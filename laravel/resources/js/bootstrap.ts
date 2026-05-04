@@ -1,0 +1,1 @@
+// Global bootstrap — add Axios setup, Echo, etc. here as needed.
