@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+#[Fillable(['firstname', 'lastname', 'age', 'club_id'])]
 class Player extends Model{
     use HasFactory;
 
@@ -16,7 +18,7 @@ class Player extends Model{
         return $this->belongsTo(Club::class);
     }
 
-    public function positions(): HasMany{
-        return $this->hasMany(Position::class);
+    public function positions(): BelongsToMany{
+        return $this->belongsToMany(Position::class, 'player_positions');
     }
 }

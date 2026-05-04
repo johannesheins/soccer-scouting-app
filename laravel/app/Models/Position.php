@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Position extends Model
-{
+class Position extends Model{
+    use HasFactory;
     public $timestamps = false;
 
-    public function players(): HasMany{
-        return $this->hasMany(Player::class);
+    public function players(): BelongsToMany{
+        return $this->belongsToMany(Player::class, 'player_positions');
     }
 }

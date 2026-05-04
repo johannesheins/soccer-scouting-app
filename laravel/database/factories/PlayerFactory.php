@@ -13,9 +13,9 @@ class PlayerFactory extends Factory
     public function definition(): array
     {
         return [
-            'firstname' => $this->faker->firstName(),
-            'lastname' => $this->faker->lastName(),
-            'age' => $this->faker->randomNumber(),
+            'firstname' => fake()->firstName(),
+            'lastname' => fake()->lastName(),
+            'age' => fake()->numberBetween(7, 20),
 
             'club_id' => Club::factory(),
         ];
