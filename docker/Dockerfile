@@ -9,7 +9,9 @@ RUN apk add --no-cache \
     icu-dev \
     bash \
     curl \
-    tzdata && \
+    tzdata \
+    nodejs \
+    npm && \
     docker-php-ext-install \
     pdo_mysql \
     mbstring \
@@ -20,6 +22,8 @@ RUN apk add --no-cache \
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN npm install -g pnpm
 
 WORKDIR /var/www/html
 
