@@ -21,14 +21,18 @@ export default function PlayerCreate() {
         <>
             <Head title="Spieler erstellen" />
             <FieldSet>
-                <FieldGroup>
+                <FieldGroup className="grid sm:grid-cols-[1fr_1fr_auto]">
                     <Field>
                         <FieldLabel htmlFor="fistname">Vorname</FieldLabel>
                         <Input id="fistname"/>
                     </Field>
                     <Field>
                         <FieldLabel htmlFor="lastname">Nachname</FieldLabel>
-                        <Input id="lastname"/>
+                        <Input id="lastname" type="text"/>
+                    </Field>
+                    <Field>
+                        <FieldLabel htmlFor="age">Alter</FieldLabel>
+                        <Input id="age" type="number" min="1" className="max-w-30"/>
                     </Field>
                 </FieldGroup>
             </FieldSet>
