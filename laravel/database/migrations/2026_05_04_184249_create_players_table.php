@@ -14,12 +14,12 @@ return new class extends Migration {
             $table->string('firstname');
             $table->string('lastname');
             $table->unsignedTinyInteger('age');
-            $table->foreignIdFor(Club::class);
+            $table->foreignIdFor(Club::class)->constrained()->cascadeOnUpdate()->restrictOnDelete();
         });
 
         Schema::create('player_positions', function (Blueprint $table){
-            $table->foreignIdFor(Player::class);
-            $table->foreignIdFor(Position::class);
+            $table->foreignIdFor(Player::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignIdFor(Position::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->primary(['player_id', 'position_id']);
         });
     }

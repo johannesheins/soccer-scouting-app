@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Club;
 use App\Models\Position;
+use App\Models\PositionGroup;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -23,8 +24,14 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
 
+        PositionGroup::factory()->createMany([
+            ['id' => 1, 'name' => 'Abwehr'],
+            ['id' => 2, 'name' => 'Mittelfeld'],
+            ['id' => 3, 'name' => 'Sturm'],
+        ]);
+
         Position::factory()->createMany([
-            ['position_code' => 'TW'],
+            ['position_group_id' => 1, 'position_code' => 'TW'],
 
             ['position_code' => 'IV'],
             ['position_code' => 'AV'],
@@ -44,5 +51,7 @@ class DatabaseSeeder extends Seeder
             ['position_code' => 'LF'],
             ['position_code' => 'RF'],
         ]);
+
+        Club::factory(10)->create();
     }
 }
