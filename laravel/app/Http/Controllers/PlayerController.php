@@ -34,7 +34,7 @@ class PlayerController extends Controller
     }
 
     public function edit($id){
-        return inertia('player/player-create', [
+        return inertia('player/player-edit', [
             'player' => Player::findOrFail($id)->load('positions:id'),
             'positions' => Position::with('positionGroup:id,name')->get(['id', 'position_code', 'position_group_id']),
             'clubs' => Club::all(['id', 'clubname']),

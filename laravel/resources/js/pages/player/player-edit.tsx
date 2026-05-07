@@ -1,18 +1,18 @@
 import { player } from '@/routes';
 import PlayerForm from "@/components/player-form";
 
-export default function PlayerCreate() {
-    return PlayerForm()
+export default function PlayerEdit() {
+    return PlayerForm(true);
 }
 
-PlayerCreate.layout = {
+PlayerEdit.layout = {
     breadcrumbs: [
         {
             title: 'Spieler',
             href: player(),
         },
         {
-            title: 'Spieler erstellen',
+            title: 'Spieler bearbeiten',
         },
     ],
 };
