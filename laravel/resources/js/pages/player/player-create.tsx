@@ -12,15 +12,15 @@ import MultipleSelector, { type Option } from "@/components/ui/multi-select";
 import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Button} from "@/components/ui/button";
 import InputError from "@/components/input-error";
+import type { Player } from "@/types/player";
 
 type PositionGroup = { id: number; name: string };
 type Position = { id: number; position_code: string; position_group: PositionGroup | null };
 type Club = { id: number; clubname: string };
-type Props = { positions: Position[]; clubs: Club[] };
+type Props = { positions: Position[]; clubs: Club[]; player?: Player };
 
 export default function PlayerCreate() {
-    const { positions, clubs } = usePage<Props>().props;
-    const [selectedPositions, setSelectedPositions] = useState<Option[]>([]);
+    const { player, positions, clubs } = usePage<Props>().props;
 
     const positionOptions: Option[] = positions.map(p => ({
         value: String(p.id),
@@ -28,23 +28,32 @@ export default function PlayerCreate() {
         group: p.position_group?.name ?? '',
     }));
 
+    const playerPositions: string[] = player?.positions.map(pos => String(pos.id)) ?? [];
+
+    const [selectedPositions, setSelectedPositions] = useState<Option[]>(
+        positionOptions.filter(o => playerPositions.includes(o.value))
+    );
+
     const clubsByLetter = clubs.reduce<Record<string, Club[]>>((acc, c) => {
         const letter = c.clubname.charAt(0).toUpperCase();
         (acc[letter] ??= []).push(c);
         return acc;
     }, {});
 
-    const { data, setData, post, processing, errors } = useForm({
-        firstname: '',
-        lastname: '',
-        age: '',
-        club_id: '',
-        position_ids: [] as string[],
+    const { data, setData, post, put, processing, errors } = useForm({
+        firstname: player?.firstname ?? '',
+        lastname: player?.lastname ?? '',
+        age: player?.age ?? '',
+        club_id: String(player?.club_id) ?? '',
+        position_ids: playerPositions ?? [] as string[],
     });
 
     function submit(e: React.FormEvent){
         e.preventDefault()
-        post('/player');
+        if(player?.id) {
+            return put(`/player/${player.id}`);
+        }
+        return post('/player');
     }
 
     return (

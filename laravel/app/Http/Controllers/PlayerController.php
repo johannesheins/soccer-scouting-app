@@ -24,12 +24,8 @@ class PlayerController extends Controller
     public function store(PlayerRequest $request){
         $validated = $request->validated();
 
-        $player = Player::create(
-            $validated
-        );
-
+        $player = Player::create($validated);
         $player->positions()->attach($validated['position_ids']);
-
 
         return redirect()->route('player.index');
     }
@@ -39,11 +35,21 @@ class PlayerController extends Controller
     }
 
     public function edit($id){
-
+        return inertia('player/player-create', [
+            'player' => Player::findOrFail($id)->load('positions:id'),
+            'positions' => Position::with('positionGroup:id,name')->get(['id', 'position_code', 'position_group_id']),
+            'clubs' => Club::all(['id', 'clubname']),
+        ]);
     }
 
-    public function update(Request $request, $id){
+    public function update(PlayerRequest $request, $id){
+        $validated = $request->validated();
 
+        $player = Player::findOrFail($id);
+        $player->update($validated);
+        $player->positions()->sync($validated['position_ids']);
+
+        return redirect()->route('player.index');
     }
 
     public function destroy($id){
