@@ -1,4 +1,5 @@
 import { Form, Head, Link, usePage } from '@inertiajs/react';
+import type { Auth } from '@/types/auth';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import DeleteUser from '@/components/delete-user';
 import Heading from '@/components/heading';
@@ -16,7 +17,7 @@ export default function Profile({
     mustVerifyEmail: boolean;
     status?: string;
 }) {
-    const { auth } = usePage().props;
+    const { auth } = usePage<{ auth: Auth }>().props;
 
     return (
         <>
