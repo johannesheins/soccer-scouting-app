@@ -115,7 +115,7 @@ export default function PlayerCreate() {
                             <InputError message={errors.position_ids} />
                         </Field>
                     </FieldGroup>
-                    <Field>
+                    <Field className="w-fit">
                         <Button type="submit" disabled={processing}>Erstellen</Button>
                     </Field>
                 </FieldSet>
