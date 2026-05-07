@@ -16,7 +16,7 @@ class PlayerController extends Controller
 
     public function create(){
         return inertia('player/player-create', [
-            'positions' => Position::all(['id', 'position_code']),
+            'positions' => Position::with('positionGroup:id,name')->get(['id', 'position_code', 'position_group_id']),
             'clubs' => Club::all(['id', 'clubname']),
         ]);
     }

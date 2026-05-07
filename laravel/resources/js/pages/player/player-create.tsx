@@ -9,11 +9,12 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input";
 import MultipleSelector, { type Option } from "@/components/ui/multi-select";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
+import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Button} from "@/components/ui/button";
 import InputError from "@/components/input-error";
 
-type Position = { id: number; position_code: string };
+type PositionGroup = { id: number; name: string };
+type Position = { id: number; position_code: string; position_group: PositionGroup | null };
 type Club = { id: number; clubname: string };
 type Props = { positions: Position[]; clubs: Club[] };
 
@@ -24,12 +25,14 @@ export default function PlayerCreate() {
     const positionOptions: Option[] = positions.map(p => ({
         value: String(p.id),
         label: p.position_code,
+        group: p.position_group?.name ?? '',
     }));
 
-    const clubOptions = clubs.map(c => ({
-        value: String(c.id),
-        label: c.clubname,
-    }));
+    const clubsByLetter = clubs.reduce<Record<string, Club[]>>((acc, c) => {
+        const letter = c.clubname.charAt(0).toUpperCase();
+        (acc[letter] ??= []).push(c);
+        return acc;
+    }, {});
 
     const { data, setData, post, processing, errors } = useForm({
         firstname: '',
@@ -83,8 +86,13 @@ export default function PlayerCreate() {
                                     <SelectValue placeholder="Club wählen" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {clubOptions.map(c => (
-                                        <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
+                                    {Object.entries(clubsByLetter).sort().map(([letter, group]) => (
+                                        <SelectGroup key={letter}>
+                                            <SelectLabel>{letter}</SelectLabel>
+                                            {group.map(c => (
+                                                <SelectItem key={c.id} value={String(c.id)}>{c.clubname}</SelectItem>
+                                            ))}
+                                        </SelectGroup>
                                     ))}
                                 </SelectContent>
                             </Select>
@@ -99,6 +107,7 @@ export default function PlayerCreate() {
                                     setData('position_ids', opts.map(o => o.value));
                                 }}
                                 defaultOptions={positionOptions}
+                                groupBy="group"
                                 placeholder="Position wählen"
                                 hidePlaceholderWhenSelected
                                 emptyIndicator={<p className="text-center text-sm">Keine Positionen gefunden</p>}

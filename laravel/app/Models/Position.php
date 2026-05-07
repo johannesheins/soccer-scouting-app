@@ -11,7 +11,7 @@ class Position extends Model{
     use HasFactory;
     public $timestamps = false;
 
-    public function group(): BelongsTo{
+    public function positionGroup(): BelongsTo{
         return $this->belongsTo(PositionGroup::class);
     }
 
