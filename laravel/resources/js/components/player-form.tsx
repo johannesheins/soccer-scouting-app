@@ -89,7 +89,7 @@ export default function PlayerForm(edit = false) {
                             </Select>
                             <InputError message={errors.club_id} />
                         </Field>
-                        <Field className="col-span-2">
+                        <Field className="sm:col-span-2">
                             <FieldLabel htmlFor="position_ids">Position</FieldLabel>
                             <MultipleSelector
                                 value={selectedPositions}

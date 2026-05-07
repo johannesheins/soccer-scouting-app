@@ -91,7 +91,7 @@ export default function PlayerSearch(){
                                 </Select>
                                 <InputError message={errors.club_id} />
                             </Field>
-                            <Field className="col-span-2">
+                            <Field className="sm:col-span-2">
                                 <FieldLabel htmlFor="position_ids">Position</FieldLabel>
                                 <MultipleSelector
                                     value={selectedPositions}
@@ -115,7 +115,7 @@ export default function PlayerSearch(){
                 </div>
 
                 <div className="relative min-h-screen flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                     TODO Implement Data-Table (https://ui.shadcn.com/docs/components/radix/data-table)
+                     TODO Implement Data-Table (https://ui.shadcn.com/docs/components/radix/data-table) ??? Search client or server side ???
                 </div>
             </div>
         </>
