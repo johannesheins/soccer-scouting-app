@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Club;
 use App\Models\Player;
 use App\Models\Position;
+use App\Http\Requests\Player\PlayerRequest;
 use Illuminate\Http\Request;
 
 class PlayerController extends Controller
@@ -20,8 +21,17 @@ class PlayerController extends Controller
         ]);
     }
 
-    public function store(Request $request){
-        dd($request->all());
+    public function store(PlayerRequest $request){
+        $validated = $request->validated();
+
+        $player = Player::create(
+            $validated
+        );
+
+        $player->positions()->attach($validated['position_ids']);
+
+
+        return redirect()->route('player.index');
     }
 
     public function show($id){

@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import MultipleSelector, { type Option } from "@/components/ui/multi-select";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Button} from "@/components/ui/button";
+import InputError from "@/components/input-error";
 
 type Position = { id: number; position_code: string };
 type Club = { id: number; clubname: string };
@@ -30,12 +31,12 @@ export default function PlayerCreate() {
         label: c.clubname,
     }));
 
-    const { data, setData, post, processing } = useForm({
+    const { data, setData, post, processing, errors } = useForm({
         firstname: '',
         lastname: '',
         age: '',
         club_id: '',
-        positions: [] as string[],
+        position_ids: [] as string[],
     });
 
     function submit(e: React.FormEvent){
@@ -55,6 +56,7 @@ export default function PlayerCreate() {
                                 value={data.firstname}
                                 onChange={e => setData('firstname', e.target.value)}
                             />
+                            <InputError message={errors.firstname} />
                         </Field>
                         <Field>
                             <FieldLabel htmlFor="lastname">Nachname</FieldLabel>
@@ -62,6 +64,7 @@ export default function PlayerCreate() {
                                 value={data.lastname}
                                 onChange={e => setData('lastname', e.target.value)}
                             />
+                            <InputError message={errors.lastname} />
                         </Field>
                         <Field>
                             <FieldLabel htmlFor="age">Alter</FieldLabel>
@@ -69,6 +72,7 @@ export default function PlayerCreate() {
                                 value={data.age}
                                 onChange={e => setData('age', e.target.value)}
                             />
+                            <InputError message={errors.age} />
                         </Field>
                     </FieldGroup>
                     <FieldGroup className="grid sm:grid-cols-[3fr_3fr_1fr]">
@@ -84,20 +88,22 @@ export default function PlayerCreate() {
                                     ))}
                                 </SelectContent>
                             </Select>
+                            <InputError message={errors.club_id} />
                         </Field>
-                        <Field>
+                        <Field className="col-span-2">
                             <FieldLabel htmlFor="position_ids">Position</FieldLabel>
                             <MultipleSelector
                                 value={selectedPositions}
                                 onChange={opts => {
                                     setSelectedPositions(opts);
-                                    setData('positions', opts.map(o => o.value));
+                                    setData('position_ids', opts.map(o => o.value));
                                 }}
                                 defaultOptions={positionOptions}
                                 placeholder="Position wählen"
                                 hidePlaceholderWhenSelected
                                 emptyIndicator={<p className="text-center text-sm">Keine Positionen gefunden</p>}
                             />
+                            <InputError message={errors.position_ids} />
                         </Field>
                     </FieldGroup>
                     <Field>
