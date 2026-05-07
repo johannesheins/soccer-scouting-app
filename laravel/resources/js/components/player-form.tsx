@@ -1,5 +1,6 @@
 import {Head, useForm, usePage} from '@inertiajs/react';
-import React, { useState } from 'react';
+import React from 'react';
+import { useFormOption } from '@/hooks/use-form-option';
 import {
     Field,
     FieldGroup,
@@ -7,7 +8,7 @@ import {
     FieldSet,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input";
-import MultipleSelector, { type Option } from "@/components/ui/multi-select";
+import MultipleSelector from "@/components/ui/multi-select";
 import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Button} from "@/components/ui/button";
 import InputError from "@/components/input-error";
@@ -19,23 +20,8 @@ export default function PlayerForm(edit = false) {
 
     const { player, positions, clubs } = usePage<Props>().props;
 
-    const positionOptions: Option[] = positions.map(p => ({
-        value: String(p.id),
-        label: p.position_code,
-        group: p.position_group?.name ?? '',
-    }));
-
-    const playerPositions: string[] = player?.positions.map(pos => String(pos.id)) ?? [];
-
-    const [selectedPositions, setSelectedPositions] = useState<Option[]>(
-        positionOptions.filter(o => playerPositions.includes(o.value))
-    );
-
-    const clubsByLetter = clubs.reduce<Record<string, Club[]>>((acc, c) => {
-        const letter = c.clubname.charAt(0).toUpperCase();
-        (acc[letter] ??= []).push(c);
-        return acc;
-    }, {});
+    const { positionOptions, playerPositions, selectedPositions, setSelectedPositions, clubsByLetter } =
+        useFormOption(positions, clubs, player);
 
     const { data, setData, post, put, processing, errors } = useForm({
         firstname: player?.firstname ?? '',
