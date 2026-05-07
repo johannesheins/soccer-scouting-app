@@ -9,7 +9,7 @@ class PlayerSearchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'firstname' => [],
+            'firstname' => ['string', 'max:255'],
             'lastname' => ['string', 'max:255'],
             'age' => ['integer'],
             'club_id' => ['integer', 'exists:clubs,id'],
@@ -19,6 +19,6 @@ class PlayerSearchRequest extends FormRequest
 
     public function authorize(): bool
     {
-        return true;
+        return auth()->check();
     }
 }

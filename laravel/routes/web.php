@@ -11,6 +11,7 @@ Route::inertia('/', 'welcome', [
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');
 
+    Route::get('player/search', [PlayerController::class, 'search'])->name('player.search');
     Route::resource('player', PlayerController::class)->names('player');
 });
 

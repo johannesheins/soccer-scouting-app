@@ -17,7 +17,6 @@ import type { Club, Player, Position } from "../types/types";
 type Props = { positions: Position[]; clubs: Club[]; player?: Player };
 
 export default function PlayerForm(edit = false) {
-
     const { player, positions, clubs } = usePage<Props>().props;
 
     const { positionOptions, playerPositions, selectedPositions, setSelectedPositions, clubsByLetter } =

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PlayerSearchRequest;
 use App\Models\Club;
 use App\Models\Player;
 use App\Models\Position;
@@ -53,5 +54,17 @@ class PlayerController extends Controller
 
     public function destroy($id){
 
+    }
+
+    public function search(PlayerSearchRequest $request){
+        $validated = $request->validated();
+
+        $players = Player::all(); //TODO Implement Search in separate file
+
+        return inertia('player/player-search', [
+            'positions' => Position::with('positionGroup:id,name')->get(),
+            'clubs' => Club::all(['id', 'clubname']),
+            'players' => $players,
+        ]);
     }
 }
