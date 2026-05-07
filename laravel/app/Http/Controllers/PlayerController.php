@@ -6,7 +6,6 @@ use App\Models\Club;
 use App\Models\Player;
 use App\Models\Position;
 use App\Http\Requests\Player\PlayerRequest;
-use Illuminate\Http\Request;
 
 class PlayerController extends Controller
 {
