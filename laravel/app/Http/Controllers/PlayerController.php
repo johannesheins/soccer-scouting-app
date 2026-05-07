@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Club;
 use App\Models\Player;
+use App\Models\Position;
 use Illuminate\Http\Request;
 
 class PlayerController extends Controller
@@ -12,11 +14,14 @@ class PlayerController extends Controller
     }
 
     public function create(){
-        return inertia('player/player-create');
+        return inertia('player/player-create', [
+            'positions' => Position::all(['id', 'position_code']),
+            'clubs' => Club::all(['id', 'clubname']),
+        ]);
     }
 
     public function store(Request $request){
-
+        dd($request->all());
     }
 
     public function show($id){
