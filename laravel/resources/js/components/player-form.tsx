@@ -11,13 +11,11 @@ import MultipleSelector, { type Option } from "@/components/ui/multi-select";
 import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Button} from "@/components/ui/button";
 import InputError from "@/components/input-error";
-import type { Player } from "@/types/player";
+import type { Club, Player, Position } from "../types/types";
+
+type Props = { positions: Position[]; clubs: Club[]; player?: Player };
 
 export default function PlayerForm(edit = false) {
-    type PositionGroup = { id: number; name: string };
-    type Position = { id: number; position_code: string; position_group: PositionGroup | null };
-    type Club = { id: number; clubname: string };
-    type Props = { positions: Position[]; clubs: Club[]; player?: Player };
 
     const { player, positions, clubs } = usePage<Props>().props;
 
@@ -58,7 +56,7 @@ export default function PlayerForm(edit = false) {
     return (
         <>
             <form onSubmit={submit}>
-                <Head title="Spieler erstellen" />
+                <Head title={"Spieler " + (edit ? 'bearbeiten' : 'erstellen')} />
                 <FieldSet>
                     <FieldGroup className="grid sm:grid-cols-[3fr_3fr_1fr]">
                         <Field>

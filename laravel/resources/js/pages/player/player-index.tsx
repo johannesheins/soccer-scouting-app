@@ -1,6 +1,6 @@
 import { Head } from '@inertiajs/react';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
-import { UserRoundPlus } from 'lucide-react';
+import {UserRoundPlus, UserSearch} from 'lucide-react';
 import {player} from '@/routes';
 
 export default function PlayerIndex() {
@@ -15,7 +15,9 @@ export default function PlayerIndex() {
                         </a>
                     </div>
                     <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
+                        <a href="/player/search" title="Spieler suchen" className="flex flex-col justify-center items-center h-full">
+                            <UserSearch className={"size-10 icon-color"}/>
+                        </a>
                     </div>
                     <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
                         <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
