@@ -17,14 +17,16 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import type {Player} from "@/types/types";
+import {Dialog, DialogContent} from "@/components/ui/dialog";
+import {PlayerView} from "@/pages/player/player-view";
 
 export function PlayerRowActions({player}: { player: Player }) {
     const [deleteOpen, setDeleteOpen] = useState(false);
+    const [viewOpen, setViewOpen] = useState(false);
 
     return (
         <>
@@ -36,19 +38,24 @@ export function PlayerRowActions({player}: { player: Player }) {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Aktionen</DropdownMenuLabel>
-                    <DropdownMenuItem onClick={() => router.visit(`${playerRoute.url()}/${player.id}`)}>
+                    <DropdownMenuItem onClick={() => setViewOpen(true)}>
                         Spieler ansehen
                     </DropdownMenuItem>
                     <DropdownMenuSeparator/>
                     <DropdownMenuItem onClick={() => router.visit(`${playerRoute.url()}/${player.id}/edit`)}>
                         Spieler bearbeiten
                     </DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => setDeleteOpen(true)}>
+                    <DropdownMenuItem onSelect={() => setDeleteOpen(true)} className="text-destructive">
                         Spieler löschen
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
+
+            <Dialog open={viewOpen} onOpenChange={setViewOpen}>
+                <DialogContent>
+                    <PlayerView player={player} />
+                </DialogContent>
+            </Dialog>
 
             <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
                 <AlertDialogContent>

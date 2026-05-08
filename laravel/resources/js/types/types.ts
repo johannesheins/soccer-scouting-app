@@ -28,6 +28,6 @@ export type Player = {
     firstname: string,
     lastname: string,
     age: number,
-    club_id: Club,
+    club: Club,
     positions: Position[],
 }
