@@ -2,6 +2,17 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import {Club, Player, Position} from "@/types/types";
+import { MoreHorizontal } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import {viewPlayer} from "@/pages/player/table/player-column-actions";
 
 export const playerColumns: ColumnDef<Player>[] = [
     {
@@ -48,5 +59,37 @@ export const playerColumns: ColumnDef<Player>[] = [
 
             return <div className="font-medium">{positions.map(p => p.position_code).join(', ')}</div>
         },
-    }
+    },
+    {
+        id: "actions",
+        cell: ({ row }) => {
+            const player = row.original
+
+            return (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                            <span className="sr-only">Menü öffnen</span>
+                            <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>
+                            Aktionen
+                        </DropdownMenuLabel>
+                        <DropdownMenuItem onClick={() =>viewPlayer(player.id)}>
+                            Spieler ansehen
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>
+                            Spieler bearbeiten
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            Spieler löschen
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            )
+        },
+    },
 ]
