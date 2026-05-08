@@ -36,7 +36,7 @@ export default function PlayerSearch(){
 
     function submit(e: React.FormEvent){
         e.preventDefault()
-        return get('/player/search');
+        return get(`${player.url()}/search`);
     }
 
     function resetForm(){
