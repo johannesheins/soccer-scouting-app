@@ -18,7 +18,6 @@ import {Button} from "@/components/ui/button";
 import {useFormOption} from "@/hooks/use-form-option";
 import type {Club, Player, Position} from "@/types/types";
 
-import {Table} from "@/components/ui/table";
 import {PlayerTable} from "@/pages/player/table/player-table";
 import {playerColumns} from "@/pages/player/table/player-columns";
 
@@ -127,9 +126,7 @@ export default function PlayerSearch(){
                 </div>
 
                 <div className="relative min-h-screen flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                    <Table>
-                        <PlayerTable columns={playerColumns} data={players} />
-                    </Table>
+                    <PlayerTable columns={playerColumns} data={players} />
                 </div>
             </div>
         </>
