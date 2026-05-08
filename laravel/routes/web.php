@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClubController;
 use App\Http\Controllers\PlayerController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -13,6 +14,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('player/search', [PlayerController::class, 'search'])->name('player.search');
     Route::resource('player', PlayerController::class)->names('player');
+
+
+    Route::resource('club', ClubController::class)->names('club');
 });
 
 require __DIR__.'/settings.php';
