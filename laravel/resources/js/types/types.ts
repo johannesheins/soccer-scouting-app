@@ -20,7 +20,7 @@ export type PlayerSmall = {
     lastname: string,
     age: number,
     club_id: number,
-    positions: { id: number},
+    positions: { id: number }[],
 };
 
 export type Player = {
