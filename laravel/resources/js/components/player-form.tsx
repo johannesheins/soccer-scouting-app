@@ -1,6 +1,7 @@
 import {Head, useForm, usePage} from '@inertiajs/react';
 import React from 'react';
-import { useFormOption } from '@/hooks/use-form-option';
+import { useState } from 'react';
+import { toPositionOptions, toPlayerPositionIds, groupClubsByLetter } from '@/hooks/form-options';
 import {
     Field,
     FieldGroup,
@@ -12,15 +13,19 @@ import MultipleSelector from "@/components/ui/multi-select";
 import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Button} from "@/components/ui/button";
 import InputError from "@/components/input-error";
-import type { Club, PlayerSmall, Position } from "../types/types";
+import type { Club, PlayerSmall, Position } from "@/types/types";
 
 type Props = { positions: Position[]; clubs: Club[]; player?: PlayerSmall };
 
 export default function PlayerForm(edit = false) {
     const { player, positions, clubs } = usePage<Props>().props;
 
-    const { positionOptions, playerPositions, selectedPositions, setSelectedPositions, clubsByLetter } =
-        useFormOption(positions, clubs, player);
+    const positionOptions = toPositionOptions(positions);
+    const playerPositions = toPlayerPositionIds(player);
+    const clubsByLetter = groupClubsByLetter(clubs);
+    const [selectedPositions, setSelectedPositions] = useState(
+        positionOptions.filter(o => playerPositions.includes(o.value))
+    );
 
     const { data, setData, post, put, processing, errors } = useForm({
         firstname: player?.firstname ?? '',
