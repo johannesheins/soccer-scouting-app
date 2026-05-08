@@ -15,7 +15,9 @@ import {
 } from "@/components/ui/select";
 import MultipleSelector from "@/components/ui/multi-select";
 import {Button} from "@/components/ui/button";
-import {useFormOption} from "@/hooks/use-form-option";
+import { useState } from 'react';
+import type { Option } from '@/components/ui/multi-select';
+import { toPositionOptions, groupClubsByLetter } from "@/hooks/form-options";
 import type {Club, Player, Position} from "@/types/types";
 
 import {PlayerTable} from "@/pages/player/table/player-table";
@@ -26,8 +28,9 @@ type Props = { positions: Position[]; clubs: Club[]; players: Player[]};
 export default function PlayerSearch(){
     const { players, positions, clubs } = usePage<Props>().props;
 
-    const { positionOptions, selectedPositions, setSelectedPositions, clubsByLetter } =
-        useFormOption(positions, clubs);
+    const positionOptions = toPositionOptions(positions);
+    const clubsByLetter = groupClubsByLetter(clubs);
+    const [selectedPositions, setSelectedPositions] = useState<Option[]>([]);
 
     const { data, setData, get, processing, errors, reset } = useForm({
         firstname: '',
