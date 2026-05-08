@@ -20,3 +20,11 @@ export function groupClubsByLetter(clubs: Club[]): Record<string, Club[]> {
         return acc;
     }, {});
 }
+
+export function toClubOptions(clubs: Club[]): Option[]{
+    return clubs.map(c => ({
+        value: String(c.id),
+        label: c.clubname,
+        group: c.clubname.substring(0,1).toUpperCase()
+    }))
+}

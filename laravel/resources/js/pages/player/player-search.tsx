@@ -4,20 +4,12 @@ import React from "react";
 import {Field, FieldGroup, FieldLabel, FieldSet} from "@/components/ui/field";
 import {Input} from "@/components/ui/input";
 import InputError from "@/components/input-error";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue
-} from "@/components/ui/select";
+
 import MultipleSelector from "@/components/ui/multi-select";
 import {Button} from "@/components/ui/button";
 import { useState } from 'react';
 import type { Option } from '@/components/ui/multi-select';
-import { toPositionOptions, groupClubsByLetter } from "@/hooks/form-options";
+import {toPositionOptions, toClubOptions} from "@/hooks/form-options";
 import type {Club, Player, Position} from "@/types/types";
 
 import {PlayerTable} from "@/pages/player/table/player-table";
@@ -29,14 +21,16 @@ export default function PlayerSearch(){
     const { players, positions, clubs } = usePage<Props>().props;
 
     const positionOptions = toPositionOptions(positions);
-    const clubsByLetter = groupClubsByLetter(clubs);
     const [selectedPositions, setSelectedPositions] = useState<Option[]>([]);
+
+    const clubOptions = toClubOptions(clubs);
+    const [selectedClubs, setSelectedClubs] = useState<Option[]>([]);
 
     const { data, setData, get, processing, errors, reset } = useForm({
         firstname: '',
         lastname: '',
-        age: '', //TODO Add from to
-        club_id: '', //TODO Add multiselct
+        age: '',
+        club_ids: [] as string[],
         position_ids: [] as string[],
     });
 
@@ -86,22 +80,19 @@ export default function PlayerSearch(){
                             <FieldGroup className="grid sm:grid-cols-[3fr_3fr_1fr]">
                                 <Field>
                                     <FieldLabel htmlFor="club_id">Club</FieldLabel>
-                                    <Select value={data.club_id} onValueChange={v => setData('club_id', v)}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Verein wählen" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {Object.entries(clubsByLetter).sort().map(([letter, group]) => (
-                                                <SelectGroup key={letter}>
-                                                    <SelectLabel>{letter}</SelectLabel>
-                                                    {group.map(c => (
-                                                        <SelectItem key={c.id} value={String(c.id)}>{c.clubname}</SelectItem>
-                                                    ))}
-                                                </SelectGroup>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                    <InputError message={errors.club_id} />
+                                    <MultipleSelector
+                                        value={selectedClubs}
+                                        onChange={opts => {
+                                            setSelectedClubs(opts);
+                                            setData('club_ids', opts.map(o => o.value));
+                                        }}
+                                        defaultOptions={clubOptions}
+                                        groupBy="group"
+                                        placeholder="Verein wählen"
+                                        hidePlaceholderWhenSelected
+                                        emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
+                                    />
+                                    <InputError message={errors.club_ids} />
                                 </Field>
                                 <Field className="sm:col-span-2">
                                     <FieldLabel htmlFor="position_ids">Position</FieldLabel>
