@@ -30,7 +30,7 @@ export default function PlayerSearch(){
     const { positionOptions, selectedPositions, setSelectedPositions, clubsByLetter } =
         useFormOption(positions, clubs);
 
-    const { data, setData, get, processing, errors } = useForm({
+    const { data, setData, get, processing, errors, reset } = useForm({
         firstname: '',
         lastname: '',
         age: '', //TODO Add from to
@@ -43,79 +43,87 @@ export default function PlayerSearch(){
         return get('/player/search');
     }
 
+    function resetForm(){
+        reset();
+        setSelectedPositions([]);
+    }
+
     return (
         <>
             <Head title="Spieler suchen" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="relative min-h-screen overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                    <FieldSet>
-                        <FieldGroup className="grid sm:grid-cols-[3fr_3fr_1fr]">
-                            <Field>
-                                <FieldLabel htmlFor="firstname">Vorname</FieldLabel>
-                                <Input id="firstname"
-                                       value={data.firstname}
-                                       onChange={e => setData('firstname', e.target.value)}
-                                />
-                                <InputError message={errors.firstname} />
+                    <form onSubmit={submit}>
+                        <FieldSet>
+                            <FieldGroup className="grid sm:grid-cols-[3fr_3fr_1fr]">
+                                <Field>
+                                    <FieldLabel htmlFor="firstname">Vorname</FieldLabel>
+                                    <Input id="firstname"
+                                           value={data.firstname}
+                                           onChange={e => setData('firstname', e.target.value)}
+                                    />
+                                    <InputError message={errors.firstname} />
+                                </Field>
+                                <Field>
+                                    <FieldLabel htmlFor="lastname">Nachname</FieldLabel>
+                                    <Input id="lastname" type="text"
+                                           value={data.lastname}
+                                           onChange={e => setData('lastname', e.target.value)}
+                                    />
+                                    <InputError message={errors.lastname} />
+                                </Field>
+                                <Field>
+                                    <FieldLabel htmlFor="age">Alter</FieldLabel>
+                                    <Input id="age" type="number" min="1" className="max-w-30"
+                                           value={data.age}
+                                           onChange={e => setData('age', e.target.value)}
+                                    />
+                                    <InputError message={errors.age} />
+                                </Field>
+                            </FieldGroup>
+                            <FieldGroup className="grid sm:grid-cols-[3fr_3fr_1fr]">
+                                <Field>
+                                    <FieldLabel htmlFor="club_id">Club</FieldLabel>
+                                    <Select value={data.club_id} onValueChange={v => setData('club_id', v)}>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Verein wählen" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {Object.entries(clubsByLetter).sort().map(([letter, group]) => (
+                                                <SelectGroup key={letter}>
+                                                    <SelectLabel>{letter}</SelectLabel>
+                                                    {group.map(c => (
+                                                        <SelectItem key={c.id} value={String(c.id)}>{c.clubname}</SelectItem>
+                                                    ))}
+                                                </SelectGroup>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <InputError message={errors.club_id} />
+                                </Field>
+                                <Field className="sm:col-span-2">
+                                    <FieldLabel htmlFor="position_ids">Position</FieldLabel>
+                                    <MultipleSelector
+                                        value={selectedPositions}
+                                        onChange={opts => {
+                                            setSelectedPositions(opts);
+                                            setData('position_ids', opts.map(o => o.value));
+                                        }}
+                                        defaultOptions={positionOptions}
+                                        groupBy="group"
+                                        placeholder="Position wählen"
+                                        hidePlaceholderWhenSelected
+                                        emptyIndicator={<p className="text-center text-sm">Keine Positionen gefunden</p>}
+                                    />
+                                    <InputError message={errors.position_ids} />
+                                </Field>
+                            </FieldGroup>
+                            <Field className="w-fit flex flex-row">
+                                <Button type="submit" disabled={processing}>Suchen</Button>
+                                <Button type="reset" variant="secondary" onClick={resetForm}>Zurücksetzen</Button>
                             </Field>
-                            <Field>
-                                <FieldLabel htmlFor="lastname">Nachname</FieldLabel>
-                                <Input id="lastname" type="text"
-                                       value={data.lastname}
-                                       onChange={e => setData('lastname', e.target.value)}
-                                />
-                                <InputError message={errors.lastname} />
-                            </Field>
-                            <Field>
-                                <FieldLabel htmlFor="age">Alter</FieldLabel>
-                                <Input id="age" type="number" min="1" className="max-w-30"
-                                       value={data.age}
-                                       onChange={e => setData('age', e.target.value)}
-                                />
-                                <InputError message={errors.age} />
-                            </Field>
-                        </FieldGroup>
-                        <FieldGroup className="grid sm:grid-cols-[3fr_3fr_1fr]">
-                            <Field>
-                                <FieldLabel htmlFor="club_id">Club</FieldLabel>
-                                <Select value={data.club_id} onValueChange={v => setData('club_id', v)}>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Verein wählen" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {Object.entries(clubsByLetter).sort().map(([letter, group]) => (
-                                            <SelectGroup key={letter}>
-                                                <SelectLabel>{letter}</SelectLabel>
-                                                {group.map(c => (
-                                                    <SelectItem key={c.id} value={String(c.id)}>{c.clubname}</SelectItem>
-                                                ))}
-                                            </SelectGroup>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                                <InputError message={errors.club_id} />
-                            </Field>
-                            <Field className="sm:col-span-2">
-                                <FieldLabel htmlFor="position_ids">Position</FieldLabel>
-                                <MultipleSelector
-                                    value={selectedPositions}
-                                    onChange={opts => {
-                                        setSelectedPositions(opts);
-                                        setData('position_ids', opts.map(o => o.value));
-                                    }}
-                                    defaultOptions={positionOptions}
-                                    groupBy="group"
-                                    placeholder="Position wählen"
-                                    hidePlaceholderWhenSelected
-                                    emptyIndicator={<p className="text-center text-sm">Keine Positionen gefunden</p>}
-                                />
-                                <InputError message={errors.position_ids} />
-                            </Field>
-                        </FieldGroup>
-                        <Field className="w-fit">
-                            <Button type="submit" disabled={processing}>Suchen</Button>
-                        </Field>
-                    </FieldSet>
+                        </FieldSet>
+                    </form>
                 </div>
 
                 <div className="relative min-h-screen flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">

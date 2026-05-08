@@ -55,7 +55,7 @@ class PlayerController extends Controller
     }
 
     public function destroy($id){
-
+        Player::findOrFail($id)->delete();
     }
 
     public function search(PlayerSearchRequest $request){
