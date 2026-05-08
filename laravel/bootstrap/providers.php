@@ -6,4 +6,5 @@ use App\Providers\FortifyServiceProvider;
 return [
     AppServiceProvider::class,
     FortifyServiceProvider::class,
+    Fruitcake\LaravelDebugbar\ServiceProvider::class,
 ];

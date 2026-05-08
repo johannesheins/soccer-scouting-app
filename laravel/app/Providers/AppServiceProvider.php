@@ -15,7 +15,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $loader = \Illuminate\Foundation\AliasLoader::getInstance();
+        $loader->alias('Debugbar', \Fruitcake\LaravelDebugbar\Facades\Debugbar::class);
     }
 
     /**
