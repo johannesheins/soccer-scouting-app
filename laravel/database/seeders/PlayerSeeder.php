@@ -11,13 +11,10 @@ class PlayerSeeder extends Seeder
 {
     public function run(): void
     {
-        $this->call(DatabaseSeeder::class);
-
-        Player::factory()->count(10)->create();
-        Position::factory()->create();
+        Player::factory(30)->create();
 
         foreach(Player::all() as $player) {
-            $count = rand(1, Position::count());
+            $count = rand(1, 4);
             $positions = Position::inRandomOrder()->limit($count)->pluck('id');
             $player->positions()->attach($positions);
         }
