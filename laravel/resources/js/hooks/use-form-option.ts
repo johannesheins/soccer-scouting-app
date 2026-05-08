@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import type { Option } from '@/components/ui/multi-select';
-import type { Club, Player, Position } from '@/types/types';
+import type { Club, PlayerSmall, Position } from '@/types/types';
 
-export function useFormOption(positions: Position[], clubs: Club[], player?: Player) {
+export function useFormOption(positions: Position[], clubs: Club[], player?: PlayerSmall) {
     const positionOptions: Option[] = positions.map(p => ({
         value: String(p.id),
         label: p.position_code,

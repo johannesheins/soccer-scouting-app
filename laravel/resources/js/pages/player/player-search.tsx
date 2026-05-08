@@ -18,6 +18,10 @@ import {Button} from "@/components/ui/button";
 import {useFormOption} from "@/hooks/use-form-option";
 import type {Club, Player, Position} from "@/types/types";
 
+import {Table} from "@/components/ui/table";
+import {PlayerTable} from "@/pages/player/table/player-table";
+import {playerColumns} from "@/pages/player/table/player-columns";
+
 type Props = { positions: Position[]; clubs: Club[]; players: Player[]};
 
 export default function PlayerSearch(){
@@ -76,7 +80,7 @@ export default function PlayerSearch(){
                                 <FieldLabel htmlFor="club_id">Club</FieldLabel>
                                 <Select value={data.club_id} onValueChange={v => setData('club_id', v)}>
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Club wählen" />
+                                        <SelectValue placeholder="Verein wählen" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {Object.entries(clubsByLetter).sort().map(([letter, group]) => (
@@ -115,7 +119,9 @@ export default function PlayerSearch(){
                 </div>
 
                 <div className="relative min-h-screen flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                     TODO Implement Data-Table (https://ui.shadcn.com/docs/components/radix/data-table) ??? Search client or server side ???
+                    <Table>
+                        <PlayerTable columns={playerColumns} data={players} />
+                    </Table>
                 </div>
             </div>
         </>

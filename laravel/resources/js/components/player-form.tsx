@@ -12,9 +12,9 @@ import MultipleSelector from "@/components/ui/multi-select";
 import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Button} from "@/components/ui/button";
 import InputError from "@/components/input-error";
-import type { Club, Player, Position } from "../types/types";
+import type { Club, PlayerSmall, Position } from "../types/types";
 
-type Props = { positions: Position[]; clubs: Club[]; player?: Player };
+type Props = { positions: Position[]; clubs: Club[]; player?: PlayerSmall };
 
 export default function PlayerForm(edit = false) {
     const { player, positions, clubs } = usePage<Props>().props;
@@ -74,7 +74,7 @@ export default function PlayerForm(edit = false) {
                             <FieldLabel htmlFor="club_id">Club</FieldLabel>
                             <Select value={data.club_id} onValueChange={v => setData('club_id', v)}>
                                 <SelectTrigger>
-                                    <SelectValue placeholder="Club wählen" />
+                                    <SelectValue placeholder="Verein wählen" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {Object.entries(clubsByLetter).sort().map(([letter, group]) => (

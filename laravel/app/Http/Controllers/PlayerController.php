@@ -8,6 +8,8 @@ use App\Models\Player;
 use App\Models\Position;
 use App\Http\Requests\Player\PlayerRequest;
 
+//TODO Implement PHPUnit test
+
 class PlayerController extends Controller
 {
     public function index(){
@@ -59,7 +61,7 @@ class PlayerController extends Controller
     public function search(PlayerSearchRequest $request){
         $validated = $request->validated();
 
-        $players = Player::all(); //TODO Implement Search in separate file
+        $players = Player::with(['positions:id,position_code', 'club:id,clubname'])->get()->toArray(); //TODO Implement Search in separate file
 
         return inertia('player/player-search', [
             'positions' => Position::with('positionGroup:id,name')->get(),

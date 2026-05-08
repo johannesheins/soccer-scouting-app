@@ -14,11 +14,20 @@ export type Club = {
     clubname: string,
 };
 
-export type Player = {
-    id?: number,
-    firstname?: string,
-    lastname?: string,
-    age?: number,
-    club_id?: number,
-    positions: { id: number }[],
+export type PlayerSmall = {
+    id: number,
+    firstname: string,
+    lastname: string,
+    age: number,
+    club_id: number,
+    positions: { id: number},
 };
+
+export type Player = {
+    id: number,
+    firstname: string,
+    lastname: string,
+    age: number,
+    club_id: Club,
+    positions: Position[],
+}
