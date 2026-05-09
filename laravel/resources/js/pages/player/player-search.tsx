@@ -26,12 +26,14 @@ export default function PlayerSearch(){
     const clubOptions = toClubOptions(clubs);
     const [selectedClubs, setSelectedClubs] = useState<Option[]>([]);
 
+    const params = new URLSearchParams(window.location.search)
+
     const { data, setData, get, processing, errors, reset } = useForm({
-        firstname: '',
-        lastname: '',
-        age: '',
-        club_ids: [] as string[],
-        position_ids: [] as string[],
+        firstname: params.get('firstname') ?? '',
+        lastname: params.get('lastname') ?? '',
+        age: params.get('age') ?? '',
+        club_ids: params.getAll('club_ids'),
+        position_ids: params.getAll('position_ids'),
     });
 
     function submit(e: React.FormEvent){
@@ -79,7 +81,7 @@ export default function PlayerSearch(){
                             </FieldGroup>
                             <FieldGroup className="grid sm:grid-cols-[3fr_3fr_1fr]">
                                 <Field>
-                                    <FieldLabel htmlFor="club_id">Club</FieldLabel>
+                                    <FieldLabel htmlFor="club_ids">Club</FieldLabel>
                                     <MultipleSelector
                                         value={selectedClubs}
                                         onChange={opts => {

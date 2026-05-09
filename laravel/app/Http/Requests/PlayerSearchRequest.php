@@ -9,11 +9,13 @@ class PlayerSearchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'firstname' => ['string', 'max:255'],
-            'lastname' => ['string', 'max:255'],
-            'age' => ['integer'],
-            'club_id' => ['integer', 'exists:clubs,id'],
-            'position_ids' => ['integer', 'exists:positions,id'],
+            'firstname'      => ['nullable', 'string', 'max:255'],
+            'lastname'       => ['nullable', 'string', 'max:255'],
+            'age'            => ['nullable', 'integer'],
+            'club_ids'       => ['nullable', 'array'],
+            'club_ids.*'     => ['integer', 'exists:clubs,id'],
+            'position_ids'   => ['nullable', 'array'],
+            'position_ids.*' => ['integer', 'exists:positions,id'],
         ];
     }
 
