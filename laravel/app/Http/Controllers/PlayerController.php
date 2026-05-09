@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\PlayerSearchDTO;
 use App\Http\Requests\PlayerSearchRequest;
 use App\Models\Club;
 use App\Models\Player;
 use App\Models\Position;
 use App\Http\Requests\Player\PlayerRequest;
+use App\Services\PlayerSearchService;
 
 //TODO Implement PHPUnit test
 
@@ -59,9 +61,9 @@ class PlayerController extends Controller
     }
 
     public function search(PlayerSearchRequest $request){
-        $validated = $request->validated();
-
-        $players = Player::with(['positions:id,position_code', 'club:id,clubname'])->get()->toArray(); //TODO Implement Search in separate file
+        $playerSearchDTO = new PlayerSearchDTO($request->validated());
+        $playerSearchService = new PlayerSearchService();
+        $players = $playerSearchService->searchPlayers($playerSearchDTO, ['positions:id,position_code', 'club:id,clubname'])->toArray();
 
         return inertia('player/player-search', [
             'positions' => Position::with('positionGroup:id,name')->get(),
