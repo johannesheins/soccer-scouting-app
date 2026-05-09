@@ -55,6 +55,14 @@ class PlayerSearchServiceTest extends TestCase
         $this->assertCount(3, $result);
     }
 
+    public function test_empty_string_firstname_returns_all(): void
+    {
+        Player::factory()->count(3)->create();
+
+        $result = $this->search(['firstname' => '']);
+        $this->assertCount(3, $result);
+    }
+
     #endregion
 
     #region lastname
@@ -84,6 +92,22 @@ class PlayerSearchServiceTest extends TestCase
         $this->assertSame('Müller', $player->lastname);
     }
 
+    public function test_no_lastname_filter_returns_all(): void
+    {
+        Player::factory()->count(3)->create();
+
+        $result = $this->search([]);
+        $this->assertCount(3, $result);
+    }
+
+    public function test_empty_string_lastname_returns_all(): void
+    {
+        Player::factory()->count(3)->create();
+
+        $result = $this->search(['lastname' => '']);
+        $this->assertCount(3, $result);
+    }
+
     #endregion
 
     #region yearsOfBirth
@@ -109,6 +133,22 @@ class PlayerSearchServiceTest extends TestCase
         $result = $this->search(['years_of_birth' => [1995, 1998]]);
 
         $this->assertCount(2, $result);
+    }
+
+    public function test_no_years_of_birth_filter_returns_all(): void
+    {
+        Player::factory()->count(3)->create();
+
+        $result = $this->search([]);
+        $this->assertCount(3, $result);
+    }
+
+    public function test_empty_years_of_birth_filter_returns_all(): void
+    {
+        Player::factory()->count(3)->create();
+
+        $result = $this->search(['years_of_birth' => []]);
+        $this->assertCount(3, $result);
     }
 
     #endregion
@@ -141,6 +181,22 @@ class PlayerSearchServiceTest extends TestCase
         $result = $this->search(['club_ids' => [$club1->id, $club2->id]]);
 
         $this->assertCount(2, $result);
+    }
+
+    public function test_no_club_ids_filter_returns_all(): void
+    {
+        Player::factory()->count(3)->create();
+
+        $result = $this->search([]);
+        $this->assertCount(3, $result);
+    }
+
+    public function test_empty_club_ids_filter_returns_all(): void
+    {
+        Player::factory()->count(3)->create();
+
+        $result = $this->search(['club_ids' => []]);
+        $this->assertCount(3, $result);
     }
 
     #endregion
@@ -181,6 +237,22 @@ class PlayerSearchServiceTest extends TestCase
         $result = $this->search(['position_ids' => [$pos1->id, $pos2->id]]);
 
         $this->assertCount(2, $result);
+    }
+
+    public function test_no_position_ids_filter_returns_all(): void
+    {
+        Player::factory()->count(3)->create();
+
+        $result = $this->search([]);
+        $this->assertCount(3, $result);
+    }
+
+    public function test_empty_position_ids_filter_returns_all(): void
+    {
+        Player::factory()->count(3)->create();
+
+        $result = $this->search(['position_ids' => []]);
+        $this->assertCount(3, $result);
     }
 
     #endregion

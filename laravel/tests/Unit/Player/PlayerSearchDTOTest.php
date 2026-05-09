@@ -38,6 +38,12 @@ class PlayerSearchDTOTest extends TestCase
         $this->assertSame('', $dto->firstname);
     }
 
+    public function test_firstname_whitespace_only_becomes_empty_string(): void
+    {
+        $dto = new PlayerSearchDTO(['firstname' => '   ']);
+        $this->assertSame('', $dto->firstname);
+    }
+
     // lastname
     public function test_lastname_gets_trimmed(): void
     {
@@ -57,9 +63,21 @@ class PlayerSearchDTOTest extends TestCase
         $this->assertNull($dto->lastname);
     }
 
+    public function test_lastname_is_null_when_explicitly_null(): void
+    {
+        $dto = new PlayerSearchDTO(['lastname' => null]);
+        $this->assertNull($dto->lastname);
+    }
+
     public function test_lastname_empty_string_stays_empty_string(): void
     {
         $dto = new PlayerSearchDTO(['lastname' => '']);
+        $this->assertSame('', $dto->lastname);
+    }
+
+    public function test_lastname_whitespace_only_becomes_empty_string(): void
+    {
+        $dto = new PlayerSearchDTO(['lastname' => '   ']);
         $this->assertSame('', $dto->lastname);
     }
 
@@ -76,6 +94,12 @@ class PlayerSearchDTOTest extends TestCase
         $this->assertSame([], $dto->yearsOfBirth);
     }
 
+    public function test_years_of_birth_defaults_to_empty_array_when_explicitly_null(): void
+    {
+        $dto = new PlayerSearchDTO(['years_of_birth' => null]);
+        $this->assertSame([], $dto->yearsOfBirth);
+    }
+
     // clubs (key mapping: club_ids → clubs)
     public function test_club_ids_are_mapped_to_club_ids(): void
     {
@@ -89,6 +113,12 @@ class PlayerSearchDTOTest extends TestCase
         $this->assertSame([], $dto->clubIds);
     }
 
+    public function test_clubs_defaults_to_empty_array_when_explicitly_null(): void
+    {
+        $dto = new PlayerSearchDTO(['club_ids' => null]);
+        $this->assertSame([], $dto->clubIds);
+    }
+
     // positions (key mapping: position_ids → positions)
     public function test_position_ids_are_mapped_to_positions(): void
     {
@@ -99,6 +129,12 @@ class PlayerSearchDTOTest extends TestCase
     public function test_positions_defaults_to_empty_array_when_missing(): void
     {
         $dto = new PlayerSearchDTO([]);
+        $this->assertSame([], $dto->positionIds);
+    }
+
+    public function test_positions_defaults_to_empty_array_when_explicitly_null(): void
+    {
+        $dto = new PlayerSearchDTO(['position_ids' => null]);
         $this->assertSame([], $dto->positionIds);
     }
 
