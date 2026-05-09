@@ -32,6 +32,12 @@ class PlayerSearchDTOTest extends TestCase
         $this->assertNull($dto->firstname);
     }
 
+    public function test_firstname_empty_string_stays_empty_string(): void
+    {
+        $dto = new PlayerSearchDTO(['firstname' => '']);
+        $this->assertSame('', $dto->firstname);
+    }
+
     // lastname
     public function test_lastname_gets_trimmed(): void
     {
@@ -49,6 +55,12 @@ class PlayerSearchDTOTest extends TestCase
     {
         $dto = new PlayerSearchDTO([]);
         $this->assertNull($dto->lastname);
+    }
+
+    public function test_lastname_empty_string_stays_empty_string(): void
+    {
+        $dto = new PlayerSearchDTO(['lastname' => '']);
+        $this->assertSame('', $dto->lastname);
     }
 
     // yearsOfBirth

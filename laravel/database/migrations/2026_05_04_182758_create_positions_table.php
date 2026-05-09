@@ -15,7 +15,7 @@ return new class () extends Migration {
 
         Schema::create('positions', function (Blueprint $table) {
             $table->id();
-            $table->string('position_code')->unique();
+            $table->string('position_code', 5)->unique();
             $table->foreignIdFor(PositionGroup::class)->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
         });
     }

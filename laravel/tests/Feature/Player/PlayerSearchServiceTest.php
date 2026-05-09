@@ -185,6 +185,17 @@ class PlayerSearchServiceTest extends TestCase
 
     #endregion
 
+    #region leere Ergebnisse
+    public function test_returns_empty_collection_when_no_match(): void
+    {
+        Player::factory()->create(['firstname' => 'John']);
+
+        $result = $this->search(['firstname' => 'Nonexistent']);
+
+        $this->assertCount(0, $result);
+    }
+    #endregion
+
     #region kombinierte Filter
     public function test_combines_multiple_filters(): void
     {
@@ -209,6 +220,21 @@ class PlayerSearchServiceTest extends TestCase
         $this->assertSame($match->id, $result->first()->id);
     }
 
+    #endregion
+
+    #region with (Eager Loading)
+    public function test_eager_loads_given_relations(): void
+    {
+        $club = Club::factory()->create();
+        $position = Position::factory()->create();
+        $player = Player::factory()->create(['club_id' => $club->id]);
+        $player->positions()->attach($position->id);
+
+        $result = $this->service->searchPlayers(new PlayerSearchDTO([]), ['club', 'positions']);
+
+        $this->assertTrue($result->first()->relationLoaded('club'));
+        $this->assertTrue($result->first()->relationLoaded('positions'));
+    }
     #endregion
 
     private function search(array $params): \Illuminate\Database\Eloquent\Collection

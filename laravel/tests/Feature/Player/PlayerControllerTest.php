@@ -37,6 +37,34 @@ class PlayerControllerTest extends TestCase
     }
     #endregion
 
+    #region create
+    public function test_create_shows_player_create_view(): void
+    {
+        $clubs = Club::factory(10)->create();
+        $positions = Position::factory(8)->create();
+
+        $response = $this->actingAs($this->user)
+            ->get(route('player.create'));
+
+        $response->assertInertia(fn ($page) => $page
+            ->component('player/player-create')
+            ->has('clubs', 10)
+            ->where('clubs.0.id', $clubs->first()->id)
+            ->where('clubs.0.clubname', $clubs->first()->clubname)
+            ->has('positions', 8)
+            ->where('positions.0.id', $positions->first()->id)
+            ->where('positions.0.position_code', $positions->first()->position_code)
+        );
+    }
+
+    public function test_create_guest_redirect_login(): void
+    {
+        $response = $this->get(route('player.create'));
+
+        $response->assertRedirect(route('login'));
+    }
+    #endregion
+
     #region store
     public function test_store_creates_player(): void
     {
@@ -89,8 +117,7 @@ class PlayerControllerTest extends TestCase
         $response = $this->actingAs($this->user)
             ->get(route('player.edit', $player));
 
-        $response->assertInertia(
-            fn ($page) => $page
+        $response->assertInertia(fn ($page) => $page
             ->component('player/player-edit')
             ->where('player.id', $player->id)
             ->where('player.firstname', 'John')
@@ -114,14 +141,14 @@ class PlayerControllerTest extends TestCase
     public function test_update_changes_player_data(): void
     {
         $club = Club::factory()->create();
-        $oldPosition = Position::factory()->create();
+        $oldPosition = Position::factory(2)->create();
         $newPosition = Position::factory()->create();
 
         $player = Player::factory()->create([
             'firstname' => 'John',
             'club_id'   => $club->id,
         ]);
-        $player->positions()->attach($oldPosition->id);
+        $player->positions()->attach($oldPosition->pluck('id')->toArray());
 
         $response = $this->actingAs($this->user)
             ->put(route('player.update', $player->id), [
