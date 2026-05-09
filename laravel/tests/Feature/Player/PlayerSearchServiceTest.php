@@ -24,7 +24,7 @@ class PlayerSearchServiceTest extends TestCase
         $this->service = new PlayerSearchService();
     }
 
-    // firstname
+    #region firstname
     public function test_filters_by_firstname(): void
     {
         Player::factory()->create(['firstname' => 'John']);
@@ -60,7 +60,9 @@ class PlayerSearchServiceTest extends TestCase
         $this->assertCount(3, $result);
     }
 
-    // lastname
+    #endregion
+
+    #region lastname
     public function test_filters_by_lastname(): void
     {
         Player::factory()->create(['lastname' => 'Müller']);
@@ -87,7 +89,9 @@ class PlayerSearchServiceTest extends TestCase
         $this->assertSame('Müller', $player->lastname);
     }
 
-    // yearsOfBirth
+    #endregion
+
+    #region yearsOfBirth
     public function test_filters_by_year_of_birth(): void
     {
         Player::factory()->create(['year_of_birth' => 1995]);
@@ -112,7 +116,9 @@ class PlayerSearchServiceTest extends TestCase
         $this->assertCount(2, $result);
     }
 
-    // clubIds
+    #endregion
+
+    #region clubIds
     public function test_filters_by_club(): void
     {
         $club = Club::factory()->create();
@@ -142,7 +148,9 @@ class PlayerSearchServiceTest extends TestCase
         $this->assertCount(2, $result);
     }
 
-    // positionIds
+    #endregion
+
+    #region positionIds
     public function test_filters_by_position(): void
     {
         $position = Position::factory()->create();
@@ -180,7 +188,9 @@ class PlayerSearchServiceTest extends TestCase
         $this->assertCount(2, $result);
     }
 
-    // kombinierte Filter
+    #endregion
+
+    #region kombinierte Filter
     public function test_combines_multiple_filters(): void
     {
         $club = Club::factory()->create();
@@ -203,6 +213,8 @@ class PlayerSearchServiceTest extends TestCase
         $this->assertCount(1, $result);
         $this->assertSame($match->id, $result->first()->id);
     }
+
+    #endregion
 
     private function search(array $params): \Illuminate\Database\Eloquent\Collection
     {
