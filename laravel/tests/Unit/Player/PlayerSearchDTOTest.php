@@ -51,21 +51,21 @@ class PlayerSearchDTOTest extends TestCase
         $this->assertNull($dto->lastname);
     }
 
-    // year_of_birth
-    public function test_year_of_birth_gets_set(): void
+    // yearsOfBirth
+    public function test_years_of_birth_are_mapped(): void
     {
-        $dto = new PlayerSearchDTO(['year_of_birth' => 1995]);
-        $this->assertSame(1995, $dto->year_of_birth);
+        $dto = new PlayerSearchDTO(['years_of_birth' => [1995, 1996]]);
+        $this->assertSame([1995, 1996], $dto->yearsOfBirth);
     }
 
-    public function test_year_of_birth_is_null_when_missing(): void
+    public function test_years_of_birth_defaults_to_empty_array_when_missing(): void
     {
         $dto = new PlayerSearchDTO([]);
-        $this->assertNull($dto->year_of_birth);
+        $this->assertSame([], $dto->yearsOfBirth);
     }
 
     // clubs (key mapping: club_ids → clubs)
-    public function test_club_ids_are_mapped_to_clubs(): void
+    public function test_club_ids_are_mapped_to_club_ids(): void
     {
         $dto = new PlayerSearchDTO(['club_ids' => [1, 2, 3]]);
         $this->assertSame([1, 2, 3], $dto->clubIds);
@@ -96,14 +96,14 @@ class PlayerSearchDTOTest extends TestCase
         $dto = new PlayerSearchDTO([
             'firstname' => 'John',
             'lastname' => 'Doe',
-            'year_of_birth' => 1995,
+            'years_of_birth' => [1995],
             'club_ids' => [1, 2],
             'position_ids' => [3],
         ]);
 
         $this->assertSame('John', $dto->firstname);
         $this->assertSame('Doe', $dto->lastname);
-        $this->assertSame(1995, $dto->year_of_birth);
+        $this->assertSame([1995], $dto->yearsOfBirth);
         $this->assertSame([1, 2], $dto->clubIds);
         $this->assertSame([3], $dto->positionIds);
     }
