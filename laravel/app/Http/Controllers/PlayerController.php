@@ -58,6 +58,8 @@ class PlayerController extends Controller
 
     public function destroy($id){
         Player::findOrFail($id)->delete();
+
+        return redirect()->route('player.index');
     }
 
     public function search(PlayerSearchRequest $request){

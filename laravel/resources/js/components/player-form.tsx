@@ -13,6 +13,7 @@ import {Button} from "@/components/ui/button";
 import InputError from "@/components/input-error";
 import type { Club, PlayerSmall, Position } from "@/types/types";
 import {SingleSelector} from "@/components/ui/single-select";
+import MultipleSelector from "@/components/ui/multi-select";
 
 type Props = { positions: Position[]; clubs: Club[]; player?: PlayerSmall };
 
@@ -107,7 +108,7 @@ export default function PlayerForm(edit = false) {
                         </Field>
                         <Field className="sm:col-span-2">
                             <FieldLabel htmlFor="position_ids">Position</FieldLabel>
-                            <SingleSelector
+                            <MultipleSelector
                                 value={selectedPositions}
                                 onChange={opts => {
                                     setSelectedPositions(opts);

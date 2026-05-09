@@ -11,6 +11,7 @@ class PlayerRequest extends FormRequest{
             'lastname' => 'required|string|max:255',
             'year_of_birth' => 'required|integer',
             'club_id' => 'required|exists:clubs,id',
+            'position_ids' => 'required|array',
             'position_ids.*' => 'integer|exists:positions,id',
         ];
     }
