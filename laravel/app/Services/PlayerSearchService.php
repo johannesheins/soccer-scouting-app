@@ -12,8 +12,8 @@ class PlayerSearchService{
             ->when($dto->firstname, fn($q) => $q->where('firstname', 'like', "%{$dto->firstname}%"))
             ->when($dto->lastname, fn($q) => $q->where('lastname', 'like', "%{$dto->lastname}%"))
             ->when($dto->year_of_birth, fn($q) => $q->where('year_of_birth', $dto->year_of_birth))
-            ->when($dto->clubs, fn($q) => $q->whereIn('club_id', $dto->clubs))
-            ->when($dto->positions, fn($q) => $q->whereHas('positions', fn($q) => $q->whereIn('positions.id', $dto->positions)))
+            ->when($dto->clubIds, fn($q) => $q->whereIn('club_id', $dto->clubIds))
+            ->when($dto->positionIds, fn($q) => $q->whereHas('positions', fn($q) => $q->whereIn('positions.id', $dto->positionIds)))
             ->get();
     }
 }

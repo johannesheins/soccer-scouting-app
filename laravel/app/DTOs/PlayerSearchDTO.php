@@ -18,13 +18,13 @@ class PlayerSearchDTO{
         set => $value;
     }
 
-    public array $clubs = []{
-        get => $this->clubs;
+    public array $clubIds = []{
+        get => $this->clubIds;
         set => $value;
     }
 
-    public array $positions = []{
-        get => $this->positions;
+    public array $positionIds = []{
+        get => $this->positionIds;
         set => $value;
     }
 
@@ -32,7 +32,7 @@ class PlayerSearchDTO{
         $this->firstname = $array['firstname'] ?? null;
         $this->lastname = $array['lastname'] ?? null;
         $this->year_of_birth = $array['year_of_birth'] ?? null;
-        $this->clubs = $array['club_ids'] ?? [];
-        $this->positions = $array['position_ids'] ?? [];
+        $this->clubIds = $array['club_ids'] ?? [];
+        $this->positionIds = $array['position_ids'] ?? [];
     }
 }
