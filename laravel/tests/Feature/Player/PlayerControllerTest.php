@@ -82,6 +82,8 @@ class PlayerControllerTest extends TestCase
 
         $response->assertRedirect(route('player.index'));
         $this->assertDatabaseHas('players', ['firstname' => 'John', 'lastname' => 'Doe', 'year_of_birth' => 1999]);
+        $player = Player::where('firstname', 'John')->first();
+        $positions->each(fn ($pos) => $this->assertDatabaseHas('player_positions', ['player_id' => $player->id, 'position_id' => $pos->id]));
     }
 
     public function test_store_guest_redirect_login(): void
@@ -98,6 +100,114 @@ class PlayerControllerTest extends TestCase
         ]);
 
         $response->assertRedirect(route('login'));
+    }
+
+    public function test_store_validates_required_fields(): void
+    {
+        $response = $this->actingAs($this->user)
+            ->post(route('player.store'), []);
+
+        $response->assertInvalid(['firstname', 'lastname', 'year_of_birth', 'club_id', 'position_ids']);
+    }
+
+    public function test_store_validates_club_exists(): void
+    {
+        $positions = Position::factory(2)->create();
+
+        $response = $this->actingAs($this->user)
+            ->post(route('player.store'), [
+                'firstname' => 'John',
+                'lastname' => 'Doe',
+                'year_of_birth' => 1999,
+                'club_id' => 999,
+                'position_ids' => $positions->pluck('id')->toArray(),
+            ]);
+
+        $response->assertInvalid(['club_id']);
+    }
+
+    public function test_store_validates_positions_exist(): void
+    {
+        $club = Club::factory()->create();
+
+        $response = $this->actingAs($this->user)
+            ->post(route('player.store'), [
+                'firstname' => 'John',
+                'lastname' => 'Doe',
+                'year_of_birth' => 1999,
+                'club_id' => $club->id,
+                'position_ids' => [999],
+            ]);
+
+        $response->assertInvalid(['position_ids.0']);
+    }
+
+    public function test_store_validates_year_of_birth_is_integer(): void
+    {
+        $club = Club::factory()->create();
+        $position = Position::factory()->create();
+
+        $response = $this->actingAs($this->user)
+            ->post(route('player.store'), [
+                'firstname' => 'John',
+                'lastname' => 'Doe',
+                'year_of_birth' => 'not-an-integer',
+                'club_id' => $club->id,
+                'position_ids' => [$position->id],
+            ]);
+
+        $response->assertInvalid(['year_of_birth']);
+    }
+
+    public function test_store_validates_firstname_max_length(): void
+    {
+        $club = Club::factory()->create();
+        $position = Position::factory()->create();
+
+        $response = $this->actingAs($this->user)
+            ->post(route('player.store'), [
+                'firstname' => str_repeat('a', 256),
+                'lastname' => 'Doe',
+                'year_of_birth' => 1999,
+                'club_id' => $club->id,
+                'position_ids' => [$position->id],
+            ]);
+
+        $response->assertInvalid(['firstname']);
+    }
+
+    public function test_store_validates_lastname_max_length(): void
+    {
+        $club = Club::factory()->create();
+        $position = Position::factory()->create();
+
+        $response = $this->actingAs($this->user)
+            ->post(route('player.store'), [
+                'firstname' => 'John',
+                'lastname' => str_repeat('a', 256),
+                'year_of_birth' => 1999,
+                'club_id' => $club->id,
+                'position_ids' => [$position->id],
+            ]);
+
+        $response->assertInvalid(['lastname']);
+    }
+    #endregion
+
+    #region show
+    public function test_show_guest_redirect_login(): void
+    {
+        $player = Player::factory()->create();
+
+        $this->get(route('player.show', $player))
+            ->assertRedirect(route('login'));
+    }
+
+    public function test_show_returns_404_for_nonexistent_player(): void
+    {
+        $this->actingAs($this->user)
+            ->get(route('player.show', 999))
+            ->assertNotFound();
     }
     #endregion
 
@@ -135,6 +245,13 @@ class PlayerControllerTest extends TestCase
         $this->get(route('player.edit', $player))
             ->assertRedirect(route('login'));
     }
+
+    public function test_edit_returns_404_for_nonexistent_player(): void
+    {
+        $this->actingAs($this->user)
+            ->get(route('player.edit', 999))
+            ->assertNotFound();
+    }
     #endregion
 
     #region update
@@ -162,7 +279,7 @@ class PlayerControllerTest extends TestCase
         $response->assertRedirect(route('player.index'));
         $this->assertDatabaseHas('players', ['id' => $player->id, 'firstname' => 'Jacob']);
         $this->assertDatabaseHas('player_positions', ['player_id' => $player->id, 'position_id' => $newPosition->id]);
-        $this->assertDatabaseMissing('player_positions', ['player_id' => $player->id, 'position_id' => $oldPosition->id]);
+        $oldPosition->each(fn ($pos) => $this->assertDatabaseMissing('player_positions', ['player_id' => $player->id, 'position_id' => $pos->id]));
     }
 
     public function test_update_guest_redirect_login(): void
@@ -171,6 +288,125 @@ class PlayerControllerTest extends TestCase
 
         $this->put(route('player.update', $player))
             ->assertRedirect(route('login'));
+    }
+
+    public function test_update_validates_required_fields(): void
+    {
+        $player = Player::factory()->create();
+
+        $response = $this->actingAs($this->user)
+            ->put(route('player.update', $player), []);
+
+        $response->assertInvalid(['firstname', 'lastname', 'year_of_birth', 'club_id', 'position_ids']);
+    }
+
+    public function test_update_validates_club_exists(): void
+    {
+        $club = Club::factory()->create();
+        $position = Position::factory()->create();
+        $player = Player::factory()->create(['club_id' => $club->id]);
+        $player->positions()->attach($position->id);
+
+        $response = $this->actingAs($this->user)
+            ->put(route('player.update', $player), [
+                'firstname' => 'John',
+                'lastname' => 'Doe',
+                'year_of_birth' => 1999,
+                'club_id' => 999,
+                'position_ids' => [$position->id],
+            ]);
+
+        $response->assertInvalid(['club_id']);
+    }
+
+    public function test_update_validates_positions_exist(): void
+    {
+        $club = Club::factory()->create();
+        $player = Player::factory()->create(['club_id' => $club->id]);
+
+        $response = $this->actingAs($this->user)
+            ->put(route('player.update', $player), [
+                'firstname' => 'John',
+                'lastname' => 'Doe',
+                'year_of_birth' => 1999,
+                'club_id' => $club->id,
+                'position_ids' => [999],
+            ]);
+
+        $response->assertInvalid(['position_ids.0']);
+    }
+
+    public function test_update_validates_year_of_birth_is_integer(): void
+    {
+        $club = Club::factory()->create();
+        $position = Position::factory()->create();
+        $player = Player::factory()->create(['club_id' => $club->id]);
+        $player->positions()->attach($position->id);
+
+        $response = $this->actingAs($this->user)
+            ->put(route('player.update', $player), [
+                'firstname' => 'John',
+                'lastname' => 'Doe',
+                'year_of_birth' => 'not-an-integer',
+                'club_id' => $club->id,
+                'position_ids' => [$position->id],
+            ]);
+
+        $response->assertInvalid(['year_of_birth']);
+    }
+
+    public function test_update_validates_firstname_max_length(): void
+    {
+        $club = Club::factory()->create();
+        $position = Position::factory()->create();
+        $player = Player::factory()->create(['club_id' => $club->id]);
+        $player->positions()->attach($position->id);
+
+        $response = $this->actingAs($this->user)
+            ->put(route('player.update', $player), [
+                'firstname' => str_repeat('a', 256),
+                'lastname' => 'Doe',
+                'year_of_birth' => 1999,
+                'club_id' => $club->id,
+                'position_ids' => [$position->id],
+            ]);
+
+        $response->assertInvalid(['firstname']);
+    }
+
+    public function test_update_validates_lastname_max_length(): void
+    {
+        $club = Club::factory()->create();
+        $position = Position::factory()->create();
+        $player = Player::factory()->create(['club_id' => $club->id]);
+        $player->positions()->attach($position->id);
+
+        $response = $this->actingAs($this->user)
+            ->put(route('player.update', $player), [
+                'firstname' => 'John',
+                'lastname' => str_repeat('a', 256),
+                'year_of_birth' => 1999,
+                'club_id' => $club->id,
+                'position_ids' => [$position->id],
+            ]);
+
+        $response->assertInvalid(['lastname']);
+    }
+
+    public function test_update_returns_404_for_nonexistent_player(): void
+    {
+        $club = Club::factory()->create();
+        $position = Position::factory()->create();
+
+        $this->actingAs($this->user)
+            ->put(route('player.update', 999), [
+                'firstname' => 'John',
+                'lastname' => 'Doe',
+                'year_of_birth' => 1999,
+                'club_id' => $club->id,
+                'position_ids' => [$position->id],
+            ])
+            ->assertNotFound();
     }
     #endregion
 
@@ -200,6 +436,13 @@ class PlayerControllerTest extends TestCase
         $response = $this->delete(route('player.destroy', $player));
 
         $response->assertRedirect(route('login'));
+    }
+
+    public function test_destroy_returns_404_for_nonexistent_player(): void
+    {
+        $this->actingAs($this->user)
+            ->delete(route('player.destroy', 999))
+            ->assertNotFound();
     }
     #endregion
 
@@ -240,6 +483,46 @@ class PlayerControllerTest extends TestCase
         $response = $this->get(route('player.search'));
 
         $response->assertRedirect(route('login'));
+    }
+
+    public function test_search_validates_club_exists(): void
+    {
+        $response = $this->actingAs($this->user)
+            ->get(route('player.search', ['club_ids' => [999]]));
+
+        $response->assertInvalid(['club_ids.0']);
+    }
+
+    public function test_search_validates_positions_exist(): void
+    {
+        $response = $this->actingAs($this->user)
+            ->get(route('player.search', ['position_ids' => [999]]));
+
+        $response->assertInvalid(['position_ids.0']);
+    }
+
+    public function test_search_validates_years_of_birth_are_integers(): void
+    {
+        $response = $this->actingAs($this->user)
+            ->get(route('player.search', ['years_of_birth' => ['not-an-integer']]));
+
+        $response->assertInvalid(['years_of_birth.0']);
+    }
+
+    public function test_search_validates_firstname_max_length(): void
+    {
+        $response = $this->actingAs($this->user)
+            ->get(route('player.search', ['firstname' => str_repeat('a', 256)]));
+
+        $response->assertInvalid(['firstname']);
+    }
+
+    public function test_search_validates_lastname_max_length(): void
+    {
+        $response = $this->actingAs($this->user)
+            ->get(route('player.search', ['lastname' => str_repeat('a', 256)]));
+
+        $response->assertInvalid(['lastname']);
     }
     #endregion
 }
