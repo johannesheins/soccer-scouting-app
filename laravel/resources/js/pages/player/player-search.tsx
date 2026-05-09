@@ -48,7 +48,7 @@ export default function PlayerSearch(){
         <>
             <Head title="Spieler suchen" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <div className="relative min-h-screen overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+                <div className="relative min-h-screen rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                     <form onSubmit={submit}>
                         <FieldSet>
                             <FieldGroup className="grid sm:grid-cols-[3fr_3fr_1fr]">
