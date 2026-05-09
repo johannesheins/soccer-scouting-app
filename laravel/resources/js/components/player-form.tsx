@@ -1,7 +1,7 @@
 import {Head, useForm, usePage} from '@inertiajs/react';
 import React from 'react';
 import { useState } from 'react';
-import {toPositionOptions, toPlayerPositionIds, groupClubsByLetter, getYearOptions} from '@/hooks/form-options';
+import {toPositionOptions, toPlayerPositionIds, toClubOptions, getYearOptions} from '@/hooks/form-options';
 import {
     Field,
     FieldGroup,
@@ -9,11 +9,10 @@ import {
     FieldSet,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input";
-import MultipleSelector from "@/components/ui/multi-select";
-import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Button} from "@/components/ui/button";
 import InputError from "@/components/input-error";
 import type { Club, PlayerSmall, Position } from "@/types/types";
+import {SingleSelector} from "@/components/ui/single-select";
 
 type Props = { positions: Position[]; clubs: Club[]; player?: PlayerSmall };
 
@@ -23,7 +22,14 @@ export default function PlayerForm(edit = false) {
     const yearOfBirthOptions = getYearOptions();
     const positionOptions = toPositionOptions(positions);
     const playerPositions = toPlayerPositionIds(player);
-    const clubsByLetter = groupClubsByLetter(clubs);
+    const clubOptions = toClubOptions(clubs);
+
+    const [selectedYearOfBirth, setSelectedYearOfBirth] = useState(
+        yearOfBirthOptions.filter(o => o.value === String(player?.year_of_birth))
+    );
+    const [selectedClub, setSelectedClub] = useState(
+        clubOptions.filter(o => o.value === String(player?.club_id))
+    );
     const [selectedPositions, setSelectedPositions] = useState(
         positionOptions.filter(o => playerPositions.includes(o.value))
     );
@@ -68,42 +74,40 @@ export default function PlayerForm(edit = false) {
                         </Field>
                         <Field>
                             <FieldLabel htmlFor="year_of_birth">Jahrgang</FieldLabel>
-                            <Select value={data.year_of_birth} onValueChange={v => setData('year_of_birth', v)}>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Jahrgang wählen" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {yearOfBirthOptions.map(c => (
-                                        <SelectItem key={c.value} value={String(c.value)}>{c.label}</SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
+                            <SingleSelector
+                                value={selectedYearOfBirth}
+                                onChange={opts => {
+                                    setSelectedYearOfBirth(opts);
+                                    setData('year_of_birth', opts[0]?.value ?? '');
+                                }}
+                                defaultOptions={yearOfBirthOptions}
+                                placeholder="Jahrgang wählen"
+                                hidePlaceholderWhenSelected
+                                emptyIndicator={<p className="text-center text-sm">Keinen Jahrgang gefunden</p>}
+                            />
                             <InputError message={errors.year_of_birth} />
                         </Field>
                     </FieldGroup>
                     <FieldGroup className="grid sm:grid-cols-[2fr_2fr_1fr]">
                         <Field>
                             <FieldLabel htmlFor="club_id">Club</FieldLabel>
-                            <Select value={data.club_id} onValueChange={v => setData('club_id', v)}>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Verein wählen" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {Object.entries(clubsByLetter).sort().map(([letter, group]) => (
-                                        <SelectGroup key={letter}>
-                                            <SelectLabel>{letter}</SelectLabel>
-                                            {group.map(c => (
-                                                <SelectItem key={c.id} value={String(c.id)}>{c.clubname}</SelectItem>
-                                            ))}
-                                        </SelectGroup>
-                                    ))}
-                                </SelectContent>
-                            </Select>
+                            <SingleSelector
+                                value={selectedClub}
+                                onChange={opts => {
+                                    setSelectedClub(opts);
+                                    setData('club_id', opts[0]?.value ?? '');
+                                }}
+                                defaultOptions={clubOptions}
+                                groupBy="group"
+                                placeholder="Verein wählen"
+                                hidePlaceholderWhenSelected
+                                emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
+                            />
                             <InputError message={errors.club_id} />
                         </Field>
                         <Field className="sm:col-span-2">
                             <FieldLabel htmlFor="position_ids">Position</FieldLabel>
-                            <MultipleSelector
+                            <SingleSelector
                                 value={selectedPositions}
                                 onChange={opts => {
                                     setSelectedPositions(opts);
