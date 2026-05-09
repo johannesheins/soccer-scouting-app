@@ -31,9 +31,10 @@ const mainNavItems: NavItem[] = [
 
 const footerNavItems: NavItem[] = [
     {
-        title: 'Verwaltung', //TODO Hide for not administrator users
+        title: 'Verwaltung',
         href: administration(),
         icon: Settings,
+        isActive: false, //TODO Hide for not administrator users
     },
 ];
 
