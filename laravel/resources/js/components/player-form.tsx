@@ -1,7 +1,7 @@
 import {Head, useForm, usePage} from '@inertiajs/react';
 import React from 'react';
 import { useState } from 'react';
-import { toPositionOptions, toPlayerPositionIds, groupClubsByLetter } from '@/hooks/form-options';
+import {toPositionOptions, toPlayerPositionIds, groupClubsByLetter, getYearOptions} from '@/hooks/form-options';
 import {
     Field,
     FieldGroup,
@@ -20,6 +20,7 @@ type Props = { positions: Position[]; clubs: Club[]; player?: PlayerSmall };
 export default function PlayerForm(edit = false) {
     const { player, positions, clubs } = usePage<Props>().props;
 
+    const yearOfBirthOptions = getYearOptions();
     const positionOptions = toPositionOptions(positions);
     const playerPositions = toPlayerPositionIds(player);
     const clubsByLetter = groupClubsByLetter(clubs);
@@ -30,7 +31,7 @@ export default function PlayerForm(edit = false) {
     const { data, setData, post, put, processing, errors } = useForm({
         firstname: player?.firstname ?? '',
         lastname: player?.lastname ?? '',
-        year_of_birth: player?.year_of_birth ?? '',
+        year_of_birth: String(player?.year_of_birth) ?? '',
         club_id: String(player?.club_id) ?? '',
         position_ids: playerPositions ?? [] as string[],
     });
@@ -48,7 +49,7 @@ export default function PlayerForm(edit = false) {
             <form onSubmit={submit}>
                 <Head title={"Spieler " + (edit ? 'bearbeiten' : 'erstellen')} />
                 <FieldSet>
-                    <FieldGroup className="grid sm:grid-cols-[3fr_3fr_1fr]">
+                    <FieldGroup className="grid sm:grid-cols-[2fr_2fr_1fr]">
                         <Field>
                             <FieldLabel htmlFor="firstname">Vorname</FieldLabel>
                             <Input id="firstname"
@@ -67,14 +68,20 @@ export default function PlayerForm(edit = false) {
                         </Field>
                         <Field>
                             <FieldLabel htmlFor="year_of_birth">Jahrgang</FieldLabel>
-                            <Input id="year_of_birth" type="number" min="1" className="max-w-30"
-                                   value={data.year_of_birth}
-                                   onChange={e => setData('year_of_birth', e.target.value)}
-                            />
+                            <Select value={data.year_of_birth} onValueChange={v => setData('year_of_birth', v)}>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Jahrgang wählen" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {yearOfBirthOptions.map(c => (
+                                        <SelectItem key={c.value} value={String(c.value)}>{c.label}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                             <InputError message={errors.year_of_birth} />
                         </Field>
                     </FieldGroup>
-                    <FieldGroup className="grid sm:grid-cols-[3fr_3fr_1fr]">
+                    <FieldGroup className="grid sm:grid-cols-[2fr_2fr_1fr]">
                         <Field>
                             <FieldLabel htmlFor="club_id">Club</FieldLabel>
                             <Select value={data.club_id} onValueChange={v => setData('club_id', v)}>

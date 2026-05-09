@@ -28,3 +28,16 @@ export function toClubOptions(clubs: Club[]): Option[]{
         group: c.clubname.substring(0,1).toUpperCase()
     }))
 }
+
+export function getYearOptions(): Option[]{
+    const currentYear = new Date().getFullYear()
+    const years = [];
+    for(let y = 1900; y < currentYear; y++ ){
+        years.push(y);
+    }
+
+    return years.sort().reverse().map(y => ({
+        value: String(y),
+        label: String(y),
+    }))
+}

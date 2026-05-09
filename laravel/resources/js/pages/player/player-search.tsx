@@ -9,7 +9,7 @@ import MultipleSelector from "@/components/ui/multi-select";
 import {Button} from "@/components/ui/button";
 import { useState } from 'react';
 import type { Option } from '@/components/ui/multi-select';
-import {toPositionOptions, toClubOptions} from "@/hooks/form-options";
+import {toPositionOptions, toClubOptions, getYearOptions} from "@/hooks/form-options";
 import type {Club, Player, Position} from "@/types/types";
 
 import {PlayerTable} from "@/pages/player/table/player-table";
@@ -19,6 +19,9 @@ type Props = { positions: Position[]; clubs: Club[]; players: Player[]};
 
 export default function PlayerSearch(){
     const { players, positions, clubs } = usePage<Props>().props;
+
+    const yearOfBirthOptions = getYearOptions();
+    const [selectedYearOfBirths, setYearOfBirths] = useState<Option[]>([]);
 
     const positionOptions = toPositionOptions(positions);
     const [selectedPositions, setSelectedPositions] = useState<Option[]>([]);
@@ -31,7 +34,7 @@ export default function PlayerSearch(){
     const { data, setData, get, processing, errors, reset } = useForm({
         firstname: params.get('firstname') ?? '',
         lastname: params.get('lastname') ?? '',
-        year_of_birth: params.get('year_of_birth') ?? '',
+        year_of_births: params.getAll('year_of_births'),
         club_ids: params.getAll('club_ids'),
         position_ids: params.getAll('position_ids'),
     });
@@ -53,7 +56,7 @@ export default function PlayerSearch(){
                 <div className="relative min-h-screen rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                     <form onSubmit={submit}>
                         <FieldSet>
-                            <FieldGroup className="grid sm:grid-cols-[3fr_3fr_1fr]">
+                            <FieldGroup className="grid sm:grid-cols-[1fr_1fr]">
                                 <Field>
                                     <FieldLabel htmlFor="firstname">Vorname</FieldLabel>
                                     <Input id="firstname"
@@ -70,16 +73,24 @@ export default function PlayerSearch(){
                                     />
                                     <InputError message={errors.lastname} />
                                 </Field>
-                                <Field>
-                                    <FieldLabel htmlFor="year_of_birth">Jahrgang</FieldLabel>
-                                    <Input id="year_of_birth" type="number" min="1" className="max-w-30"
-                                           value={data.year_of_birth}
-                                           onChange={e => setData('year_of_birth', e.target.value)}
-                                    />
-                                    <InputError message={errors.year_of_birth} />
-                                </Field>
                             </FieldGroup>
-                            <FieldGroup className="grid sm:grid-cols-[3fr_3fr_1fr]">
+                            <FieldGroup className="grid sm:grid-cols-[1fr_1fr_1fr]">
+                                <Field>
+                                    <FieldLabel htmlFor="year_of_births">Jahrgang</FieldLabel>
+                                    <MultipleSelector
+                                        value={selectedYearOfBirths}
+                                        onChange={opts => {
+                                            setYearOfBirths(opts);
+                                            setData('year_of_births', opts.map(o => o.value));
+                                        }}
+                                        defaultOptions={yearOfBirthOptions}
+                                        groupBy="group"
+                                        placeholder="Jahrgang wählen"
+                                        hidePlaceholderWhenSelected
+                                        emptyIndicator={<p className="text-center text-sm">Keinen Jahrgang gefunden</p>}
+                                    />
+                                    <InputError message={errors.year_of_births} />
+                                </Field>
                                 <Field>
                                     <FieldLabel htmlFor="club_ids">Club</FieldLabel>
                                     <MultipleSelector
@@ -96,7 +107,7 @@ export default function PlayerSearch(){
                                     />
                                     <InputError message={errors.club_ids} />
                                 </Field>
-                                <Field className="sm:col-span-2">
+                                <Field>
                                     <FieldLabel htmlFor="position_ids">Position</FieldLabel>
                                     <MultipleSelector
                                         value={selectedPositions}
