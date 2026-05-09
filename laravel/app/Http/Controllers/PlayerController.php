@@ -10,8 +10,6 @@ use App\Models\Position;
 use App\Http\Requests\Player\PlayerRequest;
 use App\Services\PlayerSearchService;
 
-//TODO Implement PHPUnit test
-
 class PlayerController extends Controller
 {
     public function index()
