@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->id();
             $table->string('firstname');
             $table->string('lastname');
-            $table->unsignedTinyInteger('age');
+            $table->unsignedTinyInteger('year_of_birth');
             $table->foreignIdFor(Club::class)->constrained()->cascadeOnUpdate()->restrictOnDelete();
         });
 

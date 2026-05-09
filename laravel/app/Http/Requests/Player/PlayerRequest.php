@@ -9,7 +9,7 @@ class PlayerRequest extends FormRequest{
         return [
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
-            'age' => 'required|integer',
+            'year_of_birth' => 'required|integer',
             'club_id' => 'required|exists:clubs,id',
             'position_ids.*' => 'integer|exists:positions,id',
         ];

@@ -18,7 +18,7 @@ export type PlayerSmall = {
     id: number,
     firstname: string,
     lastname: string,
-    age: number,
+    year_of_birth: number,
     club_id: number,
     positions: { id: number }[],
 };
@@ -27,7 +27,7 @@ export type Player = {
     id: number,
     firstname: string,
     lastname: string,
-    age: number,
+    year_of_birth: number,
     club: Club,
     positions: Position[],
 }

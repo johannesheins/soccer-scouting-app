@@ -11,7 +11,7 @@ class PlayerSearchRequest extends FormRequest
         return [
             'firstname'      => ['nullable', 'string', 'max:255'],
             'lastname'       => ['nullable', 'string', 'max:255'],
-            'age'            => ['nullable', 'integer'],
+            'year_of_birth'  => ['nullable', 'integer'],
             'club_ids'       => ['nullable', 'array'],
             'club_ids.*'     => ['integer', 'exists:clubs,id'],
             'position_ids'   => ['nullable', 'array'],

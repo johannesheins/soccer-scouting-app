@@ -31,9 +31,9 @@ export const playerColumns: ColumnDef<Player>[] = [
         cell: ({row}) => <div className="font-medium">{row.getValue("lastname")}</div>,
     },
     {
-        accessorKey: "age",
-        header: sortHeader("Alter"),
-        cell: ({row}) => <div className="font-medium">{row.getValue("age")}</div>,
+        accessorKey: "year_of_birth",
+        header: sortHeader("Jahrgang"),
+        cell: ({row}) => <div className="font-medium">{row.getValue("year_of_birth")}</div>,
     },
     {
         accessorKey: "club",

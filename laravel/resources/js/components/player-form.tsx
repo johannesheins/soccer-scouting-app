@@ -30,7 +30,7 @@ export default function PlayerForm(edit = false) {
     const { data, setData, post, put, processing, errors } = useForm({
         firstname: player?.firstname ?? '',
         lastname: player?.lastname ?? '',
-        age: player?.age ?? '',
+        year_of_birth: player?.year_of_birth ?? '',
         club_id: String(player?.club_id) ?? '',
         position_ids: playerPositions ?? [] as string[],
     });
@@ -66,12 +66,12 @@ export default function PlayerForm(edit = false) {
                             <InputError message={errors.lastname} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor="age">Alter</FieldLabel>
-                            <Input id="age" type="number" min="1" className="max-w-30"
-                                   value={data.age}
-                                   onChange={e => setData('age', e.target.value)}
+                            <FieldLabel htmlFor="year_of_birth">Jahrgang</FieldLabel>
+                            <Input id="year_of_birth" type="number" min="1" className="max-w-30"
+                                   value={data.year_of_birth}
+                                   onChange={e => setData('year_of_birth', e.target.value)}
                             />
-                            <InputError message={errors.age} />
+                            <InputError message={errors.year_of_birth} />
                         </Field>
                     </FieldGroup>
                     <FieldGroup className="grid sm:grid-cols-[3fr_3fr_1fr]">

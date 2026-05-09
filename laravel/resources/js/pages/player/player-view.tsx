@@ -20,8 +20,8 @@ export function PlayerView({player}: { player: Player }) {
 
             <CardContent className="mt-1 grid grid-cols-2 gap-4">
                 <div>
-                    <p className="text-muted-foreground text-xs uppercase tracking-wide mb-1">Alter</p>
-                    <p className="font-medium">{player.age}</p>
+                    <p className="text-muted-foreground text-xs uppercase tracking-wide mb-1">Jahrgang</p>
+                    <p className="font-medium">{player.year_of_birth}</p>
                 </div>
                 <div>
                     <p className="text-muted-foreground text-xs uppercase tracking-wide mb-1">Verein</p>

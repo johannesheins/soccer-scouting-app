@@ -31,7 +31,7 @@ export default function PlayerSearch(){
     const { data, setData, get, processing, errors, reset } = useForm({
         firstname: params.get('firstname') ?? '',
         lastname: params.get('lastname') ?? '',
-        age: params.get('age') ?? '',
+        year_of_birth: params.get('year_of_birth') ?? '',
         club_ids: params.getAll('club_ids'),
         position_ids: params.getAll('position_ids'),
     });
@@ -71,12 +71,12 @@ export default function PlayerSearch(){
                                     <InputError message={errors.lastname} />
                                 </Field>
                                 <Field>
-                                    <FieldLabel htmlFor="age">Alter</FieldLabel>
-                                    <Input id="age" type="number" min="1" className="max-w-30"
-                                           value={data.age}
-                                           onChange={e => setData('age', e.target.value)}
+                                    <FieldLabel htmlFor="year_of_birth">Alter</FieldLabel>
+                                    <Input id="year_of_birth" type="number" min="1" className="max-w-30"
+                                           value={data.year_of_birth}
+                                           onChange={e => setData('year_of_birth', e.target.value)}
                                     />
-                                    <InputError message={errors.age} />
+                                    <InputError message={errors.year_of_birth} />
                                 </Field>
                             </FieldGroup>
                             <FieldGroup className="grid sm:grid-cols-[3fr_3fr_1fr]">
