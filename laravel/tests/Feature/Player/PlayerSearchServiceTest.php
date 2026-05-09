@@ -10,81 +10,70 @@ use App\Services\PlayerSearchService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-use function Laravel\Prompts\error;
-
 class PlayerSearchServiceTest extends TestCase
 {
     use RefreshDatabase;
 
     private PlayerSearchService $service;
 
-    protected function setUp(): void
-    {
+    protected function setUp(): void{
         parent::setUp();
         $this->service = new PlayerSearchService();
     }
 
     #region firstname
-    public function test_filters_by_firstname(): void
-    {
+    public function test_filters_by_firstname(): void{
         Player::factory()->create(['firstname' => 'John']);
         Player::factory()->create(['firstname' => 'Jane']);
 
         $result = $this->search(['firstname' => 'John']);
-
         $this->assertCount(1, $result);
-        /** @var Player $player */
+
         $player = $result->first();
         $this->assertSame('John', $player->firstname);
     }
 
-    public function test_firstname_filter_matches_partial(): void
-    {
+    public function test_firstname_filter_matches_partial(): void{
         Player::factory()->create(['firstname' => 'Johannes']);
         Player::factory()->create(['firstname' => 'Jane']);
 
         $result = $this->search(['firstname' => 'Jo']);
-
         $this->assertCount(1, $result);
-        /** @var Player $player */
+
         $player = $result->first();
         $this->assertSame('Johannes', $player->firstname);
     }
 
-    public function test_no_firstname_filter_returns_all(): void
-    {
+    public function test_no_firstname_filter_returns_all(): void{
         Player::factory()->count(3)->create();
 
         $result = $this->search([]);
-
         $this->assertCount(3, $result);
     }
 
     #endregion
 
     #region lastname
-    public function test_filters_by_lastname(): void
-    {
+    public function test_filters_by_lastname(): void{
         Player::factory()->create(['lastname' => 'Müller']);
         Player::factory()->create(['lastname' => 'Schmidt']);
 
         $result = $this->search(['lastname' => 'Müller']);
 
         $this->assertCount(1, $result);
-        /** @var Player $player */
+
         $player = $result->first();
         $this->assertSame('Müller', $player->lastname);
     }
 
-    public function test_lastname_filter_matches_partial(): void
-    {
+    public function test_lastname_filter_matches_partial(): void{
         Player::factory()->create(['lastname' => 'Müller']);
         Player::factory()->create(['lastname' => 'Meier']);
 
         $result = $this->search(['lastname' => 'ller']);
 
         $this->assertCount(1, $result);
-        /** @var Player $player */
+
         $player = $result->first();
         $this->assertSame('Müller', $player->lastname);
     }
@@ -92,21 +81,19 @@ class PlayerSearchServiceTest extends TestCase
     #endregion
 
     #region yearsOfBirth
-    public function test_filters_by_year_of_birth(): void
-    {
+    public function test_filters_by_year_of_birth(): void{
         Player::factory()->create(['year_of_birth' => 1995]);
         Player::factory()->create(['year_of_birth' => 2000]);
 
         $result = $this->search(['years_of_birth' => [1995]]);
 
         $this->assertCount(1, $result);
-        /** @var Player $player */
+
         $player = $result->first();
         $this->assertSame(1995, $player->year_of_birth);
     }
 
-    public function test_filters_by_multiple_years_of_birth(): void
-    {
+    public function test_filters_by_multiple_years_of_birth(): void{
         Player::factory()->create(['year_of_birth' => 1995]);
         Player::factory()->create(['year_of_birth' => 1998]);
         Player::factory()->create(['year_of_birth' => 2000]);
@@ -119,8 +106,7 @@ class PlayerSearchServiceTest extends TestCase
     #endregion
 
     #region clubIds
-    public function test_filters_by_club(): void
-    {
+    public function test_filters_by_club(): void{
         $club = Club::factory()->create();
         $otherClub = Club::factory()->create();
 
@@ -133,8 +119,7 @@ class PlayerSearchServiceTest extends TestCase
         $this->assertSame($club->id, $result->first()->club_id);
     }
 
-    public function test_filters_by_multiple_clubs(): void
-    {
+    public function test_filters_by_multiple_clubs(): void{
         $club1 = Club::factory()->create();
         $club2 = Club::factory()->create();
         $otherClub = Club::factory()->create();
@@ -151,8 +136,7 @@ class PlayerSearchServiceTest extends TestCase
     #endregion
 
     #region positionIds
-    public function test_filters_by_position(): void
-    {
+    public function test_filters_by_position(): void{
         $position = Position::factory()->create();
         $otherPosition = Position::factory()->create();
 
@@ -168,8 +152,7 @@ class PlayerSearchServiceTest extends TestCase
         $this->assertSame($match->id, $result->first()->id);
     }
 
-    public function test_filters_by_multiple_positions(): void
-    {
+    public function test_filters_by_multiple_positions(): void{
         $pos1 = Position::factory()->create();
         $pos2 = Position::factory()->create();
         $otherPos = Position::factory()->create();
@@ -191,8 +174,7 @@ class PlayerSearchServiceTest extends TestCase
     #endregion
 
     #region kombinierte Filter
-    public function test_combines_multiple_filters(): void
-    {
+    public function test_combines_multiple_filters(): void{
         $club = Club::factory()->create();
 
         $match = Player::factory()->create([
@@ -216,8 +198,7 @@ class PlayerSearchServiceTest extends TestCase
 
     #endregion
 
-    private function search(array $params): \Illuminate\Database\Eloquent\Collection
-    {
+    private function search(array $params): \Illuminate\Database\Eloquent\Collection{
         return $this->service->searchPlayers(new PlayerSearchDTO($params), []);
     }
 }
