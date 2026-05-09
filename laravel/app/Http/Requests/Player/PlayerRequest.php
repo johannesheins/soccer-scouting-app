@@ -4,8 +4,10 @@ namespace App\Http\Requests\Player;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PlayerRequest extends FormRequest{
-    public function rules(): array{
+class PlayerRequest extends FormRequest
+{
+    public function rules(): array
+    {
         return [
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
@@ -16,7 +18,8 @@ class PlayerRequest extends FormRequest{
         ];
     }
 
-    public function authorize(): bool{
+    public function authorize(): bool
+    {
         return auth()->check();
     }
 }

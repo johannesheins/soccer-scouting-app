@@ -14,7 +14,8 @@ class Club extends Model
 
     public $timestamps = false;
 
-    public function players(): HasMany{
+    public function players(): HasMany
+    {
         return $this->hasMany(Player::class);
     }
 }

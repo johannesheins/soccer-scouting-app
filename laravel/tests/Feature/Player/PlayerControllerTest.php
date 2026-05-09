@@ -15,27 +15,31 @@ class PlayerControllerTest extends TestCase
 
     private User $user;
 
-    protected function setUp(): void{
+    protected function setUp(): void
+    {
         parent::setUp();
         $this->user = User::factory()->create();
     }
 
     #region index
-    public function test_index(): void{
+    public function test_index(): void
+    {
         $response = $this->actingAs($this->user)
             ->get(route('player.index'));
 
-        $response->assertInertia(fn($page) => $page->component('player/player-index'));
+        $response->assertInertia(fn ($page) => $page->component('player/player-index'));
     }
 
-    public function test_index_guest_redirect_login(): void{
+    public function test_index_guest_redirect_login(): void
+    {
         $response = $this->get(route('player.index'));
         $response->assertRedirect(route('login'));
     }
     #endregion
 
     #region store
-    public function test_store_creates_player(): void{
+    public function test_store_creates_player(): void
+    {
         $clubs = Club::factory()->create();
         $positions = Position::factory(2)->create();
 
@@ -52,7 +56,8 @@ class PlayerControllerTest extends TestCase
         $this->assertDatabaseHas('players', ['firstname' => 'John', 'lastname' => 'Doe', 'year_of_birth' => 1999]);
     }
 
-    public function test_store_guest_redirect_login(): void{
+    public function test_store_guest_redirect_login(): void
+    {
         $club = Club::factory()->create();
         $positions = Position::factory(2)->create();
 
@@ -69,7 +74,8 @@ class PlayerControllerTest extends TestCase
     #endregion
 
     #region edit
-    public function test_edit_show_player_update_view(): void{
+    public function test_edit_show_player_update_view(): void
+    {
         $clubs = Club::factory()->create();
         $positions = Position::factory(2)->create();
         $player = Player::factory()->create([
@@ -83,7 +89,8 @@ class PlayerControllerTest extends TestCase
         $response = $this->actingAs($this->user)
             ->get(route('player.edit', $player));
 
-        $response->assertInertia(fn($page) => $page
+        $response->assertInertia(
+            fn ($page) => $page
             ->component('player/player-edit')
             ->where('player.id', $player->id)
             ->where('player.firstname', 'John')
@@ -94,7 +101,8 @@ class PlayerControllerTest extends TestCase
         );
     }
 
-    public function test_edit_guest_redirect_login(): void{
+    public function test_edit_guest_redirect_login(): void
+    {
         $player = Player::factory()->create();
 
         $this->get(route('player.edit', $player))
@@ -103,7 +111,8 @@ class PlayerControllerTest extends TestCase
     #endregion
 
     #region update
-    public function test_update_changes_player_data(): void{
+    public function test_update_changes_player_data(): void
+    {
         $club = Club::factory()->create();
         $oldPosition = Position::factory()->create();
         $newPosition = Position::factory()->create();
@@ -129,7 +138,8 @@ class PlayerControllerTest extends TestCase
         $this->assertDatabaseMissing('player_positions', ['player_id' => $player->id, 'position_id' => $oldPosition->id]);
     }
 
-    public function test_update_guest_redirect_login(): void{
+    public function test_update_guest_redirect_login(): void
+    {
         $player = Player::factory()->create();
 
         $this->put(route('player.update', $player))
@@ -138,7 +148,8 @@ class PlayerControllerTest extends TestCase
     #endregion
 
     #region destroy
-    public function test_destroy_deletes_player(): void{
+    public function test_destroy_deletes_player(): void
+    {
         $club = Club::factory()->create();
         $position = Position::factory()->create();
         $player = Player::factory()->create([
@@ -155,7 +166,8 @@ class PlayerControllerTest extends TestCase
         $this->assertDatabaseMissing('player_positions', ['player_id' => $player->id]);
     }
 
-    public function test_destroy_guest_redirect_login(): void{
+    public function test_destroy_guest_redirect_login(): void
+    {
         $player = Player::factory()->create();
 
         $this->delete(route('player.destroy', $player))

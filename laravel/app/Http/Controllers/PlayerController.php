@@ -14,18 +14,21 @@ use App\Services\PlayerSearchService;
 
 class PlayerController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         return inertia('player/player-index');
     }
 
-    public function create(){
+    public function create()
+    {
         return inertia('player/player-create', [
             'positions' => Position::with('positionGroup:id,name')->get(['id', 'position_code', 'position_group_id']),
             'clubs' => Club::all(['id', 'clubname']),
         ]);
     }
 
-    public function store(PlayerRequest $request){
+    public function store(PlayerRequest $request)
+    {
         $validated = $request->validated();
 
         $player = Player::create($validated);
@@ -34,11 +37,13 @@ class PlayerController extends Controller
         return redirect()->route('player.index');
     }
 
-    public function show($id){
+    public function show($id)
+    {
         dd(Player::findOrFail($id));
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
         return inertia('player/player-edit', [
             'player' => Player::findOrFail($id)->load('positions:id'),
             'positions' => Position::with('positionGroup:id,name')->get(['id', 'position_code', 'position_group_id']),
@@ -46,7 +51,8 @@ class PlayerController extends Controller
         ]);
     }
 
-    public function update(PlayerRequest $request, $id){
+    public function update(PlayerRequest $request, $id)
+    {
         $validated = $request->validated();
 
         $player = Player::findOrFail($id);
@@ -56,13 +62,15 @@ class PlayerController extends Controller
         return redirect()->route('player.index');
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         Player::findOrFail($id)->delete();
 
         return redirect()->route('player.index');
     }
 
-    public function search(PlayerSearchRequest $request){
+    public function search(PlayerSearchRequest $request)
+    {
         $playerSearchDTO = new PlayerSearchDTO($request->validated());
         $playerSearchService = new PlayerSearchService();
         $players = $playerSearchService->searchPlayers($playerSearchDTO, ['positions:id,position_code', 'club:id,clubname'])->toArray();

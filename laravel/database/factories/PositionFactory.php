@@ -9,7 +9,8 @@ class PositionFactory extends Factory
 {
     protected $model = Position::class;
 
-    public function definition(): array{
+    public function definition(): array
+    {
         return [
             'position_code' => $this->faker->word(),
         ];

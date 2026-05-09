@@ -9,16 +9,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 #[Fillable(['firstname', 'lastname', 'year_of_birth', 'club_id'])]
-class Player extends Model{
+class Player extends Model
+{
     use HasFactory;
 
     public $timestamps = false;
 
-    public function club(): BelongsTo{
+    public function club(): BelongsTo
+    {
         return $this->belongsTo(Club::class);
     }
 
-    public function positions(): BelongsToMany{
+    public function positions(): BelongsToMany
+    {
         return $this->belongsToMany(Position::class, 'player_positions');
     }
 }
