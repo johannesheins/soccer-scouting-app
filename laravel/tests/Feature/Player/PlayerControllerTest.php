@@ -170,8 +170,49 @@ class PlayerControllerTest extends TestCase
     {
         $player = Player::factory()->create();
 
-        $this->delete(route('player.destroy', $player))
-            ->assertRedirect(route('login'));
+        $response = $this->delete(route('player.destroy', $player));
+
+        $response->assertRedirect(route('login'));
+    }
+    #endregion
+
+    #region search
+    public function test_search_renders_view_with_positions_clubs_and_players(): void
+    {
+        $response = $this->actingAs($this->user)
+            ->get(route('player.search'));
+
+        $response->assertInertia(
+            fn ($page) => $page
+            ->component('player/player-search')
+            ->has('positions')
+            ->has('clubs')
+            ->has('players')
+        );
+    }
+
+    public function test_search_returns_matching_players(): void
+    {
+        $club = Club::factory()->create();
+        Player::factory()->create(['firstname' => 'John', 'club_id' => $club->id]);
+        Player::factory()->create(['firstname' => 'Jane', 'club_id' => $club->id]);
+
+        $response = $this->actingAs($this->user)
+            ->get(route('player.search', ['firstname' => 'John']));
+
+        $response->assertInertia(
+            fn ($page) => $page
+            ->component('player/player-search')
+            ->has('players', 1)
+            ->where('players.0.firstname', 'John')
+        );
+    }
+
+    public function test_search_guest_redirect_login(): void
+    {
+        $response = $this->get(route('player.search'));
+
+        $response->assertRedirect(route('login'));
     }
     #endregion
 }
