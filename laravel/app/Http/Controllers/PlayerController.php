@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DTOs\PlayerSearchDTO;
 use App\Http\Requests\Player\PlayerRequest;
-use App\Http\Requests\PlayerSearchRequest;
+use App\Http\Requests\Player\PlayerSearchRequest;
 use App\Models\Club;
 use App\Models\Player;
 use App\Models\Position;

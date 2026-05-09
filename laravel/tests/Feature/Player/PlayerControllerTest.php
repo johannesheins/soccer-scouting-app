@@ -449,6 +449,10 @@ class PlayerControllerTest extends TestCase
     #region search
     public function test_search_renders_view_with_positions_clubs_and_players(): void
     {
+        Player::factory(10)->create();
+        Position::factory(10)->create();
+        Club::factory(10)->create();
+
         $response = $this->actingAs($this->user)
             ->get(route('player.search'));
 
