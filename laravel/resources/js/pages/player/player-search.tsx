@@ -71,7 +71,7 @@ export default function PlayerSearch(){
                                     <InputError message={errors.lastname} />
                                 </Field>
                                 <Field>
-                                    <FieldLabel htmlFor="year_of_birth">Alter</FieldLabel>
+                                    <FieldLabel htmlFor="year_of_birth">Jahrgang</FieldLabel>
                                     <Input id="year_of_birth" type="number" min="1" className="max-w-30"
                                            value={data.year_of_birth}
                                            onChange={e => setData('year_of_birth', e.target.value)}
