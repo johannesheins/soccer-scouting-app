@@ -1,5 +1,5 @@
 import {player} from "@/routes";
-import {Head, useForm, usePage} from "@inertiajs/react";
+import {Head, router, useForm, usePage} from "@inertiajs/react";
 import React from "react";
 import {Field, FieldGroup, FieldLabel, FieldSet} from "@/components/ui/field";
 import {Input} from "@/components/ui/input";
@@ -20,23 +20,43 @@ type Props = { positions: Position[]; clubs: Club[]; players: Player[]};
 export default function PlayerSearch(){
     const { players, positions, clubs } = usePage<Props>().props;
 
+    const params = new URLSearchParams(window.location.search);
+
+    function getArrayParam(key: string): string[] {
+        const bracketed: string[] = [];
+        let i = 0;
+        while (params.has(`${key}[${i}]`)) {
+            bracketed.push(params.get(`${key}[${i}]`)!);
+            i++;
+        }
+        return bracketed.length > 0 ? bracketed : params.getAll(key);
+    }
+
+    const urlPositionIds = getArrayParam('position_ids');
+    const urlClubIds = getArrayParam('club_ids');
+    const urlYearsOfBirth = getArrayParam('years_of_birth');
+
     const yearOfBirthOptions = getYearOptions();
-    const [selectedYearOfBirths, setYearOfBirths] = useState<Option[]>([]);
+    const [selectedYearsOfBirth, setSelectedYearsOfBirth] = useState<Option[]>(
+        yearOfBirthOptions.filter(o => urlYearsOfBirth.includes(o.value))
+    );
 
     const positionOptions = toPositionOptions(positions);
-    const [selectedPositions, setSelectedPositions] = useState<Option[]>([]);
+    const [selectedPositions, setSelectedPositions] = useState<Option[]>(
+        positionOptions.filter(o => urlPositionIds.includes(o.value))
+    );
 
     const clubOptions = toClubOptions(clubs);
-    const [selectedClubs, setSelectedClubs] = useState<Option[]>([]);
+    const [selectedClubs, setSelectedClubs] = useState<Option[]>(
+        clubOptions.filter(o => urlClubIds.includes(o.value))
+    );
 
-    const params = new URLSearchParams(window.location.search)
-
-    const { data, setData, get, processing, errors, reset } = useForm({
+    const { data, setData, get, processing, errors } = useForm({
         firstname: params.get('firstname') ?? '',
         lastname: params.get('lastname') ?? '',
-        year_of_births: params.getAll('year_of_births'),
-        club_ids: params.getAll('club_ids'),
-        position_ids: params.getAll('position_ids'),
+        years_of_birth: urlYearsOfBirth,
+        club_ids: urlClubIds,
+        position_ids: urlPositionIds,
     });
 
     function submit(e: React.FormEvent){
@@ -45,8 +65,7 @@ export default function PlayerSearch(){
     }
 
     function resetForm(){
-        reset();
-        setSelectedPositions([]);
+        router.get(`${player.url()}/search`);
     }
 
     return (
@@ -76,20 +95,19 @@ export default function PlayerSearch(){
                             </FieldGroup>
                             <FieldGroup className="grid sm:grid-cols-[1fr_1fr_1fr]">
                                 <Field>
-                                    <FieldLabel htmlFor="year_of_births">Jahrgang</FieldLabel>
+                                    <FieldLabel htmlFor="years_of_birth">Jahrgang</FieldLabel>
                                     <MultipleSelector
-                                        value={selectedYearOfBirths}
+                                        value={selectedYearsOfBirth}
                                         onChange={opts => {
-                                            setYearOfBirths(opts);
-                                            setData('year_of_births', opts.map(o => o.value));
+                                            setSelectedYearsOfBirth(opts);
+                                            setData('years_of_birth', opts.map(o => o.value));
                                         }}
                                         defaultOptions={yearOfBirthOptions}
-                                        groupBy="group"
                                         placeholder="Jahrgang wählen"
                                         hidePlaceholderWhenSelected
                                         emptyIndicator={<p className="text-center text-sm">Keinen Jahrgang gefunden</p>}
                                     />
-                                    <InputError message={errors.year_of_births} />
+                                    <InputError message={errors.years_of_birth} />
                                 </Field>
                                 <Field>
                                     <FieldLabel htmlFor="club_ids">Club</FieldLabel>
@@ -126,7 +144,7 @@ export default function PlayerSearch(){
                             </FieldGroup>
                             <Field className="w-fit flex flex-row">
                                 <Button type="submit" disabled={processing}>Suchen</Button>
-                                <Button type="reset" variant="secondary" onClick={resetForm}>Zurücksetzen</Button>
+                                <Button type="button" variant="secondary" onClick={resetForm}>Zurücksetzen</Button>
                             </Field>
                         </FieldSet>
                     </form>

@@ -13,8 +13,8 @@ class PlayerSearchDTO{
         set => $value !== null ? trim($value) : null;
     }
 
-    public ?int $year_of_birth = null{
-        get => $this->year_of_birth;
+    public array $yearsOfBirth = []{
+        get => $this->yearsOfBirth;
         set => $value;
     }
 
@@ -31,7 +31,7 @@ class PlayerSearchDTO{
     public function __construct(array $array){
         $this->firstname = $array['firstname'] ?? null;
         $this->lastname = $array['lastname'] ?? null;
-        $this->year_of_birth = $array['year_of_birth'] ?? null;
+        $this->yearsOfBirth = $array['years_of_birth'] ?? [];
         $this->clubIds = $array['club_ids'] ?? [];
         $this->positionIds = $array['position_ids'] ?? [];
     }
