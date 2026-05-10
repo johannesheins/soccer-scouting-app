@@ -21,7 +21,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::middleware(['auth', 'verified', RequireAdministrator::class])->group(function () {
-    Route::inertia('administration', 'administration/dashboard')->name('administration.dashboard');
+    Route::inertia('administration', 'administration/dashboard')->name('administration');
 });
 
 require __DIR__.'/settings.php';

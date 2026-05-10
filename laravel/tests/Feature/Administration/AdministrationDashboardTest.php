@@ -15,7 +15,7 @@ class AdministrationDashboardTest extends TestCase
         $user = User::factory()->administrator()->create();
 
         $response = $this->actingAs($user)
-            ->get(route('administration.dashboard'));
+            ->get(route('administration'));
 
         $response->assertOk();
         $response->assertInertia(fn($page) => $page
@@ -27,7 +27,7 @@ class AdministrationDashboardTest extends TestCase
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)
-            ->get(route('administration.dashboard'));
+            ->get(route('administration'));
 
         $response->assertNotFound();
     }

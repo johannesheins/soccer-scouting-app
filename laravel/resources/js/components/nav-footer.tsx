@@ -18,7 +18,7 @@ export function NavFooter({
     items: NavItem[];
 }) {
     const { auth } = usePage<{ auth: Auth }>().props;
-    const activeAndAllowedItems = items.filter(i => i.isActive !== false && (i.isAdministrationOnly === true && auth.user.isAdministrator || i.isAdministrationOnly !== true));
+    const activeAndAllowedItems = items.filter(i => i.isActive !== false && (i.isAdministrationOnly === true && auth.user.is_administrator || i.isAdministrationOnly !== true));
 
     if(activeAndAllowedItems.length > 0){
         return (
