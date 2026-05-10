@@ -9,6 +9,7 @@ use App\Models\Club;
 use App\Models\Player;
 use App\Models\Position;
 use App\Services\PlayerSearchService;
+use Emargareten\InertiaModal\Modal;
 
 class PlayerController extends Controller
 {
@@ -37,7 +38,9 @@ class PlayerController extends Controller
 
     public function show($id)
     {
-        dd(Player::findOrFail($id));
+        return new Modal('player/player-show', [
+            'player' => Player::findOrFail($id)->load('positions', 'club'),
+        ])->baseRoute('player.index');
     }
 
     public function edit($id)
