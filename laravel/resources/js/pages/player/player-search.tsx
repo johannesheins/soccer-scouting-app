@@ -14,10 +14,12 @@ import type {Club, Player, Position} from "@/types/types";
 
 import {PlayerTable} from "@/pages/player/table/player-table";
 import {playerColumns} from "@/pages/player/table/player-columns";
+import {usePreviousUrl} from "@/hooks/use-previous-url";
 
 type Props = { positions: Position[]; clubs: Club[]; players: Player[]};
 
 export default function PlayerSearch(){
+    usePreviousUrl();
     const { players, positions, clubs } = usePage<Props>().props;
 
     const params = new URLSearchParams(window.location.search);

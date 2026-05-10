@@ -2,7 +2,7 @@ import { player } from '@/routes';
 import PlayerForm from "@/components/player-form";
 
 export default function PlayerCreate() {
-    return PlayerForm()
+    return <PlayerForm />;
 }
 
 PlayerCreate.layout = {

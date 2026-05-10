@@ -1,22 +1,27 @@
+import { setLayoutProps } from '@inertiajs/react';
 import { player } from '@/routes';
-import PlayerForm from "@/components/player-form";
+import PlayerForm from '@/components/player-form';
+import { usePreviousUrl } from '@/hooks/use-previous-url';
 
 export default function PlayerEdit() {
-    return PlayerForm(true);
-}
+    const previousUrl = usePreviousUrl();
+    const usePrevious: boolean = previousUrl?.startsWith(player.url()+'/search') ?? false
 
-PlayerEdit.layout = {
-    breadcrumbs: [
-        {
-            title: 'Spieler',
-            href: player(),
-        },
-        {
-            title: 'Spieler suchen',
-            href: player.url()+'/search '
-        },
-        {
-            title: 'Spieler bearbeiten',
-        },
-    ],
-};
+    setLayoutProps({
+        breadcrumbs: [
+            {
+                title: 'Spieler',
+                href: player()
+            },
+            {
+                title: 'Spieler suchen',
+                href: usePrevious ? previousUrl : player.url()+'/search'
+            },
+            {
+                title: 'Spieler bearbeiten'
+            },
+        ],
+    });
+
+    return <PlayerForm edit />;
+}
