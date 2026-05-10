@@ -24,15 +24,28 @@ class PlayerControllerTest extends TestCase
     #region index
     public function test_index(): void
     {
+        $clubs = Club::factory(10)->create();
+        $positions = Position::factory(8)->create();
+
         $response = $this->actingAs($this->user)
             ->get(route('player.index'));
 
-        $response->assertInertia(fn ($page) => $page->component('player/player-index'));
+        $response->assertInertia(fn ($page) => $page
+            ->component('player/player-index')
+            ->has('clubs', 10)
+            ->where('clubs.0.id', $clubs->first()->id)
+            ->where('clubs.0.clubname', $clubs->first()->clubname)
+            ->has('positions', 8)
+            ->where('positions.0.id', $positions->first()->id)
+            ->where('positions.0.position_code', $positions->first()->position_code)
+        );
     }
 
     public function test_index_guest_redirect_login(): void
     {
-        $response = $this->get(route('player.index'));
+        $response = $this->actingAsGuest()
+            ->get(route('player.index'));
+
         $response->assertRedirect(route('login'));
     }
     #endregion
