@@ -71,6 +71,24 @@ class AuthenticationTest extends TestCase
         $this->assertGuest();
     }
 
+    public function test_users_as_administrator_can_see_administration_page(){
+        $user = User::factory()->administrator()->create();
+
+        $response = $this->actingAs($user)
+            ->get(route('administration.dashboard'));
+
+        $response->assertOk();
+    }
+
+    public function test_users_as_not_administrator_can_not_see_administration_page()
+    {
+        $user = User::factory()->create();
+        $response = $this->actingAs($user)
+            ->get(route('administration.dashboard'));
+
+        $response->assertNotFound();
+    }
+
     public function test_users_can_logout()
     {
         $user = User::factory()->create();
