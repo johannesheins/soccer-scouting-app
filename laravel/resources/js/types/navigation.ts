@@ -11,5 +11,6 @@ export type NavItem = {
     href: NonNullable<InertiaLinkProps['href']>;
     icon?: LucideIcon | null;
     target?: '_self' | '_blank' | '_parent' | '_top',
+    isAdministrationOnly?: boolean;
     isActive?: boolean;
 };

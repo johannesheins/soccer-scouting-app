@@ -7,8 +7,8 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { toUrl } from '@/lib/utils';
-import type { NavItem } from '@/types';
-import {Link} from "@inertiajs/react";
+import type {Auth, NavItem} from '@/types';
+import {Link, usePage} from "@inertiajs/react";
 
 export function NavFooter({
     items,
@@ -17,9 +17,10 @@ export function NavFooter({
 }: ComponentPropsWithoutRef<typeof SidebarGroup> & {
     items: NavItem[];
 }) {
-    const activeItems = items.filter(i => i.isActive === true);
+    const { auth } = usePage<{ auth: Auth }>().props;
+    const activeAndAllowedItems = items.filter(i => i.isActive !== false && (i.isAdministrationOnly === true && auth.user.isAdministrator || i.isAdministrationOnly !== true));
 
-    if(activeItems.length > 0){
+    if(activeAndAllowedItems.length > 0){
         return (
             <SidebarGroup
                 {...props}
@@ -27,7 +28,7 @@ export function NavFooter({
             >
                 <SidebarGroupContent>
                     <SidebarMenu>
-                        {activeItems.map((item) => (
+                        {activeAndAllowedItems.map((item) => (
                             <SidebarMenuItem key={item.title}>
                                 <SidebarMenuButton
                                     asChild

@@ -6,6 +6,7 @@ export type User = {
     avatar?: string;
     email_verified_at: string | null;
     two_factor_enabled?: boolean;
+    isAdministrator: boolean,
     created_at: string;
     updated_at: string;
     [key: string]: unknown;

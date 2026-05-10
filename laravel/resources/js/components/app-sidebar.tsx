@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import {Link, usePage} from '@inertiajs/react';
 import {LayoutGrid, Settings, User} from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
@@ -34,7 +34,7 @@ const footerNavItems: NavItem[] = [
         title: 'Verwaltung',
         href: administration(),
         icon: Settings,
-        isActive: false, //TODO Hide for not administrator users
+        isAdministrationOnly: true
     },
 ];
 
