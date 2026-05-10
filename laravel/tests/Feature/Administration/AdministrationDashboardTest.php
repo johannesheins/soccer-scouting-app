@@ -6,29 +6,10 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class AdministrationDashboardTest extends TestCase
+class AdministrationDashboardTest extends AdministrationTest
 {
-    use RefreshDatabase;
-
-    public function test_users_as_administrator_can_see_administration_page(): void
+    public function test_administration_dashboard(): void
     {
-        $user = User::factory()->administrator()->create();
-
-        $response = $this->actingAs($user)
-            ->get(route('administration'));
-
-        $response->assertOk();
-        $response->assertInertia(fn($page) => $page
-            ->component('administration/dashboard'));
-    }
-
-    public function test_users_as_not_administrator_can_not_see_administration_page(): void
-    {
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)
-            ->get(route('administration'));
-
-        $response->assertNotFound();
+        $this->assertAdministrationRoute('administration', 'administration/dashboard');
     }
 }
