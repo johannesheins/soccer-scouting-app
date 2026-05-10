@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClubController;
 use App\Http\Controllers\PlayerController;
+use App\Http\Middleware\RequireAdministrator;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
@@ -19,7 +20,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('club', ClubController::class)->names('club');
 });
 
-Route::middleware(['auth', 'verified', \App\Http\Middleware\RequireAdministrator::class])->group(function () {
+Route::middleware(['auth', 'verified', RequireAdministrator::class])->group(function () {
     Route::inertia('administration', 'administration/dashboard')->name('administration.dashboard');
 });
 
