@@ -2,7 +2,7 @@ import { Head } from '@inertiajs/react';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import {administration, dashboard} from '@/routes';
 
-export default function Index() {
+export default function RoleIndex() {
     return (
         <>
             <Head title="Rolen" />
@@ -18,7 +18,7 @@ export default function Index() {
     );
 }
 
-Index.layout = {
+RoleIndex.layout = {
     breadcrumbs: [
         {
             title: 'Verwaltung',
