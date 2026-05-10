@@ -10,6 +10,14 @@ class RoleController extends Controller
 {
     public function index()
     {
+        return inertia('administration/roles/index', [
+            'roles' => Role::all()
+        ]);
+    }
+
+    public function create()
+    {
+
     }
 
     public function store(RoleRequest $request)
