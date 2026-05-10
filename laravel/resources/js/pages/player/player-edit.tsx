@@ -12,6 +12,10 @@ PlayerEdit.layout = {
             href: player(),
         },
         {
+            title: 'Spieler suchen',
+            href: player.url()+'/search '
+        },
+        {
             title: 'Spieler bearbeiten',
         },
     ],
