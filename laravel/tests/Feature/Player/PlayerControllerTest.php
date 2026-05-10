@@ -203,6 +203,28 @@ class PlayerControllerTest extends TestCase
             ->assertRedirect(route('login'));
     }
 
+    public function test_show_renders_modal(): void
+    {
+        $club = Club::factory()->create();
+        $positions = Position::factory(2)->create();
+        $player = Player::factory()->create([
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'year_of_birth' => 1999,
+            'club_id' => $club->id,
+        ]);
+        $player->positions()->attach($positions);
+
+        $response = $this->actingAs($this->user)
+            ->get(route('player.show', $player));
+
+        $response->assertInertia(fn ($page) => $page
+            ->component('player/player-dashboard')
+            ->where('modal.component', 'player/player-show')
+            ->where('modal.props.player.id', $player->id)
+        );
+    }
+
     public function test_show_returns_404_for_nonexistent_player(): void
     {
         $this->actingAs($this->user)
