@@ -15,7 +15,7 @@ class PlayerController extends Controller
 {
     public function index()
     {
-        return inertia('player/player-dashboard');
+        return inertia('player/player-index');
     }
 
     public function create()

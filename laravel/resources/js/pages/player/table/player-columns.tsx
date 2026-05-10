@@ -2,7 +2,7 @@
 
 import {ColumnDef} from "@tanstack/react-table"
 import {Club, Player, Position} from "@/types/types";
-import {PlayerRowActions} from "@/pages/player/table/player-column-actions";
+import {PlayerRowActions} from "./player-row-actions";
 import {Button} from "@/components/ui/button";
 import {ArrowUpDown, ArrowUp, ArrowDown} from "lucide-react";
 

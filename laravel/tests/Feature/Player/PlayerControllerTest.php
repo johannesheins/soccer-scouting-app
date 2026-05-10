@@ -27,7 +27,7 @@ class PlayerControllerTest extends TestCase
         $response = $this->actingAs($this->user)
             ->get(route('player.index'));
 
-        $response->assertInertia(fn ($page) => $page->component('player/player-dashboard'));
+        $response->assertInertia(fn ($page) => $page->component('player/player-index'));
     }
 
     public function test_index_guest_redirect_login(): void
@@ -219,7 +219,7 @@ class PlayerControllerTest extends TestCase
             ->get(route('player.show', $player));
 
         $response->assertInertia(fn ($page) => $page
-            ->component('player/player-dashboard')
+            ->component('player/player-index')
             ->where('modal.component', 'player/player-show')
             ->where('modal.props.player.id', $player->id)
         );

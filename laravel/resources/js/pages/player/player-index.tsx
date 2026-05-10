@@ -3,7 +3,7 @@ import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import {UserRoundPlus, UserSearch} from 'lucide-react';
 import {player} from '@/routes';
 
-export default function PlayerDashboard() {
+export default function PlayerIndex() {
     return (
         <>
             <Head title="Spieler" />
@@ -31,7 +31,7 @@ export default function PlayerDashboard() {
     );
 }
 
-PlayerDashboard.layout = {
+PlayerIndex.layout = {
     breadcrumbs: [
         {
             title: 'Spieler',
