@@ -5,8 +5,13 @@ import { initializeTheme } from '@/hooks/use-appearance';
 import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
 import SettingsLayout from '@/layouts/settings/layout';
+import { setupInertiaModal } from '@/lib/inertia-modal';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+
+const pages = import.meta.glob('./pages/**/*.tsx');
+
+setupInertiaModal((name) => (pages[`./pages/${name}.tsx`] as () => Promise<any>)());
 
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),

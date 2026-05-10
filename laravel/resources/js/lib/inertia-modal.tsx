@@ -1,5 +1,5 @@
 import { http, router, usePage } from '@inertiajs/react';
-import React, { lazy, Suspense, useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 
 type ModalData = {
     component: string;
@@ -8,21 +8,28 @@ type ModalData = {
     key: string;
 };
 
-type ResolveComponent = (name: string) => Promise<{ default: React.ComponentType<Record<string, unknown>> }>;
+type ModalComponent = React.ComponentType<Record<string, unknown>>;
+type ResolveComponent = (name: string) => Promise<{ default: ModalComponent }>;
 
-// Module-level state shared between the HTTP interceptor and the Modal component
 let _resolve: ResolveComponent | null = null;
 let _currentPage: { component: string; props: Record<string, unknown> } | null = null;
 
 const preserveKeys = [
-    'scrollProps', 'mergeProps', 'prependProps', 'deepMergeProps',
-    'matchPropsOn', 'deferredProps', 'sharedProps', 'onceProps',
+    'scrollProps',
+    'mergeProps',
+    'prependProps',
+    'deepMergeProps',
+    'matchPropsOn',
+    'deferredProps',
+    'sharedProps',
+    'onceProps',
 ] as const;
 
 function mergePageData(current: unknown, incoming: unknown): unknown {
     if (Array.isArray(current) || Array.isArray(incoming)) {
         return [...new Set([...(current as unknown[] ?? []), ...(incoming as unknown[] ?? [])])];
     }
+
     return { ...JSON.parse(JSON.stringify(current ?? {})), ...(incoming ?? {}) };
 }
 
@@ -48,6 +55,7 @@ export function setupInertiaModal(resolve: ResolveComponent): void {
 
         for (const key of preserveKeys) {
             const currentValue = (_currentPage as Record<string, unknown>)[key];
+
             if (currentValue) {
                 data[key] = mergePageData(currentValue, data[key]);
             }
@@ -77,45 +85,49 @@ export function useModal() {
 export function Modal() {
     const page = usePage<{ modal?: ModalData }>();
     const modal = page.props.modal;
-    const modalRef = useRef(modal);
-    modalRef.current = modal;
+
+    const [ResolvedComponent, setResolvedComponent] = useState<ModalComponent | null>(null);
+    // Track which component name is currently resolved to gate rendering
+    const [resolvedForName, setResolvedForName] = useState<string | null>(null);
 
     // Keep the backdrop reference fresh for the HTTP interceptor
     useEffect(() => {
         _currentPage = { component: page.component, props: page.props };
     });
 
-    // Attach router.before listener once; reads modalRef to avoid stale closures
+    // Re-register the router.before listener when the modal key or redirect URL changes
+    const modalKey = modal?.key ?? null;
+    const modalRedirectURL = modal?.redirectURL ?? null;
+
     useEffect(() => {
         return router.on('before', (event) => {
-            const m = modalRef.current;
-            if (m?.key) {
-                event.detail.visit.headers['X-Inertia-Modal-Key'] = m.key;
+            if (modalKey) {
+                event.detail.visit.headers['X-Inertia-Modal-Key'] = modalKey;
             }
-            if (m?.redirectURL) {
-                event.detail.visit.headers['X-Inertia-Modal-Redirect'] = m.redirectURL;
+
+            if (modalRedirectURL) {
+                event.detail.visit.headers['X-Inertia-Modal-Redirect'] = modalRedirectURL;
             }
         });
-    }, []);
+    }, [modalKey, modalRedirectURL]);
 
-    // Cache lazy-loaded modal components by component name
-    const cache = useRef<Record<string, React.LazyExoticComponent<React.ComponentType<Record<string, unknown>>>>>({});
+    // Load the modal component when the component name changes
+    useEffect(() => {
+        if (!modal?.component || !_resolve || modal.component === resolvedForName) {
+            return;
+        }
 
-    if (!modal?.component || !_resolve) {
+        const name = modal.component;
+
+        _resolve(name).then((module) => {
+            setResolvedComponent(() => module.default);
+            setResolvedForName(name);
+        });
+    }, [modal?.component, resolvedForName]);
+
+    if (!modal?.component || !ResolvedComponent || resolvedForName !== modal.component) {
         return null;
     }
 
-    const resolve = _resolve;
-
-    if (!cache.current[modal.component]) {
-        cache.current[modal.component] = lazy(() => resolve(modal.component));
-    }
-
-    const ModalComponent = cache.current[modal.component];
-
-    return (
-        <Suspense>
-            <ModalComponent key={modal.key} {...modal.props} />
-        </Suspense>
-    );
+    return <ResolvedComponent key={modal.key} {...modal.props} />;
 }
