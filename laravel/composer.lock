@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "df4722903141f455beb25ab0fe88029d",
+    "content-hash": "9e7aae712737341b648c6fd8239100ba",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -612,6 +612,61 @@
                 }
             ],
             "time": "2025-03-06T22:45:56+00:00"
+        },
+        {
+            "name": "emargareten/inertia-modal",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/emargareten/inertia-modal.git",
+                "reference": "948a4fbe8b02f7257941a3db3c77546c582a661d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/emargareten/inertia-modal/zipball/948a4fbe8b02f7257941a3db3c77546c582a661d",
+                "reference": "948a4fbe8b02f7257941a3db3c77546c582a661d",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^11.0|^12.0|^13.0",
+                "inertiajs/inertia-laravel": "^3.0",
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.1.0",
+                "laravel/pint": "^1.21.0",
+                "orchestra/testbench": "^9.2|^10.0|^11.0",
+                "phpunit/phpunit": "^11.5|^12.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Emargareten\\InertiaModal\\InertiaModalServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Emargareten\\InertiaModal\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Inertia Modal is a Laravel package that lets you implement backend-driven modal dialogs for Inertia apps.",
+            "homepage": "https://github.com/emargareten/inertia-modal",
+            "keywords": [
+                "inertia",
+                "laravel",
+                "modal"
+            ],
+            "support": {
+                "issues": "https://github.com/emargareten/inertia-modal/issues",
+                "source": "https://github.com/emargareten/inertia-modal/tree/v2.0.0"
+            },
+            "time": "2026-03-26T13:07:07+00:00"
         },
         {
             "name": "fruitcake/php-cors",
