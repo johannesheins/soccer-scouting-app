@@ -10,7 +10,7 @@ class RequireAdministrator
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (!$request->user()?->is_administrator) {
+        if (!$request->user()?->isAdministrator()) {
             abort(404);
         }
 

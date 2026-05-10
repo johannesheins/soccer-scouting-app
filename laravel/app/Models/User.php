@@ -33,4 +33,9 @@ class User extends Authenticatable
             'two_factor_confirmed_at' => 'datetime',
         ];
     }
+
+    public function isAdministrator(): bool
+    {
+        return $this->is_administrator;
+    }
 }
