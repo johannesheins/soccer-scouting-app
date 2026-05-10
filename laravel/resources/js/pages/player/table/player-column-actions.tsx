@@ -1,4 +1,4 @@
-import {router} from "@inertiajs/react";
+import {Link, router} from "@inertiajs/react";
 import {player as playerRoute} from "@/routes";
 import {useState} from "react";
 import {
@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import type {Player} from "@/types/types";
 import {Dialog, DialogContent} from "@/components/ui/dialog";
-import {PlayerView} from "@/pages/player/player-view";
+import {PlayerView} from "../player-view";
 
 export function PlayerRowActions({player}: { player: Player }) {
     const [deleteOpen, setDeleteOpen] = useState(false);
@@ -38,14 +38,14 @@ export function PlayerRowActions({player}: { player: Player }) {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => setViewOpen(true)}>
+                    <DropdownMenuItem onClick={() => router.visit(`${playerRoute.url()}/${player.id}`)}>
                         Spieler ansehen
                     </DropdownMenuItem>
                     <DropdownMenuSeparator/>
                     <DropdownMenuItem onClick={() => router.visit(`${playerRoute.url()}/${player.id}/edit`)}>
                         Spieler bearbeiten
                     </DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => setDeleteOpen(true)} className="text-destructive">
+                    <DropdownMenuItem onSelect={() => setDeleteOpen(true)} className="text-destructive!">
                         Spieler löschen
                     </DropdownMenuItem>
                 </DropdownMenuContent>
