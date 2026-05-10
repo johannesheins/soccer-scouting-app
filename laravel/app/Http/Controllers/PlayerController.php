@@ -72,6 +72,7 @@ class PlayerController extends Controller
 
     public function search(PlayerSearchRequest $request)
     {
+        //TODO Implement server-side pagination
         $playerSearchDTO = new PlayerSearchDTO($request->validated());
         $playerSearchService = new PlayerSearchService();
         $players = $playerSearchService->searchPlayers($playerSearchDTO, ['positions:id,position_code', 'club:id,clubname'])->toArray();
