@@ -80,7 +80,7 @@ export function PlayerTable<TData, TValue>({
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                                    No results.
+                                    Kein Spieler gefunden.
                                 </TableCell>
                             </TableRow>
                         )}
