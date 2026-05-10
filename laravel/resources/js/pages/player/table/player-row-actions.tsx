@@ -1,4 +1,4 @@
-import {Link, router} from "@inertiajs/react";
+import {router} from "@inertiajs/react";
 import {player as playerRoute} from "@/routes";
 import {useState} from "react";
 import {
