@@ -146,4 +146,8 @@
     svg:not(#app-logo) *{
         color: var(--icon-color);
     }
+
+    .text-icon-color{
+        color: var(--icon-color);
+    }
 }
