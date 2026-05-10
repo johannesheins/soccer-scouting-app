@@ -27,7 +27,7 @@ class PlayerControllerTest extends TestCase
         $response = $this->actingAs($this->user)
             ->get(route('player.index'));
 
-        $response->assertInertia(fn ($page) => $page->component('player/player-index'));
+        $response->assertInertia(fn ($page) => $page->component('player/player-dashboard'));
     }
 
     public function test_index_guest_redirect_login(): void
