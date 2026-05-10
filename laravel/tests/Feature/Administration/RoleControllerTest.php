@@ -3,12 +3,13 @@
 namespace Feature\Administration;
 
 use PHPUnit\Framework\TestCase;
+use Tests\Feature\Administration\AdministrationTest;
 
-class RoleControllerTest extends TestCase
+class RoleControllerTest extends AdministrationTest
 {
     public function test_index()
     {
-        $this->assertTrue(true);
+        $this->assertAdministrationRoute('administration.role.index', 'administration/roles/index');
     }
 
     public function test_store()
