@@ -2,6 +2,8 @@
 
 namespace Feature\Administration;
 
+use App\Models\Role;
+use App\Models\User;
 use PHPUnit\Framework\TestCase;
 use Tests\Feature\Administration\AdministrationTest;
 
@@ -9,7 +11,17 @@ class RoleControllerTest extends AdministrationTest
 {
     public function test_index()
     {
-        $this->assertAdministrationRoute('administration.role.index', 'administration/roles/index');
+        $roles = Role::factory(14)->create();
+
+        $response = $this->actingAs($this->administratorUser)
+            ->get(route('administration.role.index'));
+
+        $this->assertAdministrationRoute('administration.role.index', 'administration/role/role-index');
+        $response->assertOk();
+        $response->assertInertia(fn($page) => $page
+            ->component('administration/role/role-index')
+            ->has('roles', 14)
+        );
     }
 
     public function test_store()
