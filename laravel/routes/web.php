@@ -19,7 +19,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('club', ClubController::class)->names('club');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () { //TODO Add administration middleware
+Route::middleware(['auth', 'verified', \App\Http\Middleware\RequireAdministrator::class])->group(function () {
     Route::inertia('administration', 'administration/dashboard')->name('administration.dashboard');
 });
 
