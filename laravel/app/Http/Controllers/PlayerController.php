@@ -15,7 +15,10 @@ class PlayerController extends Controller
 {
     public function index()
     {
-        return inertia('player/player-index');
+        return inertia('player/player-index', [
+            'positions' => Position::with('positionGroup:id,name')->get(['id', 'position_code', 'position_group_id']),
+            'clubs' => Club::all(['id', 'clubname']),
+        ]);
     }
 
     public function create()
