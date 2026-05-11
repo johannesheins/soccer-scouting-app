@@ -1,8 +1,14 @@
-import { Head } from '@inertiajs/react';
+import {Head, usePage} from '@inertiajs/react';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import {administration, dashboard} from '@/routes';
+import {DataTable} from "@/components/table/data-table";
+import {roleColumns} from "@/pages/administration/role/table/role-columns";
+import {Role} from "@/types/types";
 
+type Props = {roles: Role[]}
 export default function RoleIndex() {
+    const { roles } = usePage<Props>().props;
+
     return (
         <>
             <Head title="Rolen" />
@@ -11,7 +17,7 @@ export default function RoleIndex() {
                     <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
                 </div>
                 <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                    <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
+                    <DataTable columns={roleColumns} data={roles} textOnEmpty="Keine Role gefunden."/>
                 </div>
             </div>
         </>
