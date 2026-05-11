@@ -3,21 +3,7 @@
 import {ColumnDef} from "@tanstack/react-table"
 import {Club, Player, Position} from "@/types/types";
 import {PlayerRowActions} from "./player-row-actions";
-import {Button} from "@/components/ui/button";
-import {ArrowUpDown, ArrowUp, ArrowDown} from "lucide-react";
-
-function sortHeader(label: string) {
-    return ({column}: { column: any }) => {
-        const sorted = column.getIsSorted()
-        const Icon = sorted === "asc" ? ArrowUp : sorted === "desc" ? ArrowDown : ArrowUpDown
-        return (
-            <Button variant="ghost" onClick={() => column.toggleSorting(sorted === "asc")}>
-                {label}
-                <Icon className="ml-2 h-4 w-4"/>
-            </Button>
-        )
-    }
-}
+import sortHeader from "@/components/table-header-sort";
 
 export const playerColumns: ColumnDef<Player>[] = [
     {
