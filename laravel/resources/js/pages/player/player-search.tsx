@@ -32,7 +32,7 @@ PlayerSearch.layout = {
     breadcrumbs: [
         {
             title: 'Spieler',
-            href: player.index.url(),
+            href: player.index(),
         },
         {
             title: 'Spieler suchen',

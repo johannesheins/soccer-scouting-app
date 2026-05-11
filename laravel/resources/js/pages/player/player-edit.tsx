@@ -5,17 +5,17 @@ import { usePreviousUrl } from '@/hooks/use-previous-url';
 
 export default function PlayerEdit() {
     const previousUrl = usePreviousUrl();
-    const usePrevious: boolean = previousUrl?.startsWith(player.search.url()) ?? false
+    const usePrevious: boolean = previousUrl?.startsWith(player.search()) ?? false
 
     setLayoutProps({
         breadcrumbs: [
             {
                 title: 'Spieler',
-                href: player.index.url(),
+                href: player.index(),
             },
             {
                 title: 'Spieler suchen',
-                href: usePrevious ? previousUrl : player.search.url()
+                href: usePrevious ? previousUrl : player.search()
             },
             {
                 title: 'Spieler bearbeiten'

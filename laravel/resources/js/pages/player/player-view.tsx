@@ -11,7 +11,7 @@ export function PlayerView({player}: { player: Player }) {
                 <CardTitle className="text-2xl">
                     {player.firstname} {player.lastname}
                 </CardTitle>
-                <a className="text-muted-foreground text-sm" href={club.show.url(player.club.id)}>{player.club.clubname}</a>
+                <a className="text-muted-foreground text-sm" href={club.show(player.club.id)}>{player.club.clubname}</a>
             </CardHeader>
 
             <Separator/>
@@ -23,7 +23,7 @@ export function PlayerView({player}: { player: Player }) {
                 </div>
                 <div>
                     <p className="text-muted-foreground text-xs uppercase tracking-wide mb-1">Verein</p>
-                    <a className="font-medium" href={club.show.url(player.club.id)}>{player.club.clubname}</a>
+                    <a className="font-medium" href={club.show(player.club.id)}>{player.club.clubname}</a>
                 </div>
                 <div className="col-span-2">
                     <p className="text-muted-foreground text-xs uppercase tracking-wide mb-2">Positionen</p>

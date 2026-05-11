@@ -64,10 +64,10 @@ export default function PlayerSearchForm(){
 
     function resetForm(){
         if(window.location.href.includes(player.index.url())){
-            return router.get(player.index.url())
+            return router.get(player.index())
         }
 
-        return  router.get(player.search.url());
+        return  router.get(player.search());
     }
 
     return (
