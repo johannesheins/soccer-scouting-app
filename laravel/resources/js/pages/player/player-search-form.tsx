@@ -13,8 +13,6 @@ import {usePreviousUrl} from "@/hooks/use-previous-url";
 import {Club, Player, Position} from "@/types/types";
 
 type Props = { positions: Position[]; clubs: Club[]; players: Player[]};
-
-const playerRoute = player;
 export default function PlayerSearchForm(){
     usePreviousUrl();
     const { positions, clubs } = usePage<Props>().props;
@@ -61,11 +59,15 @@ export default function PlayerSearchForm(){
 
     function submit(e: React.FormEvent){
         e.preventDefault()
-        return get(`${playerRoute.search.url()}`);
+        return get(player.search.url());
     }
 
     function resetForm(){
-        router.get(window.location.href);
+        if(window.location.href.includes(player.index.url())){
+            return router.get(player.index.url())
+        }
+
+        return  router.get(player.search.url());
     }
 
     return (
