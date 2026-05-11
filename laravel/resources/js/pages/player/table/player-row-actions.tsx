@@ -1,5 +1,5 @@
 import {router} from "@inertiajs/react";
-import {player as playerRoute} from "@/routes";
+import {player as playerRoute} from "@/routes"; //TODO Update like in role-row-actions
 import {useState} from "react";
 import {
     AlertDialog,
