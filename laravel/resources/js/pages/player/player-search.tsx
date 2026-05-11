@@ -1,4 +1,4 @@
-import {player} from "@/routes";
+import player from "@/routes/player";
 import {Head, usePage} from "@inertiajs/react";
 import React from "react";
 import type {Club, Player, Position} from "@/types/types";
@@ -9,6 +9,7 @@ import PlayerSearchForm from "@/pages/player/player-search-form";
 
 type Props = { positions: Position[]; clubs: Club[]; players: Player[]};
 
+const playerRoute = player;
 export default function PlayerSearch(){
     const { players } = usePage<Props>().props;
 
@@ -32,7 +33,7 @@ PlayerSearch.layout = {
     breadcrumbs: [
         {
             title: 'Spieler',
-            href: player(),
+            href: playerRoute.index.url(),
         },
         {
             title: 'Spieler suchen',

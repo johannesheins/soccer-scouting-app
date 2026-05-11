@@ -1,5 +1,5 @@
 import {router} from "@inertiajs/react";
-import {player as playerRoute} from "@/routes"; //TODO Update like in role-row-actions
+import player from "@/routes/player";
 import {useState} from "react";
 import {
     AlertDialog,
@@ -24,6 +24,7 @@ import type {Player} from "@/types/types";
 import {Dialog, DialogContent} from "@/components/ui/dialog";
 import {PlayerView} from "../player-view";
 
+const playerRoute = player;
 export function PlayerRowActions({player}: { player: Player }) {
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [viewOpen, setViewOpen] = useState(false);
@@ -38,11 +39,11 @@ export function PlayerRowActions({player}: { player: Player }) {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => router.visit(`${playerRoute.url()}/${player.id}`)}>
+                    <DropdownMenuItem onClick={() => router.visit(playerRoute.show.url(player.id))}>
                         Spieler ansehen
                     </DropdownMenuItem>
                     <DropdownMenuSeparator/>
-                    <DropdownMenuItem onClick={() => router.visit(`${playerRoute.url()}/${player.id}/edit`)}>
+                    <DropdownMenuItem onClick={() => router.visit(playerRoute.edit.url(player.id))}>
                         Spieler bearbeiten
                     </DropdownMenuItem>
                     <DropdownMenuItem onSelect={() => setDeleteOpen(true)} className="text-destructive!">
@@ -67,7 +68,7 @@ export function PlayerRowActions({player}: { player: Player }) {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>Abbrechen</AlertDialogCancel>
-                        <AlertDialogAction variant="destructive" onClick={() => router.delete(`${playerRoute.url()}/${player.id}`)}>
+                        <AlertDialogAction variant="destructive" onClick={() => router.delete(playerRoute.destroy.url(player.id))}>
                             Löschen
                         </AlertDialogAction>
                     </AlertDialogFooter>

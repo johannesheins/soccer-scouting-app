@@ -13,7 +13,8 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import {administration, dashboard, player} from '@/routes';
+import {administration, dashboard} from '@/routes';
+import player from "@/routes/player";
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
@@ -24,7 +25,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Spieler',
-        href: player(),
+        href: player.index.url(),
         icon: User,
     },
 ];

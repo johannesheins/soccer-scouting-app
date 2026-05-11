@@ -1,20 +1,20 @@
-import {player} from "@/routes";
+import player from "@/routes/player";
 import {router, useForm, usePage} from "@inertiajs/react";
 import React from "react";
 import {Field, FieldGroup, FieldLabel, FieldSet} from "@/components/ui/field";
 import {Input} from "@/components/ui/input";
 import InputError from "@/components/input-error";
-
 import MultipleSelector from "@/components/ui/multi-select";
 import {Button} from "@/components/ui/button";
 import { useState } from 'react';
 import type { Option } from '@/components/ui/multi-select';
 import {toPositionOptions, toClubOptions, getYearOptions} from "@/hooks/form-options";
-
 import {usePreviousUrl} from "@/hooks/use-previous-url";
 import {Club, Player, Position} from "@/types/types";
 
 type Props = { positions: Position[]; clubs: Club[]; players: Player[]};
+
+const playerRoute = player;
 export default function PlayerSearchForm(){
     usePreviousUrl();
     const { positions, clubs } = usePage<Props>().props;
@@ -61,7 +61,7 @@ export default function PlayerSearchForm(){
 
     function submit(e: React.FormEvent){
         e.preventDefault()
-        return get(`${player.url()}/search`);
+        return get(`${playerRoute.search.url()}`);
     }
 
     function resetForm(){
