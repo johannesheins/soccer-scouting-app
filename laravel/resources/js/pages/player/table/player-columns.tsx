@@ -3,7 +3,7 @@
 import {ColumnDef} from "@tanstack/react-table"
 import {Club, Player, Position} from "@/types/types";
 import {PlayerRowActions} from "./player-row-actions";
-import sortHeader from "@/components/table-header-sort";
+import sortHeader from "@/components/table/table-header-sort";
 
 export const playerColumns: ColumnDef<Player>[] = [
     {
