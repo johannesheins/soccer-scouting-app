@@ -22,12 +22,14 @@ import * as React from "react"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
-    data: TData[]
+    data: TData[],
+    textOnEmpty: string,
 }
 
-export function PlayerTable<TData, TValue>({
+export function DataTable<TData, TValue>({
     columns,
     data,
+    textOnEmpty,
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const table = useReactTable({
@@ -80,7 +82,7 @@ export function PlayerTable<TData, TValue>({
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                                    Kein Spieler gefunden.
+                                    {textOnEmpty}
                                 </TableCell>
                             </TableRow>
                         )}

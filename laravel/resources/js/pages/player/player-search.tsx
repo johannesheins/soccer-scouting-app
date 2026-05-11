@@ -3,7 +3,7 @@ import {Head, usePage} from "@inertiajs/react";
 import React from "react";
 import type {Club, Player, Position} from "@/types/types";
 
-import {PlayerTable} from "@/pages/player/table/player-table";
+import {DataTable} from "@/components/table/data-table";
 import {playerColumns} from "@/pages/player/table/player-columns";
 import PlayerSearchForm from "@/pages/player/player-search-form";
 
@@ -21,7 +21,7 @@ export default function PlayerSearch(){
                 </div>
 
                 <div className="relative min-h-screen flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                    <PlayerTable columns={playerColumns} data={players} />
+                    <DataTable columns={playerColumns} data={players} textOnEmpty={'Kein Spieler gefunden'}/>
                 </div>
             </div>
         </>
