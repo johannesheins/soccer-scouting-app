@@ -31,3 +31,9 @@ export type Player = {
     club: Club,
     positions: Position[],
 }
+
+export type Role = {
+    id: number,
+    name: string,
+    numberOfUsers: number,
+}
