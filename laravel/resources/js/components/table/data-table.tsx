@@ -19,17 +19,20 @@ import {
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import * as React from "react"
+import {cn} from "@/lib/utils";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[],
     textOnEmpty: string,
+    className?: string,
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
     textOnEmpty,
+    className
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const table = useReactTable({
@@ -43,9 +46,8 @@ export function DataTable<TData, TValue>({
     })
 
     return (
-        <div>
-
-            <div className="overflow-hidden rounded-md border">
+        <>
+            <div className={cn("overflow-hidden rounded-md border", className)}>
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
@@ -65,7 +67,7 @@ export function DataTable<TData, TValue>({
                             </TableRow>
                         ))}
                     </TableHeader>
-                    <TableBody>
+                    <TableBody className="h-full">
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
@@ -107,6 +109,6 @@ export function DataTable<TData, TValue>({
                     Next
                 </Button>
             </div>
-        </div>
+        </>
     )
 }

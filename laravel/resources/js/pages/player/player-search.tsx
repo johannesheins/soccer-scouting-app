@@ -20,7 +20,7 @@ export default function PlayerSearch(){
                     <PlayerSearchForm />
                 </div>
 
-                <div className="relative min-h-screen flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+                <div className="relative min-h-screen flex-1 overflow-hidden rounded-xl md:min-h-min dark:border-sidebar-border">
                     <DataTable columns={playerColumns} data={players} textOnEmpty={'Kein Spieler gefunden'}/>
                 </div>
             </div>
