@@ -1,4 +1,4 @@
-import {Head, Link, useForm, usePage} from '@inertiajs/react';
+import {Head, Link, router, useForm, usePage} from '@inertiajs/react';
 import React from 'react';
 import { useState } from 'react';
 import {toPositionOptions, toPlayerPositionIds, toClubOptions, getYearOptions} from '@/hooks/form-options';
@@ -17,7 +17,7 @@ import MultipleSelector from "@/components/ui/multi-select";
 
 type Props = { positions: Position[]; clubs: Club[]; player?: PlayerSmall };
 
-export default function PlayerForm({ edit = false, backHref = '' }: { edit?: boolean, backHref?: string }) {
+export default function PlayerForm({ edit = false, backHref = null }: { edit?: boolean, backHref?: string|null }) {
     const { player, positions, clubs } = usePage<Props>().props;
 
     const yearOfBirthOptions = getYearOptions();
@@ -123,9 +123,9 @@ export default function PlayerForm({ edit = false, backHref = '' }: { edit?: boo
                             <InputError message={errors.position_ids} />
                         </Field>
                     </FieldGroup>
-                    <Field className="w-fit">
+                    <Field className="w-fit flex-row">
                         <Button type="submit" disabled={processing}>{edit ? 'Aktualisieren' : 'Erstellen'}</Button>
-                        {backHref && <Link href={backHref}>Zurück</Link>}
+                        {edit && backHref && <Button variant="secondary" type="button" onClick={() => router.get(backHref)}>Zurück</Button>}
                     </Field>
                 </FieldSet>
             </form>

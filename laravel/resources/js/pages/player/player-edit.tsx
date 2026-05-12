@@ -5,7 +5,7 @@ import { usePreviousUrl } from '@/hooks/use-previous-url';
 
 export default function PlayerEdit() {
     const previousUrl = usePreviousUrl();
-    const usePrevious: boolean = previousUrl?.startsWith(player.search()) ?? false
+    const usePrevious: boolean = previousUrl?.startsWith(player.search.url()) ?? false
 
     setLayoutProps({
         breadcrumbs: [
@@ -23,5 +23,5 @@ export default function PlayerEdit() {
         ],
     });
 
-    return <PlayerForm edit />;
+    return <PlayerForm edit backHref={usePrevious ? previousUrl : player.search.url()}/>;
 }
