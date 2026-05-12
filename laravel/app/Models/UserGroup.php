@@ -7,9 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 #[Fillable('name')]
-class Role extends Model
+class UserGroup extends Model
 {
     use HasFactory;
 
     public $timestamps = false;
+
+    protected $table = 'user_groups';
 }

@@ -1,4 +1,4 @@
-import type {Role} from "@/types/types";
+import type {UserGroup} from "@/types/types";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -18,12 +18,10 @@ import {
     AlertDialogTitle
 } from "@/components/ui/alert-dialog";
 import {router} from "@inertiajs/react";
-import role from "@/routes/administration/role";
+import userGroup from "@/routes/administration/user-group";
 import {useState} from "react";
 
-const roleRoute = role;
-
-export function RoleRowActions({role}: { role: Role }) {
+export function UserGroupRowActions({userGroup: ug}: { userGroup: UserGroup }) {
     const [deleteOpen, setDeleteOpen] = useState(false);
 
     return (
@@ -36,12 +34,12 @@ export function RoleRowActions({role}: { role: Role }) {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => router.visit(roleRoute.edit.url(role.id))}>
-                        Rolle bearbeiten
+                    <DropdownMenuItem onClick={() => router.visit(userGroup.edit.url(ug.id))}>
+                        Benutzergruppe bearbeiten
                     </DropdownMenuItem>
                     <DropdownMenuSeparator/>
                     <DropdownMenuItem onSelect={() => setDeleteOpen(true)} className="text-destructive!">
-                        Rolle löschen
+                        Benutzergruppe löschen
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
@@ -49,14 +47,14 @@ export function RoleRowActions({role}: { role: Role }) {
             <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Rolle wirklich löschen?</AlertDialogTitle>
+                        <AlertDialogTitle>Benutzergruppe wirklich löschen?</AlertDialogTitle>
                         <AlertDialogDescription>
                             Diese Aktion kann nicht rückgängig gemacht werden.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>Abbrechen</AlertDialogCancel>
-                        <AlertDialogAction variant="destructive" onClick={() => router.delete(roleRoute.destroy.url(role.id))}>
+                        <AlertDialogAction variant="destructive" onClick={() => router.delete(userGroup.destroy.url(ug.id))}>
                             Löschen
                         </AlertDialogAction>
                     </AlertDialogFooter>

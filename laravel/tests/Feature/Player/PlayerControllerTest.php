@@ -30,7 +30,8 @@ class PlayerControllerTest extends TestCase
         $response = $this->actingAs($this->user)
             ->get(route('player.index'));
 
-        $response->assertInertia(fn ($page) => $page
+        $response->assertInertia(
+            fn ($page) => $page
             ->component('player/player-index')
             ->has('clubs', 10)
             ->where('clubs.0.id', $clubs->first()->id)
@@ -59,7 +60,8 @@ class PlayerControllerTest extends TestCase
         $response = $this->actingAs($this->user)
             ->get(route('player.create'));
 
-        $response->assertInertia(fn ($page) => $page
+        $response->assertInertia(
+            fn ($page) => $page
             ->component('player/player-create')
             ->has('clubs', 10)
             ->where('clubs.0.id', $clubs->first()->id)
@@ -231,7 +233,8 @@ class PlayerControllerTest extends TestCase
         $response = $this->actingAs($this->user)
             ->get(route('player.show', $player));
 
-        $response->assertInertia(fn ($page) => $page
+        $response->assertInertia(
+            fn ($page) => $page
             ->component('player/player-index')
             ->where('modal.component', 'player/player-show')
             ->where('modal.props.player.id', $player->id)
@@ -262,7 +265,8 @@ class PlayerControllerTest extends TestCase
         $response = $this->actingAs($this->user)
             ->get(route('player.edit', $player));
 
-        $response->assertInertia(fn ($page) => $page
+        $response->assertInertia(
+            fn ($page) => $page
             ->component('player/player-edit')
             ->where('player.id', $player->id)
             ->where('player.firstname', 'John')

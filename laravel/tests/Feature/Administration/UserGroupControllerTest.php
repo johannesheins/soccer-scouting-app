@@ -2,25 +2,24 @@
 
 namespace Feature\Administration;
 
-use App\Models\Role;
-use App\Models\User;
-use PHPUnit\Framework\TestCase;
+use App\Models\UserGroup;
 use Tests\Feature\Administration\AdministrationTest;
 
-class RoleControllerTest extends AdministrationTest
+class UserGroupControllerTest extends AdministrationTest
 {
     public function test_index()
     {
-        $roles = Role::factory(14)->create();
+        $userGroups = UserGroup::factory(14)->create();
 
         $response = $this->actingAs($this->administratorUser)
-            ->get(route('administration.role.index'));
+            ->get(route('administration.user-group.index'));
 
-        $this->assertAdministrationRoute('administration.role.index', 'administration/role/role-index');
+        $this->assertAdministrationRoute('administration.user-group.index', 'administration/user-group/user-group-index');
         $response->assertOk();
-        $response->assertInertia(fn($page) => $page
-            ->component('administration/role/role-index')
-            ->has('roles', 14)
+        $response->assertInertia(
+            fn ($page) => $page
+            ->component('administration/user-group/user-group-index')
+            ->has('userGroups', 14)
         );
     }
 

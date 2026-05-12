@@ -1,9 +1,9 @@
 import {ColumnDef} from "@tanstack/react-table";
-import {Role} from "@/types/types";
+import {UserGroup} from "@/types/types";
 import sortHeader from "@/components/table/table-header-sort";
-import {RoleRowActions} from "./role-row-actions";
+import {UserGroupRowActions} from "./user-group-row-actions";
 
-export const roleColumns: ColumnDef<Role>[] = [
+export const userGroupColumns: ColumnDef<UserGroup>[] = [
     {
         accessorKey: "name",
         header: sortHeader("Name"),
@@ -12,10 +12,10 @@ export const roleColumns: ColumnDef<Role>[] = [
     {
         accessorKey: "numberOfUsers",
         header: "Anzahl Benutzer",
-        cell: ({row}) => <div className="font-medium">{row.getValue("name")}</div>,
+        cell: ({row}) => <div className="font-medium">{row.getValue("numberOfUsers")}</div>,
     },
     {
         id: "actions",
-        cell: ({row}) => <RoleRowActions role={row.original}/>,
+        cell: ({row}) => <UserGroupRowActions userGroup={row.original}/>,
     },
 ]

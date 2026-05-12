@@ -4,7 +4,7 @@ namespace App\Http\Requests\Administration;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RoleRequest extends FormRequest
+class UserGroupRequest extends FormRequest
 {
     public function rules(): array
     {

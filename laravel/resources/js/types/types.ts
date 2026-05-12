@@ -32,7 +32,7 @@ export type Player = {
     positions: Position[],
 }
 
-export type Role = {
+export type UserGroup = {
     id: number,
     name: string,
     numberOfUsers: number,

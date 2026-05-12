@@ -11,12 +11,14 @@ class AdministrationTest extends TestCase
     use RefreshDatabase;
 
     protected User $administratorUser;
-    protected function setUp(): void{
+    protected function setUp(): void
+    {
         parent::setUp();
         $this->administratorUser = User::factory()->administrator()->create();
     }
 
-    public function assertAdministrationRoute(string $routeName, string $component): void{
+    public function assertAdministrationRoute(string $routeName, string $component): void
+    {
         $this->administratorCanSeeAdministrationPage($routeName, $component);
         $this->userCanNotSeeAdministrationPage($routeName);
         $this->guestCanNotSeeAdministrationPage($routeName);
@@ -30,7 +32,7 @@ class AdministrationTest extends TestCase
             ->get(route($routeName));
 
         $response->assertOk();
-        $response->assertInertia(fn($page) => $page
+        $response->assertInertia(fn ($page) => $page
             ->component($component));
     }
 
