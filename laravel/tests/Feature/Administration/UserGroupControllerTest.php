@@ -23,6 +23,19 @@ class UserGroupControllerTest extends AdministrationTest
         );
     }
 
+    public function test_create(){
+        $response = $this->actingAs($this->administratorUser)
+            ->get(route('administration.user-group.create'));
+
+        $this->assertAdministrationRoute('administration.user-group.create', 'administration/user-group/create');
+        $response->assertOk();
+        $response->assertInertia(
+            fn ($page) => $page
+            ->component('administration/user-group/create')
+            ->has('rights', 14)
+        );
+    }
+
     public function test_store()
     {
         $this->assertTrue(true);
