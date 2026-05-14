@@ -101,7 +101,22 @@ class UserControllerTest extends AdministrationTest
 
     public function test_edit()
     {
-        $this->markTestSkipped();
+        $userGroups = UserGroup::factory(4)->create();
+        $user = User::factory()->create();
+        $user->userGroups()->attach($userGroups->take(2)->pluck('id'));
+
+        $response = $this->actingAs($this->administratorUser)
+            ->get(route('administration.user.edit', $user->id));
+
+        $this->assertAdministrationRoute(['administration.user.edit', $user->id], 'administration/user/user-edit');
+        $response->assertOk();
+        $response->assertInertia(fn ($page) => $page
+            ->component('administration/user/user-edit')
+            ->has('user')
+            ->where('user.id', $user->id)
+            ->has('userGroups', 4)
+            ->where('userGroups.0.id', $userGroups->first()->id)
+        );
     }
 
     public function test_update()

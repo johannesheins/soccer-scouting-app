@@ -47,7 +47,12 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
+        $user->load('userGroups');
 
+        return inertia('administration/user/user-edit', [
+            'user' => $user,
+            'userGroups' => UserGroup::all()
+        ]);
     }
 
     public function update(User $user)

@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import InputError from "@/components/input-error";
-import type { UserGroup} from "@/types/types";
+import type {UserGroup, UserGroupSmall} from "@/types/types";
 import MultipleSelector from "@/components/ui/multi-select";
 import {User} from "@/types";
 import user from "@/routes/administration/user";
@@ -27,8 +27,10 @@ export default function UserForm({ edit = false, backHref = null }: { edit?: boo
 
     const userGroupOption = toUserGroupOptions(userGroups);
 
+    const userGroupIds = user?.user_groups?.map(ug => String(ug.id)) ?? [];
+
     const [selectedUserGroups, setSelectedUserGroups] = useState(
-        userGroupOption.filter(o => o.value === String(user?.userGroups))
+        userGroupOption.filter(o => userGroupIds.includes(o.value))
     );
 
     const { data, setData, post, put, processing, errors } = useForm({
@@ -37,7 +39,7 @@ export default function UserForm({ edit = false, backHref = null }: { edit?: boo
         email: user?.email ?? '',
         password: '',
         password_confirmation: '',
-        userGroups: user?.userGroups.map(ug => String(ug.id)) ?? [] as string[]
+        user_groups: userGroupIds,
     });
 
     function submit(e: React.FormEvent){
@@ -107,14 +109,14 @@ export default function UserForm({ edit = false, backHref = null }: { edit?: boo
                                 value={selectedUserGroups}
                                 onChange={opts => {
                                     setSelectedUserGroups(opts);
-                                    setData('userGroups', opts.map(o => o.value));
+                                    setData('user_groups', opts.map(o => o.value));
                                 }}
                                 defaultOptions={userGroupOption}
                                 placeholder="Benutzergruppe wählen"
                                 hidePlaceholderWhenSelected
                                 emptyIndicator={<p className="text-center text-sm">Keine Benutzergruppe gefunden</p>}
                             />
-                            <InputError message={errors.userGroups} />
+                            <InputError message={errors.user_groups} />
                         </Field>
                     </FieldGroup>
                     <Field className="w-fit flex-row">
