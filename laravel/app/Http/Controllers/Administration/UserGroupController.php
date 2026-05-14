@@ -34,8 +34,19 @@ class UserGroupController extends Controller
         return redirect()->route('administration.user-group.index');
     }
 
-    public function show(UserGroup $userGroup)
+    public function show()
     {
+    }
+
+    public function edit(int $id)
+    {
+        $rightGroups = RightGroup::with('rights:id,right_group_id,name,description')->get();
+        $userGroup = UserGroup::findOrFail($id)->load('rights');
+
+        return inertia('administration/user-group/user-group-edit', [
+            'userGroup' => $userGroup,
+            'rightGroups' => $rightGroups
+        ]);
     }
 
     public function update(UserGroupRequest $request, UserGroup $userGroup)

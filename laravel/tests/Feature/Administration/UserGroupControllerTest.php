@@ -67,6 +67,31 @@ class UserGroupControllerTest extends AdministrationTest
         $this->assertTrue(true);
     }
 
+    public function test_edit(){
+        $rightGroups = RightGroup::factory(3)->create();
+        $rightGroups->each(fn($rightGroup) => Right::factory(3)->for($rightGroup)->create());
+
+        $userGroup = UserGroup::factory()->create();
+        $userGroup->rights()->attach($rightGroups->flatMap->rights->take(10));
+
+        $response = $this->actingAs($this->administratorUser)
+            ->get(route('administration.user-group.edit', $userGroup->id));
+
+        $this->assertAdministrationRoute(['administration.user-group.edit', $userGroup->id], 'administration/user-group/user-group-edit');
+        $response->assertOk();
+        $response->assertInertia(
+            fn ($page) => $page
+            ->component('administration/user-group/user-group-edit')
+
+            ->has('rightGroups', 3)
+            ->has('rightGroups.0.rights', 3)
+
+            ->has('userGroup')
+            ->has('userGroup.rights', 9)
+            ->where('userGroup.rights.0.id', $userGroup->rights()->first()->id)
+        );
+    }
+
     public function test_update()
     {
         $this->assertTrue(true);
