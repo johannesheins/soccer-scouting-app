@@ -10,9 +10,9 @@ export const userGroupColumns: ColumnDef<UserGroup>[] = [
         cell: ({row}) => <div className="font-medium">{row.getValue("name")}</div>,
     },
     {
-        accessorKey: "numberOfUsers",
+        accessorKey: "number_of_users",
         header: "Anzahl Benutzer",
-        cell: ({row}) => <div className="font-medium">{row.getValue("numberOfUsers")}</div>,
+        cell: ({row}) => <div className="font-medium">{row.getValue("number_of_users")}</div>,
     },
     {
         id: "actions",

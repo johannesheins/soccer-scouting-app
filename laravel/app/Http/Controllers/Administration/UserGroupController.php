@@ -12,8 +12,10 @@ class UserGroupController extends Controller
 {
     public function index()
     {
+        $userGroups = UserGroup::withCount('members as number_of_users')->get();
+
         return inertia('administration/user-group/user-group-index', [
-            'userGroups' => UserGroup::all()
+            'userGroups' => $userGroups
         ]);
     }
 

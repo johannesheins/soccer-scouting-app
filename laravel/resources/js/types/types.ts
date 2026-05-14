@@ -51,6 +51,6 @@ export type Right = {
 export type UserGroup = {
     id: number,
     name: string,
-    numberOfUsers: number,
+    number_of_users: number,
     rights: RightSmall[]
 }
