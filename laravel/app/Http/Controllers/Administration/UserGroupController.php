@@ -63,5 +63,8 @@ class UserGroupController extends Controller
 
     public function destroy(UserGroup $userGroup)
     {
+        $userGroup->delete();
+
+        return redirect()->route('administration.user-group.index');
     }
 }

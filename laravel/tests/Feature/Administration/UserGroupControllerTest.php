@@ -171,6 +171,17 @@ class UserGroupControllerTest extends AdministrationTest
 
     public function test_destroy()
     {
-        $this->assertTrue(true);
+        $userGroup = UserGroup::factory()->create();
+        $userGroup->rights()->attach(Right::factory(3)->create());
+
+        $response = $this->actingAs($this->administratorUser)
+            ->delete(route('administration.user-group.destroy', $userGroup->id));
+
+        $this->assertAdministrationRoute(['administration.user-group.destroy', $userGroup->id]);
+        $this->assertDatabaseMissing('user_groups', ['id' => $userGroup->id]);
+        $this->assertDatabaseMissing('user_group_rights', ['user_group_id' => $userGroup->id]);
+
+        $response->assertRedirect(route('administration.user-group.index'));
+
     }
 }
