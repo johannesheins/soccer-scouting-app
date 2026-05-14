@@ -26,7 +26,7 @@ class AdministrationTest extends TestCase
         $this->guestCanNotSeeAdministrationPage($route);
     }
 
-    public function administratorCanSeeAdministrationPage(string $route, string $component): void
+    public function administratorCanSeeAdministrationPage(string|array $route, string $component): void
     {
         $user = User::factory()->administrator()->create();
 
@@ -38,7 +38,7 @@ class AdministrationTest extends TestCase
             ->component($component));
     }
 
-    public function userCanNotSeeAdministrationPage(string $routeName): void
+    public function userCanNotSeeAdministrationPage(string|array $routeName): void
     {
         $user = User::factory()->create();
 
@@ -48,7 +48,7 @@ class AdministrationTest extends TestCase
         $response->assertNotFound();
     }
 
-    public function guestCanNotSeeAdministrationPage(string $routeName): void
+    public function guestCanNotSeeAdministrationPage(string|array $routeName): void
     {
         $response = $this->actingAsGuest()
             ->get($this->route($routeName));
