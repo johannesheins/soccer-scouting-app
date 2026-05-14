@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Administration;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Administration\UserRequest;
+use App\Http\Requests\Administration\UserCreateRequest;
+use App\Http\Requests\Administration\UserUpdateRequest;
 use App\Models\User;
 use App\Models\UserGroup;
 
@@ -25,7 +26,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function store(UserRequest $request)
+    public function store(UserCreateRequest $request)
     {
         $validated = $request->validated();
 
@@ -55,7 +56,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(User $user)
+    public function update(UserUpdateRequest $user)
     {
 
     }

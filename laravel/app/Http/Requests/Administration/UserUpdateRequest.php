@@ -6,7 +6,7 @@ use App\Concerns\PasswordValidationRules;
 use App\Concerns\ProfileValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserRequest extends FormRequest
+class UserUpdateRequest extends FormRequest
 {
     use ProfileValidationRules;
     use PasswordValidationRules;
@@ -14,10 +14,10 @@ class UserRequest extends FormRequest
     {
 
         return [
-            'userGroups' => ['nullable', 'array'],
-            'userGroups.*' => ['int', 'exists:user_groups,id'],
-            'password' => $this->passwordRules(),
-        ] + $this->profileRules();
+                'userGroups' => ['nullable', 'array'],
+                'userGroups.*' => ['int', 'exists:user_groups,id'],
+                'password' => $this->passwordRules(),
+            ] + $this->profileRules();
     }
 
     public function authorize(): bool
