@@ -38,6 +38,7 @@ class UserGroupController extends Controller
 
     public function show()
     {
+        abort(404);
     }
 
     public function edit(int $id)

@@ -64,7 +64,13 @@ class UserGroupControllerTest extends AdministrationTest
 
     public function test_show()
     {
-        $this->assertTrue(true);
+        $userGroup = UserGroup::factory()->create();
+
+        $response = $this->actingAs($this->administratorUser)
+            ->get(route('administration.user-group.show', $userGroup->id));
+
+        $this->assertAdministrationRoute(['administration.user-group.show', $userGroup->id]);
+        $response->assertNotFound();
     }
 
     public function test_edit(){
