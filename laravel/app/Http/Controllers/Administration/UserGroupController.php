@@ -26,7 +26,12 @@ class UserGroupController extends Controller
 
     public function store(UserGroupRequest $request)
     {
-        dd($request->validated());
+        $validated = $request->validated();
+
+        $userGroup = UserGroup::create(['name' => $validated['name']]);
+        $userGroup->rights()->attach($validated['rights']);
+
+        return redirect()->route('administration.user-group.index');
     }
 
     public function show(UserGroup $userGroup)
