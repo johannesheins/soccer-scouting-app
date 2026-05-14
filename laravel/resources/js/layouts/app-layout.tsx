@@ -11,8 +11,10 @@ export default function AppLayout({
 }) {
     return (
         <AppLayoutTemplate breadcrumbs={breadcrumbs}>
-            <div className="max-w-6xl">
-                {children}
+            <div className="w-full h-full grid justify-items-center">
+                <div className="max-w-400 w-full">
+                    {children}
+                </div>
             </div>
             <Modal />
         </AppLayoutTemplate>
