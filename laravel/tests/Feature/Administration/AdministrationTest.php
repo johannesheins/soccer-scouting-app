@@ -17,21 +17,21 @@ class AdministrationTest extends TestCase
         $this->administratorUser = User::factory()->administrator()->create();
     }
 
-    public function assertAdministrationRoute(string $routeName, ?string $component = null): void
+    public function assertAdministrationRoute(string|array $route, ?string $component = null): void
     {
         if($component !== null){
-            $this->administratorCanSeeAdministrationPage($routeName, $component);
+            $this->administratorCanSeeAdministrationPage($route, $component);
         }
-        $this->userCanNotSeeAdministrationPage($routeName);
-        $this->guestCanNotSeeAdministrationPage($routeName);
+        $this->userCanNotSeeAdministrationPage($route);
+        $this->guestCanNotSeeAdministrationPage($route);
     }
 
-    public function administratorCanSeeAdministrationPage(string $routeName, string $component): void
+    public function administratorCanSeeAdministrationPage(string $route, string $component): void
     {
         $user = User::factory()->administrator()->create();
 
         $response = $this->actingAs($user)
-            ->get(route($routeName));
+            ->get($this->route($route));
 
         $response->assertOk();
         $response->assertInertia(fn ($page) => $page
@@ -43,7 +43,7 @@ class AdministrationTest extends TestCase
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)
-            ->get(route($routeName));
+            ->get($this->route($routeName));
 
         $response->assertNotFound();
     }
@@ -51,8 +51,20 @@ class AdministrationTest extends TestCase
     public function guestCanNotSeeAdministrationPage(string $routeName): void
     {
         $response = $this->actingAsGuest()
-            ->get(route($routeName));
+            ->get($this->route($routeName));
 
         $response->assertRedirect('login');
+    }
+
+    private function route(string|array $route): string
+    {
+        if(is_array($route)){
+            $routeName = array_first($route);
+            $params = array_splice($route, 1);
+
+            return route($routeName, $params);
+        }
+
+        return route($route);
     }
 }
