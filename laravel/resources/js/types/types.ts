@@ -32,8 +32,25 @@ export type Player = {
     positions: Position[],
 }
 
+export type RightGroup = {
+    id: number,
+    name: string,
+    rights: Right[]
+}
+
+export type RightSmall = {
+    id: number
+}
+
+export type Right = {
+    id: number,
+    name: string,
+    description: string,
+}
+
 export type UserGroup = {
     id: number,
     name: string,
     numberOfUsers: number,
+    rights: RightSmall[]
 }

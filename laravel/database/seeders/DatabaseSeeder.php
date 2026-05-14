@@ -5,8 +5,8 @@ namespace Database\Seeders;
 use App\Models\Club;
 use App\Models\Position;
 use App\Models\PositionGroup;
+use App\Models\RightGroup;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -52,5 +52,34 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Club::factory(10)->create();
+
+        $rightGroups = [
+            'Spieler' => [
+                ['name' => 'player.view', 'description' => 'Spieler anzeigen'],
+                ['name' => 'player.create', 'description' => 'Spieler anlegen'],
+                ['name' => 'player.edit', 'description' => 'Spieler bearbeiten'],
+                ['name' => 'player.delete', 'description' => 'Spieler löschen'],
+            ],
+            'Vereine' => [
+                ['name' => 'club.view', 'description' => 'Vereine anzeigen'],
+                ['name' => 'club.create', 'description' => 'Vereine anlegen'],
+                ['name' => 'club.edit', 'description' => 'Vereine bearbeiten'],
+                ['name' => 'club.delete', 'description' => 'Vereine löschen'],
+            ],
+            'Administration' => [
+                ['name' => 'user.view', 'description' => 'Benutzer anzeigen'],
+                ['name' => 'user.create', 'description' => 'Benutzer anlegen'],
+                ['name' => 'user.edit', 'description' => 'Benutzer bearbeiten'],
+                ['name' => 'user.delete', 'description' => 'Benutzer löschen'],
+                ['name' => 'user-group.manage', 'description' => 'Benutzergruppen verwalten'],
+            ],
+        ];
+
+        foreach ($rightGroups as $groupName => $rights) {
+            $group = RightGroup::create(['name' => $groupName]);
+            foreach ($rights as $right) {
+                $group->rights()->create($right);
+            }
+        }
     }
 }

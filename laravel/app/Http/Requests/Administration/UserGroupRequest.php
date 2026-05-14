@@ -9,7 +9,9 @@ class UserGroupRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required|string|max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'rights' => ['nullable', 'array'],
+            'rights.*' => ['integer', 'exists:rights,id'],
         ];
     }
 
