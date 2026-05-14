@@ -17,9 +17,11 @@ class AdministrationTest extends TestCase
         $this->administratorUser = User::factory()->administrator()->create();
     }
 
-    public function assertAdministrationRoute(string $routeName, string $component): void
+    public function assertAdministrationRoute(string $routeName, ?string $component = null): void
     {
-        $this->administratorCanSeeAdministrationPage($routeName, $component);
+        if($component !== null){
+            $this->administratorCanSeeAdministrationPage($routeName, $component);
+        }
         $this->userCanNotSeeAdministrationPage($routeName);
         $this->guestCanNotSeeAdministrationPage($routeName);
     }
