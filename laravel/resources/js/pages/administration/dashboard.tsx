@@ -1,8 +1,9 @@
 import {Head, Link} from '@inertiajs/react';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import {administration} from '@/routes';
-import {Users} from "lucide-react";
+import {User, Users} from "lucide-react";
 import userGroup from "@/routes/administration/user-group";
+import user from "@/routes/administration/user";
 
 export default function Dashboard() {
     return (
@@ -17,7 +18,10 @@ export default function Dashboard() {
                         </Link>
                     </div>
                     <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
+                        <Link href={user.index()} title="Benutzer" className="flex flex-col gap-2 justify-center items-center h-full">
+                            <User className={"size-10 icon-color"}/>
+                            <p className="text-icon-color font-bold">Benutzer</p>
+                        </Link>
                     </div>
                     <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
                         <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
