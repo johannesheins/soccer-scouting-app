@@ -62,6 +62,28 @@ class UserGroupControllerTest extends AdministrationTest
         $response->assertRedirect(route('administration.user-group.index'));
     }
 
+    public function test_store_empty_request()
+    {
+        $response = $this->actingAs($this->administratorUser)
+            ->post(route('administration.user-group.store'), [
+                'name' => '',
+                'rights' => [],
+            ]);
+
+        $response->assertInvalid(['name']);
+    }
+
+    public function test_store_invalid_request()
+    {
+        $response = $this->actingAs($this->administratorUser)
+            ->post(route('administration.user-group.store'), [
+                'name' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab aliquam architecto atque, aut commodi, cumque distinctio doloribus eum explicabo fugit illo inventore ipsam minima natus nemo nesciunt nulla porro possimus quasi quo quod recusandae repellendus reprehenderit sunt totam velit veritatis vitae. Ad adipisci assumenda at, corporis culpa cumque enim eos iure neque perspiciatis quae, quo reiciendis rem repellendus repudiandae tempore vel voluptate, voluptatibus! Aperiam autem blanditiis cum delectus dolores enim excepturi facere hic, id labore maxime natus nisi nostrum quae quaerat quis quod suscipit vel, velit vitae! Ad architecto asperiores at culpa eos ex illo magnam, nesciunt nihil omnis soluta.',
+                'rights' => [1, 3, 4]
+            ]);
+
+        $response->assertInvalid(['name', 'rights.0']);
+    }
+
     public function test_show()
     {
         $userGroup = UserGroup::factory()->create();
@@ -119,6 +141,32 @@ class UserGroupControllerTest extends AdministrationTest
         $this->assertDatabaseMissing('user_group_rights', ['user_group_id' => $userGroup->id, 'right_id' => $oldRights->first()->id]);
 
         $response->assertRedirect(route('administration.user-group.index'));
+    }
+
+    public function test_update_empty_request()
+    {
+        $userGroup = UserGroup::factory()->create();
+
+        $response = $this->actingAs($this->administratorUser)
+            ->put(route('administration.user-group.update', $userGroup->id), [
+                'name' => '',
+                'rights' => [],
+            ]);
+
+        $response->assertInvalid(['name']);
+    }
+
+    public function test_update_invalid_request()
+    {
+        $userGroup = UserGroup::factory()->create();
+
+        $response = $this->actingAs($this->administratorUser)
+            ->put(route('administration.user-group.update', $userGroup->id), [
+                'name' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab aliquam architecto atque, aut commodi, cumque distinctio doloribus eum explicabo fugit illo inventore ipsam minima natus nemo nesciunt nulla porro possimus quasi quo quod recusandae repellendus reprehenderit sunt totam velit veritatis vitae. Ad adipisci assumenda at, corporis culpa cumque enim eos iure neque perspiciatis quae, quo reiciendis rem repellendus repudiandae tempore vel voluptate, voluptatibus! Aperiam autem blanditiis cum delectus dolores enim excepturi facere hic, id labore maxime natus nisi nostrum quae quaerat quis quod suscipit vel, velit vitae! Ad architecto asperiores at culpa eos ex illo magnam, nesciunt nihil omnis soluta.',
+                'rights' => [1, 3, 4]
+            ]);
+
+        $response->assertInvalid(['name', 'rights.0']);
     }
 
     public function test_destroy()

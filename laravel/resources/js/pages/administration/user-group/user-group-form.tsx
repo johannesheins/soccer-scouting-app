@@ -111,6 +111,7 @@ export default function PlayerForm({ edit = false, backHref = null }: { edit?: b
                                     </AccordionItem>
                                 ))}
                             </Accordion>
+                            <InputError message={errors.rights} />
                         </FieldGroup>
                         <Field className="w-fit flex-row">
                             <Button type="submit" disabled={processing}>{edit ? 'Aktualisieren' : 'Erstellen'}</Button>
