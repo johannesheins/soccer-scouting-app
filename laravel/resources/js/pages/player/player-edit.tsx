@@ -1,7 +1,7 @@
 import { setLayoutProps } from '@inertiajs/react';
 import player from '@/routes/player';
-import PlayerForm from '@/components/player-form';
 import { usePreviousUrl } from '@/hooks/use-previous-url';
+import PlayerForm from "@/components/from/player-form";
 
 export default function PlayerEdit() {
     const previousUrl = usePreviousUrl();

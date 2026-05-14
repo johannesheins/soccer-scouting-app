@@ -1,5 +1,5 @@
-import {Head, Link, router, useForm, usePage} from '@inertiajs/react';
-import React, {useEffect} from 'react';
+import {Head, router, useForm, usePage} from '@inertiajs/react';
+import React from 'react';
 import {
     Field, FieldContent,
     FieldDescription,
@@ -23,7 +23,7 @@ import {Checkbox} from "@/components/ui/checkbox";
 const userGroupRoute = userGroup;
 
 type Props = { rightGroups: RightGroup[]; userGroup: UserGroup; };
-export default function PlayerForm({ edit = false, backHref = null }: { edit?: boolean, backHref?: string|null }) {
+export default function UserGroupForm({ edit = false, backHref = null }: { edit?: boolean, backHref?: string|null }) {
     const { rightGroups, userGroup } = usePage<Props>().props;
 
     const { data, setData, post, put, processing, errors } = useForm({

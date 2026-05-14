@@ -1,5 +1,5 @@
-import PlayerForm from "@/components/player-form";
 import player from "@/routes/player";
+import PlayerForm from "@/components/from/player-form";
 
 export default function PlayerCreate() {
     return <PlayerForm />;
