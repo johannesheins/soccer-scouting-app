@@ -36,15 +36,15 @@ class UserGroupController extends Controller
         return redirect()->route('administration.user-group.index');
     }
 
-    public function show()
+    public function show(UserGroup $userGroup)
     {
         abort(404);
     }
 
-    public function edit(int $id)
+    public function edit(UserGroup $userGroup)
     {
         $rightGroups = RightGroup::with('rights:id,right_group_id,name,description')->get();
-        $userGroup = UserGroup::findOrFail($id)->load('rights');
+        $userGroup->load('rights');
 
         return inertia('administration/user-group/user-group-edit', [
             'userGroup' => $userGroup,
@@ -54,6 +54,11 @@ class UserGroupController extends Controller
 
     public function update(UserGroupRequest $request, UserGroup $userGroup)
     {
+        $validated = $request->validated();
+        $userGroup->update(['name' => $validated['name']]);
+        $userGroup->rights()->sync($validated['rights']);
+
+        return redirect()->route('administration.user-group.index');
     }
 
     public function destroy(UserGroup $userGroup)

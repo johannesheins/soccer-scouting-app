@@ -100,7 +100,25 @@ class UserGroupControllerTest extends AdministrationTest
 
     public function test_update()
     {
-        $this->assertTrue(true);
+        $oldRights = Right::factory(2)->create();
+        $userGroup = UserGroup::factory()->create();
+        $userGroup->rights()->attach($oldRights);
+
+        $newName = 'Updated Group';
+        $newRights = Right::factory(3)->create();
+
+        $response = $this->actingAs($this->administratorUser)
+            ->put(route('administration.user-group.update', $userGroup->id), [
+                'name' => $newName,
+                'rights' => $newRights->pluck('id')->toArray(),
+            ]);
+
+        $this->assertAdministrationRoute(['administration.user-group.edit', $userGroup->id], 'administration/user-group/user-group-edit');
+        $this->assertDatabaseHas('user_groups', ['id' => $userGroup->id, 'name' => $newName]);
+        $this->assertDatabaseHas('user_group_rights', ['user_group_id' => $userGroup->id, 'right_id' => $newRights->first()->id]);
+        $this->assertDatabaseMissing('user_group_rights', ['user_group_id' => $userGroup->id, 'right_id' => $oldRights->first()->id]);
+
+        $response->assertRedirect(route('administration.user-group.index'));
     }
 
     public function test_destroy()
