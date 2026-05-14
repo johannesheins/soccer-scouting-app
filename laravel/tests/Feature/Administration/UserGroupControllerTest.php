@@ -46,7 +46,20 @@ class UserGroupControllerTest extends AdministrationTest
 
     public function test_store()
     {
-        $this->assertTrue(true);
+        $userGroup = UserGroup::factory()->make();
+        $rights = Right::factory(12)->create();
+
+        $response = $this->actingAs($this->administratorUser)
+            ->post(route('administration.user-group.store'), [
+                'name' => $userGroup->name,
+                'rights' => $rights->pluck('id')->toArray(),
+            ]);
+
+        $this->assertAdministrationRoute('administration.user-group.create', 'administration/user-group/user-group-create');
+        $this->assertDatabaseHas('user_groups', ['name' => $userGroup->name]);
+        $this->assertDatabaseHas('user_group_rights', ['right_id' => $rights->first()->id]);
+
+        $response->assertRedirect(route('administration.user-group.index'));
     }
 
     public function test_show()
