@@ -43,26 +43,74 @@ class UserControllerTest extends AdministrationTest
 
     public function test_store()
     {
+        $userGroups = UserGroup::factory(4)->create();
 
+        $response = $this->actingAs($this->administratorUser)
+            ->post(route('administration.user.store'), [
+                'firstname' => 'Test',
+                'lastname' => 'User',
+                'email' => 'test@example.com',
+                'password' => 'password',
+                'password_confirmation' => 'password',
+                'userGroups' => $userGroups->pluck('id')->toArray(),
+            ]);
+
+        $this->assertAdministrationRoute('administration.user.store');
+        $this->assertDatabaseHas('users', [
+            'firstname' => 'Test',
+            'lastname' => 'User',
+            'email' => 'test@example.com'
+        ]);
+        $createdUser = User::where('email', 'test@example.com')->first();
+        $this->assertDatabaseHas('user_group_members', [
+            'user_group_id' => $userGroups->first()->id,
+            'user_id' => $createdUser->id,
+        ]);
+        $response->assertRedirect(route('administration.user.index'));
+    }
+
+    public function test_store_empty_request()
+    {
+        $response = $this->actingAs($this->administratorUser)
+            ->post(route('administration.user.store'), []);
+
+        $response->assertInvalid(['firstname', 'lastname', 'email']);
+    }
+
+    public function test_store_invalid_request()
+    {
+        UserGroup::factory(4)->create();
+
+        $response = $this->actingAs($this->administratorUser)
+            ->post(route('administration.user.store'), [
+                'firstname' => 'Test',
+                'lastname' => 'User',
+                'email' => 'hfsdlkfsö',
+                'password' => 'password',
+                'password_confirmation' => 'password123',
+                'userGroups' => [10, 11, 12],
+            ]);
+
+        $response->assertInvalid(['password', 'email', 'userGroups.0']);
     }
 
     public function test_show()
     {
-
+        $this->markTestSkipped();
     }
 
     public function test_edit()
     {
-
+        $this->markTestSkipped();
     }
 
     public function test_update()
     {
-
+        $this->markTestSkipped();
     }
 
     public function test_destroy()
     {
-
+        $this->markTestSkipped();
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Administration;
 
-use App\Actions\Fortify\CreateNewUser;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Administration\UserRequest;
 use App\Models\User;
@@ -28,7 +27,17 @@ class UserController extends Controller
 
     public function store(UserRequest $request)
     {
-        dd($request->validated());
+        $validated = $request->validated();
+
+        $user = User::create([
+            'firstname' => $validated['firstname'],
+            'lastname' => $validated['lastname'],
+            'email' => $validated['email'],
+            'password' => $validated['password'],
+        ]);
+        $user->userGroups()->attach($validated['userGroups'] ?? []);
+
+        return redirect(route('administration.user.index'));
     }
 
     public function show(User $user)
