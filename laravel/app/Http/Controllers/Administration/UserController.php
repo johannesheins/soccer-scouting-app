@@ -6,6 +6,7 @@ use App\Actions\Fortify\CreateNewUser;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Administration\UserRequest;
 use App\Models\User;
+use App\Models\UserGroup;
 
 class UserController extends Controller
 {
@@ -20,12 +21,14 @@ class UserController extends Controller
 
     public function create()
     {
-
+        return inertia('administration/user/user-create', [
+            'userGroups' => UserGroup::all()
+        ]);
     }
 
     public function store(UserRequest $request)
     {
-
+        dd($request->validated());
     }
 
     public function show(User $user)

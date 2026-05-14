@@ -7,6 +7,7 @@ use App\Models\Position;
 use App\Models\PositionGroup;
 use App\Models\RightGroup;
 use App\Models\User;
+use App\Models\UserGroup;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -20,6 +21,13 @@ class DatabaseSeeder extends Seeder
             'firstname' => 'Test',
             'lastname' => 'User',
             'email' => 'test@example.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        User::factory()->create([
+            'firstname' => 'Max',
+            'lastname' => 'Mustermann',
+            'email' => 'max.mustermann@example.com',
             'password' => bcrypt('password'),
         ]);
 
@@ -81,5 +89,7 @@ class DatabaseSeeder extends Seeder
                 $group->rights()->create($right);
             }
         }
+
+        UserGroup::factory(10)->create();
     }
 }

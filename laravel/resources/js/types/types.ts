@@ -48,6 +48,10 @@ export type Right = {
     description: string,
 }
 
+export type UserGroupSmall = {
+    id: number,
+}
+
 export type UserGroup = {
     id: number,
     name: string,

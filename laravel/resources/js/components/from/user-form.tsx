@@ -2,10 +2,6 @@ import {Head, Link, router, useForm, usePage} from '@inertiajs/react';
 import React from 'react';
 import { useState } from 'react';
 import {
-    toPositionOptions,
-    toPlayerPositionIds,
-    toClubOptions,
-    getYearOptions,
     toUserGroupOptions
 } from '@/hooks/form-options';
 import {
@@ -17,11 +13,11 @@ import {
 import { Input } from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import InputError from "@/components/input-error";
-import type {Club, PlayerSmall, Position, UserGroup} from "@/types/types";
-import {SingleSelector} from "@/components/ui/single-select";
+import type { UserGroup} from "@/types/types";
 import MultipleSelector from "@/components/ui/multi-select";
 import {User} from "@/types";
 import user from "@/routes/administration/user";
+import { Separator } from "@/components/ui/separator"
 
 type Props = { user: User, userGroups: UserGroup[]; };
 
@@ -36,10 +32,12 @@ export default function UserForm({ edit = false, backHref = null }: { edit?: boo
     );
 
     const { data, setData, post, put, processing, errors } = useForm({
-        firstname: user.firstname ?? '',
-        lastname: user.lastname ?? '',
+        firstname: user?.firstname ?? '',
+        lastname: user?.lastname ?? '',
+        email: user?.email ?? '',
         password: '',
-        userGroups: user.userGroups.map(ug => String(ug.id)) ?? [] as string[]
+        password_confirmation: '',
+        userGroups: user?.userGroups.map(ug => String(ug.id)) ?? [] as string[]
     });
 
     function submit(e: React.FormEvent){
@@ -55,7 +53,7 @@ export default function UserForm({ edit = false, backHref = null }: { edit?: boo
             <form onSubmit={submit}>
                 <Head title={"Spieler " + (edit ? 'bearbeiten' : 'erstellen')} />
                 <FieldSet>
-                    <FieldGroup className="grid sm:grid-cols-[2fr_2fr_1fr]">
+                    <FieldGroup className="grid sm:grid-cols-[1fr_1fr_1fr]">
                         <Field>
                             <FieldLabel htmlFor="firstname">Vorname</FieldLabel>
                             <Input id="firstname"
@@ -73,7 +71,38 @@ export default function UserForm({ edit = false, backHref = null }: { edit?: boo
                             <InputError message={errors.lastname} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor="year_of_birth">Jahrgang</FieldLabel>
+                            <FieldLabel htmlFor="email">E-Mail</FieldLabel>
+                            <Input id="email" type="text"
+                                   value={data.email}
+                                   onChange={e => setData('email', e.target.value)}
+                            />
+                            <InputError message={errors.email} />
+                        </Field>
+                    </FieldGroup>
+
+                    {!edit && <FieldGroup className="grid sm:grid-cols-[2fr_2fr]">
+                        <Field>
+                            <FieldLabel htmlFor="password">Password</FieldLabel>
+                            <Input id="password" type="password"
+                                   value={data.password}
+                                   onChange={e => setData('password', e.target.value)}
+                            />
+                        </Field>
+                        <Field>
+                            <FieldLabel htmlFor="password_confirmation">Password wiederholen</FieldLabel>
+                            <Input id="password_confirmation" type="password"
+                                   value={data.password_confirmation}
+                                   onChange={e => setData('password_confirmation', e.target.value)}
+                            />
+                            <InputError message={errors.password} />
+                        </Field>
+                    </FieldGroup>}
+
+                    <Separator className="my-4"/>
+
+                    <FieldGroup className="grid sm:grid-cols-[2fr_2fr]">
+                        <Field>
+                            <FieldLabel htmlFor="user_groups">Benutzergruppe</FieldLabel>
                             <MultipleSelector
                                 value={selectedUserGroups}
                                 onChange={opts => {

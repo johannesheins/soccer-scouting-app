@@ -1,3 +1,5 @@
+import {UserGroupSmall} from "@/types/types";
+
 export type User = {
     id: number;
     firstname: string;
@@ -7,6 +9,7 @@ export type User = {
     email_verified_at: string | null;
     two_factor_enabled?: boolean;
     is_administrator: boolean,
+    userGroups: UserGroupSmall[]
     created_at: string;
     updated_at: string;
     [key: string]: unknown;

@@ -10,7 +10,6 @@ type Props = {users: User[]}
 export default function UserIndex() {
     const { users } = usePage<Props>().props;
 
-    console.log(users);
     return (
         <>
             <Head title="Benutzer" />

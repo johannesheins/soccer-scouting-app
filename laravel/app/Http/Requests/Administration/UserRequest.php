@@ -12,12 +12,12 @@ class UserRequest extends FormRequest
     use PasswordValidationRules;
     public function rules(): array
     {
-        $this->profileRules();
-        $this->passwordRules();
+
         return [
             'userGroups' => ['nullable', 'array'],
             'userGroups.*' => ['int', 'exists:user_groups,id'],
-        ];
+            'password' => $this->passwordRules(),
+        ] + $this->profileRules();
     }
 
     public function authorize(): bool
