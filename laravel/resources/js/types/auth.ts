@@ -1,4 +1,4 @@
-import {UserGroupSmall} from "@/types/types";
+import {RightSmall, UserGroupSmall} from "@/types/types";
 
 export type User = {
     id: number;
@@ -10,6 +10,7 @@ export type User = {
     two_factor_enabled?: boolean;
     is_administrator: boolean,
     user_groups: UserGroupSmall[]
+    rights: RightSmall[]
     created_at: string;
     updated_at: string;
     [key: string]: unknown;
