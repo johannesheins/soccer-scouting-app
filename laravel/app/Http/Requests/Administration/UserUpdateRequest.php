@@ -4,20 +4,16 @@ namespace App\Http\Requests\Administration;
 
 use App\Concerns\PasswordValidationRules;
 use App\Concerns\ProfileValidationRules;
+use App\Concerns\UserGroupValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserUpdateRequest extends FormRequest
 {
     use ProfileValidationRules;
-    use PasswordValidationRules;
+    use USerGroupValidationRules;
     public function rules(): array
     {
-
-        return [
-                'userGroups' => ['nullable', 'array'],
-                'userGroups.*' => ['int', 'exists:user_groups,id'],
-                'password' => $this->passwordRules(),
-            ] + $this->profileRules();
+        return $this->profileRules($this->route('user')->id) + $this->userGroupRules();
     }
 
     public function authorize(): bool

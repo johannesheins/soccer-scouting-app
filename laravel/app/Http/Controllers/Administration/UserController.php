@@ -56,9 +56,14 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(UserUpdateRequest $user)
+    public function update(UserUpdateRequest $request, User $user)
     {
+        $validated = $request->validated();
 
+        $user->update($validated);
+        $user->userGroups()->sync($validated['userGroups'] ?? []);
+
+        return redirect(route('administration.user.index'));
     }
 
     public function destroy(User $user)

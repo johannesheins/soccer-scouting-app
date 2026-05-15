@@ -121,7 +121,34 @@ class UserControllerTest extends AdministrationTest
 
     public function test_update()
     {
-        $this->markTestSkipped();
+        $userGroups = UserGroup::factory(2)->create();
+        $user = User::factory()->create();
+        $user->userGroups()->attach($userGroups->pluck('id'));
+
+        $response = $this->actingAs($this->administratorUser)
+            ->put(route('administration.user.update', $user->id), [
+                'firstname' => 'Karlo',
+                'lastname' => 'User',
+                'email' => 'karlo@example.com',
+                'userGroups' => [$userGroups->first()->id],
+            ]);
+
+        $this->assertAdministrationRoute(['administration.user.update', $user->id]);
+        $this->assertDatabaseHas('users', [
+            'firstname' => 'Karlo',
+            'lastname' => 'User',
+            'email' => 'karlo@example.com'
+        ]);
+        $this->assertDatabaseHas('user_group_members', [
+            'user_group_id' => $userGroups->first()->id,
+            'user_id' => $user->id,
+        ]);
+        $this->assertDatabaseMissing('user_group_members', [
+            'user_group_id' => $userGroups->last()->id,
+            'user_id' => $user->id,
+        ]);
+
+        $response->assertRedirect(route('administration.user.index'));
     }
 
     public function test_destroy()
