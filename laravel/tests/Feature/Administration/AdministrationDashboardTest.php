@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Administration;
 
-class AdministrationDashboardTest extends AdministrationTest
+class AdministrationDashboardTest extends AdministrationTestCase
 {
     public function test_administration_dashboard(): void
     {

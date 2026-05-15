@@ -5,9 +5,9 @@ namespace Feature\Administration;
 use App\Models\Right;
 use App\Models\RightGroup;
 use App\Models\UserGroup;
-use Tests\Feature\Administration\AdministrationTest;
+use Tests\Feature\Administration\AdministrationTestCase;
 
-class UserGroupControllerTest extends AdministrationTest
+class UserGroupControllerTest extends AdministrationTestCase
 {
     public function test_index()
     {
