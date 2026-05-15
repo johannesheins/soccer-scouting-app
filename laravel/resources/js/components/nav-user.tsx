@@ -24,7 +24,7 @@ export function NavUser() {
     if (!auth.user) {
         return null;
     }
-
+    console.log(auth.user.rights);
     return (
         <SidebarMenu>
             <SidebarMenuItem>

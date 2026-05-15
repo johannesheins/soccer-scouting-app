@@ -38,8 +38,7 @@ class HandleInertiaRequests extends Middleware
 
         $user = $request->user();
         if ($user) {
-            $user->load('userGroups.rights');
-            $user->setRelation('rights', $user->userGroups->flatMap->rights->unique('id')->pluck('id')->values());
+            $user->load('rights');
         }
 
         return [

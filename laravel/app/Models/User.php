@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 #[Fillable(['firstname', 'lastname', 'email', 'password'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
@@ -18,6 +20,7 @@ class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory;
+    use HasRelationships;
     use Notifiable;
     use TwoFactorAuthenticatable;
 
@@ -38,6 +41,16 @@ class User extends Authenticatable
     public function userGroups(): BelongsToMany
     {
         return $this->belongsToMany(UserGroup::class, 'user_group_members');
+    }
+
+    public function rights(): HasManyDeep
+    {
+        return $this->hasManyDeep(
+            Right::class,
+            ['user_group_members', UserGroup::class, 'user_group_rights'],
+            ['user_id', 'id', 'user_group_id', 'id'],
+            ['id', 'user_group_id', 'id', 'right_id']
+        );
     }
 
     public function isAdministrator(): bool

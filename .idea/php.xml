@@ -162,6 +162,9 @@
       <path value="$PROJECT_DIR$/laravel/vendor/php-debugbar/php-debugbar" />
       <path value="$PROJECT_DIR$/laravel/vendor/php-debugbar/symfony-bridge" />
       <path value="$PROJECT_DIR$/laravel/vendor/fruitcake/laravel-debugbar" />
+      <path value="$PROJECT_DIR$/laravel/vendor/emargareten/inertia-modal" />
+      <path value="$PROJECT_DIR$/laravel/vendor/staudenmeir/eloquent-has-many-deep" />
+      <path value="$PROJECT_DIR$/laravel/vendor/staudenmeir/eloquent-has-many-deep-contracts" />
     </include_path>
   </component>
   <component name="PhpInterpreters">
