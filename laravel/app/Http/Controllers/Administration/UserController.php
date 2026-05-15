@@ -43,7 +43,7 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-
+        abort(404);
     }
 
     public function edit(User $user)
@@ -68,6 +68,8 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
+        $user->delete();
 
+        return redirect(route('administration.user.index'));
     }
 }

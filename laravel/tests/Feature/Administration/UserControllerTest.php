@@ -96,7 +96,13 @@ class UserControllerTest extends AdministrationTest
 
     public function test_show()
     {
-        $this->markTestSkipped();
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($this->administratorUser)
+            ->get(route('administration.user.show', $user->id));
+
+        $this->assertAdministrationRoute(['administration.user.show', $user]);
+        $response->assertNotFound();
     }
 
     public function test_edit()
@@ -153,6 +159,20 @@ class UserControllerTest extends AdministrationTest
 
     public function test_destroy()
     {
-        $this->markTestSkipped();
+        $user = User::factory()->create();
+        $userGroups = UserGroup::factory(2)->create();
+        $user->userGroups()->attach($userGroups);
+
+        $response = $this->actingAs($this->administratorUser)
+            ->delete(route('administration.user.destroy', $user->id));
+
+        $this->assertAdministrationRoute(['administration.user.destroy', $user->id]);
+        $this->assertDatabaseMissing('users', [
+            'id' => $user->id,
+        ]);
+        $this->assertDatabaseMissing('user_group_members', [
+            'user_id' => $user->id,
+        ]);
+        $response->assertRedirect(route('administration.user.index'));
     }
 }

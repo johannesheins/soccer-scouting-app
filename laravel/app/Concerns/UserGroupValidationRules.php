@@ -16,8 +16,8 @@ trait UserGroupValidationRules
     protected function userGroupRules(): array
     {
         return [
-            'userGroups' => ['nullable', 'array'],
-            'userGroups.*' => ['int', 'exists:user_groups,id'],
+            'user_groups' => ['nullable', 'array'],
+            'user_groups.*' => ['int', 'exists:user_groups,id'],
         ];
     }
 }
