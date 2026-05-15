@@ -1,4 +1,4 @@
-import {Link, usePage} from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import {
     SidebarGroup,
     SidebarGroupLabel,
@@ -7,11 +7,12 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { useCurrentUrl } from '@/hooks/use-current-url';
-import type {Auth, NavItem} from '@/types';
+import type { NavItem } from '@/types';
+import { useUser } from '@/hooks/use-auth';
 
 export function NavMain({ items = [] }: { items: NavItem[] }) {
-    const { auth } = usePage<{ auth: Auth }>().props;
-    const activeAndAllowedItems = items.filter(i => i.isActive !== false && (i.isAdministrationOnly === true && auth.user.isAdministrator || i.isAdministrationOnly !== true));
+    const user = useUser();
+    const activeAndAllowedItems = items.filter(i => i.isActive !== false && (i.isAdministrationOnly === true && user.isAdministrator || i.isAdministrationOnly !== true));
 
     const { isCurrentUrl } = useCurrentUrl();
 

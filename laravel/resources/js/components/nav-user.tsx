@@ -1,5 +1,4 @@
-import { usePage } from '@inertiajs/react';
-import type { Auth } from '@/types/auth';
+import { useUser } from '@/hooks/use-auth';
 import { ChevronsUpDown } from 'lucide-react';
 import {
     DropdownMenu,
@@ -17,14 +16,14 @@ import { UserMenuContent } from '@/components/user-menu-content';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 export function NavUser() {
-    const { auth } = usePage<{ auth: Auth }>().props;
+    const user = useUser();
     const { state } = useSidebar();
     const isMobile = useIsMobile();
 
-    if (!auth.user) {
+    if (!user) {
         return null;
     }
-    console.log(auth.user.rights);
+
     return (
         <SidebarMenu>
             <SidebarMenuItem>
@@ -35,7 +34,7 @@ export function NavUser() {
                             className="group text-sidebar-accent-foreground data-[state=open]:bg-sidebar-accent"
                             data-test="sidebar-menu-button"
                         >
-                            <UserInfo user={auth.user} />
+                            <UserInfo user={user} />
                             <ChevronsUpDown className="ml-auto size-4" />
                         </SidebarMenuButton>
                     </DropdownMenuTrigger>
@@ -50,7 +49,7 @@ export function NavUser() {
                                   : 'bottom'
                         }
                     >
-                        <UserMenuContent user={auth.user} />
+                        <UserMenuContent user={user} />
                     </DropdownMenuContent>
                 </DropdownMenu>
             </SidebarMenuItem>
