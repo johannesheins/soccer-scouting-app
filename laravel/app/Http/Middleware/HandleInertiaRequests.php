@@ -38,7 +38,7 @@ class HandleInertiaRequests extends Middleware
 
         $user = $request->user();
         if ($user) {
-            $user->load('rights');
+            $user->setRelation('rights', $user->rights()->distinct()->pluck('rights.id'));
         }
 
         return [
