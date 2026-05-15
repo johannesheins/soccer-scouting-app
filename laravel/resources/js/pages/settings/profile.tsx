@@ -33,7 +33,8 @@ export default function Profile({
                 />
 
                 <Form
-                    {...ProfileController.update.form()}
+                    action={ProfileController.update().url}
+                    method={ProfileController.update().method}
                     options={{
                         preserveScroll: true,
                     }}
@@ -42,21 +43,40 @@ export default function Profile({
                     {({ processing, errors }) => (
                         <>
                             <div className="grid gap-2">
-                                <Label htmlFor="name">Name</Label>
+                                <Label htmlFor="firstname">Vorname</Label>
 
                                 <Input
-                                    id="name"
+                                    id="firstname"
                                     className="mt-1 block w-full"
-                                    defaultValue={`${user.firstname} ${user.lastname}`}
-                                    name="name"
+                                    defaultValue={user.firstname}
+                                    name="firstname"
                                     required
-                                    autoComplete="name"
-                                    placeholder="Vollständiger Name"
+                                    autoComplete="given-name"
+                                    placeholder="Vorname"
                                 />
 
                                 <InputError
                                     className="mt-2"
-                                    message={errors.name}
+                                    message={errors.firstname}
+                                />
+                            </div>
+
+                            <div className="grid gap-2">
+                                <Label htmlFor="lastname">Nachname</Label>
+
+                                <Input
+                                    id="lastname"
+                                    className="mt-1 block w-full"
+                                    defaultValue={user.lastname}
+                                    name="lastname"
+                                    required
+                                    autoComplete="family-name"
+                                    placeholder="Nachname"
+                                />
+
+                                <InputError
+                                    className="mt-2"
+                                    message={errors.lastname}
                                 />
                             </div>
 
