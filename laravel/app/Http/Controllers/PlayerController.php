@@ -39,36 +39,35 @@ class PlayerController extends Controller
         return redirect()->route('player.index');
     }
 
-    public function show($id)
+    public function show(Player $player)
     {
         return new Modal('player/player-show', [
-            'player' => Player::findOrFail($id)->load('positions', 'club'),
+            'player' => $player->load('positions', 'club'),
         ])->baseRoute('player.index');
     }
 
-    public function edit($id)
+    public function edit(Player $player)
     {
         return inertia('player/player-edit', [
-            'player' => Player::findOrFail($id)->load('positions:id'),
+            'player' => $player->load('positions:id'),
             'positions' => Position::with('positionGroup:id,name')->get(['id', 'position_code', 'position_group_id']),
             'clubs' => Club::all(['id', 'clubname']),
         ]);
     }
 
-    public function update(PlayerRequest $request, $id)
+    public function update(PlayerRequest $request, Player $player)
     {
         $validated = $request->validated();
 
-        $player = Player::findOrFail($id);
         $player->update($validated);
         $player->positions()->sync($validated['position_ids']);
 
         return redirect()->route('player.index');
     }
 
-    public function destroy($id)
+    public function destroy(Player $player)
     {
-        Player::findOrFail($id)->delete();
+        $player->delete();
 
         return redirect()->route('player.index');
     }
