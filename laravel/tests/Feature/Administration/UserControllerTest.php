@@ -52,7 +52,7 @@ class UserControllerTest extends AdministrationTest
                 'email' => 'test@example.com',
                 'password' => 'password',
                 'password_confirmation' => 'password',
-                'userGroups' => $userGroups->pluck('id')->toArray(),
+                'user_groups' => $userGroups->pluck('id')->toArray(),
             ]);
 
         $this->assertAdministrationRoute('administration.user.store');
@@ -88,10 +88,10 @@ class UserControllerTest extends AdministrationTest
                 'email' => 'hfsdlkfsö',
                 'password' => 'password',
                 'password_confirmation' => 'password123',
-                'userGroups' => [10, 11, 12],
+                'user_groups' => [10, 11, 12],
             ]);
 
-        $response->assertInvalid(['password', 'email', 'userGroups.0']);
+        $response->assertInvalid(['password', 'email', 'user_groups.0']);
     }
 
     public function test_show()
@@ -130,7 +130,7 @@ class UserControllerTest extends AdministrationTest
                 'firstname' => 'Karlo',
                 'lastname' => 'User',
                 'email' => 'karlo@example.com',
-                'userGroups' => [$userGroups->first()->id],
+                'user_groups' => [$userGroups->first()->id],
             ]);
 
         $this->assertAdministrationRoute(['administration.user.update', $user->id]);

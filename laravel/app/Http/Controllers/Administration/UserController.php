@@ -36,7 +36,7 @@ class UserController extends Controller
             'email' => $validated['email'],
             'password' => $validated['password'],
         ]);
-        $user->userGroups()->attach($validated['userGroups'] ?? []);
+        $user->userGroups()->attach($validated['user_groups'] ?? []);
 
         return redirect(route('administration.user.index'));
     }
@@ -61,7 +61,7 @@ class UserController extends Controller
         $validated = $request->validated();
 
         $user->update($validated);
-        $user->userGroups()->sync($validated['userGroups'] ?? []);
+        $user->userGroups()->sync($validated['user_groups'] ?? []);
 
         return redirect(route('administration.user.index'));
     }
