@@ -11,6 +11,7 @@ return new class extends Migration {
         Schema::create('rights', function (Blueprint $table){
             $table->id();
             $table->foreignIdFor(RightGroup::class);
+            $table->string('enum_case')->unique();
             $table->string('name')->unique();
             $table->string('description')->nullable();
         });

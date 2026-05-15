@@ -10,9 +10,23 @@ use App\Models\Player;
 use App\Models\Position;
 use App\Services\PlayerSearchService;
 use Emargareten\InertiaModal\Modal;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class PlayerController extends Controller
+class PlayerController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('can:index,App\Models\Player', only: ['index']),
+            new Middleware('can:search,App\Models\Player', only: ['search']),
+            new Middleware('can:create,App\Models\Player', only: ['create', 'store']),
+            new Middleware('can:view,player', only: ['show']),
+            new Middleware('can:update,player', only: ['edit', 'update']),
+            new Middleware('can:delete,player', only: ['destroy']),
+        ];
+    }
+
     public function index()
     {
         return inertia('player/player-index', [

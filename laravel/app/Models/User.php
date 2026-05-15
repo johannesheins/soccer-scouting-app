@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use App\Enums\RightEnum as RightEnum;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
@@ -51,6 +52,15 @@ class User extends Authenticatable
             ['user_id', 'id', 'user_group_id', 'id'],
             ['id', 'user_group_id', 'id', 'right_id']
         );
+    }
+
+    public function hasRight(RightEnum $right): bool
+    {
+        if ($this->isAdministrator()) {
+            return true;
+        }
+
+        return $this->rights()->where('rights.enum_case', $right->value)->exists();
     }
 
     public function isAdministrator(): bool
