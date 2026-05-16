@@ -30,15 +30,18 @@ class PlayerControllerTest extends TestCase
         $response = $this->actingAs($this->user)
             ->get(route('player.index'));
 
+        $firstClub = $clubs->sortBy('clubname')->first();
+        $firstPosition = $positions->sortBy('id')->first();
+
         $response->assertInertia(
             fn ($page) => $page
             ->component('player/player-index')
             ->has('clubs', 10)
-            ->where('clubs.0.id', $clubs->first()->id)
-            ->where('clubs.0.clubname', $clubs->first()->clubname)
+            ->where('clubs.0.id', $firstClub->id)
+            ->where('clubs.0.clubname', $firstClub->clubname)
             ->has('positions', 8)
-            ->where('positions.0.id', $positions->first()->id)
-            ->where('positions.0.position_code', $positions->first()->position_code)
+            ->where('positions.0.id', $firstPosition->id)
+            ->where('positions.0.position_code', $firstPosition->position_code)
         );
     }
 
@@ -60,15 +63,18 @@ class PlayerControllerTest extends TestCase
         $response = $this->actingAs($this->user)
             ->get(route('player.create'));
 
+        $firstClub = $clubs->sortBy('clubname')->first();
+        $firstPosition = $positions->sortBy('id')->first();
+
         $response->assertInertia(
             fn ($page) => $page
             ->component('player/player-create')
             ->has('clubs', 10)
-            ->where('clubs.0.id', $clubs->first()->id)
-            ->where('clubs.0.clubname', $clubs->first()->clubname)
+            ->where('clubs.0.id', $firstClub->id)
+            ->where('clubs.0.clubname', $firstClub->clubname)
             ->has('positions', 8)
-            ->where('positions.0.id', $positions->first()->id)
-            ->where('positions.0.position_code', $positions->first()->position_code)
+            ->where('positions.0.id', $firstPosition->id)
+            ->where('positions.0.position_code', $firstPosition->position_code)
         );
     }
 

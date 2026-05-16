@@ -12,7 +12,7 @@ class ClubFactory extends Factory
     public function definition(): array
     {
         return [
-            'clubname' => $this->faker->word(),
+            'clubname' => $this->faker->unique()->word(),
             'zip_code' => $this->faker->postcode(),
             'city' => $this->faker->city(),
         ];

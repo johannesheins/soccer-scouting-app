@@ -9,7 +9,7 @@ return new class () extends Migration {
     {
         Schema::create('clubs', function (Blueprint $table) {
             $table->id();
-            $table->string('clubname');
+            $table->string('clubname')->unique();
             $table->string('zip_code')->nullable();
             $table->string('city')->nullable();
         });

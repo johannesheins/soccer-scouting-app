@@ -30,16 +30,16 @@ class PlayerController extends Controller implements HasMiddleware
     public function index()
     {
         return inertia('player/player-index', [
-            'positions' => Position::with('positionGroup:id,name')->get(['id', 'position_code', 'position_group_id']),
-            'clubs' => Club::all(['id', 'clubname']),
+            'positions' => Position::with('positionGroup:id,name')->orderBy('id')->get(['id', 'position_code', 'position_group_id']),
+            'clubs' => Club::orderBy('clubname')->get(['id', 'clubname']),
         ]);
     }
 
     public function create()
     {
         return inertia('player/player-create', [
-            'positions' => Position::with('positionGroup:id,name')->get(['id', 'position_code', 'position_group_id']),
-            'clubs' => Club::all(['id', 'clubname']),
+            'positions' => Position::with('positionGroup:id,name')->orderBy('id')->get(['id', 'position_code', 'position_group_id']),
+            'clubs' => Club::orderBy('clubname')->get(['id', 'clubname']),
         ]);
     }
 
@@ -64,8 +64,8 @@ class PlayerController extends Controller implements HasMiddleware
     {
         return inertia('player/player-edit', [
             'player' => $player->load('positions:id'),
-            'positions' => Position::with('positionGroup:id,name')->get(['id', 'position_code', 'position_group_id']),
-            'clubs' => Club::all(['id', 'clubname']),
+            'positions' => Position::with('positionGroup:id,name')->orderBy('id')->get(['id', 'position_code', 'position_group_id']),
+            'clubs' => Club::orderBy('clubname')->get(['id', 'clubname']),
         ]);
     }
 
@@ -95,7 +95,7 @@ class PlayerController extends Controller implements HasMiddleware
 
         return inertia('player/player-search', [
             'positions' => Position::with('positionGroup:id,name')->get(),
-            'clubs' => Club::all(['id', 'clubname']),
+            'clubs' => Club::orderBy('clubname')->get(['id', 'clubname']),
             'players' => $players,
         ]);
     }
