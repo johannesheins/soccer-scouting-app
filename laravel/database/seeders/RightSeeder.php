@@ -21,7 +21,7 @@ class RightSeeder extends Seeder
                 $this->createRight(RightEnum::PlayerCreate, 'Spieler erstellen', 'Dard Spieler erstellen'),
                 $this->createRight(RightEnum::PlayerView, 'Spieler ansehen', 'Darf Spieler ansehen'),
                 $this->createRight(RightEnum::PlayerEdit, 'Spieler bearbeiten', 'Darf Spieler bearbeiten'),
-                $this->createRight(RightEnum::PlayerDelete, 'Spieler löschen', 'Darf Spieler löschen'),
+                $this->createRight(RightEnum::PlayerDestroy, 'Spieler löschen', 'Darf Spieler löschen'),
             ],
         ];
 

@@ -9,5 +9,5 @@ enum RightEnum: string
     case PlayerView   = 'player.view';
     case PlayerCreate = 'player.create';
     case PlayerEdit   = 'player.edit';
-    case PlayerDelete = 'player.delete';
+    case PlayerDestroy = 'player.destroy';
 }

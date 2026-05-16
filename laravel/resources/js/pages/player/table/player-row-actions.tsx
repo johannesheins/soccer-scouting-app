@@ -32,7 +32,7 @@ export function PlayerRowActions({player}: { player: Player }) {
     const [viewOpen, setViewOpen] = useState(false);
     const canView = useHasRight(RightEnum.PlayerView);
     const canEdit = useHasRight(RightEnum.PlayerEdit);
-    const canDelete = useHasRight(RightEnum.PlayerDelete);
+    const canDelete = useHasRight(RightEnum.PlayerDestroy);
 
     if (!canView && !canEdit && !canDelete) return null;
 

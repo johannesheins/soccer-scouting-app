@@ -35,6 +35,6 @@ class PlayerPolicy
 
     public function delete(User $user, Player $player): bool
     {
-        return $user->hasRight(RightEnum::PlayerDelete);
+        return $user->hasRight(RightEnum::PlayerDestroy);
     }
 }

@@ -477,7 +477,7 @@ class PlayerControllerTest extends TestCase
         ]);
         $player->positions()->attach($position->id);
 
-        $this->assertRights(RightEnum::PlayerDelete, ['player.destroy', $player->id]);
+        $this->assertRights(RightEnum::PlayerDestroy, ['player.destroy', $player->id]);
 
         $response = $this->actingAs($this->user)
             ->delete(route('player.destroy', $player->id));
