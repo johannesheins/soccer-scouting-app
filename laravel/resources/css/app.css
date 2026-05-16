@@ -96,6 +96,7 @@
     --sidebar-border: oklch(0.922 0.005 34.3);
     --sidebar-ring: oklch(0.714 0.014 41.2);
     --icon-color: oklch(0.609 0.126 221.723);
+    --muted-icon-color: oklch(0.609 0.126 221.723 / 0.30);
 }
 
 .dark {
@@ -132,6 +133,7 @@
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.547 0.021 43.1);
     --icon-color: oklch(0.715 0.143 215.221);
+    --muted-icon-color: oklch(0.815 0.143 215.082 / 0.30);
 }
 
 @layer base {
@@ -149,5 +151,9 @@
 
     .text-icon-color{
         color: var(--icon-color);
+    }
+
+    .disabled *{
+        color: var(--muted-icon-color) !important;
     }
 }

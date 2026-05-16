@@ -2,6 +2,8 @@ import {Head, Link} from '@inertiajs/react';
 import {UserRoundPlus, UserSearch} from 'lucide-react';
 import PlayerSearchForm from "@/pages/player/player-search-form";
 import player from "@/routes/player";
+import Block from "@/components/block";
+import {useHasRight} from "@/hooks/use-has-right";
 
 export default function PlayerIndex() {
     return (
@@ -16,10 +18,12 @@ export default function PlayerIndex() {
                         </Link>
                     </div>
                     <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <Link href={player.search()} title="Spieler suchen" className="flex flex-col gap-2 justify-center items-center h-full">
-                            <UserSearch className={"size-10 icon-color"}/>
-                            <p className="text-icon-color font-bold">Spieler suchen</p>
-                        </Link>
+                        <Block active={useHasRight('player.search')} title="Keine Berechtigung">
+                            <Link href={player.search()} title="Spieler suchen" className="flex flex-col gap-2 justify-center items-center h-full">
+                                <UserSearch className={"size-10 icon-color"}/>
+                                <p className="text-icon-color font-bold">Spieler suchen</p>
+                            </Link>
+                        </Block>
                     </div>
                 </div>
                 <div className="content-center invisible md:visible relative min-h-screen flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
