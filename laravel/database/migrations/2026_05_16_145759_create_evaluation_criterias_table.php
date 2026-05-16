@@ -9,9 +9,9 @@ return new class extends Migration {
     {
         Schema::create('evaluation_criteria', function (Blueprint $table){
             $table->id();
-            $table->string('name');
-            $table->unsignedSmallInteger('minimum_player_age');
-            $table->unsignedTinyInteger('multiplier');
+            $table->string('name')->unique();
+            $table->unsignedSmallInteger('minimum_player_age')->nullable();
+            $table->unsignedTinyInteger('multiplier')->default(1);
         });
     }
 
