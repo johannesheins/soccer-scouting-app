@@ -1,6 +1,6 @@
 import {useUser} from "@/hooks/use-auth";
 
-export function useHasRight(rightId: string): boolean {
+export function useHasRight(rightId: number): boolean {
     const user = useUser();
 
     if(user.is_administrator){

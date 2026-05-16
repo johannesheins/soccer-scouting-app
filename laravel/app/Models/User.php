@@ -60,7 +60,7 @@ class User extends Authenticatable
             return true;
         }
 
-        return $this->rights()->where('rights.enum_case', $right->value)->exists();
+        return $this->rights()->where('rights.id', $right->value)->exists();
     }
 
     public function isAdministrator(): bool

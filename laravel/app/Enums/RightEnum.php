@@ -2,12 +2,12 @@
 
 namespace App\Enums;
 
-enum RightEnum: string
+enum RightEnum: int
 {
-    case PlayerIndex  = 'player.index';
-    case PlayerSearch  = 'player.search';
-    case PlayerView   = 'player.view';
-    case PlayerCreate = 'player.create';
-    case PlayerEdit   = 'player.edit';
-    case PlayerDestroy = 'player.destroy';
+    case PlayerIndex   = 1;
+    case PlayerSearch  = 2;
+    case PlayerCreate  = 3;
+    case PlayerView    = 4;
+    case PlayerEdit    = 5;
+    case PlayerDestroy = 6;
 }

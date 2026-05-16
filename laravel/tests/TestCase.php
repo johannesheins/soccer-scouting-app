@@ -48,7 +48,7 @@ abstract class TestCase extends BaseTestCase
         $this->inRollback(function () use ($right, $route, $method): void {
             $user = User::factory()->create();
             $userGroup = UserGroup::factory()->create();
-            $rightModel = Right::where('enum_case', $right->value)->firstOrFail();
+            $rightModel = Right::findOrFail($right->value);
             $userGroup->rights()->attach($rightModel);
             $userGroup->members()->attach($user);
 

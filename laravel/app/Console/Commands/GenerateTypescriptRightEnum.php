@@ -23,7 +23,7 @@ class GenerateTypescriptRightEnum extends Command
 
         $fileContent = "export enum RightEnum {\n";
         foreach(RightEnum::cases() as $enum){
-            $fileContent .= "   {$enum->name} = '{$enum->value}',\n";
+            $fileContent .= "   {$enum->name} = {$enum->value},\n";
         }
         $fileContent .= "}";
 

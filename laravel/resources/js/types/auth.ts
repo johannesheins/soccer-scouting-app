@@ -10,7 +10,7 @@ export type User = {
     two_factor_enabled?: boolean;
     is_administrator: boolean,
     user_groups: UserGroupSmall[]
-    rights: string[]
+    rights: number[]
     created_at: string;
     updated_at: string;
     [key: string]: unknown;

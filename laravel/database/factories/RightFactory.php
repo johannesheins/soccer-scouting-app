@@ -14,7 +14,6 @@ class RightFactory extends Factory
     {
         return [
             'right_group_id' => RightGroup::factory(),
-            'enum_case' => $this->faker->unique()->word(),
             'name' => $this->faker->unique()->name(),
             'description' => $this->faker->text(),
         ];

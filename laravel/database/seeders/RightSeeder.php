@@ -18,7 +18,7 @@ class RightSeeder extends Seeder
             'Spieler' => [
                 $this->createRight(RightEnum::PlayerIndex, 'Spieler Übersicht', 'Darf die Spieler-Übersicht sehen'),
                 $this->createRight(RightEnum::PlayerSearch, 'Spieler suchen', 'Darf Spieler suchen'),
-                $this->createRight(RightEnum::PlayerCreate, 'Spieler erstellen', 'Dard Spieler erstellen'),
+                $this->createRight(RightEnum::PlayerCreate, 'Spieler erstellen', 'Darf Spieler erstellen'),
                 $this->createRight(RightEnum::PlayerView, 'Spieler ansehen', 'Darf Spieler ansehen'),
                 $this->createRight(RightEnum::PlayerEdit, 'Spieler bearbeiten', 'Darf Spieler bearbeiten'),
                 $this->createRight(RightEnum::PlayerDestroy, 'Spieler löschen', 'Darf Spieler löschen'),
@@ -35,12 +35,12 @@ class RightSeeder extends Seeder
         }
     }
 
-    private function createRight(RightEnum $enumCase, string $name, string $description): array
+    private function createRight(RightEnum $id, string $name, string $description): array
     {
         return [
-            'enum_case' => $enumCase,
+            'id' => $id,
             'name' => $name,
-            'description' => $description
+            'description' => $description,
         ];
     }
 }
