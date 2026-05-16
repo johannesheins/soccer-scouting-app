@@ -13,9 +13,7 @@ import { useUser } from '@/hooks/use-auth';
 export function NavMain({ items = [] }: { items: NavItem[] }) {
     const user = useUser();
     const activeAndAllowedItems = items.filter(i =>
-        i.isActive !== false
-        && (i.isAdministrationOnly !== true || user.isAdministrator)
-        && (i.right === undefined || user.rights.includes(i.right))
+        i.isActive !== false && (i.right === undefined || user.rights.includes(i.right) || user.is_administrator)
     );
 
     const { isCurrentUrl } = useCurrentUrl();

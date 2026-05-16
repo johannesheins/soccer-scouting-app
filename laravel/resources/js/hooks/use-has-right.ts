@@ -1,5 +1,10 @@
 import {useUser} from "@/hooks/use-auth";
 
 export function useHasRight(rightId: string): boolean {
-    return useUser().rights.includes(rightId);
+    const user = useUser();
+
+    if(user.is_administrator){
+        return true;
+    }
+    return user.rights.includes(rightId);
 }
