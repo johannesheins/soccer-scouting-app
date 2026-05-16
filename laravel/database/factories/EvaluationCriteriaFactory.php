@@ -12,7 +12,7 @@ class EvaluationCriteriaFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
+            'name' => $this->faker->unique()->name(),
             'minimum_player_age' => $this->faker->randomNumber(),
             'multiplier' => $this->faker->randomNumber(),
         ];

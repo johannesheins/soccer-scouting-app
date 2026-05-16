@@ -15,6 +15,10 @@ class EvaluationCriteriaController extends Controller
         ]);
     }
 
+    public function create(){
+        return inertia('administration/evaluation-criteria/evaluation-criteria-create')
+    }
+
     public function store(EvaluationCriteriaRequest $request)
     {
         return EvaluationCriteria::create($request->validated());
