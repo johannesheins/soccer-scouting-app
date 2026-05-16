@@ -8,7 +8,7 @@ use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
 #[Signature('app:generate-typescript-right-enum')]
-#[Description('Command description')]
+#[Description('Generates resources/js/enums/right-enum.ts from the PHP RightEnum')]
 class GenerateTypescriptRightEnum extends Command
 {
     /**
