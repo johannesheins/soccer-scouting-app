@@ -35,7 +35,7 @@ class EvaluationCriteriaControllerTest extends AdministrationTestCase
 
         $this->assertAdministrationRoute('evaluation-criteria.index', 'administration/evaluation-criteria/evaluation-criteria-index');
         $this->assertDatabaseHas('evaluation_criteria', ['name' => $data->name]);
-        $response->assertCreated();
+        $response->assertRedirect(route('evaluation-criteria.index'));
     }
 
     public function test_store_empty_request()
@@ -46,7 +46,7 @@ class EvaluationCriteriaControllerTest extends AdministrationTestCase
                 'minimum_player_age' => '',
             ]);
 
-        $response->assertInvalid(['name', 'minimum_player_age']);
+        $response->assertInvalid(['name', 'multiplier']);
     }
 
     public function test_show()
@@ -56,9 +56,23 @@ class EvaluationCriteriaControllerTest extends AdministrationTestCase
         $response = $this->actingAs($this->administratorUser)
             ->get(route('evaluation-criteria.show', $criterion->id));
 
-        $this->assertAdministrationRoute(['evaluation-criteria.show', $criterion->id]);
+        $response->assertNotFound();
+    }
+
+    public function test_edit()
+    {
+        $criterion = EvaluationCriteria::factory()->create();
+
+        $response = $this->actingAs($this->administratorUser)
+            ->get(route('evaluation-criteria.edit', $criterion->id));
+
+        $this->assertAdministrationRoute(['evaluation-criteria.edit', $criterion->id], 'administration/evaluation-criteria/evaluation-criteria-edit');
         $response->assertOk();
-        $response->assertJson(['id' => $criterion->id]);
+        $response->assertInertia(
+            fn($page) => $page
+                ->component('administration/evaluation-criteria/evaluation-criteria-edit')
+                ->has('evaluationCriterion')
+        );
     }
 
     public function test_update()
@@ -73,9 +87,8 @@ class EvaluationCriteriaControllerTest extends AdministrationTestCase
                 'multiplier' => $criterion->multiplier,
             ]);
 
-        $this->assertAdministrationRoute(['evaluation-criteria.show', $criterion->id]);
         $this->assertDatabaseHas('evaluation_criteria', ['id' => $criterion->id, 'name' => $newName]);
-        $response->assertOk();
+        $response->assertRedirect(route('evaluation-criteria.index'));
     }
 
     public function test_update_empty_request()
@@ -88,7 +101,7 @@ class EvaluationCriteriaControllerTest extends AdministrationTestCase
                 'minimum_player_age' => '',
             ]);
 
-        $response->assertInvalid(['name', 'minimum_player_age']);
+        $response->assertInvalid(['name', 'multiplier']);
     }
 
     public function test_destroy()
@@ -98,8 +111,7 @@ class EvaluationCriteriaControllerTest extends AdministrationTestCase
         $response = $this->actingAs($this->administratorUser)
             ->delete(route('evaluation-criteria.destroy', $criterion->id));
 
-        $this->assertAdministrationRoute(['evaluation-criteria.destroy', $criterion->id]);
         $this->assertDatabaseMissing('evaluation_criteria', ['id' => $criterion->id]);
-        $response->assertOk();
+        $response->assertRedirect(route('evaluation-criteria.index'));
     }
 }

@@ -11,12 +11,12 @@ export const evaluationCriteriaColumns: ColumnDef<EvaluationCriteria>[] = [
     },
     {
         accessorKey: "minimum_player_age",
-        header: "Mindestalter",
+        header: sortHeader("Mindestalter"),
         cell: ({row}) => <div className="font-medium">{row.getValue("minimum_player_age")}</div>,
     },
     {
         accessorKey: "multiplier",
-        header: "Multiplikator",
+        header: sortHeader("Multiplikator"),
         cell: ({row}) => <div className="font-medium">{row.getValue("multiplier")}</div>,
     },
     {

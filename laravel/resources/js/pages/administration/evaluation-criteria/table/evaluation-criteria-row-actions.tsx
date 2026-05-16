@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import {router} from "@inertiajs/react";
 import evaluationCriteria from "@/routes/evaluation-criteria";
+import {Link} from "@inertiajs/react";
 import {useState} from "react";
 
 export function EvaluationCriteriaRowActions({criterion}: { criterion: EvaluationCriteria }) {
@@ -35,6 +36,10 @@ export function EvaluationCriteriaRowActions({criterion}: { criterion: Evaluatio
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
+                    <DropdownMenuItem asChild>
+                        <Link href={evaluationCriteria.edit.url(criterion.id)}>Bearbeiten</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
                     <DropdownMenuItem onSelect={() => setDeleteOpen(true)} className="text-destructive!">
                         Bewertungskriterium löschen
                     </DropdownMenuItem>

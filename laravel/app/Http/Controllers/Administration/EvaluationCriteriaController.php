@@ -16,30 +16,39 @@ class EvaluationCriteriaController extends Controller
     }
 
     public function create(){
-        return inertia('administration/evaluation-criteria/evaluation-criteria-create')
+        return inertia('administration/evaluation-criteria/evaluation-criteria-create');
     }
 
     public function store(EvaluationCriteriaRequest $request)
     {
-        return EvaluationCriteria::create($request->validated());
+        EvaluationCriteria::create($request->validated());
+
+        return redirect()->route('evaluation-criteria.index');
     }
 
     public function show(EvaluationCriteria $evaluationCriterion)
     {
-        return $evaluationCriterion;
+        abort(404);
+    }
+
+    public function edit(EvaluationCriteria $evaluationCriterion)
+    {
+        return inertia('administration/evaluation-criteria/evaluation-criteria-edit', [
+            'evaluationCriterion' => $evaluationCriterion,
+        ]);
     }
 
     public function update(EvaluationCriteriaRequest $request, EvaluationCriteria $evaluationCriterion)
     {
         $evaluationCriterion->update($request->validated());
 
-        return $evaluationCriterion;
+        return redirect()->route('evaluation-criteria.index');
     }
 
     public function destroy(EvaluationCriteria $evaluationCriterion)
     {
         $evaluationCriterion->delete();
 
-        return response()->json();
+        return redirect()->route('evaluation-criteria.index');
     }
 }

@@ -10,8 +10,8 @@ class EvaluationCriteriaRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'minimum_player_age' => ['required', 'integer'],
-            'multiplier' => ['integer'],
+            'minimum_player_age' => ['nullable', 'integer'],
+            'multiplier' => ['required', 'integer'],
         ];
     }
 
