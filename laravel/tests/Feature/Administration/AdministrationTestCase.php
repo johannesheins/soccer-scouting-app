@@ -55,16 +55,4 @@ class AdministrationTestCase extends TestCase
 
         $response->assertRedirect('login');
     }
-
-    private function route(string|array $route): string
-    {
-        if(is_array($route)){
-            $routeName = array_first($route);
-            $params = array_splice($route, 1);
-
-            return route($routeName, $params);
-        }
-
-        return route($route);
-    }
 }

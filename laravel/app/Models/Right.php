@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable('name', 'description')]
+#[Fillable('enum_case', 'name', 'description')]
 class Right extends Model
 {
     use HasFactory;

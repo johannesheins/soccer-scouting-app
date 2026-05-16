@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Player;
 
+use App\Enums\RightEnum;
 use App\Models\Club;
 use App\Models\Player;
 use App\Models\Position;
@@ -18,7 +19,7 @@ class PlayerControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = User::factory()->administrator()->create(); //TODO Implement right tests for all
+        $this->user = User::factory()->administrator()->create();
     }
 
     #region index
@@ -43,6 +44,7 @@ class PlayerControllerTest extends TestCase
             ->where('positions.0.id', $firstPosition->id)
             ->where('positions.0.position_code', $firstPosition->position_code)
         );
+        $this->assertRights(RightEnum::PlayerIndex, 'player.index');
     }
 
     public function test_index_guest_redirect_login(): void
@@ -76,6 +78,7 @@ class PlayerControllerTest extends TestCase
             ->where('positions.0.id', $firstPosition->id)
             ->where('positions.0.position_code', $firstPosition->position_code)
         );
+        $this->assertRights(RightEnum::PlayerCreate, 'player.create');
     }
 
     public function test_create_guest_redirect_login(): void
@@ -105,6 +108,8 @@ class PlayerControllerTest extends TestCase
         $this->assertDatabaseHas('players', ['firstname' => 'John', 'lastname' => 'Doe', 'year_of_birth' => 1999]);
         $player = Player::where('firstname', 'John')->first();
         $positions->each(fn ($pos) => $this->assertDatabaseHas('player_positions', ['player_id' => $player->id, 'position_id' => $pos->id]));
+
+        $this->assertRights(RightEnum::PlayerCreate, 'player.create');
     }
 
     public function test_store_guest_redirect_login(): void
@@ -245,6 +250,8 @@ class PlayerControllerTest extends TestCase
             ->where('modal.component', 'player/player-show')
             ->where('modal.props.player.id', $player->id)
         );
+
+        $this->assertRights(RightEnum::PlayerView, ['player.show', $player->id]);
     }
 
     public function test_show_returns_404_for_nonexistent_player(): void
@@ -281,6 +288,8 @@ class PlayerControllerTest extends TestCase
             ->where('player.club_id', $clubs->id)
             ->has('player.positions', 2)
         );
+
+        $this->assertRights(RightEnum::PlayerEdit, ['player.edit', $player->id]);
     }
 
     public function test_edit_guest_redirect_login(): void
@@ -325,6 +334,8 @@ class PlayerControllerTest extends TestCase
         $this->assertDatabaseHas('players', ['id' => $player->id, 'firstname' => 'Jacob']);
         $this->assertDatabaseHas('player_positions', ['player_id' => $player->id, 'position_id' => $newPosition->id]);
         $oldPosition->each(fn ($pos) => $this->assertDatabaseMissing('player_positions', ['player_id' => $player->id, 'position_id' => $pos->id]));
+
+        $this->assertRights(RightEnum::PlayerEdit, ['player.update', $player]);
     }
 
     public function test_update_guest_redirect_login(): void
@@ -465,6 +476,8 @@ class PlayerControllerTest extends TestCase
             'club_id'   => $club->id,
         ]);
         $player->positions()->attach($position->id);
+
+        $this->assertRights(RightEnum::PlayerDelete, ['player.destroy', $player->id]);
 
         $response = $this->actingAs($this->user)
             ->delete(route('player.destroy', $player->id));
