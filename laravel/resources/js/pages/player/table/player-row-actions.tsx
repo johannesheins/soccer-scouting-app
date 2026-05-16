@@ -23,11 +23,18 @@ import {
 import type {Player} from "@/types/types";
 import {Dialog, DialogContent} from "@/components/ui/dialog";
 import {PlayerView} from "../player-view";
+import {useHasRight} from "@/hooks/use-has-right";
+import {RightEnum} from "@/enums";
 
 const playerRoute = player;
 export function PlayerRowActions({player}: { player: Player }) {
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [viewOpen, setViewOpen] = useState(false);
+    const canView = useHasRight(RightEnum.PlayerView);
+    const canEdit = useHasRight(RightEnum.PlayerEdit);
+    const canDelete = useHasRight(RightEnum.PlayerDelete);
+
+    if (!canView && !canEdit && !canDelete) return null;
 
     return (
         <>
@@ -39,16 +46,22 @@ export function PlayerRowActions({player}: { player: Player }) {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => router.visit(playerRoute.show.url(player.id))}>
-                        Spieler ansehen
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator/>
-                    <DropdownMenuItem onClick={() => router.visit(playerRoute.edit.url(player.id))}>
-                        Spieler bearbeiten
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => setDeleteOpen(true)} className="text-destructive!">
-                        Spieler löschen
-                    </DropdownMenuItem>
+                    {canView && (
+                        <DropdownMenuItem onClick={() => router.visit(playerRoute.show.url(player.id))}>
+                            Spieler ansehen
+                        </DropdownMenuItem>
+                    )}
+                    {canView && (canEdit || canDelete) && <DropdownMenuSeparator/>}
+                    {canEdit && (
+                        <DropdownMenuItem onClick={() => router.visit(playerRoute.edit.url(player.id))}>
+                            Spieler bearbeiten
+                        </DropdownMenuItem>
+                    )}
+                    {canDelete && (
+                        <DropdownMenuItem onSelect={() => setDeleteOpen(true)} className="text-destructive!">
+                            Spieler löschen
+                        </DropdownMenuItem>
+                    )}
                 </DropdownMenuContent>
             </DropdownMenu>
 

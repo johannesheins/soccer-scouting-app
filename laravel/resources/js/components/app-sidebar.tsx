@@ -16,6 +16,7 @@ import {
 import player from "@/routes/player";
 import type { NavItem } from '@/types';
 import {administration, dashboard} from "@/routes";
+import {RightEnum} from "@/enums";
 
 const mainNavItems: NavItem[] = [
     {
@@ -27,6 +28,7 @@ const mainNavItems: NavItem[] = [
         title: 'Spieler',
         href: player.index(),
         icon: User,
+        right: RightEnum.PlayerIndex,
     },
 ];
 

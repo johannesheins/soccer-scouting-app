@@ -12,7 +12,11 @@ import { useUser } from '@/hooks/use-auth';
 
 export function NavMain({ items = [] }: { items: NavItem[] }) {
     const user = useUser();
-    const activeAndAllowedItems = items.filter(i => i.isActive !== false && (i.isAdministrationOnly === true && user.isAdministrator || i.isAdministrationOnly !== true));
+    const activeAndAllowedItems = items.filter(i =>
+        i.isActive !== false
+        && (i.isAdministrationOnly !== true || user.isAdministrator)
+        && (i.right === undefined || user.rights.includes(i.right))
+    );
 
     const { isCurrentUrl } = useCurrentUrl();
 
@@ -21,7 +25,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
             <SidebarGroup className="px-2 py-0">
                 <SidebarGroupLabel>Platform</SidebarGroupLabel>
                 <SidebarMenu>
-                    {items.map((item) => (
+                    {activeAndAllowedItems.map((item) => (
                         <SidebarMenuItem key={item.title}>
                             <SidebarMenuButton
                                 asChild
