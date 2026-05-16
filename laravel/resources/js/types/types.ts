@@ -48,6 +48,13 @@ export type Right = {
     description: string,
 }
 
+export type EvaluationCriteria = {
+    id: number,
+    name: string,
+    minimum_player_age: number,
+    multiplier: number,
+}
+
 export type UserGroupSmall = {
     id: number,
 }
