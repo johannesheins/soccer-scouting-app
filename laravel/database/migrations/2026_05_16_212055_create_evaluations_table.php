@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Club;
 use App\Models\Player;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -13,8 +14,9 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(Player::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignIdFor(User::class)->nullable()->constrained()->nullOnDelete()->cascadeOnUpdate();
-            $table->string('hometeam');
-            $table->string('awayteam');
+            $table->foreignIdFor(Club::class, 'home_team_id')->nullable()->constrained()->nullOnDelete()->cascadeOnUpdate();
+            $table->foreignIdFor(Club::class, 'away_team_id')->nullable()->constrained()->nullOnDelete()->cascadeOnUpdate();
+            $table->text('comment');
             $table->dateTime('kickoff');
             $table->timestamps();
         });

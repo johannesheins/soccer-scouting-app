@@ -74,7 +74,7 @@ export type EvaluationCriteriaScore = {
 export type Evaluation = {
     id: number,
     player_id: number,
-    hometeam_id: number,
-    awayteam_id: number,
+    home_team_id: number,
+    away_team_id: number,
     criteria_scores: EvaluationCriteriaScore[]
 }

@@ -19,8 +19,8 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
 
     const { data, setData, post, put, processing, errors } = useForm({
         player_id: evaluation?.player_id ?? '',
-        hometeam_id: evaluation?.hometeam_id ?? '',
-        awayteam_id: evaluation?.awayteam_id ?? '',
+        home_team_id: evaluation?.home_team_id ?? '',
+        away_team_id: evaluation?.away_team_id ?? '',
     });
 
     function submit(e: React.FormEvent) {

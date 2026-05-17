@@ -21,6 +21,16 @@ class Evaluation extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function homeTeam(): BelongsTo
+    {
+        return $this->belongsTo(Club::class, 'home_team_id');
+    }
+
+    public function awayTeam(): BelongsTo
+    {
+        return $this->belongsTo(Club::class, 'away_team_id');
+    }
+
     public function categoryScores(): HasMany
     {
         return $this->hasMany(EvaluationCriteriaScore::class);
