@@ -20,7 +20,7 @@ export default function EvaluationIndex() {
                         <AccessGuard active={canCreate} title="Keine Berechtigung">
                             <Link href={evaluation.create()} title="Spieler-Bewertung erstellen" className="flex flex-col gap-2 justify-center items-center h-full">
                                 <FilePlus className={"size-10 icon-color"}/>
-                                <p className="text-icon-color font-bold">Spieler erstellen</p>
+                                <p className="text-icon-color font-bold">Spieler-Bewertung erstellen</p>
                             </Link>
                         </AccessGuard>
                     </div>

@@ -6,7 +6,10 @@ use App\Enums\RightEnum;
 use App\Models\Club;
 use App\Models\Player;
 use App\Models\Position;
+use App\Models\Right;
 use App\Models\User;
+use App\Models\UserGroup;
+use Database\Seeders\RightSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -19,7 +22,14 @@ class PlayerControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = User::factory()->administrator()->create();
+        $this->user = $this->createUserWithRight([
+            RightEnum::PlayerIndex,
+            RightEnum::PlayerSearch,
+            RightEnum::PlayerCreate,
+            RightEnum::PlayerView,
+            RightEnum::PlayerEdit,
+            RightEnum::PlayerDestroy,
+        ]);
     }
 
     #region index
@@ -34,6 +44,7 @@ class PlayerControllerTest extends TestCase
         $firstClub = $clubs->sortBy('clubname')->first();
         $firstPosition = $positions->sortBy('id')->first();
 
+        $response->assertOk();
         $response->assertInertia(
             fn ($page) => $page
             ->component('player/player-index')

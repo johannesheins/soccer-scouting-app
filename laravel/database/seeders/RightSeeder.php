@@ -37,11 +37,9 @@ class RightSeeder extends Seeder
         ];
 
         foreach ($rightGroups as $groupName => $rights) {
-            $group = RightGroup::create([
-                'name' => $groupName
-            ]);
+            $group = RightGroup::firstOrCreate(['name' => $groupName]);
             foreach ($rights as $right) {
-                $group->rights()->create($right);
+                $group->rights()->firstOrCreate(['id' => $right['id']], $right);
             }
         }
     }

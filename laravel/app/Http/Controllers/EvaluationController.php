@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EvaluationRequest;
+use App\Models\Evaluation;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 
-class EvaluationController extends Controller
+class EvaluationController extends Controller implements HasMiddleware
 {
     public static function middleware(): array
     {

@@ -23,7 +23,11 @@ class EvaluationPolicy
 
     public function view(User $user, Evaluation $evaluation): bool
     {
-        return $user->hasRight(RightEnum::EvaluationView);
+        if($user->hasRight(RightEnum::EvaluationViewAll)){
+            return true;
+        }
+
+        return $user->hasRight(RightEnum::EvaluationView) && $evaluation->user()->is($user);
     }
 
     public function create(User $user): bool
