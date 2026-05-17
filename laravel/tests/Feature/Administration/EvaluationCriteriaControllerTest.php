@@ -22,6 +22,19 @@ class EvaluationCriteriaControllerTest extends AdministrationTestCase
         );
     }
 
+    public function test_create()
+    {
+        $response = $this->actingAs($this->administratorUser)
+            ->get(route('evaluation-criteria.create'));
+
+        $this->assertAdministrationRoute('evaluation-criteria.create', 'administration/evaluation-criteria/evaluation-criteria-create');
+        $response->assertOk();
+        $response->assertInertia(
+            fn($page) => $page
+                ->component('administration/evaluation-criteria/evaluation-criteria-create')
+        );
+    }
+
     public function test_store()
     {
         $data = EvaluationCriteria::factory()->make();
