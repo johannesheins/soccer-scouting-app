@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClubController;
+use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\PlayerController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -15,6 +16,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('player/search', [PlayerController::class, 'search'])->name('player.search');
     Route::resource('player', PlayerController::class)->names('player');
 
+    Route::get('evaluation/search', [EvaluationController::class, 'search'])->name('evaluation.search');
+    Route::resource('evaluation', EvaluationController::class)->names('evaluation');
 
     Route::resource('club', ClubController::class)->names('club');
 });

@@ -1,5 +1,5 @@
-import {Link, usePage} from '@inertiajs/react';
-import {LayoutGrid, Settings, User} from 'lucide-react';
+import {Link} from '@inertiajs/react';
+import {FileUserIcon, LayoutGrid, Settings, User} from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -17,6 +17,7 @@ import player from "@/routes/player";
 import type { NavItem } from '@/types';
 import {administration, dashboard} from "@/routes";
 import {RightEnum} from "@/enums";
+import evaluation from "@/routes/evaluation";
 
 const mainNavItems: NavItem[] = [
     {
@@ -29,6 +30,12 @@ const mainNavItems: NavItem[] = [
         href: player.index(),
         icon: User,
         right: RightEnum.PlayerIndex,
+    },
+    {
+        title: 'Bewertung',
+        href: evaluation.index(),
+        icon: FileUserIcon,
+        right: RightEnum.EvaluationIndex,
     },
 ];
 
