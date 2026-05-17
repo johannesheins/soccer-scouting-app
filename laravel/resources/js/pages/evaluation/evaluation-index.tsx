@@ -45,7 +45,7 @@ EvaluationIndex.layout = {
     breadcrumbs: [
         {
             title: 'Spieler-Bewertungen',
-            href: player.index(),
+            href: evaluation.index(),
         },
     ],
 };

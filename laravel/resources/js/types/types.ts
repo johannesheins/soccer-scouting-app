@@ -48,13 +48,6 @@ export type Right = {
     description: string,
 }
 
-export type EvaluationCriteria = {
-    id: number,
-    name: string,
-    minimum_player_age: number,
-    multiplier: number,
-}
-
 export type UserGroupSmall = {
     id: number,
 }
@@ -64,4 +57,24 @@ export type UserGroup = {
     name: string,
     number_of_users: number,
     rights: RightSmall[]
+}
+
+export type EvaluationCriteria = {
+    id: number,
+    name: string,
+    minimum_player_age: number,
+    multiplier: number,
+}
+
+export type EvaluationCriteriaScore = {
+    evaluation_criteria_id: number,
+    score: number;
+}
+
+export type Evaluation = {
+    id: number,
+    player_id: number,
+    hometeam_id: number,
+    awayteam_id: number,
+    criteria_scores: EvaluationCriteriaScore[]
 }

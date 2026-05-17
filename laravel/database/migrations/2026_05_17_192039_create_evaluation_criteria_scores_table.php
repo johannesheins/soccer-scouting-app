@@ -10,10 +10,10 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('evaluation_criteria_scores', function (Blueprint $table){
-            $table->id();
-            $table->foreignIdFor(Evaluation::class);
-            $table->foreignIdFor(EvaluationCriteria::class, 'evaluation_criterion_id');
+            $table->foreignIdFor(Evaluation::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignIdFor(EvaluationCriteria::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->unsignedTinyInteger('score');
+            $table->primary(['evaluation_id', 'evaluation_criteria_id']);
             $table->timestamps();
         });
     }

@@ -28,10 +28,10 @@ class EvaluationController extends Controller implements HasMiddleware
 
     public function create()
     {
-
+        return inertia('evaluation/evaluation-create');
     }
 
-    public function store()
+    public function store(EvaluationRequest $request)
     {
 
     }
