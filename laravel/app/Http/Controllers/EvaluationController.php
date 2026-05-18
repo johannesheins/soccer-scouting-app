@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\EvaluationRequest;
 use App\Models\Evaluation;
+use App\Models\EvaluationCriteria;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 
@@ -28,7 +29,9 @@ class EvaluationController extends Controller implements HasMiddleware
 
     public function create()
     {
-        return inertia('evaluation/evaluation-create');
+        return inertia('evaluation/evaluation-create', [
+            'evaluationCriteria' => EvaluationCriteria::all(),
+        ]);
     }
 
     public function store(EvaluationRequest $request)

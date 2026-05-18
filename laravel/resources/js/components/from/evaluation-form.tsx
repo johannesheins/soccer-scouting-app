@@ -9,10 +9,12 @@ import {
 import { Input } from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import InputError from "@/components/input-error";
-import {Evaluation} from "@/types/types";
+import {Evaluation, EvaluationCriteria} from "@/types/types";
 import evaluationRoute from "@/routes/evaluation";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import ScoreBar from "../score-bar";
 
-type Props = { evaluation?: Evaluation };
+type Props = { evaluation?: Evaluation, evaluationCriteria: EvaluationCriteria[] };
 
 export default function EvaluationForm({ edit = false, backHref = null }: { edit?: boolean, backHref?: string | null }){
     const { evaluation, evaluationCriteria } = usePage<Props>().props;
@@ -21,7 +23,10 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
         player_id: evaluation?.player_id ?? '',
         home_team_id: evaluation?.home_team_id ?? '',
         away_team_id: evaluation?.away_team_id ?? '',
+        criteriaScore: 0, //TODO Loop berücksichtigen
     });
+
+    console.log(data.criteriaScore);
 
     function submit(e: React.FormEvent) {
         e.preventDefault();
@@ -36,9 +41,35 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
             <div className="max-w-6xl">
                 <form onSubmit={submit}>
                     <Head title={"Bewertungskriterium " + (edit ? 'bearbeiten' : 'erstellen')} />
+                    <Tabs defaultValue="game">
+                        <TabsList variant="line">
+                            <TabsTrigger value="player">Spieler wählen</TabsTrigger>
+                            <TabsTrigger value="game">Spieldaten</TabsTrigger>
+                            <TabsTrigger value="evaluation">Bewertung</TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="player">
+
+                        </TabsContent>
+                        <TabsContent value="game">
+
+                        </TabsContent>
+                        <TabsContent value="evaluation">
+                            <FieldSet>
+                                {evaluationCriteria.map(criteria =>
+                                    <FieldGroup key={criteria.id}>
+                                        <FieldLabel htmlFor={'criteria_'+criteria.id}>{criteria.name}</FieldLabel>
+                                        <ScoreBar name={'criteria_'+criteria.id} value={data.criteriaScore} onChange={val => setData('criteriaScore', val)} />
+                                    </FieldGroup>
+                                )}
+                            </FieldSet>
+                        </TabsContent>
+
+                    </Tabs>
                     <FieldSet>
                         <FieldGroup>
-
+                            <Field>
+                                <Input></Input>
+                            </Field>
                         </FieldGroup>
 
                         <Field className="w-fit flex-row">

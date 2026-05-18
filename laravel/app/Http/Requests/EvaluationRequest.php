@@ -12,8 +12,9 @@ class EvaluationRequest extends FormRequest
     {
         return [
             'player_id' => ['required', 'exists:players'],
-            'hometeam' => $this->teamNameRules(),
-            'awayteam' => $this->teamNameRules(),
+            'hometeam' => ['required', 'exists:teams,id'],
+            'awayteam' => ['required', 'exists:teams,id'],
+            'comment' => ['required', 'string', 'max:65535'],
             'kickoff' => ['required', 'date'],
         ];
     }
