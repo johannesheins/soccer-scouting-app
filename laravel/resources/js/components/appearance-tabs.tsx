@@ -5,7 +5,7 @@ import type { Appearance } from '@/hooks/use-appearance';
 import { useAppearance } from '@/hooks/use-appearance';
 import { cn } from '@/lib/utils';
 
-export default function AppearanceToggleTab({
+export default function AppearanceToggleTab({ //TODO Refactor to Tabs from shadcn
     className = '',
     ...props
 }: HTMLAttributes<HTMLDivElement>) {
