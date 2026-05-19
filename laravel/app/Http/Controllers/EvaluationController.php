@@ -36,7 +36,7 @@ class EvaluationController extends Controller implements HasMiddleware
 
     public function store(EvaluationRequest $request)
     {
-
+        dd($request);
     }
 
     public function show(Evaluation $evaluation)

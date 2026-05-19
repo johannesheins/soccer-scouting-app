@@ -19,14 +19,22 @@ type Props = { evaluation?: Evaluation, evaluationCriteria: EvaluationCriteria[]
 export default function EvaluationForm({ edit = false, backHref = null }: { edit?: boolean, backHref?: string | null }){
     const { evaluation, evaluationCriteria } = usePage<Props>().props;
 
-    const { data, setData, post, put, processing, errors } = useForm({
+    const { data, setData, transform, post, put, processing, errors } = useForm({
         player_id: evaluation?.player_id ?? '',
         home_team_id: evaluation?.home_team_id ?? '',
         away_team_id: evaluation?.away_team_id ?? '',
-        criteriaScore: 0, //TODO Loop berücksichtigen
+        criteriaScores: Object.fromEntries(
+            (evaluation?.criteria_scores ?? []).map(s => [s.evaluation_criteria_id, s.score])
+        ) as Record<number, number>,
     });
 
-    console.log(data.criteriaScore);
+    transform(d => ({
+        ...d,
+        criteriaScores: evaluationCriteria.map(c => ({
+            evaluation_criteria_id: c.id,
+            score: d.criteriaScores[c.id] ?? 0,
+        })),
+    }));
 
     function submit(e: React.FormEvent) {
         e.preventDefault();
@@ -55,10 +63,11 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                         </TabsContent>
                         <TabsContent value="evaluation">
                             <FieldSet>
-                                {evaluationCriteria.map(criteria =>
+                                {evaluationCriteria.map((criteria, criteriaId) =>
                                     <FieldGroup key={criteria.id}>
                                         <FieldLabel htmlFor={'criteria_'+criteria.id}>{criteria.name}</FieldLabel>
-                                        <ScoreBar name={'criteria_'+criteria.id} value={data.criteriaScore} onChange={val => setData('criteriaScore', val)} />
+                                        <ScoreBar name={'criteria_'+criteria.id} value={data.criteriaScores[criteria.id] ?? 0} onChange={val => setData('criteriaScores', { ...data.criteriaScores, [criteria.id]: val })} />
+                                        <InputError message={(errors as Record<string, string>)[`criteriaScores.${criteriaId}.score`] ?? ''}/>
                                     </FieldGroup>
                                 )}
                             </FieldSet>
