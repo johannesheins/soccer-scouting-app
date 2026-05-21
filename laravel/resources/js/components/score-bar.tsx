@@ -9,7 +9,7 @@ export default function ScoreBar({name, className, value = 0, onChange}: {
     value?: number,
     onChange?: (value: number) => void
 }) {
-    const [currentValue, setCurrentValue] = useState(value);
+    const [currentValue, setCurrentValue] = useState(value / 2);
 
     function update(next: number) {
         setCurrentValue(next);
@@ -31,22 +31,24 @@ export default function ScoreBar({name, className, value = 0, onChange}: {
         }
     }
 
-    while(variants.length < 10){
+    while(variants.length < 5){
         variants.push('zero');
     }
 
+    const outputValue = value * 2;
+
     return (
         <>
-            <div className={cn(className, "grid grid-cols-12 grid-rows-1 gap-2 justify-items-center items-center")}>
+            <div className={cn(className, "grid grid-cols-7 gap-2 justify-items-center items-center")}>
                 <MinusCircle className="size-3" onClick={() => update(Math.max(0, currentValue - 0.5))}/>
                 {variants.map((v, key) =>
-                    <div key={key} className="w-full">
+                    <div key={key} className="w-full" onClick={() => update(currentValue === (key + 0.5) ? (key + 1) : (key + 0.5))}>
                         <Star variant={v} />
                     </div>
                 )}
-                <PlusCircle className="size-3" onClick={() => update(Math.min(10, currentValue + 0.5))}/>
+                <PlusCircle className="size-3" onClick={() => update(Math.min(5, currentValue + 0.5))}/>
             </div>
-            <Input type="hidden" name={name} value={currentValue} min="0" max="10" readOnly />
+            <Input type="hidden" name={name} value={outputValue} min="0" max="10" readOnly />
         </>
     )
 }
