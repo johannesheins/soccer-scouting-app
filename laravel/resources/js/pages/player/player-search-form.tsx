@@ -63,11 +63,7 @@ export default function PlayerSearchForm(){
     }
 
     function resetForm(){
-        const baseUrl = window.location.href.replace(window.location.search, '')
-        if(baseUrl.endsWith(player.index.url())){
-            return router.get(player.index())
-        }
-        return router.get(player.search());
+        router.get(window.location.pathname);
     }
 
     return (
