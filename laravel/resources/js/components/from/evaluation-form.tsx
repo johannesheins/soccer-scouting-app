@@ -77,15 +77,8 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                                 </div>
                             </FieldSet>
                         </TabsContent>
-
                     </Tabs>
                     <FieldSet>
-                        <FieldGroup>
-                            <Field>
-                                <Input></Input>
-                            </Field>
-                        </FieldGroup>
-
                         <Field className="w-fit flex-row">
                             <Button type="submit" disabled={processing}>{edit ? 'Aktualisieren' : 'Erstellen'}</Button>
                             {edit && backHref && (
