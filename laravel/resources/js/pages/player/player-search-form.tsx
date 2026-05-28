@@ -6,14 +6,15 @@ import {Input} from "@/components/ui/input";
 import InputError from "@/components/input-error";
 import MultipleSelector from "@/components/ui/multi-select";
 import {Button} from "@/components/ui/button";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Option } from '@/components/ui/multi-select';
 import {toPositionOptions, toClubOptions, getYearOptions} from "@/hooks/form-options";
 import {usePreviousUrl} from "@/hooks/use-previous-url";
-import {Club, Position} from "@/types/types";
+import {Club, Player, Position} from "@/types/types";
+import api from "@/routes/api";
 
-type Props = { positions: Position[]; clubs: Club[], modal?: boolean };
-export default function PlayerSearchForm({ positions, clubs, modal }: Props){
+type Props = { positions: Position[]; clubs: Club[], returnData?: boolean, onResponse?: (players: Player[]) => void };
+export default function PlayerSearchForm({ positions, clubs, returnData, onResponse }: Props){
     usePreviousUrl();
 
     const params = new URLSearchParams(window.location.search);
@@ -56,14 +57,24 @@ export default function PlayerSearchForm({ positions, clubs, modal }: Props){
         position_ids: urlPositionIds,
     });
 
-    function submit(e: React.FormEvent){
+    async function submit(e: React.FormEvent){
         e.preventDefault()
-        return get(modal ? player.searchModal.url(): player.search.url());
+        if(returnData){
+            const players = await fetchData(data);
+            onResponse?.(players);
+            return;
+        }
+        return get(player.search.url());
     }
 
     function resetForm(){
         router.get(window.location.pathname);
     }
+
+    useEffect(() => {
+        if (!returnData) return;
+        fetchData(data).then(players => onResponse?.(players));
+    }, []);
 
     return (
         <div className="w-full">
@@ -144,4 +155,19 @@ export default function PlayerSearchForm({ positions, clubs, modal }: Props){
             </form>
         </div>
     );
+}
+
+async function fetchData(data: Record<string, string | string[]>): Promise<Player[]> {
+    const params = new URLSearchParams();
+    Object.entries(data).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+            value.forEach(v => params.append(key, v));
+        } else {
+            params.append(key, value);
+        }
+    });
+
+    const url = api.player.search.url() + '?' + params.toString();
+    const res = await fetch(url);
+    return res.json();
 }

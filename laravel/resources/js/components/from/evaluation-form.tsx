@@ -6,18 +6,22 @@ import {
     FieldLabel, FieldSeparator,
     FieldSet,
 } from "@/components/ui/field"
-import { Input } from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import InputError from "@/components/input-error";
-import {Evaluation, EvaluationCriteria} from "@/types/types";
+import {type Club, Evaluation, EvaluationCriteria, type Position} from "@/types/types";
 import evaluationRoute from "@/routes/evaluation";
 import ScoreBar from "../score-bar";
-import player from "@/routes/player";
+import PlayerSearchDialog from "@/pages/player/player-search-dialog";
 
-type Props = { evaluation?: Evaluation, evaluationCriteria: EvaluationCriteria[] };
+type Props = {
+    evaluation?: Evaluation,
+    evaluationCriteria: EvaluationCriteria[],
+    positions: Position[];
+    clubs: Club[],
+};
 
 export default function EvaluationForm({ edit = false, backHref = null }: { edit?: boolean, backHref?: string | null }){
-    const { evaluation, evaluationCriteria } = usePage<Props>().props;
+    const { evaluation, evaluationCriteria, positions, clubs } = usePage<Props>().props;
 
     const { data, setData, transform, post, put, processing, errors } = useForm({
         player_id: evaluation?.player_id ?? '',
@@ -47,17 +51,18 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
     return (
         <>
             <div className="max-w-6xl">
-                <form onSubmit={submit}>
-                    <Head title={"Bewertungskriterium " + (edit ? 'bearbeiten' : 'erstellen')} />
+                <Head title={"Bewertungskriterium " + (edit ? 'bearbeiten' : 'erstellen')} />
 
-                    <FieldSet>
-                        <FieldGroup>
-                            <Field>
-                                <Button type="button" variant="outline" onClick={() => router.visit(player.searchModal.url())}>Spieler wählen</Button>
-                                <Input type="hidden" value={data.player_id}/>
-                            </Field>
-                        </FieldGroup>
-                        <FieldSeparator />
+                <FieldSet>
+                    <FieldGroup>
+                        <Field>
+                            <PlayerSearchDialog positions={positions} clubs={clubs}/>
+                        </Field>
+                    </FieldGroup>
+
+                    <FieldSeparator />
+
+                    <form onSubmit={submit}>
                         <FieldGroup className="grid grid-cols-2 gap-x-15">
                             {evaluationCriteria.length <= 0 && <p>Keine Bewertungskriterien gefunden</p>}
                             {evaluationCriteria.length > 0 && evaluationCriteria.map((criteria, criteriaId) =>
@@ -81,8 +86,8 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                                 )}
                             </Field>
                         </FieldGroup>
-                    </FieldSet>
-                </form>
+                    </form>
+                </FieldSet>
             </div>
         </>
     );

@@ -18,26 +18,17 @@ class PlayerSearchController extends Controller
         return inertia('player/player-search', [
             'positions' => Position::with('positionGroup:id,name')->get(),
             'clubs' => Club::orderBy('clubname')->get(['id', 'clubname']),
-            'players' => $players,
+            'players' => $players->getData(),
         ]);
     }
 
-    public function modal(PlayerSearchRequest $request)
-    {
-        $players = self::search($request);
-
-        return new Modal('player/player-search-modal', [
-            'positions' => Position::with('positionGroup:id,name')->get(),
-            'clubs' => Club::orderBy('clubname')->get(['id', 'clubname']),
-            'players' => $players,
-        ]);
-    }
-
-    private function search(PlayerSearchRequest $request)
+    public function search(PlayerSearchRequest $request)
     {
         //TODO Implement server-side pagination
         $playerSearchDTO = new PlayerSearchDTO($request->validated());
         $playerSearchService = new PlayerSearchService();
-        return $playerSearchService->searchPlayers($playerSearchDTO, ['positions:id,position_code', 'club:id,clubname'])->toArray();
+        $players = $playerSearchService->searchPlayers($playerSearchDTO, ['positions:id,position_code', 'club:id,clubname'])->toArray();
+
+        return response()->json($players);
     }
 }
