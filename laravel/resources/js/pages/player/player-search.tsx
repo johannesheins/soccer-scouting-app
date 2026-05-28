@@ -10,14 +10,14 @@ import PlayerSearchForm from "@/pages/player/player-search-form";
 type Props = { positions: Position[]; clubs: Club[]; players: Player[]};
 
 export default function PlayerSearch(){
-    const { players } = usePage<Props>().props;
+    const { players, positions, clubs } = usePage<Props>().props;
 
     return (
         <>
             <Head title="Spieler suchen" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="relative min-h-screen rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                    <PlayerSearchForm />
+                    <PlayerSearchForm positions={positions} clubs={clubs} />
                 </div>
 
                 <div className="relative min-h-screen flex-1 overflow-hidden rounded-xl md:min-h-min dark:border-sidebar-border">

@@ -3,7 +3,7 @@ import React from 'react';
 import {
     Field, FieldDescription,
     FieldGroup,
-    FieldLabel,
+    FieldLabel, FieldSeparator,
     FieldSet,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input";
@@ -11,8 +11,8 @@ import {Button} from "@/components/ui/button";
 import InputError from "@/components/input-error";
 import {Evaluation, EvaluationCriteria} from "@/types/types";
 import evaluationRoute from "@/routes/evaluation";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ScoreBar from "../score-bar";
+import player from "@/routes/player";
 
 type Props = { evaluation?: Evaluation, evaluationCriteria: EvaluationCriteria[] };
 
@@ -49,44 +49,38 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
             <div className="max-w-6xl">
                 <form onSubmit={submit}>
                     <Head title={"Bewertungskriterium " + (edit ? 'bearbeiten' : 'erstellen')} />
-                    <Tabs defaultValue="player">
-                        <TabsList variant="line">
-                            <TabsTrigger value="player">Spieler wählen</TabsTrigger>
-                            <TabsTrigger value="game">Spieldaten</TabsTrigger>
-                            <TabsTrigger value="evaluation">Bewertung</TabsTrigger>
-                        </TabsList>
-                        <TabsContent value="player">
 
-                        </TabsContent>
-                        <TabsContent value="game">
-
-                        </TabsContent>
-                        <TabsContent value="evaluation">
-                            <FieldSet>
-                                <div className="grid grid-cols-2 gap-x-15">
-                                    {evaluationCriteria.map((criteria, criteriaId) =>
-                                        <FieldGroup key={criteria.id}>
-                                            <div className="flex flex-row justify-between">
-                                                <FieldLabel htmlFor={'criteria_'+criteria.id}>{criteria.name}</FieldLabel>
-                                                <FieldDescription>x{criteria.multiplier}</FieldDescription>
-                                            </div>
-                                            <ScoreBar name={'criteria_'+criteria.id} value={data.criteriaScores[criteria.id] ?? 0} onChange={val => setData('criteriaScores', { ...data.criteriaScores, [criteria.id]: val })} />
-                                            <InputError message={(errors as Record<string, string>)[`criteriaScores.${criteriaId}.score`] ?? ''}/>
-                                        </FieldGroup>
-                                    )}
-                                </div>
-                            </FieldSet>
-                        </TabsContent>
-                    </Tabs>
                     <FieldSet>
-                        <Field className="w-fit flex-row">
-                            <Button type="submit" disabled={processing}>{edit ? 'Aktualisieren' : 'Erstellen'}</Button>
-                            {edit && backHref && (
-                                <Button variant="secondary" type="button" onClick={() => router.get(backHref)}>
-                                    Zurück
-                                </Button>
+                        <FieldGroup>
+                            <Field>
+                                <Button type="button" variant="outline" onClick={() => router.visit(player.searchModal.url())}>Spieler wählen</Button>
+                                <Input type="hidden" value={data.player_id}/>
+                            </Field>
+                        </FieldGroup>
+                        <FieldSeparator />
+                        <FieldGroup className="grid grid-cols-2 gap-x-15">
+                            {evaluationCriteria.length <= 0 && <p>Keine Bewertungskriterien gefunden</p>}
+                            {evaluationCriteria.length > 0 && evaluationCriteria.map((criteria, criteriaId) =>
+                                <Field key={criteria.id}>
+                                    <div className="flex flex-row justify-between">
+                                        <FieldLabel htmlFor={'criteria_'+criteria.id}>{criteria.name}</FieldLabel>
+                                        <FieldDescription>x{criteria.multiplier}</FieldDescription>
+                                    </div>
+                                    <ScoreBar name={'criteria_'+criteria.id} value={data.criteriaScores[criteria.id] ?? 0} onChange={val => setData('criteriaScores', { ...data.criteriaScores, [criteria.id]: val })} />
+                                    <InputError message={(errors as Record<string, string>)[`criteriaScores.${criteriaId}.score`] ?? ''}/>
+                                </Field>
                             )}
-                        </Field>
+                        </FieldGroup>
+                        <FieldGroup>
+                            <Field className="w-fit flex-row">
+                                <Button type="submit" disabled={processing}>{edit ? 'Aktualisieren' : 'Erstellen'}</Button>
+                                {edit && backHref && (
+                                    <Button variant="secondary" type="button" onClick={() => router.get(backHref)}>
+                                        Zurück
+                                    </Button>
+                                )}
+                            </Field>
+                        </FieldGroup>
                     </FieldSet>
                 </form>
             </div>

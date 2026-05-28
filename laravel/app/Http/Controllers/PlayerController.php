@@ -85,18 +85,4 @@ class PlayerController extends Controller implements HasMiddleware
 
         return redirect()->route('player.index');
     }
-
-    public function search(PlayerSearchRequest $request)
-    {
-        //TODO Implement server-side pagination
-        $playerSearchDTO = new PlayerSearchDTO($request->validated());
-        $playerSearchService = new PlayerSearchService();
-        $players = $playerSearchService->searchPlayers($playerSearchDTO, ['positions:id,position_code', 'club:id,clubname'])->toArray();
-
-        return inertia('player/player-search', [
-            'positions' => Position::with('positionGroup:id,name')->get(),
-            'clubs' => Club::orderBy('clubname')->get(['id', 'clubname']),
-            'players' => $players,
-        ]);
-    }
 }

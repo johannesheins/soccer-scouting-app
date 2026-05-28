@@ -1,12 +1,15 @@
-import {Head, Link} from '@inertiajs/react';
+import {Head, Link, usePage} from '@inertiajs/react';
 import {UserRoundPlus, UserSearch} from 'lucide-react';
 import PlayerSearchForm from "@/pages/player/player-search-form";
 import player from "@/routes/player";
 import AccessGuard from "@/components/access-guard";
 import {useHasRight} from "@/hooks/use-has-right";
 import {RightEnum} from "@/enums";
+import type {Club, Position} from "@/types/types";
 
+type Props = { positions: Position[]; clubs: Club[] };
 export default function PlayerIndex() {
+    const { positions, clubs } = usePage<Props>().props;
     const canCreate = useHasRight(RightEnum.PlayerCreate);
     const canSearch = useHasRight(RightEnum.PlayerSearch);
 
@@ -33,7 +36,7 @@ export default function PlayerIndex() {
                     </div>
                 </div>
                 {canSearch && <div className="content-center invisible md:visible relative min-h-screen flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                    <PlayerSearchForm />
+                    <PlayerSearchForm positions={positions} clubs={clubs} />
                 </div>}
             </div>
         </>

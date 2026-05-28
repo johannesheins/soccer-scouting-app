@@ -3,6 +3,7 @@
 use App\Http\Controllers\ClubController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\PlayerController;
+use App\Http\Controllers\PlayerSearchController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
@@ -13,7 +14,8 @@ Route::inertia('/', 'welcome', [
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');
 
-    Route::get('player/search', [PlayerController::class, 'search'])->name('player.search');
+    Route::get('player/search', [PlayerSearchController::class, 'index'])->name('player.search');
+    Route::get('player/search-modal', [PlayerSearchController::class, 'modal'])->name('player.search-modal');
     Route::resource('player', PlayerController::class)->names('player');
 
     Route::get('evaluation/search', [EvaluationController::class, 'search'])->name('evaluation.search');
