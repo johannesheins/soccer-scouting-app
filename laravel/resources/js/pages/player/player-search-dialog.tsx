@@ -16,7 +16,7 @@ export default function PlayerSearchDialog({positions, clubs}: {positions: Posit
             <DialogTitle>
                 Spielersuche
             </DialogTitle>
-            <DialogContent>
+            <DialogContent variant={"large"}>
                 <div className="relative min-h-screen rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                     <PlayerSearchForm positions={positions} clubs={clubs} returnData={true} onResponse={setPlayers}/>
                 </div>
