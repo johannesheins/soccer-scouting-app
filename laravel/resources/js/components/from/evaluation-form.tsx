@@ -1,5 +1,5 @@
 import {Head, router, useForm, usePage} from '@inertiajs/react';
-import React from 'react';
+import React, {useState} from 'react';
 import {
     Field, FieldDescription,
     FieldGroup,
@@ -8,10 +8,12 @@ import {
 } from "@/components/ui/field"
 import {Button} from "@/components/ui/button";
 import InputError from "@/components/input-error";
-import {type Club, Evaluation, EvaluationCriteria, type Position} from "@/types/types";
+import {type Club, Evaluation, EvaluationCriteria, Player, type Position} from "@/types/types";
 import evaluationRoute from "@/routes/evaluation";
 import ScoreBar from "../score-bar";
 import PlayerSearchDialog from "@/pages/player/player-search-dialog";
+import {Input} from "@/components/ui/input";
+import {PlayerView} from "@/pages/player/player-view";
 
 type Props = {
     evaluation?: Evaluation,
@@ -22,6 +24,7 @@ type Props = {
 
 export default function EvaluationForm({ edit = false, backHref = null }: { edit?: boolean, backHref?: string | null }){
     const { evaluation, evaluationCriteria, positions, clubs } = usePage<Props>().props;
+    const [selectedPlayer, setSelectedPlayer] = useState<Player>();
 
     const { data, setData, transform, post, put, processing, errors } = useForm({
         player_id: evaluation?.player_id ?? '',
@@ -51,19 +54,20 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
     return (
         <>
             <div className="max-w-6xl">
-                <Head title={"Bewertungskriterium " + (edit ? 'bearbeiten' : 'erstellen')} />
+                <Head title={"Bewertung " + (edit ? 'bearbeiten' : 'erstellen')} />
 
                 <FieldSet>
                     <FieldGroup>
                         <Field>
-                            <PlayerSearchDialog positions={positions} clubs={clubs}/>
+                            <PlayerSearchDialog positions={positions} clubs={clubs} selectPlayer={true} onSelectPlayer={setSelectedPlayer}/>
+                            {selectedPlayer && <PlayerView player={selectedPlayer}/>}
                         </Field>
                     </FieldGroup>
-
-                    <FieldSeparator />
-
-                    <form onSubmit={submit}>
-                        <FieldGroup className="grid grid-cols-2 gap-x-15">
+                </FieldSet>
+                <FieldSeparator />
+                <form onSubmit={submit}>
+                    <FieldSet>
+                        <FieldGroup className="grid sm:grid-cols-2 gap-x-15">
                             {evaluationCriteria.length <= 0 && <p>Keine Bewertungskriterien gefunden</p>}
                             {evaluationCriteria.length > 0 && evaluationCriteria.map((criteria, criteriaId) =>
                                 <Field key={criteria.id}>
@@ -86,8 +90,9 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                                 )}
                             </Field>
                         </FieldGroup>
-                    </form>
-                </FieldSet>
+                        <Input type="hidden" name="player_id" value={selectedPlayer?.id ?? data.player_id} onChange={(val) => setData('player_id', String(val))}/>
+                    </FieldSet>
+                </form>
             </div>
         </>
     );

@@ -9,7 +9,7 @@ enum DialogVariantEnum{
     large = "large",
     medium = "medium",
 }
-type DialogVariant = DialogVariantEnum.large | DialogVariantEnum.medium
+type DialogVariant = "large" | "medium"
 
 function Dialog({
   ...props
@@ -55,7 +55,7 @@ function DialogContent({
   className,
   children,
   showCloseButton = true,
-  variant = DialogVariantEnum.medium as DialogVariant,
+  variant = DialogVariantEnum.medium,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
   showCloseButton?: boolean

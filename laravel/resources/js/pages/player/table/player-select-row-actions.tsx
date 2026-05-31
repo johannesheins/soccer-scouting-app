@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import type {Player} from "@/types/types";
 
-export function PlayerSelectRowActions({player}: { player: Player }) {
+export function PlayerSelectRowActions({player, onClick}: { player: Player, onClick: (player: Player) => void }) {
     return (
         <>
             <DropdownMenu>
@@ -19,7 +19,7 @@ export function PlayerSelectRowActions({player}: { player: Player }) {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => alert(player.firstname)}>
+                    <DropdownMenuItem onClick={() => onClick(player)}>
                         Spieler auswählen
                     </DropdownMenuItem>
                 </DropdownMenuContent>

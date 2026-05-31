@@ -59,14 +59,16 @@ export const playerColumns: ColumnDef<Player>[] = [
     },
 ];
 
-export const playerSelectColumns: ColumnDef<Player>[] = [
-    firstname,
-    lastname,
-    yearOfBirth,
-    club,
-    positions,
-    {
-        id: "actions",
-        cell: ({row}) => <PlayerSelectRowActions player={row.original}/>,
-    },
-];
+export function playerSelectColumns(onSelect: (player: Player) => void): ColumnDef<Player>[] {
+    return [
+        firstname,
+        lastname,
+        yearOfBirth,
+        club,
+        positions,
+        {
+            id: "actions",
+            cell: ({row}) => <PlayerSelectRowActions player={row.original} onClick={onSelect}/>,
+        },
+    ];
+}
