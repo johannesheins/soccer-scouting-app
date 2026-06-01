@@ -23,10 +23,6 @@ export function PlayerView({player, button}: { player: Player, button: any }) {
                     <p className="font-medium">{player.year_of_birth}</p>
                 </div>
                 <div>
-                    <p className="text-muted-foreground text-xs uppercase tracking-wide mb-1">Verein</p>
-                    <a className="font-medium" href={club.show.url(player.club.id)}>{player.club.clubname}</a>
-                </div>
-                <div className="col-span-2">
                     <p className="text-muted-foreground text-xs uppercase tracking-wide mb-2">Positionen</p>
                     <div className="flex flex-wrap gap-1.5">
                         {player.positions.map(p => (
