@@ -13,6 +13,9 @@ import evaluationRoute from "@/routes/evaluation";
 import ScoreBar from "../score-bar";
 import PlayerSearchDialog from "@/pages/player/player-search-dialog";
 import {Input} from "@/components/ui/input";
+import {SingleSelector} from "@/components/ui/single-select";
+import {toClubOptions} from "@/hooks/form-options";
+import {DateTimePicker} from "@/components/ui/date-time-picker";
 
 type Props = {
     evaluation?: Evaluation,
@@ -25,10 +28,20 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
     const { evaluation, evaluationCriteria, positions, clubs } = usePage<Props>().props;
     const [selectedPlayer, setSelectedPlayer] = useState<Player>();
 
+    const clubOptions = toClubOptions(clubs);
+    const [selectedHomeTeam, setSelectedHomeTeam] = useState(
+        clubOptions.filter(o => o.value === String(evaluation?.home_team_id))
+    );
+    const [selectedAwayTeam, setSelectedAwayTeam] = useState(
+        clubOptions.filter(o => o.value === String(evaluation?.away_team_id))
+    );
+
     const { data, setData, transform, post, put, processing, errors } = useForm({
         player_id: evaluation?.player_id ?? '',
         home_team_id: evaluation?.home_team_id ?? '',
         away_team_id: evaluation?.away_team_id ?? '',
+        kickoff_date: evaluation?.kickoff_date ?? '',
+        kickoff_time: evaluation?.kickoff_time ?? '',
         criteriaScores: Object.fromEntries(
             (evaluation?.criteria_scores ?? []).map(s => [s.evaluation_criteria_id, s.score])
         ) as Record<number, number>,
@@ -66,7 +79,59 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                         </FieldSet>
                     </div>
 
-                    <form onSubmit={submit}>
+                    <div className="relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+                        <FieldSet>
+                            <FieldGroup>
+                                <Field>
+                                    <DateTimePicker
+                                        dateLabel="Datum"
+                                        dateName="kickoff_date"
+                                        dateErrorMessage={errors.kickoff_date}
+
+                                        timeLabel="Zeit"
+                                        timeName="kickoff_time"
+                                        timeErrorMessage={errors.kickoff_time}
+                                    />
+                                </Field>
+                            </FieldGroup>
+                            <FieldGroup className="grid grid-cols-2 gap-4">
+                                <Field>
+                                    <FieldLabel htmlFor="home_team_id">Heimverein</FieldLabel>
+                                    <SingleSelector
+                                        value={selectedHomeTeam}
+                                        onChange={opts => {
+                                            setSelectedHomeTeam(opts);
+                                            setData('home_team_id', opts[0]?.value ?? '');
+                                        }}
+                                        defaultOptions={clubOptions}
+                                        groupBy="group"
+                                        placeholder="Heimmverein wählen"
+                                        hidePlaceholderWhenSelected
+                                        emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
+                                    />
+                                    <InputError message={errors.home_team_id} />
+                                </Field>
+                                <Field>
+                                    <FieldLabel htmlFor="away_team_id">Gastverein</FieldLabel>
+                                    <SingleSelector
+                                        value={selectedAwayTeam}
+                                        onChange={opts => {
+                                            setSelectedAwayTeam(opts);
+                                            setData('away_team_id', opts[0]?.value ?? '');
+                                        }}
+                                        defaultOptions={clubOptions}
+                                        groupBy="group"
+                                        placeholder="Gastverein wählen"
+                                        hidePlaceholderWhenSelected
+                                        emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
+                                    />
+                                    <InputError message={errors.home_team_id} />
+                                </Field>
+                            </FieldGroup>
+                        </FieldSet>
+                    </div>
+
+                    <form onSubmit={submit} id="evaluation-from">
                         <div className="relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                             <FieldSet>
                                 <FieldGroup className="grid sm:grid-cols-2 gap-x-15">
@@ -82,20 +147,19 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                                         </Field>
                                     )}
                                 </FieldGroup>
-                                <FieldGroup>
-                                    <Field className="w-fit flex-row">
-                                        <Button type="submit" disabled={processing}>{edit ? 'Aktualisieren' : 'Erstellen'}</Button>
-                                        {edit && backHref && (
-                                            <Button variant="secondary" type="button" onClick={() => router.get(backHref)}>
-                                                Zurück
-                                            </Button>
-                                        )}
-                                    </Field>
-                                </FieldGroup>
                                 <Input type="hidden" name="player_id" value={selectedPlayer?.id ?? data.player_id} onChange={(val) => setData('player_id', String(val))}/>
                             </FieldSet>
                         </div>
                     </form>
+
+                    <div>
+                        <Button type="submit" form="evaluation-from" disabled={processing}>{edit ? 'Aktualisieren' : 'Erstellen'}</Button>
+                        {edit && backHref && (
+                            <Button variant="secondary" type="button" onClick={() => router.get(backHref)}>
+                                Zurück
+                            </Button>
+                        )}
+                    </div>
                 </div>
             </div>
         </>

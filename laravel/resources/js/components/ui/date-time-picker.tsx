@@ -13,15 +13,17 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
+import InputError from "@/components/input-error";
 
-export function DateTimePicker() {
+type Props = { dateLabel: string, dateName: string, dateErrorMessage?: string, timeLabel: string, timeName: string, timeErrorMessage?: string }
+export function DateTimePicker({ dateLabel, dateName, dateErrorMessage, timeName, timeErrorMessage, timeLabel }: Props) {
     const [open, setOpen] = React.useState(false)
     const [date, setDate] = React.useState<Date | undefined>(undefined)
 
     return (
-        <FieldGroup className="mx-auto max-w-xs flex-row">
+        <FieldGroup className="max-w-xs flex-row">
             <Field>
-                <FieldLabel htmlFor="date-picker-optional">Date</FieldLabel>
+                <FieldLabel htmlFor="date-picker-optional">{dateLabel}</FieldLabel>
                 <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>
                         <Button
@@ -43,19 +45,24 @@ export function DateTimePicker() {
                                 setDate(date)
                                 setOpen(false)
                             }}
+                            timeZone="Europe/Berlin"
                         />
                     </PopoverContent>
                 </Popover>
+                <Input type="hidden" name={dateName} value={String(date)}/>
+                <InputError message={dateErrorMessage}/>
             </Field>
             <Field className="w-32">
-                <FieldLabel htmlFor="time-picker-optional">Time</FieldLabel>
+                <FieldLabel htmlFor="time-picker-optional">{timeLabel}</FieldLabel>
                 <Input
+                    name={timeName}
                     type="time"
                     id="time-picker-optional"
                     step="1"
                     defaultValue="10:30:00"
                     className="appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                 />
+                <InputError message={timeErrorMessage}/>
             </Field>
         </FieldGroup>
     )
