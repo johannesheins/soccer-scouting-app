@@ -15,14 +15,12 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import InputError from "@/components/input-error";
+import { TimeInput } from "@/components/ui/time-input"
 
 type Props = { dateLabel: string, dateName: string, dateErrorMessage?: string, timeLabel: string, timeName: string, timeErrorMessage?: string }
 export function DateTimePicker({ dateLabel, dateName, dateErrorMessage, timeName, timeErrorMessage, timeLabel }: Props) {
     const [open, setOpen] = React.useState(false)
     const [date, setDate] = React.useState<Date | undefined>(undefined)
-    const [hours, setHours] = React.useState("10")
-    const [minutes, setMinutes] = React.useState("30")
-    const pad = (v: string) => v.padStart(2, "0")
 
     return (
         <FieldGroup className="max-w-xs flex-row">
@@ -57,31 +55,7 @@ export function DateTimePicker({ dateLabel, dateName, dateErrorMessage, timeName
                 <Input type="hidden" name={dateName} value={String(date)}/>
                 <InputError message={dateErrorMessage}/>
             </Field>
-            <Field className="w-auto">
-                <FieldLabel htmlFor="time-hours">{timeLabel}</FieldLabel>
-                <div className="flex border-input shadow-xs h-9 items-center rounded-md border px-2 transition-[color,box-shadow] focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50">
-                    <Input
-                        id="time-hours"
-                        type="number"
-                        min={0}
-                        max={23}
-                        value={hours}
-                        onChange={e => setHours(e.target.value)}
-                        className="w-7 border-0 p-0 text-center shadow-none focus-visible:ring-0"
-                    />
-                    <span className="text-sm font-medium">:</span>
-                    <Input
-                        type="number"
-                        min={0}
-                        max={59}
-                        value={minutes}
-                        onChange={e => setMinutes(e.target.value)}
-                        className="w-7 border-0 p-0 text-center shadow-none focus-visible:ring-0"
-                    />
-                </div>
-                <Input type="hidden" name={timeName} value={`${pad(hours)}:${pad(minutes)}`} />
-                <InputError message={timeErrorMessage}/>
-            </Field>
+            <TimeInput name={timeName} errorMessage={timeErrorMessage} label={timeLabel} />
         </FieldGroup>
     )
 }
