@@ -16,22 +16,24 @@ import {
 } from "@/components/ui/popover"
 import InputError from "@/components/input-error";
 import { TimeInput } from "@/components/ui/time-input"
+import {cn} from "@/lib/utils";
 
-type Props = { dateLabel: string, dateName: string, dateErrorMessage?: string, timeLabel: string, timeName: string, timeErrorMessage?: string }
+type Props = { dateLabel?: string, dateName: string, dateErrorMessage?: string, timeLabel?: string, timeName: string, timeErrorMessage?: string }
 export function DateTimePicker({ dateLabel, dateName, dateErrorMessage, timeName, timeErrorMessage, timeLabel }: Props) {
     const [open, setOpen] = React.useState(false)
     const [date, setDate] = React.useState<Date | undefined>(undefined)
+    const isPlaceholder = !date
 
     return (
         <FieldGroup className="max-w-xs flex-row">
             <Field>
-                <FieldLabel htmlFor="date-picker-optional">{dateLabel}</FieldLabel>
+                {dateLabel && <FieldLabel htmlFor="date-picker-optional">{dateLabel}</FieldLabel>}
                 <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>
                         <Button
                             variant="outline"
                             id="date-picker-optional"
-                            className="w-32 justify-between font-normal"
+                            className={cn("w-32 justify-between font-normal", isPlaceholder ? 'text-muted-foreground' : '')}
                         >
                             {date ? format(date, "dd.MM.yyyy", { locale: de }) : "Datum wählen"}
                             <ChevronDownIcon />

@@ -82,18 +82,6 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                     <div className="relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                         <FieldSet>
                             <FieldGroup>
-                                <Field>
-                                    <DateTimePicker
-                                        dateLabel="Datum"
-                                        dateName="kickoff_date"
-                                        dateErrorMessage={errors.kickoff_date}
-
-                                        timeLabel="Zeit"
-                                        timeName="kickoff_time"
-                                        timeErrorMessage={errors.kickoff_time}
-                                    />
-                                </Field>
-                            </FieldGroup>
                             <FieldGroup className="grid grid-cols-2 gap-4">
                                 <Field>
                                     <FieldLabel htmlFor="home_team_id">Heimverein</FieldLabel>
@@ -127,6 +115,18 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                                     />
                                     <InputError message={errors.home_team_id} />
                                 </Field>
+                                <Field>
+                                    <DateTimePicker
+                                        dateLabel="Datum"
+                                        dateName="kickoff_date"
+                                        dateErrorMessage={errors.kickoff_date}
+
+                                        timeLabel="Zeit"
+                                        timeName="kickoff_time"
+                                        timeErrorMessage={errors.kickoff_time}
+                                    />
+                                </Field>
+                            </FieldGroup>
                             </FieldGroup>
                         </FieldSet>
                     </div>
