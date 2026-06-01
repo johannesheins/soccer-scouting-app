@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { format } from "date-fns"
+import { de } from "date-fns/locale"
 import { ChevronDownIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -19,6 +20,9 @@ type Props = { dateLabel: string, dateName: string, dateErrorMessage?: string, t
 export function DateTimePicker({ dateLabel, dateName, dateErrorMessage, timeName, timeErrorMessage, timeLabel }: Props) {
     const [open, setOpen] = React.useState(false)
     const [date, setDate] = React.useState<Date | undefined>(undefined)
+    const [hours, setHours] = React.useState("10")
+    const [minutes, setMinutes] = React.useState("30")
+    const pad = (v: string) => v.padStart(2, "0")
 
     return (
         <FieldGroup className="max-w-xs flex-row">
@@ -31,7 +35,7 @@ export function DateTimePicker({ dateLabel, dateName, dateErrorMessage, timeName
                             id="date-picker-optional"
                             className="w-32 justify-between font-normal"
                         >
-                            {date ? format(date, "PPP") : "Select date"}
+                            {date ? format(date, "dd.MM.yyyy", { locale: de }) : "Datum wählen"}
                             <ChevronDownIcon />
                         </Button>
                     </PopoverTrigger>
@@ -41,6 +45,7 @@ export function DateTimePicker({ dateLabel, dateName, dateErrorMessage, timeName
                             selected={date}
                             captionLayout="dropdown"
                             defaultMonth={date}
+                            locale={de}
                             onSelect={(date) => {
                                 setDate(date)
                                 setOpen(false)
@@ -52,16 +57,29 @@ export function DateTimePicker({ dateLabel, dateName, dateErrorMessage, timeName
                 <Input type="hidden" name={dateName} value={String(date)}/>
                 <InputError message={dateErrorMessage}/>
             </Field>
-            <Field className="w-32">
-                <FieldLabel htmlFor="time-picker-optional">{timeLabel}</FieldLabel>
-                <Input
-                    name={timeName}
-                    type="time"
-                    id="time-picker-optional"
-                    step="1"
-                    defaultValue="10:30:00"
-                    className="appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                />
+            <Field className="w-auto">
+                <FieldLabel htmlFor="time-hours">{timeLabel}</FieldLabel>
+                <div className="flex border-input shadow-xs h-9 items-center rounded-md border px-2 transition-[color,box-shadow] focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50">
+                    <Input
+                        id="time-hours"
+                        type="number"
+                        min={0}
+                        max={23}
+                        value={hours}
+                        onChange={e => setHours(e.target.value)}
+                        className="w-7 border-0 p-0 text-center shadow-none focus-visible:ring-0"
+                    />
+                    <span className="text-sm font-medium">:</span>
+                    <Input
+                        type="number"
+                        min={0}
+                        max={59}
+                        value={minutes}
+                        onChange={e => setMinutes(e.target.value)}
+                        className="w-7 border-0 p-0 text-center shadow-none focus-visible:ring-0"
+                    />
+                </div>
+                <Input type="hidden" name={timeName} value={`${pad(hours)}:${pad(minutes)}`} />
                 <InputError message={timeErrorMessage}/>
             </Field>
         </FieldGroup>
