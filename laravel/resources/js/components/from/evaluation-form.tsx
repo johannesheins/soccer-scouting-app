@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {
     Field, FieldDescription,
     FieldGroup,
-    FieldLabel, FieldSeparator,
+    FieldLabel,
     FieldSet,
 } from "@/components/ui/field"
 import {Button} from "@/components/ui/button";
@@ -13,7 +13,6 @@ import evaluationRoute from "@/routes/evaluation";
 import ScoreBar from "../score-bar";
 import PlayerSearchDialog from "@/pages/player/player-search-dialog";
 import {Input} from "@/components/ui/input";
-import {PlayerView} from "@/pages/player/player-view";
 
 type Props = {
     evaluation?: Evaluation,
@@ -56,43 +55,48 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
             <div className="max-w-6xl">
                 <Head title={"Bewertung " + (edit ? 'bearbeiten' : 'erstellen')} />
 
-                <FieldSet>
-                    <FieldGroup>
-                        <Field>
-                            <PlayerSearchDialog positions={positions} clubs={clubs} selectPlayer={true} onSelectPlayer={setSelectedPlayer}/>
-                            {selectedPlayer && <PlayerView player={selectedPlayer}/>}
-                        </Field>
-                    </FieldGroup>
-                </FieldSet>
-                <FieldSeparator />
-                <form onSubmit={submit}>
-                    <FieldSet>
-                        <FieldGroup className="grid sm:grid-cols-2 gap-x-15">
-                            {evaluationCriteria.length <= 0 && <p>Keine Bewertungskriterien gefunden</p>}
-                            {evaluationCriteria.length > 0 && evaluationCriteria.map((criteria, criteriaId) =>
-                                <Field key={criteria.id}>
-                                    <div className="flex flex-row justify-between">
-                                        <FieldLabel htmlFor={'criteria_'+criteria.id}>{criteria.name}</FieldLabel>
-                                        <FieldDescription>x{criteria.multiplier}</FieldDescription>
-                                    </div>
-                                    <ScoreBar name={'criteria_'+criteria.id} value={data.criteriaScores[criteria.id] ?? 0} onChange={val => setData('criteriaScores', { ...data.criteriaScores, [criteria.id]: val })} />
-                                    <InputError message={(errors as Record<string, string>)[`criteriaScores.${criteriaId}.score`] ?? ''}/>
+                <div className="flex flex-1 flex-col gap-4 rounded-xl p-4">
+                    <div className="relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+                        <FieldSet>
+                            <FieldGroup>
+                                <Field>
+                                    <PlayerSearchDialog positions={positions} clubs={clubs} selectPlayer={true} onSelectPlayer={setSelectedPlayer}/>
                                 </Field>
-                            )}
-                        </FieldGroup>
-                        <FieldGroup>
-                            <Field className="w-fit flex-row">
-                                <Button type="submit" disabled={processing}>{edit ? 'Aktualisieren' : 'Erstellen'}</Button>
-                                {edit && backHref && (
-                                    <Button variant="secondary" type="button" onClick={() => router.get(backHref)}>
-                                        Zurück
-                                    </Button>
-                                )}
-                            </Field>
-                        </FieldGroup>
-                        <Input type="hidden" name="player_id" value={selectedPlayer?.id ?? data.player_id} onChange={(val) => setData('player_id', String(val))}/>
-                    </FieldSet>
-                </form>
+                            </FieldGroup>
+                        </FieldSet>
+                    </div>
+
+                    <form onSubmit={submit}>
+                        <div className="relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+                            <FieldSet>
+                                <FieldGroup className="grid sm:grid-cols-2 gap-x-15">
+                                    {evaluationCriteria.length <= 0 && <p>Keine Bewertungskriterien gefunden</p>}
+                                    {evaluationCriteria.length > 0 && evaluationCriteria.map((criteria, criteriaId) =>
+                                        <Field key={criteria.id}>
+                                            <div className="flex flex-row justify-between">
+                                                <FieldLabel htmlFor={'criteria_'+criteria.id}>{criteria.name}</FieldLabel>
+                                                <FieldDescription>x{criteria.multiplier}</FieldDescription>
+                                            </div>
+                                            <ScoreBar name={'criteria_'+criteria.id} value={data.criteriaScores[criteria.id] ?? 0} onChange={val => setData('criteriaScores', { ...data.criteriaScores, [criteria.id]: val })} />
+                                            <InputError message={(errors as Record<string, string>)[`criteriaScores.${criteriaId}.score`] ?? ''}/>
+                                        </Field>
+                                    )}
+                                </FieldGroup>
+                                <FieldGroup>
+                                    <Field className="w-fit flex-row">
+                                        <Button type="submit" disabled={processing}>{edit ? 'Aktualisieren' : 'Erstellen'}</Button>
+                                        {edit && backHref && (
+                                            <Button variant="secondary" type="button" onClick={() => router.get(backHref)}>
+                                                Zurück
+                                            </Button>
+                                        )}
+                                    </Field>
+                                </FieldGroup>
+                                <Input type="hidden" name="player_id" value={selectedPlayer?.id ?? data.player_id} onChange={(val) => setData('player_id', String(val))}/>
+                            </FieldSet>
+                        </div>
+                    </form>
+                </div>
             </div>
         </>
     );

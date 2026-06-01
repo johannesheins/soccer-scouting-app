@@ -5,6 +5,7 @@ import {DataTable} from "@/components/table/data-table";
 import {playerColumns, playerSelectColumns} from "@/pages/player/table/player-columns";
 import React, {useEffect, useState} from "react";
 import {Button} from "@/components/ui/button";
+import {PlayerView} from "@/pages/player/player-view";
 
 
 type Props = {
@@ -25,11 +26,17 @@ export default function PlayerSearchDialog({positions, clubs, selectPlayer, onSe
         }
     }, [selectedPlayer]);
 
+    const dialogTrigger = (
+        <DialogTrigger asChild>
+            <Button variant="outline">Spieler {selectedPlayer ? 'ändern' : 'wählen'}</Button>
+        </DialogTrigger>
+    )
+
     return (
         <Dialog>
-            <DialogTrigger asChild>
-                <Button variant="outline">Spieler wählen</Button>
-            </DialogTrigger>
+            {!selectedPlayer && dialogTrigger}
+            {selectedPlayer && <PlayerView player={selectedPlayer} button={dialogTrigger}/>}
+
             <DialogContent variant="large">
                 <DialogTitle>Spielersuche</DialogTitle>
                 <div className="relative min-h-screen rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">

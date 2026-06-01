@@ -4,12 +4,13 @@ import {Separator} from "@/components/ui/separator";
 import type {Player} from "@/types/types";
 import club from "@/routes/club";
 
-export function PlayerView({player}: { player: Player }) {
+export function PlayerView({player, button}: { player: Player, button: any }) {
     return (
         <Card className="max-w-xl border-none shadow-none py-1">
             <CardHeader className="pb-2">
-                <CardTitle className="text-2xl">
-                    {player.firstname} {player.lastname}
+                <CardTitle className="grid grid-cols-2">
+                    <p className="text-2xl">{player.firstname} {player.lastname}</p>
+                    <div className="flex justify-end">{button}</div>
                 </CardTitle>
                 <a className="text-muted-foreground text-sm" href={club.show.url(player.club.id)}>{player.club.clubname}</a>
             </CardHeader>
