@@ -4,7 +4,7 @@ services:
   php:
     build:
       context: ../..
-      dockerfile: docker/prod/Dockerfile
+      dockerfile: docker/prod/Dockerfile.prod
       target: php-runtime
     container_name: soccer_php
     restart: unless-stopped
@@ -21,7 +21,7 @@ services:
   nginx:
     build:
       context: ../..
-      dockerfile: docker/prod/Dockerfile
+      dockerfile: docker/prod/Dockerfile.prod
       target: nginx-runtime
     container_name: soccer_nginx
     restart: unless-stopped
