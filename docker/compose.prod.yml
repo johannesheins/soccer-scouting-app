@@ -1,0 +1,57 @@
+name: soccer-scouting-app
+
+services:
+  php:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.prod
+      target: php-runtime
+    container_name: soccer_php
+    restart: unless-stopped
+    env_file:
+      - .env.prod
+    volumes:
+      - app_storage:/var/www/html/storage
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      - app
+
+  nginx:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.prod
+      target: nginx-runtime
+    container_name: soccer_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - php
+    networks:
+      - app
+
+  mariadb:
+    image: mariadb:11
+    container_name: soccer_mariadb
+    restart: unless-stopped
+    env_file:
+      - .env.prod
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app
+
+networks:
+  app:
+    driver: bridge
+
+volumes:
+  mariadb_data:
+  app_storage:

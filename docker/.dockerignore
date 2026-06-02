@@ -8,12 +8,16 @@ CLAUDE.md
 *.md
 
 # Laravel dev artifacts
-laravel/node_modules/
-laravel/vendor/
-laravel/storage/logs/
+laravel/node_modules
+laravel/vendor
+laravel/storage/logs
 # laravel/.env
 # laravel/.env.*
 # !laravel/.env.example
 
 # Docker sources (not needed in the image)
-docker/
+docker/compose.yml
+docker/compose.prod.yml
+docker/Dockerfile
+docker/Dockerfile.prod
+docker/.dockerignore
