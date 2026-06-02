@@ -17,7 +17,8 @@ laravel/storage/logs
 
 # Docker sources (not needed in the image)
 docker/compose.yml
-docker/compose.prod.yml
+docker/prod/compose.yml
 docker/Dockerfile
-docker/Dockerfile.prod
+docker/prod/Dockerfile
 docker/.dockerignore
+docker/prod/.env.prod

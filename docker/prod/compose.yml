@@ -3,8 +3,8 @@ name: soccer-scouting-app
 services:
   php:
     build:
-      context: ..
-      dockerfile: docker/Dockerfile.prod
+      context: ../..
+      dockerfile: docker/prod/Dockerfile
       target: php-runtime
     container_name: soccer_php
     restart: unless-stopped
@@ -20,8 +20,8 @@ services:
 
   nginx:
     build:
-      context: ..
-      dockerfile: docker/Dockerfile.prod
+      context: ../..
+      dockerfile: docker/prod/Dockerfile
       target: nginx-runtime
     container_name: soccer_nginx
     restart: unless-stopped

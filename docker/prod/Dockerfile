@@ -35,7 +35,7 @@ RUN apk add --no-cache \
     intl \
     bcmath
 
-COPY docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+COPY docker/prod/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 WORKDIR /var/www/html
 
@@ -46,7 +46,7 @@ RUN mkdir -p storage/framework/{cache,sessions,views} bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-COPY docker/entrypoint.sh /entrypoint.sh
+COPY docker/prod/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 EXPOSE 9000
@@ -57,6 +57,6 @@ ENTRYPOINT ["/entrypoint.sh"]
 FROM nginx:1.27-alpine AS nginx-runtime
 
 COPY --from=php-runtime /var/www/html/public /var/www/html/public
-COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY docker/prod/nginx/default.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
