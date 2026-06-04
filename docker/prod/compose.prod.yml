@@ -2,6 +2,7 @@ name: soccer-scouting-app
 
 services:
   php:
+    platform: linux/amd64
     build:
       context: ../..
       dockerfile: docker/prod/Dockerfile.prod
@@ -19,6 +20,7 @@ services:
       - app
 
   nginx:
+    platform: linux/amd64
     build:
       context: ../..
       dockerfile: docker/prod/Dockerfile.prod
