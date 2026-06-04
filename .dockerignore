@@ -1,0 +1,25 @@
+# IDE & OS
+.idea/
+.vscode/
+.DS_Store
+
+# Docs / meta
+CLAUDE.md
+*.md
+
+# Laravel dev artifacts
+laravel/node_modules
+laravel/vendor
+laravel/storage/logs
+laravel/public/hot
+# laravel/.env
+# laravel/.env.*
+# !laravel/.env.example
+
+# Docker sources (not needed in the image)
+docker/compose.yml
+docker/prod/compose.yml
+docker/Dockerfile
+docker/prod/Dockerfile
+docker/.dockerignore
+docker/prod/.env.prod
