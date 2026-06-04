@@ -7,7 +7,7 @@ ENV WAYFINDER_COMMAND="echo 'wayfinder: skipped in production build'"
 COPY laravel/package*.json ./
 RUN npm ci
 COPY --exclude=node_modules laravel/ ./
-RUN npm run build
+RUN npm run build && rm -f public/hot
 
 # ---- Stage 2: PHP production dependencies ----
 FROM composer:2 AS vendor
@@ -41,6 +41,8 @@ WORKDIR /var/www/html
 
 COPY --chown=www-data:www-data --from=vendor /app ./
 COPY --chown=www-data:www-data --from=assets /app/public/build ./public/build
+
+RUN rm -f public/hot
 
 RUN mkdir -p storage/framework/{cache,sessions,views} bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache \

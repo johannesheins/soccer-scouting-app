@@ -11,6 +11,7 @@ CLAUDE.md
 laravel/node_modules
 laravel/vendor
 laravel/storage/logs
+laravel/public/hot
 # laravel/.env
 # laravel/.env.*
 # !laravel/.env.example
