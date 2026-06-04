@@ -1,2 +1,3 @@
 .idea
 docker/prod/.env.prod
+/docker/prod/scripts/.env
