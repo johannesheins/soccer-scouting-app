@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+//TODO Add grouping for criteria as data table action
+//TODO Check rights to change and everything in this controller
 use App\Http\Requests\EvaluationCriteriaRequest;
 use App\Models\EvaluationCriteria;
 
