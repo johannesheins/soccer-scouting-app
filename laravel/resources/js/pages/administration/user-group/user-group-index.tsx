@@ -21,7 +21,7 @@ export default function UserGroupIndex() {
                     </Link>
                 </div>
                 <div className="content-center relative flex-1 overflow-hidden rounded-xl md:min-h-min dark:border-sidebar-border">
-                    <DataTable columns={userGroupColumns} data={userGroups} textOnEmpty="Keine Benutzergruppe gefunden." className={"h-full"}/>
+                    <DataTable columns={userGroupColumns} data={userGroups} textOnEmpty="Keine Benutzergruppe gefunden."/>
                 </div>
             </div>
         </>

@@ -20,6 +20,7 @@ import {
 import { Button } from "@/components/ui/button"
 import * as React from "react"
 import {cn} from "@/lib/utils";
+import {useSidebar} from "@/components/ui/sidebar";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -34,6 +35,7 @@ export function DataTable<TData, TValue>({
     textOnEmpty,
     className
 }: DataTableProps<TData, TValue>) {
+    const { state, isMobile } = useSidebar()
     const [sorting, setSorting] = React.useState<SortingState>([])
     const table = useReactTable({
         data,
@@ -45,9 +47,11 @@ export function DataTable<TData, TValue>({
         state: { sorting },
     })
 
+    className = cn(className, isMobile ? 'w-[calc(100vw-2rem)]' : state === 'expanded' ? 'max-w-[calc(100vw-(var(--sidebar-width)+2.5rem))]' : 'max-w-[calc(100vw-(var(--sidebar-width-icon)+2.5rem))]')
+
     return (
-        <>
-            <div className={cn("overflow-hidden rounded-md border", className)}>
+        <div className={className}>
+            <div className={cn("overflow-x-scroll rounded-md border")}>
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
@@ -109,6 +113,6 @@ export function DataTable<TData, TValue>({
                     Next
                 </Button>
             </div>
-        </>
+        </div>
     )
 }

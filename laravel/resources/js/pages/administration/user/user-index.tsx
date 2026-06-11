@@ -21,7 +21,7 @@ export default function UserIndex() {
                     </Link>
                 </div>
                 <div className="content-center relative flex-1 overflow-hidden rounded-xl md:min-h-min dark:border-sidebar-border">
-                    <DataTable columns={userColumns} data={users} textOnEmpty="Keine Benutzergruppe gefunden." className={"h-full"}/>
+                    <DataTable columns={userColumns} data={users} textOnEmpty="Keine Benutzergruppe gefunden."/>
                 </div>
             </div>
         </>
