@@ -15,12 +15,12 @@ export default function PlayerSearch(){
     return (
         <>
             <Head title="Spieler suchen" />
-            <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <div className="relative min-h-screen rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+            <div className="flex h-full flex-col gap-4 overflow-x-auto rounded-xl p-4">
+                <div className="relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                     <PlayerSearchForm positions={positions} clubs={clubs} />
                 </div>
 
-                <div className="relative min-h-screen flex-1 overflow-hidden rounded-xl md:min-h-min dark:border-sidebar-border">
+                <div className="relative overflow-hidden rounded-xl md:min-h-min dark:border-sidebar-border">
                     <DataTable columns={playerColumns} data={players} textOnEmpty={'Kein Spieler gefunden'}/>
                 </div>
             </div>

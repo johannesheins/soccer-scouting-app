@@ -20,22 +20,22 @@ import {
 import { Button } from "@/components/ui/button"
 import * as React from "react"
 import {cn} from "@/lib/utils";
-import {useSidebar} from "@/components/ui/sidebar";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[],
     textOnEmpty: string,
     className?: string,
+    isInDialog?: boolean,
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
     textOnEmpty,
-    className
+    className,
+    isInDialog,
 }: DataTableProps<TData, TValue>) {
-    const { state, isMobile } = useSidebar()
     const [sorting, setSorting] = React.useState<SortingState>([])
     const table = useReactTable({
         data,
@@ -47,7 +47,8 @@ export function DataTable<TData, TValue>({
         state: { sorting },
     })
 
-    className = cn(className, isMobile ? 'w-[calc(100vw-2rem)]' : state === 'expanded' ? 'max-w-[calc(100vw-(var(--sidebar-width)+2.5rem))]' : 'max-w-[calc(100vw-(var(--sidebar-width-icon)+2.5rem))]')
+    const rem = isInDialog ? '6rem' : '2rem'
+    className = cn(className, `max-w-[calc(100vw-var(--sidebar-active-width)-${rem})]`)
 
     return (
         <div className={className}>

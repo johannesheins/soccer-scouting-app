@@ -116,6 +116,7 @@
 }
 
 :root {
+    --sidebar-active-width: 0px;
     --background: oklch(1 0 0);
     --foreground: oklch(0.147 0.004 49.3);
     --card: oklch(1 0 0);
@@ -188,6 +189,14 @@
     --sidebar-ring: oklch(0.547 0.021 43.1);
     --icon-color: oklch(0.715 0.143 215.221);
     --muted-icon-color: oklch(0.815 0.143 215.082 / 0.30);
+}
+
+[data-slot="sidebar-wrapper"]:has([data-slot="sidebar"][data-state="expanded"]) {
+    --sidebar-active-width: var(--sidebar-width);
+}
+
+[data-slot="sidebar-wrapper"]:has([data-slot="sidebar"][data-state="collapsed"]) {
+    --sidebar-active-width: var(--sidebar-width-icon);
 }
 
 @layer base {

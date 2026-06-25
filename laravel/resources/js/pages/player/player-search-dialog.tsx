@@ -39,11 +39,11 @@ export default function PlayerSearchDialog({positions, clubs, selectPlayer, onSe
 
             <DialogContent variant="large">
                 <DialogTitle>Spielersuche</DialogTitle>
-                <div className="relative min-h-screen rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+                <div className="relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                     <PlayerSearchForm positions={positions} clubs={clubs} returnData={true} onResponse={setPlayers}/>
                 </div>
 
-                <div className="relative min-h-screen flex-1 overflow-hidden rounded-xl md:min-h-min dark:border-sidebar-border">
+                <div className="relative overflow-hidden rounded-xl md:min-h-min dark:border-sidebar-border">
                     <DataTable columns={columns} data={players} textOnEmpty={'Kein Spieler gefunden'}/>
                 </div>
             </DialogContent>
