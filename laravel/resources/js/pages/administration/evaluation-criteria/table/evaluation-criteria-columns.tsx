@@ -10,6 +10,12 @@ export const evaluationCriteriaColumns: ColumnDef<EvaluationCriteria>[] = [
         cell: ({row}) => <div className="font-medium">{row.getValue("name")}</div>,
     },
     {
+        id: "group",
+        accessorFn: row => row.group?.name ?? '',
+        header: sortHeader("Gruppe"),
+        cell: ({row}) => <div className="font-medium">{row.original.group?.name ?? '—'}</div>,
+    },
+    {
         accessorKey: "minimum_player_age",
         header: sortHeader("Mindestalter"),
         cell: ({row}) => <div className="font-medium">{row.getValue("minimum_player_age")}</div>,

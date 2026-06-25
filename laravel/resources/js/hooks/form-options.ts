@@ -1,5 +1,5 @@
 import type { Option } from '@/components/ui/multi-select';
-import type {Club, PlayerSmall, Position, UserGroup} from '@/types/types';
+import type {Club, EvaluationCriteriaGroup, PlayerSmall, Position, UserGroup} from '@/types/types';
 
 export function toPositionOptions(positions: Position[]): Option[] {
     return positions.map(p => ({
@@ -46,5 +46,12 @@ export function toUserGroupOptions(userGroups: UserGroup[]): Option[]{
     return userGroups.map(userGroup => ({
         value: String(userGroup.id),
         label: userGroup.name
+    }))
+}
+
+export function toEvaluationCriteriaGroupOptions(groups: EvaluationCriteriaGroup[]): Option[] {
+    return groups.map(g => ({
+        value: String(g.id),
+        label: g.name,
     }))
 }

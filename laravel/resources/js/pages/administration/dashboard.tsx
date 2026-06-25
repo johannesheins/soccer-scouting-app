@@ -1,10 +1,11 @@
 import {Head, Link} from '@inertiajs/react';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import {administration} from '@/routes';
-import {Star, User, Users} from "lucide-react";
+import {Layers, Star, User, Users} from "lucide-react";
 import userGroup from "@/routes/administration/user-group";
 import user from "@/routes/administration/user";
 import evaluationCriteria from "@/routes/evaluation-criteria";
+import evaluationCriteriaGroup from "@/routes/evaluation-criteria-group";
 
 export default function Dashboard() {
     return (
@@ -28,6 +29,12 @@ export default function Dashboard() {
                         <Link href={evaluationCriteria.index()} title="Bewertungskriterien" className="flex flex-col gap-2 justify-center items-center h-full">
                             <Star className={"size-10 icon-color"}/>
                             <p className="text-icon-color font-bold">Bewertungskriterien</p>
+                        </Link>
+                    </div>
+                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                        <Link href={evaluationCriteriaGroup.index()} title="Kriteriengruppen" className="flex flex-col gap-2 justify-center items-center h-full">
+                            <Layers className={"size-10 icon-color"}/>
+                            <p className="text-icon-color font-bold">Kriteriengruppen</p>
                         </Link>
                     </div>
                 </div>

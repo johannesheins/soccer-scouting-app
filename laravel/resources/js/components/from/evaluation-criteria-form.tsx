@@ -1,5 +1,5 @@
 import {Head, router, useForm, usePage} from '@inertiajs/react';
-import React from 'react';
+import React, {useState} from 'react';
 import {
     Field,
     FieldGroup,
@@ -9,18 +9,26 @@ import {
 import { Input } from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import InputError from "@/components/input-error";
-import {EvaluationCriteria} from "@/types/types";
+import {EvaluationCriteria, EvaluationCriteriaGroup} from "@/types/types";
 import evaluationCriteriaRoute from "@/routes/evaluation-criteria";
+import {SingleSelector} from "@/components/ui/single-select";
+import {toEvaluationCriteriaGroupOptions} from "@/hooks/form-options";
 
-type Props = { evaluationCriterion?: EvaluationCriteria };
+type Props = { evaluationCriterion?: EvaluationCriteria, evaluation_criteria_groups: EvaluationCriteriaGroup[] };
 
 export default function EvaluationCriteriaForm({ edit = false, backHref = null }: { edit?: boolean, backHref?: string | null }) {
-    const { evaluationCriterion } = usePage<Props>().props;
+    const { evaluationCriterion, evaluation_criteria_groups } = usePage<Props>().props;
+
+    const groupOptions = toEvaluationCriteriaGroupOptions(evaluation_criteria_groups);
+    const [selectedGroup, setSelectedGroup] = useState(
+        groupOptions.filter(o => o.value === String(evaluationCriterion?.evaluation_criteria_group_id))
+    );
 
     const { data, setData, post, put, processing, errors } = useForm({
         name: evaluationCriterion?.name ?? '',
         minimum_player_age: evaluationCriterion?.minimum_player_age ?? '',
         multiplier: evaluationCriterion?.multiplier ?? 1,
+        evaluation_criteria_group_id: evaluationCriterion?.evaluation_criteria_group_id ?? null as number | null,
     });
 
     function submit(e: React.FormEvent) {
@@ -46,6 +54,19 @@ export default function EvaluationCriteriaForm({ edit = false, backHref = null }
                                     onChange={e => setData('name', e.target.value)}
                                 />
                                 <InputError message={errors.name} />
+                            </Field>
+                            <Field>
+                                <FieldLabel>Gruppe</FieldLabel>
+                                <SingleSelector
+                                    value={selectedGroup}
+                                    onChange={opts => {
+                                        setSelectedGroup(opts);
+                                        setData('evaluation_criteria_group_id', opts[0] ? Number(opts[0].value) : null);
+                                    }}
+                                    options={groupOptions}
+                                    placeholder="Gruppe wählen..."
+                                />
+                                <InputError message={errors.evaluation_criteria_group_id} />
                             </Field>
                         </FieldGroup>
                         <FieldGroup className="grid sm:grid-cols-[1fr_1fr]">
