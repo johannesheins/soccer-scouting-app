@@ -4,11 +4,18 @@ import {
     Field, FieldDescription,
     FieldGroup,
     FieldLabel,
+    FieldLegend,
     FieldSet,
 } from "@/components/ui/field"
 import {Button} from "@/components/ui/button";
 import InputError from "@/components/input-error";
-import {type Club, Evaluation, EvaluationCriteria, Player, type Position} from "@/types/types";
+import {
+    type Club,
+    Evaluation,
+    EvaluationCriteriaGroups,
+    Player,
+    type Position
+} from "@/types/types";
 import evaluationRoute from "@/routes/evaluation";
 import ScoreBar from "../score-bar";
 import PlayerSearchDialog from "@/pages/player/player-search-dialog";
@@ -19,13 +26,13 @@ import {DateTimePicker} from "@/components/ui/date-time-picker";
 
 type Props = {
     evaluation?: Evaluation,
-    evaluationCriteria: EvaluationCriteria[],
+    evaluationCriteriaGroups: EvaluationCriteriaGroups[],
     positions: Position[];
     clubs: Club[],
 };
 
 export default function EvaluationForm({ edit = false, backHref = null }: { edit?: boolean, backHref?: string | null }){
-    const { evaluation, evaluationCriteria, positions, clubs } = usePage<Props>().props;
+    const { evaluation, evaluationCriteriaGroups, positions, clubs } = usePage<Props>().props;
     const [selectedPlayer, setSelectedPlayer] = useState<Player>();
 
     const clubOptions = toClubOptions(clubs);
@@ -47,12 +54,16 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
         ) as Record<number, number>,
     });
 
+    const flatCriteria = evaluationCriteriaGroups.flatMap(g => g.evaluation_criteria);
+
     transform(d => ({
         ...d,
-        criteriaScores: evaluationCriteria.map(c => ({
-            evaluation_criteria_id: c.id,
-            score: d.criteriaScores[c.id] ?? 0,
-        })),
+        criteriaScores: evaluationCriteriaGroups.flatMap(group => {
+            group.evaluation_criteria.map(criteria => ({
+                evaluation_criteria_id: criteria.id,
+                score: d.criteriaScores[criteria.id] ?? 0,
+            }))
+        }),
     }));
 
     function submit(e: React.FormEvent) {
@@ -132,23 +143,29 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                     </div>
 
                     <form onSubmit={submit} id="evaluation-from">
-                        <div className="relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                            <FieldSet>
-                                <FieldGroup className="grid sm:grid-cols-2 gap-x-15">
-                                    {evaluationCriteria.length <= 0 && <p>Keine Bewertungskriterien gefunden</p>}
-                                    {evaluationCriteria.length > 0 && evaluationCriteria.map((criteria, criteriaId) =>
-                                        <Field key={criteria.id}>
-                                            <div className="flex flex-row justify-between">
-                                                <FieldLabel htmlFor={'criteria_'+criteria.id}>{criteria.name}</FieldLabel>
-                                                <FieldDescription>x{criteria.multiplier}</FieldDescription>
-                                            </div>
-                                            <ScoreBar name={'criteria_'+criteria.id} value={data.criteriaScores[criteria.id] ?? 0} onChange={val => setData('criteriaScores', { ...data.criteriaScores, [criteria.id]: val })} />
-                                            <InputError message={(errors as Record<string, string>)[`criteriaScores.${criteriaId}.score`] ?? ''}/>
-                                        </Field>
-                                    )}
-                                </FieldGroup>
-                                <Input type="hidden" name="player_id" value={selectedPlayer?.id ?? data.player_id} onChange={(val) => setData('player_id', String(val))}/>
-                            </FieldSet>
+                        <div className="grid gap-y-4 relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+                            {evaluationCriteriaGroups.length <= 0 && <p className="p-5">Keine Bewertungskriterien gefunden</p>}
+                            {evaluationCriteriaGroups.map(group => (
+                                <FieldSet key={group.id}>
+                                    <FieldLegend>{group.name}</FieldLegend>
+                                    <FieldGroup className="grid sm:grid-cols-2 gap-x-15">
+                                        {group.evaluation_criteria.map(criteria => {
+                                            const flatIndex = flatCriteria.findIndex(c => c.id === criteria.id);
+                                            return (
+                                                <Field key={criteria.id}>
+                                                    <div className="flex flex-row justify-between">
+                                                        <FieldLabel htmlFor={'criteria_' + criteria.id}>{criteria.name}</FieldLabel>
+                                                        <FieldDescription>x{criteria.multiplier}</FieldDescription>
+                                                    </div>
+                                                    <ScoreBar name={'criteria_' + criteria.id} value={data.criteriaScores[criteria.id] ?? 0} onChange={val => setData('criteriaScores', {...data.criteriaScores, [criteria.id]: val})} />
+                                                    <InputError message={(errors as Record<string, string>)[`criteriaScores.${flatIndex}.score`] ?? ''} />
+                                                </Field>
+                                            );
+                                        })}
+                                    </FieldGroup>
+                                </FieldSet>
+                            ))}
+                            <Input type="hidden" name="player_id" value={selectedPlayer?.id ?? data.player_id} onChange={(val) => setData('player_id', String(val))}/>
                         </div>
                     </form>
 

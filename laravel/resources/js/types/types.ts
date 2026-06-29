@@ -74,6 +74,12 @@ export type EvaluationCriteria = {
     group: EvaluationCriteriaGroup | null,
 }
 
+export type EvaluationCriteriaGroups = {
+    id: number,
+    name: string,
+    evaluation_criteria: EvaluationCriteria[],
+}
+
 export type EvaluationCriteriaScore = {
     evaluation_criteria_id: number,
     score: number;
