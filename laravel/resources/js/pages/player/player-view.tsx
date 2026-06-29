@@ -3,6 +3,7 @@ import {Badge} from "@/components/ui/badge";
 import {Separator} from "@/components/ui/separator";
 import type {Player} from "@/types/types";
 import club from "@/routes/club";
+import months from "@/constants/months";
 
 export function PlayerView({player, button}: { player: Player, button: any }) {
     return (
@@ -18,6 +19,10 @@ export function PlayerView({player, button}: { player: Player, button: any }) {
             <Separator/>
 
             <CardContent className="mt-1 grid grid-cols-2 gap-4">
+                <div>
+                    <p className="text-muted-foreground text-xs uppercase tracking-wide mb-1">Monat</p>
+                    <p className="font-medium">{months[player.month_of_birth]}</p>
+                </div>
                 <div>
                     <p className="text-muted-foreground text-xs uppercase tracking-wide mb-1">Jahrgang</p>
                     <p className="font-medium">{player.year_of_birth}</p>

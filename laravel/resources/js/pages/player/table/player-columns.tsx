@@ -5,6 +5,7 @@ import {Club, Player, Position} from "@/types/types";
 import {PlayerRowActions} from "./player-row-actions";
 import sortHeader from "@/components/table/table-header-sort";
 import {PlayerSelectRowActions} from "@/pages/player/table/player-select-row-actions";
+import months from "@/constants/months";
 
 const firstname:ColumnDef<Player> = {
     accessorKey: "firstname",
@@ -16,6 +17,12 @@ const lastname:ColumnDef<Player> = {
         accessorKey: "lastname",
         header: sortHeader("Nachname"),
         cell: ({row}) => <div className="font-medium">{row.getValue("lastname")}</div>,
+};
+
+const monthOfBirth:ColumnDef<Player> = {
+    accessorKey: "month_of_birth",
+    header: sortHeader("Monat"),
+    cell: ({row}) => <div className="font-medium">{months[Number(row.getValue("month_of_birth"))]}</div>,
 };
 
 const yearOfBirth:ColumnDef<Player> = {
@@ -50,6 +57,7 @@ const positions:ColumnDef<Player> = {
 export const playerColumns: ColumnDef<Player>[] = [
     firstname,
     lastname,
+    monthOfBirth,
     yearOfBirth,
     club,
     positions,
@@ -63,6 +71,7 @@ export function playerSelectColumns(onSelect: (player: Player) => void): ColumnD
     return [
         firstname,
         lastname,
+        monthOfBirth,
         yearOfBirth,
         club,
         positions,

@@ -1,7 +1,13 @@
-import {Head, Link, router, useForm, usePage} from '@inertiajs/react';
+import {Head, router, useForm, usePage} from '@inertiajs/react';
 import React from 'react';
 import { useState } from 'react';
-import {toPositionOptions, toPlayerPositionIds, toClubOptions, getYearOptions} from '@/hooks/form-options';
+import {
+    toPositionOptions,
+    toPlayerPositionIds,
+    toClubOptions,
+    getYearOptions,
+    getMonthOptions
+} from '@/hooks/form-options';
 import {
     Field,
     FieldGroup,
@@ -20,11 +26,15 @@ type Props = { positions: Position[]; clubs: Club[]; player?: PlayerSmall };
 export default function PlayerForm({ edit = false, backHref = null }: { edit?: boolean, backHref?: string|null }) {
     const { player, positions, clubs } = usePage<Props>().props;
 
+    const monthOfBirthOptions = getMonthOptions();
     const yearOfBirthOptions = getYearOptions();
     const positionOptions = toPositionOptions(positions);
     const playerPositions = toPlayerPositionIds(player);
     const clubOptions = toClubOptions(clubs);
 
+    const [selectedMonthOfBirth, setSelectedMonthOfBirth] = useState(
+        monthOfBirthOptions.filter(o => o.value === String(player?.month_of_birth))
+    );
     const [selectedYearOfBirth, setSelectedYearOfBirth] = useState(
         yearOfBirthOptions.filter(o => o.value === String(player?.year_of_birth))
     );
@@ -38,6 +48,7 @@ export default function PlayerForm({ edit = false, backHref = null }: { edit?: b
     const { data, setData, post, put, processing, errors } = useForm({
         firstname: player?.firstname ?? '',
         lastname: player?.lastname ?? '',
+        month_of_birth: String(player?.month_of_birth) ?? '',
         year_of_birth: String(player?.year_of_birth) ?? '',
         club_id: String(player?.club_id) ?? '',
         position_ids: playerPositions ?? [] as string[],
@@ -56,7 +67,7 @@ export default function PlayerForm({ edit = false, backHref = null }: { edit?: b
             <form onSubmit={submit}>
                 <Head title={"Spieler " + (edit ? 'bearbeiten' : 'erstellen')} />
                 <FieldSet>
-                    <FieldGroup className="grid sm:grid-cols-[2fr_2fr_1fr]">
+                    <FieldGroup className="grid sm:grid-cols-[1fr_1fr]">
                         <Field>
                             <FieldLabel htmlFor="firstname">Vorname</FieldLabel>
                             <Input id="firstname"
@@ -74,6 +85,21 @@ export default function PlayerForm({ edit = false, backHref = null }: { edit?: b
                             <InputError message={errors.lastname} />
                         </Field>
                         <Field>
+                            <FieldLabel htmlFor="year_of_birth">Monat</FieldLabel>
+                            <SingleSelector
+                                value={selectedMonthOfBirth}
+                                onChange={opts => {
+                                    setSelectedMonthOfBirth(opts);
+                                    setData('month_of_birth', opts[0]?.value ?? '');
+                                }}
+                                defaultOptions={monthOfBirthOptions}
+                                placeholder="Monat wählen"
+                                hidePlaceholderWhenSelected
+                                emptyIndicator={<p className="text-center text-sm">Keinen Monat gefunden</p>}
+                            />
+                            <InputError message={errors.month_of_birth} />
+                        </Field>
+                        <Field>
                             <FieldLabel htmlFor="year_of_birth">Jahrgang</FieldLabel>
                             <SingleSelector
                                 value={selectedYearOfBirth}
@@ -88,8 +114,6 @@ export default function PlayerForm({ edit = false, backHref = null }: { edit?: b
                             />
                             <InputError message={errors.year_of_birth} />
                         </Field>
-                    </FieldGroup>
-                    <FieldGroup className="grid sm:grid-cols-[2fr_2fr_1fr]">
                         <Field>
                             <FieldLabel htmlFor="club_id">Club</FieldLabel>
                             <SingleSelector
@@ -106,7 +130,7 @@ export default function PlayerForm({ edit = false, backHref = null }: { edit?: b
                             />
                             <InputError message={errors.club_id} />
                         </Field>
-                        <Field className="sm:col-span-2">
+                        <Field>
                             <FieldLabel htmlFor="position_ids">Position</FieldLabel>
                             <MultipleSelector
                                 value={selectedPositions}

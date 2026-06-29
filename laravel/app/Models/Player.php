@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-#[Fillable(['firstname', 'lastname', 'year_of_birth', 'club_id'])]
+#[Fillable(['firstname', 'lastname', 'month_of_birth', 'year_of_birth', 'club_id'])]
 class Player extends Model
 {
     use HasFactory;

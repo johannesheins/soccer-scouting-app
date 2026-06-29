@@ -110,13 +110,19 @@ class PlayerControllerTest extends TestCase
             ->post(route('player.store'), [
                 'firstname' => 'John',
                 'lastname' => 'Doe',
+                'month_of_birth' => 12,
                 'year_of_birth' => 1999,
                 'club_id' => $clubs->id,
                 'position_ids' => $positions->pluck('id')->toArray(),
             ]);
 
         $response->assertRedirect(route('player.index'));
-        $this->assertDatabaseHas('players', ['firstname' => 'John', 'lastname' => 'Doe', 'year_of_birth' => 1999]);
+        $this->assertDatabaseHas('players', [
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'month_of_birth' => 12,
+            'year_of_birth' => 1999
+        ]);
         $player = Player::where('firstname', 'John')->first();
         $positions->each(fn ($pos) => $this->assertDatabaseHas('player_positions', ['player_id' => $player->id, 'position_id' => $pos->id]));
 
@@ -131,6 +137,7 @@ class PlayerControllerTest extends TestCase
         $response = $this->post(route('player.store'), [
             'firstname' => 'John',
             'lastname' => 'Doe',
+            'month_of_birth' => 12,
             'year_of_birth' => 1999,
             'club_id' => $club->id,
             'position_ids' => $positions->pluck('id')->toArray(),
@@ -144,7 +151,7 @@ class PlayerControllerTest extends TestCase
         $response = $this->actingAs($this->user)
             ->post(route('player.store'), []);
 
-        $response->assertInvalid(['firstname', 'lastname', 'year_of_birth', 'club_id', 'position_ids']);
+        $response->assertInvalid(['firstname', 'lastname', 'month_of_birth', 'year_of_birth', 'club_id', 'position_ids']);
     }
 
     public function test_store_validates_club_exists(): void
@@ -155,6 +162,7 @@ class PlayerControllerTest extends TestCase
             ->post(route('player.store'), [
                 'firstname' => 'John',
                 'lastname' => 'Doe',
+                'month_of_birth' => 12,
                 'year_of_birth' => 1999,
                 'club_id' => 999,
                 'position_ids' => $positions->pluck('id')->toArray(),
@@ -171,6 +179,7 @@ class PlayerControllerTest extends TestCase
             ->post(route('player.store'), [
                 'firstname' => 'John',
                 'lastname' => 'Doe',
+                'month_of_birth' => 12,
                 'year_of_birth' => 1999,
                 'club_id' => $club->id,
                 'position_ids' => [999],
@@ -179,7 +188,7 @@ class PlayerControllerTest extends TestCase
         $response->assertInvalid(['position_ids.0']);
     }
 
-    public function test_store_validates_year_of_birth_is_integer(): void
+    public function test_store_validates_month_and_year_of_birth_is_integer(): void
     {
         $club = Club::factory()->create();
         $position = Position::factory()->create();
@@ -188,12 +197,14 @@ class PlayerControllerTest extends TestCase
             ->post(route('player.store'), [
                 'firstname' => 'John',
                 'lastname' => 'Doe',
+                'month_of_birth' => 'not-an-integer',
                 'year_of_birth' => 'not-an-integer',
                 'club_id' => $club->id,
                 'position_ids' => [$position->id],
             ]);
 
         $response->assertInvalid(['year_of_birth']);
+        $response->assertInvalid(['month_of_birth']);
     }
 
     public function test_store_validates_firstname_max_length(): void
@@ -205,6 +216,7 @@ class PlayerControllerTest extends TestCase
             ->post(route('player.store'), [
                 'firstname' => str_repeat('a', 256),
                 'lastname' => 'Doe',
+                'month_of_birth' => 12,
                 'year_of_birth' => 1999,
                 'club_id' => $club->id,
                 'position_ids' => [$position->id],
@@ -222,6 +234,7 @@ class PlayerControllerTest extends TestCase
             ->post(route('player.store'), [
                 'firstname' => 'John',
                 'lastname' => str_repeat('a', 256),
+                'month_of_birth' => 12,
                 'year_of_birth' => 1999,
                 'club_id' => $club->id,
                 'position_ids' => [$position->id],
@@ -247,6 +260,7 @@ class PlayerControllerTest extends TestCase
         $player = Player::factory()->create([
             'firstname' => 'John',
             'lastname' => 'Doe',
+            'month_of_birth' => 12,
             'year_of_birth' => 1999,
             'club_id' => $club->id,
         ]);
@@ -281,6 +295,7 @@ class PlayerControllerTest extends TestCase
         $player = Player::factory()->create([
             'firstname' => 'John',
             'lastname' => 'Doe',
+            'month_of_birth' => 12,
             'year_of_birth' => 1999,
             'club_id' => $clubs->id,
         ]);
@@ -295,6 +310,7 @@ class PlayerControllerTest extends TestCase
             ->where('player.id', $player->id)
             ->where('player.firstname', 'John')
             ->where('player.lastname', 'Doe')
+            ->where('player.month_of_birth', 12)
             ->where('player.year_of_birth', 1999)
             ->where('player.club_id', $clubs->id)
             ->has('player.positions', 2)
@@ -336,6 +352,7 @@ class PlayerControllerTest extends TestCase
             ->put(route('player.update', $player->id), [
                 'firstname'     => 'Jacob',
                 'lastname'      => $player->lastname,
+                'month_of_birth' => $player->month_of_birth,
                 'year_of_birth' => $player->year_of_birth,
                 'club_id'       => $club->id,
                 'position_ids'  => [$newPosition->id],
@@ -364,7 +381,7 @@ class PlayerControllerTest extends TestCase
         $response = $this->actingAs($this->user)
             ->put(route('player.update', $player), []);
 
-        $response->assertInvalid(['firstname', 'lastname', 'year_of_birth', 'club_id', 'position_ids']);
+        $response->assertInvalid(['firstname', 'lastname', 'month_of_birth', 'year_of_birth', 'club_id', 'position_ids']);
     }
 
     public function test_update_validates_club_exists(): void
@@ -378,6 +395,7 @@ class PlayerControllerTest extends TestCase
             ->put(route('player.update', $player), [
                 'firstname' => 'John',
                 'lastname' => 'Doe',
+                'month_of_birth' => 12,
                 'year_of_birth' => 1999,
                 'club_id' => 999,
                 'position_ids' => [$position->id],
@@ -395,6 +413,7 @@ class PlayerControllerTest extends TestCase
             ->put(route('player.update', $player), [
                 'firstname' => 'John',
                 'lastname' => 'Doe',
+                'month_of_birth' => 12,
                 'year_of_birth' => 1999,
                 'club_id' => $club->id,
                 'position_ids' => [999],
@@ -414,6 +433,7 @@ class PlayerControllerTest extends TestCase
             ->put(route('player.update', $player), [
                 'firstname' => 'John',
                 'lastname' => 'Doe',
+                'month_of_birth' => 12,
                 'year_of_birth' => 'not-an-integer',
                 'club_id' => $club->id,
                 'position_ids' => [$position->id],
@@ -433,6 +453,7 @@ class PlayerControllerTest extends TestCase
             ->put(route('player.update', $player), [
                 'firstname' => str_repeat('a', 256),
                 'lastname' => 'Doe',
+                'month_of_birth' => 12,
                 'year_of_birth' => 1999,
                 'club_id' => $club->id,
                 'position_ids' => [$position->id],
@@ -452,6 +473,7 @@ class PlayerControllerTest extends TestCase
             ->put(route('player.update', $player), [
                 'firstname' => 'John',
                 'lastname' => str_repeat('a', 256),
+                'month_of_birth' => 12,
                 'year_of_birth' => 1999,
                 'club_id' => $club->id,
                 'position_ids' => [$position->id],
@@ -469,6 +491,7 @@ class PlayerControllerTest extends TestCase
             ->put(route('player.update', 999), [
                 'firstname' => 'John',
                 'lastname' => 'Doe',
+                'month_of_birth' => 12,
                 'year_of_birth' => 1999,
                 'club_id' => $club->id,
                 'position_ids' => [$position->id],

@@ -8,7 +8,7 @@ import MultipleSelector from "@/components/ui/multi-select";
 import {Button} from "@/components/ui/button";
 import { useState, useEffect } from 'react';
 import type { Option } from '@/components/ui/multi-select';
-import {toPositionOptions, toClubOptions, getYearOptions} from "@/hooks/form-options";
+import {toPositionOptions, toClubOptions, getYearOptions, getMonthOptions} from "@/hooks/form-options";
 import {usePreviousUrl} from "@/hooks/use-previous-url";
 import {Club, Player, Position} from "@/types/types";
 import api from "@/routes/api";
@@ -31,7 +31,13 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
 
     const urlPositionIds = getArrayParam('position_ids');
     const urlClubIds = getArrayParam('club_ids');
+    const urlMonthsOfBirth = getArrayParam('months_of_birth');
     const urlYearsOfBirth = getArrayParam('years_of_birth');
+
+    const monthOfBirthOptions = getMonthOptions();
+    const [selectedMonthsOfBirth, setSelectedMonthsOfBirth] = useState<Option[]>(
+        monthOfBirthOptions.filter(o => urlMonthsOfBirth.includes(o.value))
+    );
 
     const yearOfBirthOptions = getYearOptions();
     const [selectedYearsOfBirth, setSelectedYearsOfBirth] = useState<Option[]>(
@@ -52,6 +58,7 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
     const { data, setData, get, processing, errors } = useForm({
         firstname: params.get('firstname') ?? '',
         lastname: params.get('lastname') ?? '',
+        months_of_birth: urlMonthsOfBirth,
         years_of_birth: urlYearsOfBirth,
         club_ids: urlClubIds,
         position_ids: urlPositionIds,
@@ -98,7 +105,22 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
                             <InputError message={errors.lastname} />
                         </Field>
                     </FieldGroup>
-                    <FieldGroup className="grid sm:grid-cols-[1fr_1fr_1fr]">
+                    <FieldGroup className="grid sm:grid-cols-[1fr_1fr_1fr_1fr]">
+                        <Field>
+                            <FieldLabel htmlFor="months_of_birth">Monat</FieldLabel>
+                            <MultipleSelector
+                                value={selectedMonthsOfBirth}
+                                onChange={opts => {
+                                    setSelectedMonthsOfBirth(opts);
+                                    setData('months_of_birth', opts.map(o => o.value));
+                                }}
+                                defaultOptions={monthOfBirthOptions}
+                                placeholder="Monat wählen"
+                                hidePlaceholderWhenSelected
+                                emptyIndicator={<p className="text-center text-sm">Keinen Monat gefunden</p>}
+                            />
+                            <InputError message={errors.years_of_birth} />
+                        </Field>
                         <Field>
                             <FieldLabel htmlFor="years_of_birth">Jahrgang</FieldLabel>
                             <MultipleSelector
