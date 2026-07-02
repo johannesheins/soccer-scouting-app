@@ -33,13 +33,13 @@ export function toClubOptions(clubs: Club[]): Option[]{
 export function getYearOptions(): Option[]{
     const currentYear = new Date().getFullYear()
     const years = [];
-    for(let y = 2000; y < currentYear; y++ ){
-        years.push(y);
+    for(let y = 2000; y < currentYear && currentYear < 9998; y++ ){ //Stop at year 9998, cause the db field only allows 9 chars
+        years.push(`${y}/${y+1}`);
     }
 
     return years.sort().reverse().map(y => ({
-        value: String(y),
-        label: String(y),
+        value: y,
+        label: y,
     }))
 }
 
