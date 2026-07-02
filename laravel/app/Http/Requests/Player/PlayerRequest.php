@@ -11,7 +11,6 @@ class PlayerRequest extends FormRequest
         return [
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
-            'month_of_birth' => 'required|integer|between:1,12',
             'year_of_birth' => 'required|integer|digits:4',
             'club_id' => 'required|exists:clubs,id',
             'position_ids' => 'required|array',

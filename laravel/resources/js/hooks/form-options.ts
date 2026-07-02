@@ -1,6 +1,5 @@
 import type { Option } from '@/components/ui/multi-select';
 import type {Club, EvaluationCriteriaGroup, PlayerSmall, Position, UserGroup} from '@/types/types';
-import months from '@/constants/months';
 
 export function toPositionOptions(positions: Position[]): Option[] {
     return positions.map(p => ({
@@ -30,10 +29,6 @@ export function toClubOptions(clubs: Club[]): Option[]{
     }))
 }
 
-
-export function getMonthOptions(): Option[] {
-    return Object.entries(months).map(([value, label]) => ({ value, label }));
-}
 
 export function getYearOptions(): Option[]{
     const currentYear = new Date().getFullYear()
