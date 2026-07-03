@@ -15,10 +15,12 @@ class GenerateTypescriptEnums extends Command
         try {
             $enums = $this->argument('enum');
             if(empty($enums)){
-                $files = scandir(app_path('Enums'));
-                $enums = array_map(static function($filename){
-                    return str_replace('.php', '', basename($filename));
-                }, $files);
+                foreach(scandir(app_path('Enums')) as $file){
+                    if(!str_ends_with($file, '.php')){
+                        continue;
+                    }
+                    $enums[] = str_replace('.php', '', basename($file));
+                }
             }
 
             $dir = resource_path('js/enums');
@@ -37,7 +39,9 @@ class GenerateTypescriptEnums extends Command
 
                 $fileContent = "export enum {$enumName} {".PHP_EOL;
                 foreach($class::cases() as $case){
-                    $fileContent .= "   {$case->name} = {$case->value},".PHP_EOL;
+                    $name = $case->name;
+                    $value = is_string($case->value) ? "'{$case->value}'" : $case->value;
+                    $fileContent .= "   {$name} = {$value},".PHP_EOL;
                 }
                 $fileContent .= "}";
 
