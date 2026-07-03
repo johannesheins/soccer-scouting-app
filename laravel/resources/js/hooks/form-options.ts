@@ -1,5 +1,6 @@
 import type { Option } from '@/components/ui/multi-select';
 import type {Club, EvaluationCriteriaGroup, PlayerSmall, Position, UserGroup} from '@/types/types';
+import {FootEnum} from "@/enums";
 
 export function toPositionOptions(positions: Position[]): Option[] {
     return positions.map(p => ({
@@ -62,5 +63,12 @@ export function toEvaluationCriteriaGroupOptions(groups: EvaluationCriteriaGroup
     return groups.map(g => ({
         value: String(g.id),
         label: g.name,
+    }))
+}
+
+export function getFootOptions(): Option[]{
+    return Object.values(FootEnum).map(foot => ({
+        value: foot,
+        label: foot
     }))
 }

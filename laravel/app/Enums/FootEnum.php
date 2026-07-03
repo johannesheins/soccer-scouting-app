@@ -4,7 +4,7 @@ namespace App\Enums;
 
 enum FootEnum: string
 {
-    case LEFT = 'left';
-    case RIGHT = 'right';
-    case BOTH = 'both';
+    case LEFT = 'Links';
+    case RIGHT = 'Rechts';
+    case BOTH = 'Beide';
 }

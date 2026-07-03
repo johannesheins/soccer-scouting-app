@@ -5,7 +5,7 @@ import {
     toPositionOptions,
     toPlayerPositionIds,
     toClubOptions,
-    getYearOptions
+    getYearOptions, getFootOptions
 } from '@/hooks/form-options';
 import {
     Field,
@@ -26,12 +26,16 @@ export default function PlayerForm({ edit = false, backHref = null }: { edit?: b
     const { player, positions, clubs } = usePage<Props>().props;
 
     const yearOfBirthOptions = getYearOptions();
+    const footOptions = getFootOptions();
     const positionOptions = toPositionOptions(positions);
     const playerPositions = toPlayerPositionIds(player);
     const clubOptions = toClubOptions(clubs);
 
     const [selectedYearOfBirth, setSelectedYearOfBirth] = useState(
         yearOfBirthOptions.filter(o => o.value === String(player?.year_of_birth))
+    );
+    const [selectedStrongFoot, setSelectedStrongFoot] = useState(
+        footOptions.filter(o => o.value === player?.strong_foot)
     );
     const [selectedClub, setSelectedClub] = useState(
         clubOptions.filter(o => o.value === String(player?.club_id))
@@ -44,6 +48,7 @@ export default function PlayerForm({ edit = false, backHref = null }: { edit?: b
         firstname: player?.firstname ?? '',
         lastname: player?.lastname ?? '',
         year_of_birth: String(player?.year_of_birth) ?? '',
+        strong_foot: player?.strong_foot ?? '',
         club_id: String(player?.club_id) ?? '',
         position_ids: playerPositions ?? [] as string[],
     });
@@ -67,6 +72,7 @@ export default function PlayerForm({ edit = false, backHref = null }: { edit?: b
                             <Input id="firstname"
                                    value={data.firstname}
                                    onChange={e => setData('firstname', e.target.value)}
+                                   placeholder="Vorname eintragen"
                             />
                             <InputError message={errors.firstname} />
                         </Field>
@@ -75,6 +81,7 @@ export default function PlayerForm({ edit = false, backHref = null }: { edit?: b
                             <Input id="lastname" type="text"
                                    value={data.lastname}
                                    onChange={e => setData('lastname', e.target.value)}
+                                   placeholder="Nachname eintragen"
                             />
                             <InputError message={errors.lastname} />
                         </Field>
@@ -124,6 +131,22 @@ export default function PlayerForm({ edit = false, backHref = null }: { edit?: b
                                 emptyIndicator={<p className="text-center text-sm">Keine Positionen gefunden</p>}
                             />
                             <InputError message={errors.position_ids} />
+                        </Field>
+                        <Field>
+                            <FieldLabel htmlFor="strong_foot">Starker Fuß</FieldLabel>
+                            <SingleSelector
+                                value={selectedStrongFoot}
+                                onChange={opts => {
+                                    setSelectedStrongFoot(opts);
+                                    setData('strong_foot', opts[0]?.value ?? '');
+                                }}
+                                defaultOptions={footOptions}
+                                groupBy="group"
+                                placeholder="Starken Fuß wählen"
+                                hidePlaceholderWhenSelected
+                                emptyIndicator={<p className="text-center text-sm">Kein treffer</p>}
+                            />
+                            <InputError message={errors.strong_foot} />
                         </Field>
                     </FieldGroup>
                     <Field className="w-fit flex-row">
