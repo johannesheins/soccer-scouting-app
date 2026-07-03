@@ -79,7 +79,7 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
             <div className="max-w-6xl">
                 <Head title={"Bewertung " + (edit ? 'bearbeiten' : 'erstellen')} />
 
-                <div className="flex flex-1 flex-col gap-4 rounded-xl p-4">
+                <div className="flex flex-1 flex-col gap-4 p-4">
                     <div className="relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                         <FieldSet>
                             <FieldGroup>
@@ -142,10 +142,10 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                         </FieldSet>
                     </div>
 
-                    <form onSubmit={submit} id="evaluation-from">
-                        <div className="grid gap-y-4 relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                            {evaluationCriteriaGroups.length <= 0 && <p className="p-5">Keine Bewertungskriterien gefunden</p>}
-                            {evaluationCriteriaGroups.map(group => (
+                    <form onSubmit={submit} id="evaluation-from" className="flex flex-1 flex-col gap-4">
+                        {evaluationCriteriaGroups.length <= 0 && <p className="p-5">Keine Bewertungskriterien gefunden</p>}
+                        {evaluationCriteriaGroups.map(group => (
+                            <div className="grid gap-y-4 relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                                 <FieldSet key={group.id}>
                                     <FieldLegend>{group.name}</FieldLegend>
                                     <FieldGroup className="grid sm:grid-cols-2 gap-x-15">
@@ -164,9 +164,9 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                                         })}
                                     </FieldGroup>
                                 </FieldSet>
-                            ))}
-                            <Input type="hidden" name="player_id" value={selectedPlayer?.id ?? data.player_id} onChange={(val) => setData('player_id', String(val))}/>
-                        </div>
+                            </div>
+                        ))}
+                        <Input type="hidden" name="player_id" value={selectedPlayer?.id ?? data.player_id} onChange={(val) => setData('player_id', String(val))}/>
                     </form>
 
                     <div>
