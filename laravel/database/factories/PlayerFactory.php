@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\FootEnum;
 use App\Models\Club;
 use App\Models\Player;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -18,6 +19,7 @@ class PlayerFactory extends Factory
             'firstname' => fake()->firstName(),
             'lastname' => fake()->lastName(),
             'year_of_birth' => "{$y1}/{$y2}",
+            'strong_foot' => fake()->randomElement(FootEnum::cases())->value,
 
             'club_id' => Club::factory(),
         ];
