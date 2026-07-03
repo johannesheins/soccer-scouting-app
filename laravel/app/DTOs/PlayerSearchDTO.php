@@ -19,6 +19,21 @@ class PlayerSearchDTO
         set => $value;
     }
 
+    public ?int $heightFrom = null {
+        get => $this->heightFrom;
+        set => $value;
+    }
+
+    public ?int $heightTo = null {
+        get => $this->heightTo;
+        set => $value;
+    }
+
+    public array $strongFoots = [] {
+        get => $this->strongFoots;
+        set => $value;
+    }
+
     public array $clubIds = [] {
         get => $this->clubIds;
         set => $value;
@@ -34,6 +49,9 @@ class PlayerSearchDTO
         $this->firstname = $array['firstname'] ?? null;
         $this->lastname = $array['lastname'] ?? null;
         $this->yearsOfBirth = $array['years_of_birth'] ?? [];
+        $this->heightFrom = $array['height_from'] ?? null;
+        $this->heightTo = $array['height_to'] ?? null;
+        $this->strongFoots = $array['strong_foots'] ?? [];
         $this->clubIds = $array['club_ids'] ?? [];
         $this->positionIds = $array['position_ids'] ?? [];
     }

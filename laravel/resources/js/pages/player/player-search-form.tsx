@@ -8,7 +8,7 @@ import MultipleSelector from "@/components/ui/multi-select";
 import {Button} from "@/components/ui/button";
 import { useState, useEffect } from 'react';
 import type { Option } from '@/components/ui/multi-select';
-import {toPositionOptions, toClubOptions, getYearOptions} from "@/hooks/form-options";
+import {toPositionOptions, toClubOptions, getYearOptions, getFootOptions} from "@/hooks/form-options";
 import {usePreviousUrl} from "@/hooks/use-previous-url";
 import {Club, Player, Position} from "@/types/types";
 import api from "@/routes/api";
@@ -18,6 +18,8 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
     usePreviousUrl();
 
     const params = new URLSearchParams(window.location.search);
+
+    console.log(params);
 
     function getArrayParam(key: string): string[] {
         const bracketed: string[] = [];
@@ -32,10 +34,16 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
     const urlPositionIds = getArrayParam('position_ids');
     const urlClubIds = getArrayParam('club_ids');
     const urlYearsOfBirth = getArrayParam('years_of_birth');
+    const urlStrongFoots = getArrayParam('strong_foots');
 
     const yearOfBirthOptions = getYearOptions();
     const [selectedYearsOfBirth, setSelectedYearsOfBirth] = useState<Option[]>(
         yearOfBirthOptions.filter(o => urlYearsOfBirth.includes(o.value))
+    );
+
+    const footOptions = getFootOptions();
+    const [selectedStrongFoots, setSelectedStrongFoots] = useState<Option[]>(
+        footOptions.filter(o => urlStrongFoots.includes(o.value))
     );
 
     const positionOptions = toPositionOptions(positions);
@@ -44,7 +52,6 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
     );
 
     const clubOptions = toClubOptions(clubs);
-    // @ts-ignore
     const [selectedClubs, setSelectedClubs] = useState<Option[]>(
         clubOptions.filter(o => urlClubIds.includes(o.value))
     );
@@ -53,6 +60,9 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
         firstname: params.get('firstname') ?? '',
         lastname: params.get('lastname') ?? '',
         years_of_birth: urlYearsOfBirth,
+        height_from: params.get('height_from') ?? '',
+        height_to: params.get('height_to') ?? '',
+        strong_foots: urlStrongFoots,
         club_ids: urlClubIds,
         position_ids: urlPositionIds,
     });
@@ -80,7 +90,7 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
         <div className="w-full">
             <form onSubmit={submit}>
                 <FieldSet>
-                    <FieldGroup className="grid sm:grid-cols-[1fr_1fr]">
+                    <FieldGroup className="grid sm:grid-cols-2 lg:grid-cols-3">
                         <Field>
                             <FieldLabel htmlFor="firstname">Vorname</FieldLabel>
                             <Input id="firstname"
@@ -97,23 +107,6 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
                             />
                             <InputError message={errors.lastname} />
                         </Field>
-                    </FieldGroup>
-                    <FieldGroup className="grid sm:grid-cols-[1fr_1fr_1fr]">
-                        <Field>
-                            <FieldLabel htmlFor="years_of_birth">Jahrgang</FieldLabel>
-                            <MultipleSelector
-                                value={selectedYearsOfBirth}
-                                onChange={opts => {
-                                    setSelectedYearsOfBirth(opts);
-                                    setData('years_of_birth', opts.map(o => o.value));
-                                }}
-                                defaultOptions={yearOfBirthOptions}
-                                placeholder="Jahrgang wählen"
-                                hidePlaceholderWhenSelected
-                                emptyIndicator={<p className="text-center text-sm">Keinen Jahrgang gefunden</p>}
-                            />
-                            <InputError message={errors.years_of_birth} />
-                        </Field>
                         <Field>
                             <FieldLabel htmlFor="club_ids">Club</FieldLabel>
                             <MultipleSelector
@@ -129,6 +122,59 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
                                 emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
                             />
                             <InputError message={errors.club_ids} />
+                        </Field>
+                        <Field>
+                            <FieldLabel htmlFor="years_of_birth">Jahrgang</FieldLabel>
+                            <MultipleSelector
+                                value={selectedYearsOfBirth}
+                                onChange={opts => {
+                                    setSelectedYearsOfBirth(opts);
+                                    setData('years_of_birth', opts.map(o => o.value));
+                                }}
+                                defaultOptions={yearOfBirthOptions}
+                                placeholder="Jahrgang wählen"
+                                hidePlaceholderWhenSelected
+                                emptyIndicator={<p className="text-center text-sm">Keinen Jahrgang gefunden</p>}
+                            />
+                            <InputError message={errors.years_of_birth} />
+                        </Field>
+                        <FieldGroup className="grid grid-cols-2 gap-2 items-center">
+                            <Field>
+                                <FieldLabel htmlFor="height_from">Größe von</FieldLabel>
+                                <Input id="height_from"
+                                       value={data.height_from}
+                                       onChange={e => setData('height_from', e.target.value)}
+                                       placeholder="Größe eintragen"
+                                       type="number"
+                                />
+                                <InputError message={errors.height_from} />
+                            </Field>
+                            <Field>
+                                <FieldLabel htmlFor="height_to">Größe bis</FieldLabel>
+                                <Input id="height_to"
+                                       value={data.height_to}
+                                       onChange={e => setData('height_to', e.target.value)}
+                                       placeholder="Größe eintragen"
+                                       type="number"
+                                />
+                                <InputError message={errors.height_to} />
+                            </Field>
+                        </FieldGroup>
+                        <Field>
+                            <FieldLabel htmlFor="strong_foot">Starker Fuß</FieldLabel>
+                            <MultipleSelector
+                                value={selectedStrongFoots}
+                                onChange={opts => {
+                                    setSelectedStrongFoots(opts);
+                                    setData('strong_foots', opts.map(o => o.value));
+                                }}
+                                defaultOptions={footOptions}
+                                groupBy="group"
+                                placeholder="Starken Fuß wählen"
+                                hidePlaceholderWhenSelected
+                                emptyIndicator={<p className="text-center text-sm">Kein treffer</p>}
+                            />
+                            <InputError message={errors.strong_foots} />
                         </Field>
                         <Field>
                             <FieldLabel htmlFor="position_ids">Position</FieldLabel>
