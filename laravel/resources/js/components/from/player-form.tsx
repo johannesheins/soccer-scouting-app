@@ -67,7 +67,7 @@ export default function PlayerForm({ edit = false, backHref = null }: { edit?: b
             <form onSubmit={submit}>
                 <Head title={"Spieler " + (edit ? 'bearbeiten' : 'erstellen')} />
                 <FieldSet>
-                    <FieldGroup className="grid sm:grid-cols-[1fr_1fr]">
+                    <FieldGroup className="grid sm:grid-cols-2 lg:grid-cols-3">
                         <Field>
                             <FieldLabel htmlFor="firstname">Vorname</FieldLabel>
                             <Input id="firstname"
@@ -87,21 +87,6 @@ export default function PlayerForm({ edit = false, backHref = null }: { edit?: b
                             <InputError message={errors.lastname} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor="year_of_birth">Jahrgang</FieldLabel>
-                            <SingleSelector
-                                value={selectedYearOfBirth}
-                                onChange={opts => {
-                                    setSelectedYearOfBirth(opts);
-                                    setData('year_of_birth', opts[0]?.value ?? '');
-                                }}
-                                defaultOptions={yearOfBirthOptions}
-                                placeholder="Jahrgang wählen"
-                                hidePlaceholderWhenSelected
-                                emptyIndicator={<p className="text-center text-sm">Keinen Jahrgang gefunden</p>}
-                            />
-                            <InputError message={errors.year_of_birth} />
-                        </Field>
-                        <Field>
                             <FieldLabel htmlFor="club_id">Club</FieldLabel>
                             <SingleSelector
                                 value={selectedClub}
@@ -118,20 +103,29 @@ export default function PlayerForm({ edit = false, backHref = null }: { edit?: b
                             <InputError message={errors.club_id} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor="position_ids">Position</FieldLabel>
-                            <MultipleSelector
-                                value={selectedPositions}
+                            <FieldLabel htmlFor="year_of_birth">Jahrgang</FieldLabel>
+                            <SingleSelector
+                                value={selectedYearOfBirth}
                                 onChange={opts => {
-                                    setSelectedPositions(opts);
-                                    setData('position_ids', opts.map(o => o.value));
+                                    setSelectedYearOfBirth(opts);
+                                    setData('year_of_birth', opts[0]?.value ?? '');
                                 }}
-                                defaultOptions={positionOptions}
-                                groupBy="group"
-                                placeholder="Position wählen"
+                                defaultOptions={yearOfBirthOptions}
+                                placeholder="Jahrgang wählen"
                                 hidePlaceholderWhenSelected
-                                emptyIndicator={<p className="text-center text-sm">Keine Positionen gefunden</p>}
+                                emptyIndicator={<p className="text-center text-sm">Keinen Jahrgang gefunden</p>}
                             />
-                            <InputError message={errors.position_ids} />
+                            <InputError message={errors.year_of_birth} />
+                        </Field>
+                        <Field>
+                            <FieldLabel htmlFor="height">Größe (cm)</FieldLabel>
+                            <Input id="height"
+                                   value={data.height}
+                                   onChange={e => setData('height', e.target.value)}
+                                   placeholder="Größe eintragen"
+                                   type="number"
+                            />
+                            <InputError message={errors.height} />
                         </Field>
                         <Field>
                             <FieldLabel htmlFor="strong_foot">Starker Fuß</FieldLabel>
@@ -150,14 +144,20 @@ export default function PlayerForm({ edit = false, backHref = null }: { edit?: b
                             <InputError message={errors.strong_foot} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor="height">Größe (cm)</FieldLabel>
-                            <Input id="height"
-                                   value={data.height}
-                                   onChange={e => setData('height', e.target.value)}
-                                   placeholder="Größe eintragen"
-                                   type="number"
+                            <FieldLabel htmlFor="position_ids">Position</FieldLabel>
+                            <MultipleSelector
+                                value={selectedPositions}
+                                onChange={opts => {
+                                    setSelectedPositions(opts);
+                                    setData('position_ids', opts.map(o => o.value));
+                                }}
+                                defaultOptions={positionOptions}
+                                groupBy="group"
+                                placeholder="Position wählen"
+                                hidePlaceholderWhenSelected
+                                emptyIndicator={<p className="text-center text-sm">Keine Positionen gefunden</p>}
                             />
-                            <InputError message={errors.height} />
+                            <InputError message={errors.position_ids} />
                         </Field>
                     </FieldGroup>
                     <Field className="w-fit flex-row">
