@@ -28,16 +28,24 @@ export function toClubOptions(clubs: Club[]): Option[]{
         group: c.clubname.substring(0,1).toUpperCase()
     }))
 }
-
-
-export function getYearOptions(): Option[]{
+export function getYears(firstYear: number = 0, lastYear: null|number = null, limit: number = 0): string[]{
+    const MAX = 9998;
     const currentYear = new Date().getFullYear()
     const years = [];
-    for(let y = 2000; y < currentYear && currentYear < 9998; y++ ){ //Stop at year 9998, cause the db field only allows 9 chars
+
+    const start = Math.max(firstYear, 2000);
+    const end = lastYear !== null ? Math.min(lastYear, MAX) : MAX;
+    const last = limit > 0 ? firstYear + limit : currentYear;
+
+    for(let y = start; y < last && currentYear < end; y++){ //Stop at year 9998, cause the db field only allows 9 chars
         years.push(`${y}/${y+1}`);
     }
 
-    return years.sort().reverse().map(y => ({
+    return years;
+}
+
+export function getYearOptions(): Option[]{
+    return getYears().sort().reverse().map(y => ({
         value: y,
         label: y,
     }))
