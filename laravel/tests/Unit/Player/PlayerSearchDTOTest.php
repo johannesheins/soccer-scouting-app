@@ -3,6 +3,7 @@
 namespace Tests\Unit\Player;
 
 use App\DTOs\PlayerSearchDTO;
+use App\Enums\FootEnum;
 use PHPUnit\Framework\TestCase;
 
 class PlayerSearchDTOTest extends TestCase
@@ -100,6 +101,57 @@ class PlayerSearchDTOTest extends TestCase
         $this->assertSame([], $dto->yearsOfBirth);
     }
 
+    // heightFrom / heightTo
+    public function test_height_from_and_height_to_are_mapped(): void
+    {
+        $dto = new PlayerSearchDTO(['height_from' => 170, 'height_to' => 190]);
+        $this->assertSame(170, $dto->heightFrom);
+        $this->assertSame(190, $dto->heightTo);
+    }
+
+    public function test_height_from_is_null_when_missing(): void
+    {
+        $dto = new PlayerSearchDTO([]);
+        $this->assertNull($dto->heightFrom);
+    }
+
+    public function test_height_from_is_null_when_explicitly_null(): void
+    {
+        $dto = new PlayerSearchDTO(['height_from' => null]);
+        $this->assertNull($dto->heightFrom);
+    }
+
+    public function test_height_to_is_null_when_missing(): void
+    {
+        $dto = new PlayerSearchDTO([]);
+        $this->assertNull($dto->heightTo);
+    }
+
+    public function test_height_to_is_null_when_explicitly_null(): void
+    {
+        $dto = new PlayerSearchDTO(['height_to' => null]);
+        $this->assertNull($dto->heightTo);
+    }
+
+    // strongFoots
+    public function test_strong_foots_are_mapped(): void
+    {
+        $dto = new PlayerSearchDTO(['strong_foots' => [FootEnum::LEFT->value, FootEnum::RIGHT->value]]);
+        $this->assertSame([FootEnum::LEFT->value, FootEnum::RIGHT->value], $dto->strongFoots);
+    }
+
+    public function test_strong_foots_defaults_to_empty_array_when_missing(): void
+    {
+        $dto = new PlayerSearchDTO([]);
+        $this->assertSame([], $dto->strongFoots);
+    }
+
+    public function test_strong_foots_defaults_to_empty_array_when_explicitly_null(): void
+    {
+        $dto = new PlayerSearchDTO(['strong_foots' => null]);
+        $this->assertSame([], $dto->strongFoots);
+    }
+
     // clubs (key mapping: club_ids → clubs)
     public function test_club_ids_are_mapped_to_club_ids(): void
     {
@@ -145,6 +197,9 @@ class PlayerSearchDTOTest extends TestCase
             'firstname' => 'John',
             'lastname' => 'Doe',
             'years_of_birth' => [1995],
+            'height_from' => 170,
+            'height_to' => 190,
+            'strong_foots' => [FootEnum::LEFT->value],
             'club_ids' => [1, 2],
             'position_ids' => [3],
         ]);
@@ -152,6 +207,9 @@ class PlayerSearchDTOTest extends TestCase
         $this->assertSame('John', $dto->firstname);
         $this->assertSame('Doe', $dto->lastname);
         $this->assertSame([1995], $dto->yearsOfBirth);
+        $this->assertSame(170, $dto->heightFrom);
+        $this->assertSame(190, $dto->heightTo);
+        $this->assertSame([FootEnum::LEFT->value], $dto->strongFoots);
         $this->assertSame([1, 2], $dto->clubIds);
         $this->assertSame([3], $dto->positionIds);
     }

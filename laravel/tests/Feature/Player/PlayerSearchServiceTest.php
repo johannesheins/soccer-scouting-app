@@ -3,6 +3,7 @@
 namespace Tests\Feature\Player;
 
 use App\DTOs\PlayerSearchDTO;
+use App\Enums\FootEnum;
 use App\Models\Club;
 use App\Models\Player;
 use App\Models\Position;
@@ -148,6 +149,92 @@ class PlayerSearchServiceTest extends TestCase
         Player::factory()->count(3)->create();
 
         $result = $this->search(['years_of_birth' => []]);
+        $this->assertCount(3, $result);
+    }
+
+    #endregion
+
+    #region height
+    public function test_filters_by_height_from(): void
+    {
+        Player::factory()->create(['height' => 170]);
+        Player::factory()->create(['height' => 190]);
+
+        $result = $this->search(['height_from' => 180]);
+
+        $this->assertCount(1, $result);
+        $this->assertSame(190, $result->first()->height);
+    }
+
+    public function test_filters_by_height_to(): void
+    {
+        Player::factory()->create(['height' => 170]);
+        Player::factory()->create(['height' => 190]);
+
+        $result = $this->search(['height_to' => 180]);
+
+        $this->assertCount(1, $result);
+        $this->assertSame(170, $result->first()->height);
+    }
+
+    public function test_filters_by_height_range(): void
+    {
+        Player::factory()->create(['height' => 170]);
+        Player::factory()->create(['height' => 180]);
+        Player::factory()->create(['height' => 190]);
+
+        $result = $this->search(['height_from' => 175, 'height_to' => 185]);
+
+        $this->assertCount(1, $result);
+        $this->assertSame(180, $result->first()->height);
+    }
+
+    public function test_no_height_filter_returns_all(): void
+    {
+        Player::factory()->count(3)->create();
+
+        $result = $this->search([]);
+        $this->assertCount(3, $result);
+    }
+
+    #endregion
+
+    #region strongFoots
+    public function test_filters_by_strong_foot(): void
+    {
+        Player::factory()->create(['strong_foot' => FootEnum::LEFT->value]);
+        Player::factory()->create(['strong_foot' => FootEnum::RIGHT->value]);
+
+        $result = $this->search(['strong_foots' => [FootEnum::LEFT->value]]);
+
+        $this->assertCount(1, $result);
+        $this->assertSame(FootEnum::LEFT->value, $result->first()->strong_foot);
+    }
+
+    public function test_filters_by_multiple_strong_foots(): void
+    {
+        Player::factory()->create(['strong_foot' => FootEnum::LEFT->value]);
+        Player::factory()->create(['strong_foot' => FootEnum::RIGHT->value]);
+        Player::factory()->create(['strong_foot' => FootEnum::BOTH->value]);
+
+        $result = $this->search(['strong_foots' => [FootEnum::LEFT->value, FootEnum::RIGHT->value]]);
+
+        $this->assertCount(2, $result);
+    }
+
+    public function test_no_strong_foots_filter_returns_all(): void
+    {
+        Player::factory()->count(3)->create();
+
+        $result = $this->search([]);
+        $this->assertCount(3, $result);
+    }
+
+    public function test_empty_strong_foots_filter_returns_all(): void
+    {
+        Player::factory()->count(3)->create();
+
+        $result = $this->search(['strong_foots' => []]);
         $this->assertCount(3, $result);
     }
 
