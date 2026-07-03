@@ -14,6 +14,12 @@ class GenerateTypescriptEnums extends Command
     {
         try {
             $enums = $this->argument('enum');
+            if(empty($enums)){
+                $files = scandir(app_path('Enums'));
+                $enums = array_map(static function($filename){
+                    return str_replace('.php', '', basename($filename));
+                }, $files);
+            }
 
             $dir = resource_path('js/enums');
             if(!is_dir($dir)){
