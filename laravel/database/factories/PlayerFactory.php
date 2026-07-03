@@ -19,6 +19,7 @@ class PlayerFactory extends Factory
             'firstname' => fake()->firstName(),
             'lastname' => fake()->lastName(),
             'year_of_birth' => "{$y1}/{$y2}",
+            'height' => fake()->numberBetween(160, 200),
             'strong_foot' => fake()->randomElement(FootEnum::cases())->value,
 
             'club_id' => Club::factory(),

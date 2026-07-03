@@ -48,6 +48,7 @@ export default function PlayerForm({ edit = false, backHref = null }: { edit?: b
         firstname: player?.firstname ?? '',
         lastname: player?.lastname ?? '',
         year_of_birth: String(player?.year_of_birth) ?? '',
+        height: String(player?.height ?? ''),
         strong_foot: player?.strong_foot ?? '',
         club_id: String(player?.club_id) ?? '',
         position_ids: playerPositions ?? [] as string[],
@@ -147,6 +148,16 @@ export default function PlayerForm({ edit = false, backHref = null }: { edit?: b
                                 emptyIndicator={<p className="text-center text-sm">Kein treffer</p>}
                             />
                             <InputError message={errors.strong_foot} />
+                        </Field>
+                        <Field>
+                            <FieldLabel htmlFor="height">Größe (cm)</FieldLabel>
+                            <Input id="height"
+                                   value={data.height}
+                                   onChange={e => setData('height', e.target.value)}
+                                   placeholder="Größe eintragen"
+                                   type="number"
+                            />
+                            <InputError message={errors.height} />
                         </Field>
                     </FieldGroup>
                     <Field className="w-fit flex-row">
