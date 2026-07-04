@@ -11,7 +11,7 @@ import type { Option } from '@/components/ui/multi-select';
 import {toPositionOptions, toClubOptions, getYearOptions, getFootOptions} from "@/hooks/form-options";
 import {usePreviousUrl} from "@/hooks/use-previous-url";
 import {Club, Player, Position} from "@/types/types";
-import api from "@/routes/api";
+import fetchPlayerSerchData from "@/hooks/fetchApiData";
 
 type Props = { positions: Position[]; clubs: Club[], returnData?: boolean, onResponse?: (players: Player[]) => void };
 export default function PlayerSearchForm({ positions, clubs, returnData, onResponse }: Props){
@@ -70,7 +70,7 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
     async function submit(e: React.FormEvent){
         e.preventDefault()
         if(returnData){
-            const players = await fetchData(data);
+            const players = await fetchPlayerSerchData(data);
             onResponse?.(players);
             return;
         }
@@ -83,7 +83,7 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
 
     useEffect(() => {
         if (!returnData) return;
-        fetchData(data).then(players => onResponse?.(players));
+        fetchPlayerSerchData(data).then(players => onResponse?.(players));
     }, []);
 
     return (
@@ -201,19 +201,4 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
             </form>
         </div>
     );
-}
-
-async function fetchData(data: Record<string, string | string[]>): Promise<Player[]> {
-    const params = new URLSearchParams();
-    Object.entries(data).forEach(([key, value]) => {
-        if (Array.isArray(value)) {
-            value.forEach(v => params.append(key, v));
-        } else {
-            params.append(key, value);
-        }
-    });
-
-    const url = api.player.search.url() + '?' + params.toString();
-    const res = await fetch(url);
-    return res.json();
 }

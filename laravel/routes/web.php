@@ -24,6 +24,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     Route::group(['prefix' => 'api',], function () {
+        Route::post('player', [PlayerController::class, 'storeApi'])->name('api.player.store');
         Route::get('player/search', [PlayerSearchController::class, 'search'])->name('api.player.search');
     });
 });

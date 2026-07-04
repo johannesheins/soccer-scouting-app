@@ -16,14 +16,27 @@ import {
 import { Input } from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import InputError from "@/components/input-error";
-import type { Club, PlayerSmall, Position } from "@/types/types";
+import type {Club, Player, PlayerSmall, Position} from "@/types/types";
 import {SingleSelector} from "@/components/ui/single-select";
 import MultipleSelector from "@/components/ui/multi-select";
+import player from "@/routes/player"; //used as playerRoute
+import api from "@/routes/api";
+import {fetchPlayerData} from "@/hooks/fetchApiData";
+
+const playerRoute = player
 
 type Props = { positions: Position[]; clubs: Club[]; player?: PlayerSmall };
 
 export default function PlayerForm({ edit = false, backHref = null }: { edit?: boolean, backHref?: string|null }) {
-    const { player, positions, clubs } = usePage<Props>().props;
+    return <Form edit={edit} backHref={backHref}/>;
+}
+
+export function PlayerFormDialog({onSelectPlayer}: { onSelectPlayer?: (player: Player) => void }){
+    return <Form dialog={true} onResponse={onSelectPlayer}/>
+}
+
+
+function Form({edit = false, dialog = false, backHref, onResponse}: { edit?: boolean, dialog?: boolean, backHref?: string|null, onResponse?: (players: Player) => void }) {const { player, positions, clubs } = usePage<Props>().props;
 
     const yearOfBirthOptions = getYearOptions();
     const footOptions = getFootOptions();
@@ -54,12 +67,17 @@ export default function PlayerForm({ edit = false, backHref = null }: { edit?: b
         position_ids: playerPositions ?? [] as string[],
     });
 
-    function submit(e: React.FormEvent){
+    async function submit(e: React.FormEvent){
         e.preventDefault()
         if(edit && player?.id){
             return put(`/player/${player.id}`);
         }
-        return post('/player');
+        if(dialog){
+            const player = await fetchPlayerData(data, api.player.store.url());
+            onResponse?.(player);
+            return;
+        }
+        return post(playerRoute.store.url());
     }
 
     return (

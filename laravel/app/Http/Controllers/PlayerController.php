@@ -45,12 +45,18 @@ class PlayerController extends Controller implements HasMiddleware
 
     public function store(PlayerRequest $request)
     {
+        self::storeApi($request);
+        return redirect()->route('player.index');
+    }
+
+    public function storeApi(PlayerRequest $request)
+    {
         $validated = $request->validated();
 
         $player = Player::create($validated);
         $player->positions()->attach($validated['position_ids']);
 
-        return redirect()->route('player.index');
+        return response()->json($player->load('positions', 'club'));
     }
 
     public function show(Player $player)

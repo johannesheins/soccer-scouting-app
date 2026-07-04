@@ -84,7 +84,7 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                         <FieldSet>
                             <FieldGroup>
                                 <Field>
-                                    <PlayerSearchDialog positions={positions} clubs={clubs} selectPlayer={true} onSelectPlayer={setSelectedPlayer}/>
+                                    <PlayerSearchDialog positions={positions} clubs={clubs} selectPlayer={true} onSelectedPlayer={setSelectedPlayer}/>
                                 </Field>
                             </FieldGroup>
                         </FieldSet>
