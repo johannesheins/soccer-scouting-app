@@ -4,7 +4,7 @@ import {Separator} from "@/components/ui/separator";
 import type {Player} from "@/types/types";
 import club from "@/routes/club";
 
-export function PlayerView({player, button}: { player: Player, button: any }) {
+export function PlayerView({player, button}: { player: Player, button?: any }) {
     return (
         <Card className="border-none shadow-none py-1 w-full">
             <CardHeader className="pb-2">
