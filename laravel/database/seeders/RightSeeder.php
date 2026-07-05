@@ -7,6 +7,8 @@ use App\Models\RightGroup;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
+use function Laravel\Prompts\error;
+
 class RightSeeder extends Seeder
 {
     /**
@@ -39,7 +41,7 @@ class RightSeeder extends Seeder
         foreach ($rightGroups as $groupName => $rights) {
             $group = RightGroup::updateOrCreate(['name' => $groupName]);
             foreach ($rights as $right) {
-                $group->rights()->updateOrCreate(['id' => $right['id']], $right);
+                $group->rights()->updateOrCreate($right);
             }
         }
     }
