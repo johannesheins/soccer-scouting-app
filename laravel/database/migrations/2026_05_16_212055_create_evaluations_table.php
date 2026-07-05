@@ -16,8 +16,8 @@ return new class extends Migration {
             $table->foreignIdFor(User::class)->nullable()->constrained()->nullOnDelete()->cascadeOnUpdate();
             $table->foreignIdFor(Club::class, 'home_team_id')->nullable()->constrained()->nullOnDelete()->cascadeOnUpdate();
             $table->foreignIdFor(Club::class, 'away_team_id')->nullable()->constrained()->nullOnDelete()->cascadeOnUpdate();
-            $table->text('comment');
             $table->dateTime('kickoff');
+            $table->text('comment')->nullable();
             $table->timestamps();
         });
     }

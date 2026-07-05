@@ -8,6 +8,7 @@ use App\Models\Evaluation;
 use App\Models\EvaluationCriteria;
 use App\Models\EvaluationCriteriaGroup;
 use App\Models\Position;
+use App\Models\Recommendation;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 
@@ -36,6 +37,7 @@ class EvaluationController extends Controller implements HasMiddleware
             'evaluationCriteriaGroups' => EvaluationCriteriaGroup::with('evaluationCriteria')->get(),
             'positions' => Position::with('positionGroup:id,name')->orderBy('id')->get(['id', 'position_code', 'position_group_id']),
             'clubs' => Club::orderBy('clubname')->get(['id', 'clubname']),
+            'recommendations' => Recommendation::all(),
         ]);
     }
 

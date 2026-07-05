@@ -1,5 +1,5 @@
 import type { Option } from '@/components/ui/multi-select';
-import type {Club, EvaluationCriteriaGroup, PlayerSmall, Position, UserGroup} from '@/types/types';
+import type {Club, EvaluationCriteriaGroup, PlayerSmall, Position, Recommendation, UserGroup} from '@/types/types';
 import {FootEnum} from "@/enums";
 
 export function toPositionOptions(positions: Position[]): Option[] {
@@ -29,6 +29,14 @@ export function toClubOptions(clubs: Club[]): Option[]{
         group: c.clubname.substring(0,1).toUpperCase()
     }))
 }
+
+export function toRecommendationOptions(recommendations: Recommendation[]): Option[]{
+    return recommendations.map(r => ({
+        value: String(r.id),
+        label: r.name,
+    }))
+}
+
 export function getYears(firstYear: number = 0, lastYear: null|number = null, limit: number = 0): string[]{
     const MAX = 9998;
     const currentYear = new Date().getFullYear()

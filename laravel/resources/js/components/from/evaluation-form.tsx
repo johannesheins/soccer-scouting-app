@@ -14,25 +14,27 @@ import {
     Evaluation,
     EvaluationCriteriaGroups,
     Player,
-    type Position
+    type Position, Recommendation
 } from "@/types/types";
 import evaluationRoute from "@/routes/evaluation";
 import ScoreBar from "../score-bar";
 import PlayerSearchDialog from "@/pages/player/player-search-dialog";
 import {Input} from "@/components/ui/input";
 import {SingleSelector} from "@/components/ui/single-select";
-import {toClubOptions} from "@/hooks/form-options";
+import {toClubOptions, toRecommendationOptions} from "@/hooks/form-options";
 import {DateTimePicker} from "@/components/ui/date-time-picker";
+import {Textarea} from "@/components/ui/textarea";
 
 type Props = {
     evaluation?: Evaluation,
     evaluationCriteriaGroups: EvaluationCriteriaGroups[],
     positions: Position[];
     clubs: Club[],
+    recommendations: Recommendation[],
 };
 
 export default function EvaluationForm({ edit = false, backHref = null }: { edit?: boolean, backHref?: string | null }){
-    const { evaluation, evaluationCriteriaGroups, positions, clubs } = usePage<Props>().props;
+    const { evaluation, evaluationCriteriaGroups, positions, clubs, recommendations } = usePage<Props>().props;
     const [selectedPlayer, setSelectedPlayer] = useState<Player>();
 
     const clubOptions = toClubOptions(clubs);
@@ -43,12 +45,21 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
         clubOptions.filter(o => o.value === String(evaluation?.away_team_id))
     );
 
+    const recommendationOptions = toRecommendationOptions(recommendations);
+    const [selectedRecommendation, setSelectedRecommendation] = useState(
+        recommendationOptions.filter(o => o.value === String(evaluation?.home_team_id))
+    );
+
     const { data, setData, transform, post, put, processing, errors } = useForm({
         player_id: evaluation?.player_id ?? '',
         home_team_id: evaluation?.home_team_id ?? '',
         away_team_id: evaluation?.away_team_id ?? '',
         kickoff_date: evaluation?.kickoff_date ?? '',
         kickoff_time: evaluation?.kickoff_time ?? '',
+        strengths: evaluation?.strengths ?? '',
+        weaknesses: evaluation?.weaknesses ?? '',
+        recommendation_id: evaluation?.recommendation_id ?? '',
+        comment: evaluation?.comment,
         criteriaScores: Object.fromEntries(
             (evaluation?.criteria_scores ?? []).map(s => [s.evaluation_criteria_id, s.score])
         ) as Record<number, number>,
@@ -82,6 +93,7 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                 <div className="flex flex-1 flex-col gap-4 p-4">
                     <div className="relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                         <FieldSet>
+                            <FieldLegend>Spieler</FieldLegend>
                             <FieldGroup>
                                 <Field>
                                     <PlayerSearchDialog positions={positions} clubs={clubs} selectPlayer={true} onSelectedPlayer={setSelectedPlayer}/>
@@ -92,7 +104,7 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
 
                     <div className="relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                         <FieldSet>
-                            <FieldGroup>
+                            <FieldLegend>Spieldaten</FieldLegend>
                             <FieldGroup className="grid grid-cols-2 gap-4">
                                 <Field>
                                     <FieldLabel htmlFor="home_team_id">Heimverein</FieldLabel>
@@ -138,15 +150,14 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                                     />
                                 </Field>
                             </FieldGroup>
-                            </FieldGroup>
                         </FieldSet>
                     </div>
 
                     <form onSubmit={submit} id="evaluation-from" className="flex flex-1 flex-col gap-4">
                         {evaluationCriteriaGroups.length <= 0 && <p className="p-5">Keine Bewertungskriterien gefunden</p>}
                         {evaluationCriteriaGroups.map(group => (
-                            <div className="grid gap-y-4 relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                                <FieldSet key={group.id}>
+                            <div key={group.id} className="grid gap-y-4 relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+                                <FieldSet>
                                     <FieldLegend>{group.name}</FieldLegend>
                                     <FieldGroup className="grid sm:grid-cols-2 gap-x-15">
                                         {group.evaluation_criteria.map(criteria => {
@@ -166,6 +177,61 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                                 </FieldSet>
                             </div>
                         ))}
+
+                        <div className="grid gap-y-4 relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+                            <FieldSet>
+                                <FieldLegend>Sonstiges</FieldLegend>
+                                <FieldGroup>
+                                    <Field>
+                                        <FieldLabel htmlFor="strengths">Stärken</FieldLabel>
+                                        <Textarea id="strengths"
+                                            onChange={e => setData('strengths', e.target.value)}
+                                            placeholder="Stärken eintragen"
+                                        >
+                                            {data.strengths}
+                                        </Textarea>
+                                        <InputError>{errors.strengths}</InputError>
+                                    </Field>
+                                    <Field>
+                                        <FieldLabel htmlFor="weaknesses">Schwächen</FieldLabel>
+                                        <Textarea id="weaknesses"
+                                            onChange={e => setData('weaknesses', e.target.value)}
+                                            placeholder="Schwächen eintragen"
+                                        >
+                                            {data.weaknesses}
+                                        </Textarea>
+                                        <InputError>{errors.weaknesses}</InputError>
+                                    </Field>
+                                    <Field>
+                                        <FieldLabel>Empfehlung</FieldLabel>
+                                        <SingleSelector
+                                            value={selectedRecommendation}
+                                            onChange={opts => {
+                                                setSelectedRecommendation(opts);
+                                                setData('recommendation_id', opts[0]?.value ?? '');
+                                            }}
+                                            defaultOptions={recommendationOptions}
+                                            groupBy="group"
+                                            placeholder="Empfehlung wählen"
+                                            hidePlaceholderWhenSelected
+                                            emptyIndicator={<p className="text-center text-sm">Keine Empfehlung gefunden</p>}
+                                        />
+                                        <InputError>{errors.recommendation_id}</InputError>
+                                    </Field>
+                                    <Field>
+                                        <FieldLabel htmlFor="comment">Bemerkung</FieldLabel>
+                                        <Textarea id="comment"
+                                            onChange={e => setData('comment', e.target.value)}
+                                            placeholder="Bemerkung eintragen"
+                                        >
+                                            {data.comment}
+                                        </Textarea>
+                                        <InputError>{errors.comment}</InputError>
+                                    </Field>
+                                </FieldGroup>
+                            </FieldSet>
+                        </div>
+
                         <Input type="hidden" name="player_id" value={selectedPlayer?.id ?? data.player_id} onChange={(val) => setData('player_id', String(val))}/>
                     </form>
 

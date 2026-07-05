@@ -36,6 +36,11 @@ class Evaluation extends Model
         return $this->hasMany(EvaluationCriteriaScore::class);
     }
 
+    public function recommendation(): BelongsTo
+    {
+        return $this->belongsTo(Recommendation::class);
+    }
+
     protected function casts(): array
     {
         return [

@@ -19,5 +19,7 @@ class MasterDataSeeder extends Seeder
         $this->call(PositionSeeder::class);
 
         $this->call(RightSeeder::class);
+
+        $this->call(RecommendationSeeder::class);
     }
 }

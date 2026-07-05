@@ -89,6 +89,11 @@ export type EvaluationCriteriaScore = {
     score: number;
 }
 
+export type Recommendation = {
+    id: number,
+    name: string,
+}
+
 export type Evaluation = {
     id: number,
     player_id: number,
@@ -96,5 +101,9 @@ export type Evaluation = {
     away_team_id: number,
     kickoff_date: string
     kickoff_time: string
+    strengths: string,
+    weaknesses: string,
+    recommendation_id: number,
+    comment: string,
     criteria_scores: EvaluationCriteriaScore[]
 }
