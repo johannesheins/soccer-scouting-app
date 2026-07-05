@@ -5,8 +5,8 @@ import { Input } from "@/components/ui/input"
 import InputError from "@/components/input-error"
 import {cn} from "@/lib/utils";
 
-type Props = { name: string; errorMessage?: string; label?: string }
-export function TimeInput({ name, errorMessage, label }: Props) {
+type Props = { name: string; errorMessage?: string; label?: string; onChange?: (value: string) => void }
+export function TimeInput({ name, errorMessage, label, onChange }: Props) {
     const hoursRef = React.useRef<HTMLInputElement>(null);
     const minutesRef = React.useRef<HTMLInputElement>(null);
 
@@ -15,6 +15,15 @@ export function TimeInput({ name, errorMessage, label }: Props) {
     const [hours, setHours] = React.useState('')
     const [minutes, setMinutes] = React.useState('')
     const pad = (v: string) => v.padStart(2, "0")
+
+    const isFirstRender = React.useRef(true)
+    React.useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false
+            return
+        }
+        onChange?.(`${pad(hours)}:${pad(minutes)}`)
+    }, [hours, minutes])
 
     return (
         <Field className="w-auto">
@@ -55,7 +64,7 @@ export function TimeInput({ name, errorMessage, label }: Props) {
                     ref={minutesRef}
                 />
             </div>
-            <Input type="hidden" name={name} value={`${pad(hours)}:${pad(minutes)}`} />
+            <Input type="hidden" name={name} value={`${pad(hours)}:${pad(minutes)}`} readOnly/>
             <InputError message={errorMessage}/>
         </Field>
     )

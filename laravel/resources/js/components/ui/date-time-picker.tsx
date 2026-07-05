@@ -18,8 +18,17 @@ import InputError from "@/components/input-error";
 import { TimeInput } from "@/components/ui/time-input"
 import {cn} from "@/lib/utils";
 
-type Props = { dateLabel?: string, dateName: string, dateErrorMessage?: string, timeLabel?: string, timeName: string, timeErrorMessage?: string }
-export function DateTimePicker({ dateLabel, dateName, dateErrorMessage, timeName, timeErrorMessage, timeLabel }: Props) {
+type Props = {
+    dateLabel?: string,
+    dateName: string,
+    dateErrorMessage?: string,
+    dateOnChange?: (value: string) => void,
+    timeLabel?: string,
+    timeName: string,
+    timeErrorMessage?: string,
+    timeOnChange?: (value: string) => void,
+}
+export function DateTimePicker({ dateLabel, dateName, dateErrorMessage, dateOnChange, timeName, timeErrorMessage, timeLabel, timeOnChange }: Props) {
     const [open, setOpen] = React.useState(false)
     const [date, setDate] = React.useState<Date | undefined>(undefined)
     const isPlaceholder = !date
@@ -49,15 +58,16 @@ export function DateTimePicker({ dateLabel, dateName, dateErrorMessage, timeName
                             onSelect={(date) => {
                                 setDate(date)
                                 setOpen(false)
+                                dateOnChange?.(date ? format(date, "yyyy-MM-dd") : '')
                             }}
                             timeZone="Europe/Berlin"
                         />
                     </PopoverContent>
                 </Popover>
-                <Input type="hidden" name={dateName} value={String(date)}/>
+                <Input type="hidden" name={dateName} value={date ? format(date, "yyyy-MM-dd") : ''} readOnly/>
                 <InputError message={dateErrorMessage}/>
             </Field>
-            <TimeInput name={timeName} errorMessage={timeErrorMessage} label={timeLabel} />
+            <TimeInput name={timeName} errorMessage={timeErrorMessage} label={timeLabel} onChange={timeOnChange}/>
         </FieldGroup>
     )
 }
