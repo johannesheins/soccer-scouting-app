@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EvaluationRequest;
 use App\Models\Club;
 use App\Models\Evaluation;
-use App\Models\EvaluationCriteria;
 use App\Models\EvaluationCriteriaGroup;
+use App\Models\EvaluationCriteriaScore;
 use App\Models\Position;
 use App\Models\Recommendation;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -43,9 +43,16 @@ class EvaluationController extends Controller implements HasMiddleware
 
     public function store(EvaluationRequest $request)
     {
-        Evaluation::create(
-            $request->validated() + ['created_by' => auth()->id()],
+        $data = $request->validated();
+        $evaluation = Evaluation::create(
+            $data + ['created_by' => auth()->id()],
         );
+
+        foreach ($data['criteriaScores'] as $criteriaScore) {
+            EvaluationCriteriaScore::create(
+                $criteriaScore + ['evaluation_id' => $evaluation->id]
+            );
+        }
 
         return redirect()->route('evaluation.index');
     }
