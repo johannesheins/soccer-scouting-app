@@ -11,14 +11,18 @@ class EvaluationRequest extends FormRequest
     public function rules(): array
     {
         return [
-//            'player_id' => ['required', 'exists:players'],
-//            'hometeam' => ['required', 'exists:teams,id'],
-//            'awayteam' => ['required', 'exists:teams,id'],
-//            'comment' => ['required', 'string', 'max:65535'],
-//            'kickoff' => ['required', 'date'],
+            'player_id' => ['required', 'exists:players,id'],
+            'home_team_id' => ['required', 'exists:clubs,id'],
+            'away_team_id' => ['required', 'exists:clubs,id'],
+            'kickoff_date' => ['required', 'date'],
+            'kickoff_time' => ['required', 'date_format:H:i'],
+            'strengths' => ['nullable', 'string', 'max:255'],
+            'weaknesses' => ['nullable', 'string', 'max:255'],
+            'recommendation_id' => ['nullable', 'exists:recommendations,id'],
+            'comment' => ['nullable', 'string', 'max:65535'],
             'criteriaScores' => ['required', 'array'],
             'criteriaScores.*.evaluation_criteria_id' => ['required', 'exists:evaluation_criteria,id'],
-            'criteriaScores.*.score' => ['required', 'min:0', 'max:10'],
+            'criteriaScores.*.score' => ['required', 'numeric', 'min:0', 'max:10'],
         ];
     }
 

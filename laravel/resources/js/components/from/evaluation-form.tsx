@@ -1,5 +1,5 @@
 import {Head, router, useForm, usePage} from '@inertiajs/react';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Field, FieldDescription,
     FieldGroup,
@@ -36,6 +36,9 @@ type Props = {
 export default function EvaluationForm({ edit = false, backHref = null }: { edit?: boolean, backHref?: string | null }){
     const { evaluation, evaluationCriteriaGroups, positions, clubs, recommendations } = usePage<Props>().props;
     const [selectedPlayer, setSelectedPlayer] = useState<Player>();
+    useEffect(() => {
+        setData('player_id', String(selectedPlayer?.id));
+    }, [selectedPlayer]);
 
     const clubOptions = toClubOptions(clubs);
     const [selectedHomeTeam, setSelectedHomeTeam] = useState(
@@ -69,12 +72,12 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
 
     transform(d => ({
         ...d,
-        criteriaScores: evaluationCriteriaGroups.flatMap(group => {
+        criteriaScores: evaluationCriteriaGroups.flatMap(group =>
             group.evaluation_criteria.map(criteria => ({
                 evaluation_criteria_id: criteria.id,
                 score: d.criteriaScores[criteria.id] ?? 0,
             }))
-        }),
+        ),
     }));
 
     function submit(e: React.FormEvent) {
@@ -97,6 +100,7 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                             <FieldGroup>
                                 <Field>
                                     <PlayerSearchDialog positions={positions} clubs={clubs} selectPlayer={true} onSelectedPlayer={setSelectedPlayer}/>
+                                    <InputError message={errors.player_id} />
                                 </Field>
                             </FieldGroup>
                         </FieldSet>
@@ -143,10 +147,12 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                                         dateLabel="Datum"
                                         dateName="kickoff_date"
                                         dateErrorMessage={errors.kickoff_date}
+                                        dateOnChange={(val) => setData('kickoff_date', val)}
 
                                         timeLabel="Zeit"
                                         timeName="kickoff_time"
                                         timeErrorMessage={errors.kickoff_time}
+                                        timeOnChange={(val) => setData('kickoff_time', val)}
                                     />
                                 </Field>
                             </FieldGroup>
@@ -190,7 +196,7 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                                         >
                                             {data.strengths}
                                         </Textarea>
-                                        <InputError>{errors.strengths}</InputError>
+                                        <InputError message={errors.strengths} />
                                     </Field>
                                     <Field>
                                         <FieldLabel htmlFor="weaknesses">Schwächen</FieldLabel>
@@ -200,7 +206,7 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                                         >
                                             {data.weaknesses}
                                         </Textarea>
-                                        <InputError>{errors.weaknesses}</InputError>
+                                        <InputError message={errors.weaknesses}/>
                                     </Field>
                                     <Field>
                                         <FieldLabel>Empfehlung</FieldLabel>
@@ -216,7 +222,7 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                                             hidePlaceholderWhenSelected
                                             emptyIndicator={<p className="text-center text-sm">Keine Empfehlung gefunden</p>}
                                         />
-                                        <InputError>{errors.recommendation_id}</InputError>
+                                        <InputError message={errors.recommendation_id}/>
                                     </Field>
                                     <Field>
                                         <FieldLabel htmlFor="comment">Bemerkung</FieldLabel>
@@ -226,7 +232,7 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                                         >
                                             {data.comment}
                                         </Textarea>
-                                        <InputError>{errors.comment}</InputError>
+                                        <InputError message={errors.comment}/>
                                     </Field>
                                 </FieldGroup>
                             </FieldSet>
