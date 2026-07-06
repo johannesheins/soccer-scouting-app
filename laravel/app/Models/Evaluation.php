@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable('player_id', 'user_id', 'home_team_id', 'away_team_id', 'kickoff', 'kickoff_date', 'kickoff_time', 'strengths', 'weaknesses', 'recommendation_id', 'comment')]
+#[Fillable('player_id', 'created_by', 'home_team_id', 'away_team_id', 'kickoff', 'kickoff_date', 'kickoff_time', 'strengths', 'weaknesses', 'recommendation_id', 'comment')]
 class Evaluation extends Model
 {
     use HasFactory;
@@ -18,9 +18,9 @@ class Evaluation extends Model
         return $this->belongsTo(Player::class);
     }
 
-    public function user(): BelongsTo
+    public function creator(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     public function homeTeam(): BelongsTo

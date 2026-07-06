@@ -43,9 +43,9 @@ class EvaluationController extends Controller implements HasMiddleware
 
     public function store(EvaluationRequest $request)
     {
-
-        $data = $request->validated();
-        Evaluation::create($request->validated());
+        Evaluation::create(
+            $request->validated() + ['created_by' => auth()->id()],
+        );
 
         return redirect()->route('evaluation.index');
     }
