@@ -12,7 +12,7 @@ class PositionFactory extends Factory
     public function definition(): array
     {
         return [
-            'position_code' => $this->faker->unique()->word(),
+            'position_code' => strtoupper($this->faker->unique()->lexify('???')),
         ];
     }
 }

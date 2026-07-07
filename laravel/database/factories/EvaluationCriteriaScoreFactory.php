@@ -15,7 +15,7 @@ class EvaluationCriteriaScoreFactory extends Factory
     public function definition(): array
     {
         return [
-            'score' => $this->faker->randomNumber(),
+            'score' => $this->faker->numberBetween(0, 10),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
 
