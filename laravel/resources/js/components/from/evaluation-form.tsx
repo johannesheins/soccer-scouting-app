@@ -193,9 +193,8 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                                         <Textarea id="strengths"
                                             onChange={e => setData('strengths', e.target.value)}
                                             placeholder="Stärken eintragen"
-                                        >
-                                            {data.strengths}
-                                        </Textarea>
+                                            value={data.strengths}
+                                        />
                                         <InputError message={errors.strengths} />
                                     </Field>
                                     <Field>
@@ -203,9 +202,8 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                                         <Textarea id="weaknesses"
                                             onChange={e => setData('weaknesses', e.target.value)}
                                             placeholder="Schwächen eintragen"
-                                        >
-                                            {data.weaknesses}
-                                        </Textarea>
+                                            value={data.weaknesses}
+                                        />
                                         <InputError message={errors.weaknesses}/>
                                     </Field>
                                     <Field>
@@ -229,9 +227,8 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                                         <Textarea id="comment"
                                             onChange={e => setData('comment', e.target.value)}
                                             placeholder="Bemerkung eintragen"
-                                        >
-                                            {data.comment}
-                                        </Textarea>
+                                            value={data.comment}
+                                        />
                                         <InputError message={errors.comment}/>
                                     </Field>
                                 </FieldGroup>
