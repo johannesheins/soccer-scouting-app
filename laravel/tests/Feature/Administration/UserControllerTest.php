@@ -79,7 +79,8 @@ class UserControllerTest extends AdministrationTestCase
 
     public function test_store_invalid_request()
     {
-        UserGroup::factory(4)->create();
+        $userGroups = UserGroup::factory(4)->create();
+        $nonExistentUserGroupId = $userGroups->max('id') + 1;
 
         $response = $this->actingAs($this->administratorUser)
             ->post(route('administration.user.store'), [
@@ -88,7 +89,7 @@ class UserControllerTest extends AdministrationTestCase
                 'email' => 'hfsdlkfsö',
                 'password' => 'password',
                 'password_confirmation' => 'password123',
-                'user_groups' => [10, 11, 12],
+                'user_groups' => [$nonExistentUserGroupId],
             ]);
 
         $response->assertInvalid(['password', 'email', 'user_groups.0']);

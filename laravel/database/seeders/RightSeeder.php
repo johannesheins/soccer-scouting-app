@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use App\Enums\RightEnum;
+use App\Models\Right;
 use App\Models\RightGroup;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 use function Laravel\Prompts\error;
@@ -38,18 +38,20 @@ class RightSeeder extends Seeder
             ]
         ];
 
-        foreach ($rightGroups as $groupName => $rights) {
-            $group = RightGroup::updateOrCreate(['name' => $groupName]);
-            foreach ($rights as $right) {
-                $group->rights()->updateOrCreate($right);
+        Right::unguarded(function () use ($rightGroups) {
+            foreach ($rightGroups as $groupName => $rights) {
+                $group = RightGroup::updateOrCreate(['name' => $groupName]);
+                foreach ($rights as $right) {
+                    $group->rights()->updateOrCreate(['id' => $right['id']], $right);
+                }
             }
-        }
+        });
     }
 
     private function createRight(RightEnum $id, string $name, string $description): array
     {
         return [
-            'id' => $id,
+            'id' => $id->value,
             'name' => $name,
             'description' => $description,
         ];
