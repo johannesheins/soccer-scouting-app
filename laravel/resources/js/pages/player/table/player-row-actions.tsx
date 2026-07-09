@@ -34,7 +34,13 @@ export function PlayerRowActions({player}: { player: Player }) {
     const canEdit = useHasRight(RightEnum.PlayerEdit);
     const canDelete = useHasRight(RightEnum.PlayerDestroy);
 
-    if (!canView && !canEdit && !canDelete) return null;
+    const canCreateEvaluation = useHasRight(RightEnum.EvaluationCreate);
+    const canViewEvaluation = useHasRight(RightEnum.EvaluationView);
+
+    if (!canView && !canEdit && !canDelete && !canCreateEvaluation && !canViewEvaluation) return null;
+
+    const showEvaluationSeparator = canView && (canCreateEvaluation || canViewEvaluation);
+    const showEditDeleteSeparator = (canView || canCreateEvaluation || canViewEvaluation) && (canEdit || canDelete);
 
     return (
         <>
@@ -51,7 +57,22 @@ export function PlayerRowActions({player}: { player: Player }) {
                             Spieler ansehen
                         </DropdownMenuItem>
                     )}
-                    {canView && (canEdit || canDelete) && <DropdownMenuSeparator/>}
+
+                    {showEvaluationSeparator && <DropdownMenuSeparator/>}
+
+                    {canCreateEvaluation && ( //TODO Implement evaluation creation from player
+                        <DropdownMenuItem onClick={() => alert('Feature needs to be implemented.')}>
+                            Spielerbewertung erstellen
+                        </DropdownMenuItem>
+                    )}
+                    {canViewEvaluation && ( //TODO Implement evaluation search with pre-loaded player id
+                        <DropdownMenuItem onClick={() => alert('Feature needs to be implemented.')}>
+                            Spielerbewertungen anzeigen
+                        </DropdownMenuItem>
+                    )}
+
+                    {showEditDeleteSeparator && <DropdownMenuSeparator/>}
+
                     {canEdit && (
                         <DropdownMenuItem onClick={() => router.visit(playerRoute.edit.url(player.id))}>
                             Spieler bearbeiten
