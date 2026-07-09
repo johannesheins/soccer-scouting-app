@@ -238,14 +238,14 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                         <Input type="hidden" name="player_id" value={selectedPlayer?.id ?? data.player_id} onChange={(val) => setData('player_id', String(val))}/>
                     </form>
 
-                    <div>
+                    <Field className="w-fit flex-row">
                         <Button type="submit" form="evaluation-from" disabled={processing}>{edit ? 'Aktualisieren' : 'Erstellen'}</Button>
                         {edit && backHref && (
                             <Button variant="secondary" type="button" onClick={() => router.get(backHref)}>
                                 Zurück
                             </Button>
                         )}
-                    </div>
+                    </Field>
                 </div>
             </div>
         </>
