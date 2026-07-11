@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\EvaluationRequest;
+use App\Http\Requests\Evaluation\EvaluationStoreRequest;
 use App\Models\Club;
 use App\Models\Evaluation;
 use App\Models\EvaluationCriteriaGroup;
@@ -41,7 +41,7 @@ class EvaluationController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function store(EvaluationRequest $request)
+    public function store(EvaluationStoreRequest $request)
     {
         $data = $request->validated();
         $evaluation = Evaluation::create(
@@ -67,7 +67,7 @@ class EvaluationController extends Controller implements HasMiddleware
 
     }
 
-    public function update(EvaluationRequest $request, Evaluation $evaluation)
+    public function update(EvaluationStoreRequest $request, Evaluation $evaluation)
     {
 
     }

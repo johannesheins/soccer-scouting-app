@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Evaluation;
 
 use App\Concerns\TeamValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 
-class EvaluationRequest extends FormRequest
+class EvaluationStoreRequest extends FormRequest
 {
     use TeamValidationRules;
     public function rules(): array
