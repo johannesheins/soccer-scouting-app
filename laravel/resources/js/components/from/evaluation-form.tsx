@@ -31,10 +31,11 @@ type Props = {
     positions: Position[];
     clubs: Club[],
     recommendations: Recommendation[],
+    player: Player,
 };
 
 export default function EvaluationForm({ edit = false, backHref = null }: { edit?: boolean, backHref?: string | null }){
-    const { evaluation, evaluationCriteriaGroups, positions, clubs, recommendations } = usePage<Props>().props;
+    const { evaluation, evaluationCriteriaGroups, positions, clubs, recommendations, player } = usePage<Props>().props;
     const [selectedPlayer, setSelectedPlayer] = useState<Player>();
     useEffect(() => {
         setData('player_id', String(selectedPlayer?.id));
@@ -54,7 +55,7 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
     );
 
     const { data, setData, transform, post, put, processing, errors } = useForm({
-        player_id: evaluation?.player_id ?? '',
+        player_id: String(player?.id) ?? evaluation?.player_id ?? '',
         home_team_id: evaluation?.home_team_id ?? '',
         away_team_id: evaluation?.away_team_id ?? '',
         kickoff_date: evaluation?.kickoff_date ?? '',
@@ -99,7 +100,7 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                             <FieldLegend>Spieler</FieldLegend>
                             <FieldGroup>
                                 <Field>
-                                    <PlayerSearchDialog positions={positions} clubs={clubs} selectPlayer={true} onSelectedPlayer={setSelectedPlayer}/>
+                                    <PlayerSearchDialog positions={positions} clubs={clubs} selectPlayer={true} value={player} onSelectedPlayer={setSelectedPlayer}/>
                                     <InputError message={errors.player_id} />
                                 </Field>
                             </FieldGroup>
@@ -235,7 +236,7 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                             </FieldSet>
                         </div>
 
-                        <Input type="hidden" name="player_id" value={selectedPlayer?.id ?? data.player_id} onChange={(val) => setData('player_id', String(val))}/>
+                        <Input type="hidden" name="player_id" value={player?.id ?? selectedPlayer?.id ?? data.player_id ?? ''} onChange={(val) => setData('player_id', String(val))}/>
                     </form>
 
                     <Field className="w-fit flex-row">

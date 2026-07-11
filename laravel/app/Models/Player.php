@@ -24,4 +24,9 @@ class Player extends Model
     {
         return $this->belongsToMany(Position::class, 'player_positions');
     }
+
+    public function loadForPlayerView(): Player
+    {
+        return $this->load('positions', 'club');
+    }
 }

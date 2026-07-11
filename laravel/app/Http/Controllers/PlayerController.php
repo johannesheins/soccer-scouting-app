@@ -62,7 +62,7 @@ class PlayerController extends Controller implements HasMiddleware
     public function show(Player $player)
     {
         return new Modal('player/player-show', [
-            'player' => $player->load('positions', 'club'),
+            'player' => $player->loadForPlayerView(),
         ])->baseRoute('player.index');
     }
 

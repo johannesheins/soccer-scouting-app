@@ -13,9 +13,10 @@ type Props = {
     positions: Position[];
     clubs: Club[],
     selectPlayer?: boolean,
+    value?: Player,
     onSelectedPlayer?: (player: Player) => void,
 };
-export default function PlayerSearchDialog({positions, clubs, selectPlayer, onSelectedPlayer}: Props) {
+export default function PlayerSearchDialog({positions, clubs, selectPlayer, value, onSelectedPlayer}: Props) {
     const [open, setOpen] = useState(false);
     const [players, setPlayers] = useState<Player[]>([]);
     const [selectedPlayer, setSelectedPlayer] = useState<Player>();
@@ -37,10 +38,14 @@ export default function PlayerSearchDialog({positions, clubs, selectPlayer, onSe
         </div>
     )
 
+    if(selectedPlayer){
+        value = selectedPlayer
+    }
+
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            {!selectedPlayer && dialogTrigger}
-            {selectedPlayer && <PlayerView player={selectedPlayer} button={dialogTrigger}/>}
+            {!value && dialogTrigger}
+            {value && <PlayerView player={value} button={dialogTrigger}/>}
 
             <DialogContent variant="large">
                 <DialogTitle>Spielersuche</DialogTitle>

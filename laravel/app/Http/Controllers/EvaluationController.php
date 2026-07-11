@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Evaluation\EvaluationCreateRequest;
 use App\Http\Requests\Evaluation\EvaluationStoreRequest;
 use App\Models\Club;
 use App\Models\Evaluation;
 use App\Models\EvaluationCriteriaGroup;
 use App\Models\EvaluationCriteriaScore;
+use App\Models\Player;
 use App\Models\Position;
 use App\Models\Recommendation;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -31,13 +33,19 @@ class EvaluationController extends Controller implements HasMiddleware
         return inertia('evaluation/evaluation-index');
     }
 
-    public function create()
+    public function create(EvaluationCreateRequest $request)
     {
+        $playerId = $request->input('player_id');
+        if($playerId !== null){
+            $player = Player::find($playerId)->loadForPlayerView();
+        }
+
         return inertia('evaluation/evaluation-create', [
             'evaluationCriteriaGroups' => EvaluationCriteriaGroup::with('evaluationCriteria')->get(),
             'positions' => Position::with('positionGroup:id,name')->orderBy('id')->get(['id', 'position_code', 'position_group_id']),
             'clubs' => Club::orderBy('clubname')->get(['id', 'clubname']),
             'recommendations' => Recommendation::all(),
+            'player' => $player ?? null,
         ]);
     }
 
