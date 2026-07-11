@@ -2,24 +2,15 @@
 
 namespace App\Http\Requests\Player;
 
-use App\Enums\FootEnum;
+use App\Concerns\PlayerValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PlayerRequest extends FormRequest
 {
+    use PlayerValidationRules;
     public function rules(): array
     {
-        $footCases = implode(',', array_column(FootEnum::cases(), 'value'));
-        return [
-            'firstname' => 'required|string|max:255',
-            'lastname' => 'required|string|max:255',
-            'year_of_birth' => 'required|string|regex:/^\d{4}\/\d{4}$/',
-            'height' => 'required|integer',
-            'strong_foot' => "required|string|in:$footCases",
-            'club_id' => 'required|exists:clubs,id',
-            'position_ids' => 'required|array',
-            'position_ids.*' => 'integer|exists:positions,id',
-        ];
+        return $this->playerRules();
     }
 
     public function authorize(): bool

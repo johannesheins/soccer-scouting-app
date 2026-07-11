@@ -2,16 +2,18 @@
 
 namespace App\Http\Requests\Evaluation;
 
+use App\Concerns\PlayerValidationRules;
 use App\Concerns\TeamValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 
 class EvaluationStoreRequest extends FormRequest
 {
     use TeamValidationRules;
+    use PlayerValidationRules;
     public function rules(): array
     {
         return [
-            'player_id' => ['required', 'exists:players,id'],
+            'player_id' => $this->playerId(),
             'home_team_id' => ['required', 'exists:clubs,id'],
             'away_team_id' => ['required', 'exists:clubs,id'],
             'kickoff_date' => ['required', 'date'],
