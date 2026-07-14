@@ -24,7 +24,7 @@ import type {Player} from "@/types/types";
 import {Dialog, DialogContent} from "@/components/ui/dialog";
 import {PlayerView} from "../player-view";
 import {useHasRight} from "@/hooks/use-has-right";
-import {RightEnum} from "@/enums";
+import {PlayerRequestNameEnum as Name, RightEnum} from "@/enums";
 import evaluation from "@/routes/evaluation";
 
 const playerRoute = player;
@@ -62,7 +62,7 @@ export function PlayerRowActions({player}: { player: Player }) {
                     {showEvaluationSeparator && <DropdownMenuSeparator/>}
 
                     {canCreateEvaluation && (
-                        <DropdownMenuItem onClick={() => router.visit(evaluation.create.url({query: {player_id: player.id}}))}>
+                        <DropdownMenuItem onClick={() => router.visit(evaluation.create.url({query: {[Name.playerId]: player.id}}))}>
                             Spielerbewertung erstellen
                         </DropdownMenuItem>
                     )}

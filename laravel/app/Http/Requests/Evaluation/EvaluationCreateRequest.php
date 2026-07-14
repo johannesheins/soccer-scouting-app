@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Evaluation;
 
 use App\Concerns\PlayerValidationRules;
+use App\Enums\Request\PlayerRequestNameEnum as Name;
 use Illuminate\Foundation\Http\FormRequest;
 
 class EvaluationCreateRequest extends FormRequest
@@ -11,7 +12,7 @@ class EvaluationCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'player_id' => $this->playerId(false)
+            reqN(Name::playerId) => $this->playerId(false)
         ];
     }
 

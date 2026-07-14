@@ -3,22 +3,21 @@
 namespace App\Concerns;
 
 use App\Enums\FootEnum;
-use App\Enums\Request\PlayerRequestNameEnum as NameEnum;
+use App\Enums\Request\PlayerRequestNameEnum as Name;
 
 trait PlayerValidationRules
 {
     protected function playerRules(): array
     {
-        //TODO Replace 'player_id' with Enum call
         return [
-            reqN(NameEnum::firstname) => $this->firstnameRules(),
-            reqN(NameEnum::lastname) => $this->lastnameRules(),
-            reqN(NameEnum::yearOfBirth) => $this->yearOfBirthRules(),
-            reqN(NameEnum::height) => $this->heightRules(),
-            reqN(NameEnum::strongFoot) => $this->strongFootRules(),
-            reqN(NameEnum::clubId) => $this->clubIdRules(),
-            reqN(NameEnum::positionIds) => $this->positionIdRules(),
-            reqN(NameEnum::positionIds, '.*') => $this->positionIdsRules()
+            reqN(Name::firstname) => $this->firstnameRules(),
+            reqN(Name::lastname) => $this->lastnameRules(),
+            reqN(Name::yearOfBirth) => $this->yearOfBirthRules(),
+            reqN(Name::height) => $this->heightRules(),
+            reqN(Name::strongFoot) => $this->strongFootRules(),
+            reqN(Name::clubId) => $this->clubIdRules(),
+            reqN(Name::positionIds) => $this->positionIdRules(),
+            reqN(Name::positionIds, '.*') => $this->positionIdsRules()
         ];
     }
 

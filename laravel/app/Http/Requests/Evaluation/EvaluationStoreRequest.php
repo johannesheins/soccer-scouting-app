@@ -4,6 +4,7 @@ namespace App\Http\Requests\Evaluation;
 
 use App\Concerns\PlayerValidationRules;
 use App\Concerns\TeamValidationRules;
+use App\Enums\Request\PlayerRequestNameEnum as Name;
 use Illuminate\Foundation\Http\FormRequest;
 
 class EvaluationStoreRequest extends FormRequest
@@ -13,7 +14,7 @@ class EvaluationStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'player_id' => $this->playerId(),
+            reqN(Name::playerId) => $this->playerId(),
             'home_team_id' => ['required', 'exists:clubs,id'],
             'away_team_id' => ['required', 'exists:clubs,id'],
             'kickoff_date' => ['required', 'date'],

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Request\PlayerRequestNameEnum as Name;
 use App\Http\Requests\Evaluation\EvaluationCreateRequest;
 use App\Http\Requests\Evaluation\EvaluationStoreRequest;
 use App\Models\Club;
@@ -35,7 +36,7 @@ class EvaluationController extends Controller implements HasMiddleware
 
     public function create(EvaluationCreateRequest $request)
     {
-        $playerId = $request->input('player_id');
+        $playerId = $request->input(reqN(Name::playerId));
         if($playerId !== null){
             $player = Player::find($playerId)->loadForPlayerView();
         }
