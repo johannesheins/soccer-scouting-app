@@ -33,7 +33,7 @@ trait PlayerValidationRules
 
     protected function yearOfBirthRules(): array
     {
-        return ['required', 'string', 'regex:/^\d{4}\/\d{4}$/'];
+        return ['required', 'integer', 'digits:4'];
     }
 
     protected function heightRules(): array

@@ -111,7 +111,7 @@ class PlayerControllerTest extends TestCase
             ->post(route('player.store'), [
                 'firstname' => 'John',
                 'lastname' => 'Doe',
-                'year_of_birth' => '1999/2000',
+                'year_of_birth' => 1999,
                 'height' => 180,
                 'strong_foot' => FootEnum::LEFT->value,
                 'club_id' => $clubs->id,
@@ -122,7 +122,7 @@ class PlayerControllerTest extends TestCase
         $this->assertDatabaseHas('players', [
             'firstname' => 'John',
             'lastname' => 'Doe',
-            'year_of_birth' => '1999/2000',
+            'year_of_birth' => 1999,
             'height' => 180,
             'strong_foot' => FootEnum::LEFT->value,
         ]);
@@ -140,7 +140,7 @@ class PlayerControllerTest extends TestCase
         $response = $this->post(route('player.store'), [
             'firstname' => 'John',
             'lastname' => 'Doe',
-            'year_of_birth' => '1999/2000',
+            'year_of_birth' => 1999,
             'height' => 180,
             'strong_foot' => FootEnum::LEFT->value,
             'club_id' => $club->id,
@@ -166,7 +166,7 @@ class PlayerControllerTest extends TestCase
             ->post(route('player.store'), [
                 'firstname' => 'John',
                 'lastname' => 'Doe',
-                'year_of_birth' => '1999/2000',
+                'year_of_birth' => 1999,
                 'height' => 180,
                 'strong_foot' => FootEnum::LEFT->value,
                 'club_id' => 999,
@@ -184,7 +184,7 @@ class PlayerControllerTest extends TestCase
             ->post(route('player.store'), [
                 'firstname' => 'John',
                 'lastname' => 'Doe',
-                'year_of_birth' => '1999/2000',
+                'year_of_birth' => 1999,
                 'height' => 180,
                 'strong_foot' => FootEnum::LEFT->value,
                 'club_id' => $club->id,
@@ -194,7 +194,7 @@ class PlayerControllerTest extends TestCase
         $response->assertInvalid(['position_ids.0']);
     }
 
-    public function test_store_validates_year_of_birth_has_right_format(): void
+    public function test_store_validates_year_of_birth_is_integer(): void
     {
         $club = Club::factory()->create();
         $position = Position::factory()->create();
@@ -203,14 +203,12 @@ class PlayerControllerTest extends TestCase
             ->post(route('player.store'), [
                 'firstname' => 'John',
                 'lastname' => 'Doe',
-                'year_of_birth' => '0000/0000',
-                'height' => 180,
-                'strong_foot' => FootEnum::LEFT->value,
+                'year_of_birth' => 'not-an-integer',
                 'club_id' => $club->id,
                 'position_ids' => [$position->id],
             ]);
 
-        $response->assertValid(['year_of_birth']);
+        $response->assertInvalid(['year_of_birth']);
     }
 
     public function test_store_validates_year_of_birth_not_has_right_format(): void
@@ -222,7 +220,7 @@ class PlayerControllerTest extends TestCase
             ->post(route('player.store'), [
                 'firstname' => 'John',
                 'lastname' => 'Doe',
-                'year_of_birth' => 'not-in-0000/0000',
+                'year_of_birth' => 'not-an-integer',
                 'height' => 180,
                 'strong_foot' => FootEnum::LEFT->value,
                 'club_id' => $club->id,
@@ -241,7 +239,7 @@ class PlayerControllerTest extends TestCase
             ->post(route('player.store'), [
                 'firstname' => str_repeat('a', 256),
                 'lastname' => 'Doe',
-                'year_of_birth' => '1999/2000',
+                'year_of_birth' => 1999,
                 'height' => 180,
                 'strong_foot' => FootEnum::LEFT->value,
                 'club_id' => $club->id,
@@ -260,7 +258,7 @@ class PlayerControllerTest extends TestCase
             ->post(route('player.store'), [
                 'firstname' => 'John',
                 'lastname' => str_repeat('a', 256),
-                'year_of_birth' => '1999/2000',
+                'year_of_birth' => 1999,
                 'height' => 180,
                 'strong_foot' => FootEnum::LEFT->value,
                 'club_id' => $club->id,
@@ -279,7 +277,7 @@ class PlayerControllerTest extends TestCase
             ->post(route('player.store'), [
                 'firstname' => 'John',
                 'lastname' => 'Doe',
-                'year_of_birth' => '1999/2000',
+                'year_of_birth' => 1999,
                 'height' => 180,
                 'strong_foot' => 'not-a-foot',
                 'club_id' => $club->id,
@@ -298,7 +296,7 @@ class PlayerControllerTest extends TestCase
             ->post(route('player.store'), [
                 'firstname' => 'John',
                 'lastname' => 'Doe',
-                'year_of_birth' => '1999/2000',
+                'year_of_birth' => 1999,
                 'height' => 'not-a-number',
                 'strong_foot' => FootEnum::LEFT->value,
                 'club_id' => $club->id,
@@ -325,7 +323,7 @@ class PlayerControllerTest extends TestCase
         $player = Player::factory()->create([
             'firstname' => 'John',
             'lastname' => 'Doe',
-            'year_of_birth' => '1999/2000',
+            'year_of_birth' => 1999,
             'height' => 180,
             'strong_foot' => FootEnum::LEFT->value,
             'club_id' => $club->id,
@@ -363,7 +361,7 @@ class PlayerControllerTest extends TestCase
         $player = Player::factory()->create([
             'firstname' => 'John',
             'lastname' => 'Doe',
-            'year_of_birth' => '1999/2000',
+            'year_of_birth' => 1999,
             'height' => 180,
             'strong_foot' => FootEnum::LEFT->value,
             'club_id' => $clubs->id,
@@ -379,7 +377,7 @@ class PlayerControllerTest extends TestCase
             ->where('player.id', $player->id)
             ->where('player.firstname', 'John')
             ->where('player.lastname', 'Doe')
-            ->where('player.year_of_birth', '1999/2000')
+            ->where('player.year_of_birth', 1999)
             ->where('player.height', 180)
             ->where('player.strong_foot', FootEnum::LEFT->value)
             ->where('player.club_id', $clubs->id)
@@ -466,7 +464,7 @@ class PlayerControllerTest extends TestCase
             ->put(route('player.update', $player), [
                 'firstname' => 'John',
                 'lastname' => 'Doe',
-                'year_of_birth' => '1999/2000',
+                'year_of_birth' => 1999,
                 'height' => 180,
                 'strong_foot' => FootEnum::LEFT->value,
                 'club_id' => 999,
@@ -485,7 +483,7 @@ class PlayerControllerTest extends TestCase
             ->put(route('player.update', $player), [
                 'firstname' => 'John',
                 'lastname' => 'Doe',
-                'year_of_birth' => '1999/2000',
+                'year_of_birth' => 1999,
                 'height' => 180,
                 'strong_foot' => FootEnum::LEFT->value,
                 'club_id' => $club->id,
@@ -506,7 +504,7 @@ class PlayerControllerTest extends TestCase
             ->put(route('player.update', $player), [
                 'firstname' => str_repeat('a', 256),
                 'lastname' => 'Doe',
-                'year_of_birth' => '1999/2000',
+                'year_of_birth' => 1999,
                 'height' => 180,
                 'strong_foot' => FootEnum::LEFT->value,
                 'club_id' => $club->id,
@@ -527,7 +525,7 @@ class PlayerControllerTest extends TestCase
             ->put(route('player.update', $player), [
                 'firstname' => 'John',
                 'lastname' => str_repeat('a', 256),
-                'year_of_birth' => '1999/2000',
+                'year_of_birth' => 1999,
                 'height' => 180,
                 'strong_foot' => FootEnum::LEFT->value,
                 'club_id' => $club->id,
@@ -548,7 +546,7 @@ class PlayerControllerTest extends TestCase
             ->put(route('player.update', $player), [
                 'firstname' => 'John',
                 'lastname' => 'Doe',
-                'year_of_birth' => '1999/2000',
+                'year_of_birth' => 1999,
                 'height' => 180,
                 'strong_foot' => 'not-a-foot',
                 'club_id' => $club->id,
@@ -569,7 +567,7 @@ class PlayerControllerTest extends TestCase
             ->put(route('player.update', $player), [
                 'firstname' => 'John',
                 'lastname' => 'Doe',
-                'year_of_birth' => '1999/2000',
+                'year_of_birth' => 1999,
                 'height' => 'not-a-number',
                 'strong_foot' => FootEnum::LEFT->value,
                 'club_id' => $club->id,
@@ -588,7 +586,7 @@ class PlayerControllerTest extends TestCase
             ->put(route('player.update', 999), [
                 'firstname' => 'John',
                 'lastname' => 'Doe',
-                'year_of_birth' => '1999/2000',
+                'year_of_birth' => 1999,
                 'height' => 180,
                 'strong_foot' => FootEnum::LEFT->value,
                 'club_id' => $club->id,

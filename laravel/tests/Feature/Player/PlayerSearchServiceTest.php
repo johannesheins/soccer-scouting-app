@@ -114,15 +114,15 @@ class PlayerSearchServiceTest extends TestCase
     #region yearsOfBirth
     public function test_filters_by_year_of_birth(): void
     {
-        Player::factory()->create(['year_of_birth' => '1995/1996']);
-        Player::factory()->create(['year_of_birth' => '2000/2001']);
+        Player::factory()->create(['year_of_birth' => 1995]);
+        Player::factory()->create(['year_of_birth' => 2000]);
 
-        $result = $this->search(['years_of_birth' => ['1995/1996']]);
+        $result = $this->search(['years_of_birth' => [1995]]);
 
         $this->assertCount(1, $result);
 
         $player = $result->first();
-        $this->assertSame('1995/1996', $player->year_of_birth);
+        $this->assertSame(1995, $player->year_of_birth);
     }
 
     public function test_filters_by_multiple_years_of_birth(): void

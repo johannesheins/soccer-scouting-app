@@ -37,7 +37,7 @@ export function toRecommendationOptions(recommendations: Recommendation[]): Opti
     }))
 }
 
-export function getYears(firstYear: number = 0, lastYear: null|number = null, limit: number = 0): string[]{
+export function getYears(firstYear: number = 0, lastYear: null|number = null, limit: number = 0): number[]{
     const MAX = 9998;
     const currentYear = new Date().getFullYear()
     const years = [];
@@ -47,7 +47,7 @@ export function getYears(firstYear: number = 0, lastYear: null|number = null, li
     const last = limit > 0 ? firstYear + limit : currentYear;
 
     for(let y = start; y < last && currentYear < end; y++){ //Stop at year 9998, cause the db field only allows 9 chars
-        years.push(`${y}/${y+1}`);
+        years.push(y);
     }
 
     return years;
@@ -55,8 +55,8 @@ export function getYears(firstYear: number = 0, lastYear: null|number = null, li
 
 export function getYearOptions(): Option[]{
     return getYears().sort().reverse().map(y => ({
-        value: y,
-        label: y,
+        value: String(y),
+        label: String(y),
     }))
 }
 
