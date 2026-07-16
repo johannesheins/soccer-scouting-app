@@ -150,12 +150,14 @@ class PlayerControllerTest extends TestCase
         $response->assertRedirect(route('login'));
     }
 
-    public function test_store_validates_required_fields(): void
+    public function test_store_succeeds_with_no_fields(): void
     {
         $response = $this->actingAs($this->user)
             ->post(route('player.store'), []);
 
-        $response->assertInvalid(['firstname', 'lastname', 'year_of_birth', 'height', 'strong_foot', 'club_id', 'position_ids']);
+        $response->assertValid();
+        $response->assertRedirect(route('player.index'));
+        $this->assertDatabaseHas('players', ['firstname' => null, 'club_id' => null]);
     }
 
     public function test_store_validates_club_exists(): void
@@ -443,14 +445,16 @@ class PlayerControllerTest extends TestCase
             ->assertRedirect(route('login'));
     }
 
-    public function test_update_validates_required_fields(): void
+    public function test_update_succeeds_with_no_fields(): void
     {
         $player = Player::factory()->create();
 
         $response = $this->actingAs($this->user)
             ->put(route('player.update', $player), []);
 
-        $response->assertInvalid(['firstname', 'lastname', 'year_of_birth', 'height', 'strong_foot', 'club_id', 'position_ids']);
+        $response->assertValid();
+        $response->assertRedirect(route('player.index'));
+        $this->assertDatabaseHas('players', ['id' => $player->id, 'firstname' => $player->firstname, 'club_id' => $player->club_id]);
     }
 
     public function test_update_validates_club_exists(): void

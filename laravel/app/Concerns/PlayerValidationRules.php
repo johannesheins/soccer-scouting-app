@@ -23,38 +23,38 @@ trait PlayerValidationRules
 
     protected function firstnameRules(): array
     {
-        return ['required', 'string', 'max:255'];
+        return ['string', 'max:255'];
     }
 
     protected function lastnameRules(): array
     {
-        return ['required', 'string', 'max:255'];
+        return ['string', 'max:255'];
     }
 
     protected function yearOfBirthRules(): array
     {
-        return ['required', 'integer', 'digits:4'];
+        return ['integer', 'digits:4'];
     }
 
     protected function heightRules(): array
     {
-        return ['required', 'integer'];
+        return ['integer'];
     }
 
     public function strongFootRules(): array
     {
         $footCases = implode(',', array_column(FootEnum::cases(), 'value'));
-        return ['required', 'string', "in:$footCases"];
+        return ['string', "in:$footCases"];
     }
 
     public function clubIdRules(): array
     {
-        return ['required', 'exists:clubs,id'];
+        return ['exists:clubs,id'];
     }
 
     public function positionIdRules(): array
     {
-        return ['required', 'array'];
+        return ['array'];
     }
 
     protected function positionIdsRules(): array
