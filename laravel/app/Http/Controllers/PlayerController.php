@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DTOs\PlayerSearchDTO;
+use App\Enums\Request\PlayerRequestNameEnum as Name;
 use App\Http\Requests\Player\PlayerRequest;
 use App\Http\Requests\Player\PlayerSearchRequest;
 use App\Models\Club;
@@ -54,7 +55,7 @@ class PlayerController extends Controller implements HasMiddleware
         $validated = $request->validated();
 
         $player = Player::create($validated);
-        $player->positions()->attach($validated['position_ids']);
+        $player->positions()->attach($validated[reqN(Name::positionIds)]);
 
         return response()->json($player->load('positions', 'club'));
     }
@@ -80,7 +81,7 @@ class PlayerController extends Controller implements HasMiddleware
         $validated = $request->validated();
 
         $player->update($validated);
-        $player->positions()->sync($validated['position_ids']);
+        $player->positions()->sync($validated[reqN(Name::positionIds)]);
 
         return redirect()->route('player.index');
     }

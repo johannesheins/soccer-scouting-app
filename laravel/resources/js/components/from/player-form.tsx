@@ -22,6 +22,7 @@ import MultipleSelector from "@/components/ui/multi-select";
 import player from "@/routes/player"; //used as playerRoute
 import api from "@/routes/api";
 import {fetchPlayerData} from "@/hooks/fetchApiData";
+import {PlayerRequestNameEnum as Name} from "@/enums";
 
 const playerRoute = player
 
@@ -58,13 +59,13 @@ function Form({edit = false, dialog = false, backHref, onResponse}: { edit?: boo
     );
 
     const { data, setData, post, put, processing, errors } = useForm({
-        firstname: player?.firstname ?? '',
-        lastname: player?.lastname ?? '',
-        year_of_birth: String(player?.year_of_birth) ?? '',
-        height: String(player?.height ?? ''),
-        strong_foot: player?.strong_foot ?? '',
-        club_id: String(player?.club_id) ?? '',
-        position_ids: playerPositions ?? [] as string[],
+        [Name.firstname]: player?.firstname ?? '',
+        [Name.lastname]: player?.lastname ?? '',
+        [Name.yearOfBirth]: String(player?.year_of_birth) ?? '',
+        [Name.height]: String(player?.height ?? ''),
+        [Name.strongFoot]: player?.strong_foot ?? '',
+        [Name.clubId]: String(player?.club_id) ?? '',
+        [Name.positionIds]: playerPositions ?? [] as string[],
     });
 
     async function submit(e: React.FormEvent){
@@ -87,30 +88,30 @@ function Form({edit = false, dialog = false, backHref, onResponse}: { edit?: boo
                 <FieldSet>
                     <FieldGroup className="grid sm:grid-cols-2 lg:grid-cols-3">
                         <Field>
-                            <FieldLabel htmlFor="firstname">Vorname</FieldLabel>
-                            <Input id="firstname"
-                                   value={data.firstname}
-                                   onChange={e => setData('firstname', e.target.value)}
+                            <FieldLabel htmlFor={Name.firstname}>Vorname</FieldLabel>
+                            <Input id={Name.firstname}
+                                   value={data[Name.firstname]}
+                                   onChange={e => setData(Name.firstname, e.target.value)}
                                    placeholder="Vorname eintragen"
                             />
-                            <InputError message={errors.firstname} />
+                            <InputError message={errors[Name.firstname]} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor="lastname">Nachname</FieldLabel>
-                            <Input id="lastname" type="text"
-                                   value={data.lastname}
-                                   onChange={e => setData('lastname', e.target.value)}
+                            <FieldLabel htmlFor={Name.lastname}>Nachname</FieldLabel>
+                            <Input id={Name.lastname} type="text"
+                                   value={data[Name.lastname]}
+                                   onChange={e => setData(Name.lastname, e.target.value)}
                                    placeholder="Nachname eintragen"
                             />
-                            <InputError message={errors.lastname} />
+                            <InputError message={errors[Name.lastname]} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor="club_id">Club</FieldLabel>
+                            <FieldLabel htmlFor={Name.clubId}>Club</FieldLabel>
                             <SingleSelector
                                 value={selectedClub}
                                 onChange={opts => {
                                     setSelectedClub(opts);
-                                    setData('club_id', opts[0]?.value ?? '');
+                                    setData(Name.clubId, opts[0]?.value ?? '');
                                 }}
                                 defaultOptions={clubOptions}
                                 groupBy="group"
@@ -118,40 +119,40 @@ function Form({edit = false, dialog = false, backHref, onResponse}: { edit?: boo
                                 hidePlaceholderWhenSelected
                                 emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
                             />
-                            <InputError message={errors.club_id} />
+                            <InputError message={errors[Name.clubId]} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor="year_of_birth">Jahrgang</FieldLabel>
+                            <FieldLabel htmlFor={Name.yearOfBirth}>Jahrgang</FieldLabel>
                             <SingleSelector
                                 value={selectedYearOfBirth}
                                 onChange={opts => {
                                     setSelectedYearOfBirth(opts);
-                                    setData('year_of_birth', opts[0]?.value ?? '');
+                                    setData(Name.yearOfBirth, opts[0]?.value ?? '');
                                 }}
                                 defaultOptions={yearOfBirthOptions}
                                 placeholder="Jahrgang wählen"
                                 hidePlaceholderWhenSelected
                                 emptyIndicator={<p className="text-center text-sm">Keinen Jahrgang gefunden</p>}
                             />
-                            <InputError message={errors.year_of_birth} />
+                            <InputError message={errors[Name.yearOfBirth]} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor="height">Größe (cm)</FieldLabel>
-                            <Input id="height"
-                                   value={data.height}
-                                   onChange={e => setData('height', e.target.value)}
+                            <FieldLabel htmlFor={Name.height}>Größe (cm)</FieldLabel>
+                            <Input id={Name.height}
+                                   value={data[Name.height]}
+                                   onChange={e => setData(Name.height, e.target.value)}
                                    placeholder="Größe eintragen"
                                    type="number"
                             />
-                            <InputError message={errors.height} />
+                            <InputError message={errors[Name.height]} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor="strong_foot">Starker Fuß</FieldLabel>
+                            <FieldLabel htmlFor={Name.strongFoot}>Starker Fuß</FieldLabel>
                             <SingleSelector
                                 value={selectedStrongFoot}
                                 onChange={opts => {
                                     setSelectedStrongFoot(opts);
-                                    setData('strong_foot', opts[0]?.value ?? '');
+                                    setData(Name.strongFoot, opts[0]?.value ?? '');
                                 }}
                                 defaultOptions={footOptions}
                                 groupBy="group"
@@ -159,15 +160,15 @@ function Form({edit = false, dialog = false, backHref, onResponse}: { edit?: boo
                                 hidePlaceholderWhenSelected
                                 emptyIndicator={<p className="text-center text-sm">Kein treffer</p>}
                             />
-                            <InputError message={errors.strong_foot} />
+                            <InputError message={errors[Name.strongFoot]} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor="position_ids">Position</FieldLabel>
+                            <FieldLabel htmlFor={Name.positionIds}>Position</FieldLabel>
                             <MultipleSelector
                                 value={selectedPositions}
                                 onChange={opts => {
                                     setSelectedPositions(opts);
-                                    setData('position_ids', opts.map(o => o.value));
+                                    setData(Name.positionIds, opts.map(o => o.value));
                                 }}
                                 defaultOptions={positionOptions}
                                 groupBy="group"
@@ -175,7 +176,7 @@ function Form({edit = false, dialog = false, backHref, onResponse}: { edit?: boo
                                 hidePlaceholderWhenSelected
                                 emptyIndicator={<p className="text-center text-sm">Keine Positionen gefunden</p>}
                             />
-                            <InputError message={errors.position_ids} />
+                            <InputError message={errors[Name.positionIds]} />
                         </Field>
                     </FieldGroup>
                     <Field className="w-fit flex-row">
