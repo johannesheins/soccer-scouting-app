@@ -94,11 +94,25 @@ export type Recommendation = {
     name: string,
 }
 
-export type Evaluation = {
+export type EvaluationSmall = {
     id: number,
     player_id: number,
     home_team_id: number,
     away_team_id: number,
+    kickoff_date: string
+    kickoff_time: string
+    strengths: string,
+    weaknesses: string,
+    recommendation_id: number,
+    comment: string,
+    criteria_scores: EvaluationCriteriaScore[]
+}
+
+export type Evaluation = {
+    id: number,
+    player_id: PlayerSmall,
+    home_team_id: Club,
+    away_team_id: Club,
     kickoff_date: string
     kickoff_time: string
     strengths: string,

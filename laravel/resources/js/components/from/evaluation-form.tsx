@@ -11,7 +11,7 @@ import {Button} from "@/components/ui/button";
 import InputError from "@/components/input-error";
 import {
     type Club,
-    Evaluation,
+    EvaluationSmall,
     EvaluationCriteriaGroups,
     Player,
     type Position, Recommendation
@@ -27,7 +27,7 @@ import {Textarea} from "@/components/ui/textarea";
 import {PlayerRequestNameEnum as Name} from "@/enums";
 
 type Props = {
-    evaluation?: Evaluation,
+    evaluation?: EvaluationSmall,
     evaluationCriteriaGroups: EvaluationCriteriaGroups[],
     positions: Position[];
     clubs: Club[],
