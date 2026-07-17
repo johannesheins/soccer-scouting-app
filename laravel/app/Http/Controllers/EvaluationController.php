@@ -88,6 +88,8 @@ class EvaluationController extends Controller implements HasMiddleware
 
     public function search()
     {
-
+        return inertia('evaluation/evaluation-search', [
+            'evaluations' => Evaluation::all()->load(['player', 'homeTeam', 'awayTeam']) //TODO Implement search
+        ]);
     }
 }

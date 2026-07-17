@@ -110,9 +110,9 @@ export type EvaluationSmall = {
 
 export type Evaluation = {
     id: number,
-    player_id: PlayerSmall,
-    home_team_id: Club,
-    away_team_id: Club,
+    player: PlayerSmall,
+    home_team: Club,
+    away_team: Club,
     kickoff_date: string
     kickoff_time: string
     strengths: string,

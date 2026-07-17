@@ -16,7 +16,7 @@ class EvaluationPolicy
         return $user->hasRight(RightEnum::EvaluationIndex);
     }
 
-    public function search(User $user, Evaluation $evaluation): bool
+    public function search(User $user): bool
     {
         return $user->hasRight(RightEnum::EvaluationSearch);
     }
