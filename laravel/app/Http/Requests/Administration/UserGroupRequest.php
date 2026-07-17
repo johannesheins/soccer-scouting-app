@@ -2,17 +2,15 @@
 
 namespace App\Http\Requests\Administration;
 
+use App\Concerns\UserGroupValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserGroupRequest extends FormRequest
 {
+    use UserGroupValidationRules;
     public function rules(): array
     {
-        return [
-            'name' => ['required', 'string', 'max:255'],
-            'rights' => ['nullable', 'array'],
-            'rights.*' => ['integer', 'exists:rights,id'],
-        ];
+        return $this->userGroupOwnRules();
     }
 
     public function authorize(): bool

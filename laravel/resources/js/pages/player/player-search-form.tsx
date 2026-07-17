@@ -19,8 +19,6 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
 
     const params = new URLSearchParams(window.location.search);
 
-    console.log(params);
-
     function getArrayParam(key: string): string[] {
         const bracketed: string[] = [];
         let i = 0;

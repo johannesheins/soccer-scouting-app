@@ -2,16 +2,15 @@
 
 namespace App\Http\Requests;
 
+use App\Concerns\RightValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RightRequest extends FormRequest
 {
+    use RightValidationRules;
     public function rules(): array
     {
-        return [
-            'name' => ['required'],
-            'description' => ['nullable'],
-        ];
+        return $this->rightRules();
     }
 
     public function authorize(): bool

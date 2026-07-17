@@ -2,32 +2,33 @@
 
 namespace App\Http\Requests\Player;
 
+use App\Concerns\PlayerValidationRules;
 use App\Enums\FootEnum;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PlayerSearchRequest extends FormRequest
 {
+    use PlayerValidationRules;
     public function rules(): array
     {
-        $footCases = implode(',', array_column(FootEnum::cases(), 'value'));
         return [
-            'firstname' => ['nullable', 'string', 'max:255'],
-            'lastname' => ['nullable', 'string', 'max:255'],
+            'firstname' => $this->firstnameRules('nullable'),
+            'lastname' => $this->lastnameRules('nullable'),
 
             'club_ids' => ['nullable', 'array'],
-            'club_ids.*' => ['integer', 'exists:clubs,id'],
+            'club_ids.*' => $this->clubIdRules('nullable'),
 
             'years_of_birth' => ['nullable', 'array'],
-            'years_of_birth.*' => ['nullable', 'string', 'regex:/^\d{4}\/\d{4}$/'],
+            'years_of_birth.*' => $this->yearOfBirthRules('nullable'),
 
-            'height_from' => ['nullable', 'integer'],
-            'height_to' => ['nullable', 'integer'],
+            'height_from' => $this->heightRules('nullable'),
+            'height_to' => $this->heightRules('nullable'),
 
             'strong_foots' => ['nullable', 'array'],
-            'strong_foots.*' => ['required', 'string', "in:$footCases"],
+            'strong_foots.*' => $this->strongFootRules('nullable'),
 
             'position_ids' => ['nullable', 'array'],
-            'position_ids.*' => ['integer', 'exists:positions,id'],
+            'position_ids.*' => $this->positionIdRules('nullable'),
         ];
     }
 

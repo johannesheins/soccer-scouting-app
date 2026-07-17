@@ -7,6 +7,7 @@ use App\Enums\Request\PlayerRequestNameEnum as Name;
 
 trait PlayerValidationRules
 {
+    use ClubValidationRules;
     protected function playerRules(): array
     {
         return [
@@ -16,58 +17,44 @@ trait PlayerValidationRules
             reqN(Name::height) => $this->heightRules(),
             reqN(Name::strongFoot) => $this->strongFootRules(),
             reqN(Name::clubId) => $this->clubIdRules(),
-            reqN(Name::positionIds) => $this->positionIdRules(),
-            reqN(Name::positionIds, '.*') => $this->positionIdsRules()
+            reqN(Name::positionIds) => ['array'],
+            reqN(Name::positionIds, '.*') => $this->positionIdRules()
         ];
     }
 
-    protected function firstnameRules(): array
+    protected function firstnameRules(...$rules): array
     {
-        return ['string', 'max:255'];
+        return ['string', 'max:255', ...$rules];
     }
 
-    protected function lastnameRules(): array
+    protected function lastnameRules(...$rules): array
     {
-        return ['string', 'max:255'];
+        return ['string', 'max:255', ...$rules];
     }
 
-    protected function yearOfBirthRules(): array
+    protected function yearOfBirthRules(...$rules): array
     {
-        return ['integer', 'digits:4'];
+        return ['integer', 'digits:4', ...$rules];
     }
 
-    protected function heightRules(): array
+    protected function heightRules(...$rules): array
     {
-        return ['integer'];
+        return ['integer', ...$rules];
     }
 
-    public function strongFootRules(): array
+    public function strongFootRules(...$rules): array
     {
         $footCases = implode(',', array_column(FootEnum::cases(), 'value'));
-        return ['string', "in:$footCases"];
+        return ['string', "in:$footCases", ...$rules];
     }
 
-    public function clubIdRules(): array
+    protected function positionIdRules(...$rules): array
     {
-        return ['exists:clubs,id'];
+        return ['integer', 'exists:positions,id', ...$rules];
     }
 
-    public function positionIdRules(): array
+    protected function playerId(...$rules): array
     {
-        return ['array'];
-    }
-
-    protected function positionIdsRules(): array
-    {
-        return ['integer', 'exists:positions,id'];
-    }
-
-    protected function playerId($required = true): array
-    {
-        $rules = ['integer', 'exists:players,id'];
-        if($required) {
-            $rules[] = 'required';
-        }
-        return $rules;
+        return ['integer', 'exists:players,id', ...$rules];
     }
 }
