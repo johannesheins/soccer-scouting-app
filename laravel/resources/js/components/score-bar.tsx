@@ -4,23 +4,25 @@ import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 
 type DefaultProps = {
-    name: string,
+    name?: string,
     className?: string,
     value: number,
     onChange?: (value: number) => void
+    disabled?: boolean
 }
 
 type RangeProps = {
-    nameFrom: string,
-    nameTo: string,
+    nameFrom?: string,
+    nameTo?: string,
     className?: string,
     valueFrom: number,
     valueTo: number,
     onChangeFrom?: (value: number) => void
     onChangeTo?: (value: number) => void
+    disabled?: boolean
 }
 
-export function ScoreBar({name, value, onChange, className}: DefaultProps) {
+export function ScoreBar({name, value, onChange, className, disabled = false}: DefaultProps) {
     const [currentValue, setCurrentValue] = useState(value);
 
     function update(next: number[]) {
@@ -37,8 +39,9 @@ export function ScoreBar({name, value, onChange, className}: DefaultProps) {
                 min={0}
                 max={10}
                 step={1}
+                disabled={disabled}
             />
-            <span className="w-10 text-right text-sm tabular-nums text-muted-foreground">
+            <span className="w-10 text-right text-sm tabular-nums text-foreground">
                 {currentValue}
             </span>
             <Input type="hidden" name={name} value={currentValue} min="0" max="10" readOnly />
@@ -46,7 +49,7 @@ export function ScoreBar({name, value, onChange, className}: DefaultProps) {
     )
 }
 
-export function ScoreBarRange({nameFrom, nameTo, valueFrom, valueTo, onChangeFrom, onChangeTo, className}: RangeProps) {
+export function ScoreBarRange({nameFrom, nameTo, valueFrom, valueTo, onChangeFrom, onChangeTo, className, disabled = false}: RangeProps) {
     const [currentValueFrom, setCurrentValueFrom] = useState(valueFrom);
     const [currentValueTo, setCurrentValueTo] = useState(valueTo);
 
@@ -66,6 +69,7 @@ export function ScoreBarRange({nameFrom, nameTo, valueFrom, valueTo, onChangeFro
                 min={0}
                 max={10}
                 step={1}
+                disabled={disabled}
             />
             <span className="w-10 text-right text-sm tabular-nums text-muted-foreground">
                 {[currentValueFrom, currentValueTo].join(', ')}
