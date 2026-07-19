@@ -33,9 +33,9 @@ class Evaluation extends Model
         return $this->belongsTo(Club::class, 'away_team_id');
     }
 
-    public function categoryScores(): HasMany
+    public function criteriaScores(): HasMany
     {
-        return $this->hasMany(EvaluationCriteriaScore::class);
+        return $this->hasMany(EvaluationCriteriaScore::class, 'evaluation_id');
     }
 
     public function recommendation(): BelongsTo

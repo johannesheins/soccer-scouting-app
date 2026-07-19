@@ -151,7 +151,7 @@ class EvaluationControllerTest extends TestCase
         $response->assertRedirect(route('evaluation.index'));
         $evaluation = Evaluation::where('player_id', $player->id)->firstOrFail();
 
-        $this->assertSame(3, $evaluation->categoryScores()->count());
+        $this->assertSame(3, $evaluation->criteriaScores()->count());
         $criteria->each(fn ($criterion, $index) => $this->assertDatabaseHas('evaluation_criteria_scores', [
             'evaluation_id' => $evaluation->id,
             'evaluation_criteria_id' => $criterion->id,
