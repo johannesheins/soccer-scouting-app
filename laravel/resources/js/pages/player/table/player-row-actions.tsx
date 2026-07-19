@@ -21,8 +21,6 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import type {Player} from "@/types/types";
-import {Dialog, DialogContent} from "@/components/ui/dialog";
-import {PlayerView} from "../player-view";
 import {useHasRight} from "@/hooks/use-has-right";
 import {PlayerRequestNameEnum as Name, RightEnum} from "@/enums";
 import evaluation from "@/routes/evaluation";
@@ -30,7 +28,6 @@ import evaluation from "@/routes/evaluation";
 const playerRoute = player;
 export function PlayerRowActions({player}: { player: Player }) {
     const [deleteOpen, setDeleteOpen] = useState(false);
-    const [viewOpen, setViewOpen] = useState(false);
     const canView = useHasRight(RightEnum.PlayerView);
     const canEdit = useHasRight(RightEnum.PlayerEdit);
     const canDelete = useHasRight(RightEnum.PlayerDestroy);
@@ -86,12 +83,6 @@ export function PlayerRowActions({player}: { player: Player }) {
                     )}
                 </DropdownMenuContent>
             </DropdownMenu>
-
-            <Dialog open={viewOpen} onOpenChange={setViewOpen}>
-                <DialogContent>
-                    <PlayerView player={player} />
-                </DialogContent>
-            </Dialog>
 
             <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
                 <AlertDialogContent>
