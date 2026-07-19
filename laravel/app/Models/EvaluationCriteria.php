@@ -15,7 +15,7 @@ class EvaluationCriteria extends Model
     public $table = 'evaluation_criteria';
     public $timestamps = false;
 
-    public function ealuationCriteriaScores(): HasMany
+    public function evaluationCriteriaScores(): HasMany
     {
         return $this->hasMany(EvaluationCriteriaScore::class);
     }

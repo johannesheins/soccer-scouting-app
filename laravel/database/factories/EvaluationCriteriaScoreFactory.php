@@ -20,7 +20,7 @@ class EvaluationCriteriaScoreFactory extends Factory
             'updated_at' => Carbon::now(),
 
             'evaluation_id' => Evaluation::factory(),
-            'evaluation_criterion_id' => EvaluationCriteria::factory(),
+            'evaluation_criteria_id' => EvaluationCriteria::factory(),
         ];
     }
 }

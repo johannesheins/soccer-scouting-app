@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\EvaluationSearchDTO;
 use App\Enums\Request\PlayerRequestNameEnum as Name;
 use App\Http\Requests\Evaluation\EvaluationCreateRequest;
 use App\Http\Requests\Evaluation\EvaluationSearchRequest;
@@ -13,6 +14,7 @@ use App\Models\EvaluationCriteriaScore;
 use App\Models\Player;
 use App\Models\Position;
 use App\Models\Recommendation;
+use App\Services\EvaluationSearchService;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 
@@ -91,12 +93,21 @@ class EvaluationController extends Controller implements HasMiddleware
     {
         $validated = $request->validated();
 
+        $evaluationSearchDTO = new EvaluationSearchDTO($request->validated());
+        $evaluationSearchService = new EvaluationSearchService();
+        $evaluations = $evaluationSearchService->searchEvaluations($evaluationSearchDTO, [
+            'player',
+            'homeTeam',
+            'awayTeam',
+            'criteriaScores',
+        ])->toArray();
+
         return inertia('evaluation/evaluation-search', [
             'evaluationCriteriaGroups' => EvaluationCriteriaGroup::with('evaluationCriteria')->get(),
             'clubs' => Club::orderBy('clubname')->get(['id', 'clubname']),
 
             'queryParams' => $validated,
-            'evaluations' => Evaluation::all()->load(['player', 'homeTeam', 'awayTeam']), //TODO Implement search
+            'evaluations' => $evaluations,
         ]);
     }
 }

@@ -19,6 +19,6 @@ class EvaluationCriteriaScore extends Model
 
     public function evaluationCriterion(): BelongsTo
     {
-        return $this->belongsTo(EvaluationCriteria::class, 'evaluation_criterion_id');
+        return $this->belongsTo(EvaluationCriteria::class, 'evaluation_criteria_id');
     }
 }

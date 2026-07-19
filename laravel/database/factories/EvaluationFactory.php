@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
-use App\Enums\RecommendationEnum;
 use App\Models\Club;
 use App\Models\Evaluation;
 use App\Models\Player;
+use App\Models\Recommendation;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
@@ -24,7 +24,7 @@ class EvaluationFactory extends Factory
             'kickoff_time' => Carbon::now()->format("H:i:s"),
             'strengths' => $this->faker->text(),
             'weaknesses' => $this->faker->text(),
-            'recommendation' => $this->faker->randomElement(RecommendationEnum::cases()),
+            'recommendation_id' => Recommendation::factory(),
             'remarks' => $this->faker->text(),
             'created_by' => User::factory(),
             'created_at' => Carbon::now(),
