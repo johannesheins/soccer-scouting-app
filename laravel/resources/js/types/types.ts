@@ -1,3 +1,5 @@
+import {User} from "@/types/auth";
+
 export type PositionGroup = {
     id: number,
     name: string,
@@ -105,7 +107,8 @@ export type EvaluationSmall = {
     weaknesses: string,
     recommendation_id: number,
     comment: string,
-    criteria_scores: EvaluationCriteriaScore[]
+    criteria_scores: EvaluationCriteriaScore[],
+    created_by: number
 }
 
 export type Evaluation = {
@@ -120,6 +123,7 @@ export type Evaluation = {
     recommendation_id: number,
     comment: string,
     criteria_scores: EvaluationCriteriaScore[]
+    creator: User
 }
 
 export type EvaluationSearchQuery = {

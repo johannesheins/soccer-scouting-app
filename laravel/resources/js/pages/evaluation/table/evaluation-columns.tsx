@@ -5,6 +5,7 @@ import {Club, Evaluation, PlayerSmall} from "@/types/types";
 import sortHeader from "@/components/table/table-header-sort";
 import {format} from "date-fns";
 import {de} from "date-fns/locale";
+import EvaluationRowActions from "@/pages/evaluation/table/evaluation-row-actions";
 
 const player:ColumnDef<Evaluation> = {
     accessorKey: "player",
@@ -72,6 +73,6 @@ export const evaluationColumns: ColumnDef<Evaluation>[] = [
     score,
     {
         id: "actions",
-        cell: 'Aktion', //TODO Implement actions
+        cell: ({row}) => <EvaluationRowActions evaluation={row.original}/>,
     },
 ];

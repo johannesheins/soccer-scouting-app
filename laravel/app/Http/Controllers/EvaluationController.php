@@ -100,6 +100,7 @@ class EvaluationController extends Controller implements HasMiddleware
             'homeTeam',
             'awayTeam',
             'criteriaScores',
+            'creator'
         ])->toArray();
 
         return inertia('evaluation/evaluation-search', [
