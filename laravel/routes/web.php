@@ -17,7 +17,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('player/search', [PlayerSearchController::class, 'index'])->name('player.search');
     Route::resource('player', PlayerController::class)->names('player');
 
-    Route::get('evaluation/search', [EvaluationController::class, 'search'])->name('evaluation.search');
+    Route::get('evaluation/search/{query?}', [EvaluationController::class, 'search'])->name('evaluation.search');
     Route::resource('evaluation', EvaluationController::class)->names('evaluation');
 
     Route::resource('club', ClubController::class)->names('club');

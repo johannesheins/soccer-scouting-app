@@ -121,3 +121,9 @@ export type Evaluation = {
     comment: string,
     criteria_scores: EvaluationCriteriaScore[]
 }
+
+export type EvaluationSearchQuery = {
+    criteria_scores_from: number[]
+    criteria_scores_to: number[]
+    open_accordion: boolean[]
+}

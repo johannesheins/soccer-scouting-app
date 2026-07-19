@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\Request\PlayerRequestNameEnum as Name;
 use App\Http\Requests\Evaluation\EvaluationCreateRequest;
+use App\Http\Requests\Evaluation\EvaluationSearchRequest;
 use App\Http\Requests\Evaluation\EvaluationStoreRequest;
 use App\Models\Club;
 use App\Models\Evaluation;
@@ -86,12 +87,16 @@ class EvaluationController extends Controller implements HasMiddleware
 
     }
 
-    public function search()
+    public function search(EvaluationSearchRequest $request)
     {
+        $validated = $request->validated();
+
         return inertia('evaluation/evaluation-search', [
             'evaluationCriteriaGroups' => EvaluationCriteriaGroup::with('evaluationCriteria')->get(),
             'clubs' => Club::orderBy('clubname')->get(['id', 'clubname']),
-            'evaluations' => Evaluation::all()->load(['player', 'homeTeam', 'awayTeam']) //TODO Implement search
+
+            'queryParams' => $validated,
+            'evaluations' => Evaluation::all()->load(['player', 'homeTeam', 'awayTeam']), //TODO Implement search
         ]);
     }
 }

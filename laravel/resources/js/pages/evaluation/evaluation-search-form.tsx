@@ -2,38 +2,40 @@ import React from "react";
 import {Field, FieldDescription, FieldGroup, FieldLabel, FieldSet} from "@/components/ui/field";
 import {router, useForm} from "@inertiajs/react";
 import {Button} from "@/components/ui/button";
-import {Club, EvaluationCriteriaGroups} from "@/types/types";
+import {Club, EvaluationCriteriaGroups, EvaluationSearchQuery} from "@/types/types";
 import {ScoreBarRange} from "@/components/score-bar";
-import {useUrlParamBracket} from "@/hooks/useUrlParam";
 import InputError from "@/components/input-error";
 import evaluation from "@/routes/evaluation";
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "@/components/ui/accordion";
 
 type Props = {
     evaluationCriteriaGroups: EvaluationCriteriaGroups[],
-    clubs: Club[]
+    clubs: Club[],
+    queryParams: EvaluationSearchQuery,
 };
-export default function EvaluationSearchForm({evaluationCriteriaGroups}: Props){
-    const { data, setData, get, processing, errors } = useForm({
-        criteria_scores_from: (useUrlParamBracket('criteria_scores_from') as string[]).map(score => Number(score)),
-        criteria_scores_to: (useUrlParamBracket('criteria_scores_to') as string[]).map(score => Number(score)),
-        open_accordion: (useUrlParamBracket('open_accordion') as string[]),
+export default function EvaluationSearchForm({evaluationCriteriaGroups, queryParams}: Props){
+    const { data, setData, processing, errors } = useForm({
+        criteria_scores_from: queryParams.criteria_scores_from ?? [],
+        criteria_scores_to: queryParams.criteria_scores_to ?? [],
+        open_accordion: queryParams.open_accordion ?? [],
     });
 
     const flatCriteria = evaluationCriteriaGroups.flatMap(g => g.evaluation_criteria);
 
     async function submit(e: React.SubmitEvent){
         e.preventDefault()
-        return get(evaluation.search.url());
+        const jsonData = JSON.stringify(data);
+        const base64Encoded = btoa(jsonData);
+        return router.get(evaluation.search.url()+'/'+base64Encoded);
     }
 
     function resetForm(){
-        router.get(window.location.pathname);
+        router.get(evaluation.search.url());
     }
 
-    function toggle(id: string){
-        const val = !Boolean(data.open_accordion[Number(id)]);
-        setData('open_accordion', {...data.open_accordion, [id]: String(Number(val))});
+    function toggle(id: number){
+        const val = !data.open_accordion[id];
+        setData('open_accordion', {...data.open_accordion, [id]: val});
     }
 
 
@@ -51,7 +53,7 @@ export default function EvaluationSearchForm({evaluationCriteriaGroups}: Props){
                         {evaluationCriteriaGroups.map(group => (
                             <Accordion defaultValue={openAccordions} key={group.id} type="multiple" className="grid px-2 relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                                 <AccordionItem value={String(group.id)} >
-                                    <AccordionTrigger onClick={() => toggle(String(group.id))}>{group.name}</AccordionTrigger>
+                                    <AccordionTrigger onClick={() => toggle(group.id)}>{group.name}</AccordionTrigger>
                                     <AccordionContent>
                                         <FieldGroup className="grid sm:grid-cols-2 gap-x-15">
                                             {group.evaluation_criteria.map(criteria => {
