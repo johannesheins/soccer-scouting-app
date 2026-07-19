@@ -12,27 +12,16 @@ import {toPositionOptions, toClubOptions, getYearOptions, getFootOptions} from "
 import {usePreviousUrl} from "@/hooks/use-previous-url";
 import {Club, Player, Position} from "@/types/types";
 import fetchPlayerSerchData from "@/hooks/fetchApiData";
+import { useUrlParam, useUrlParamBracket } from "@/hooks/useUrlParam";
 
 type Props = { positions: Position[]; clubs: Club[], returnData?: boolean, onResponse?: (players: Player[]) => void };
 export default function PlayerSearchForm({ positions, clubs, returnData, onResponse }: Props){
     usePreviousUrl();
 
-    const params = new URLSearchParams(window.location.search);
-
-    function getArrayParam(key: string): string[] {
-        const bracketed: string[] = [];
-        let i = 0;
-        while (params.has(`${key}[${i}]`)) {
-            bracketed.push(params.get(`${key}[${i}]`)!);
-            i++;
-        }
-        return bracketed.length > 0 ? bracketed : params.getAll(key);
-    }
-
-    const urlPositionIds = getArrayParam('position_ids');
-    const urlClubIds = getArrayParam('club_ids');
-    const urlYearsOfBirth = getArrayParam('years_of_birth');
-    const urlStrongFoots = getArrayParam('strong_foots');
+    const urlPositionIds = useUrlParamBracket('position_ids');
+    const urlClubIds = useUrlParamBracket('club_ids');
+    const urlYearsOfBirth = useUrlParamBracket('years_of_birth');
+    const urlStrongFoots = useUrlParamBracket('strong_foots');
 
     const yearOfBirthOptions = getYearOptions();
     const [selectedYearsOfBirth, setSelectedYearsOfBirth] = useState<Option[]>(
@@ -55,11 +44,11 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
     );
 
     const { data, setData, get, processing, errors } = useForm({
-        firstname: params.get('firstname') ?? '',
-        lastname: params.get('lastname') ?? '',
+        firstname: useUrlParam('firstname') ?? '',
+        lastname: useUrlParam('lastname') ?? '',
         years_of_birth: urlYearsOfBirth,
-        height_from: params.get('height_from') ?? '',
-        height_to: params.get('height_to') ?? '',
+        height_from: useUrlParam('height_from') ?? '',
+        height_to: useUrlParam('height_to') ?? '',
         strong_foots: urlStrongFoots,
         club_ids: urlClubIds,
         position_ids: urlPositionIds,

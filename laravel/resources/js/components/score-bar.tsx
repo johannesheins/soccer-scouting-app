@@ -3,17 +3,29 @@ import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 
-export default function ScoreBar({name, className, value = 0, onChange}: {
+type DefaultProps = {
     name: string,
     className?: string,
-    value?: number,
+    value: number,
     onChange?: (value: number) => void
-}) {
+}
+
+type RangeProps = {
+    nameFrom: string,
+    nameTo: string,
+    className?: string,
+    valueFrom: number,
+    valueTo: number,
+    onChangeFrom?: (value: number) => void
+    onChangeTo?: (value: number) => void
+}
+
+export function ScoreBar({name, value, onChange, className}: DefaultProps) {
     const [currentValue, setCurrentValue] = useState(value);
 
-    function update(next: number) {
-        setCurrentValue(next);
-        onChange?.(next);
+    function update(next: number[]) {
+        setCurrentValue(next[0]);
+        onChange?.(next[0]);
     }
 
     return (
@@ -21,13 +33,45 @@ export default function ScoreBar({name, className, value = 0, onChange}: {
             <Slider
                 className="flex-1"
                 value={[currentValue]}
-                onValueChange={([next]) => update(next)}
+                onValueChange={update}
                 min={0}
                 max={10}
                 step={1}
             />
-            <span className="w-6 text-right text-sm tabular-nums text-muted-foreground">{currentValue}</span>
+            <span className="w-10 text-right text-sm tabular-nums text-muted-foreground">
+                {currentValue}
+            </span>
             <Input type="hidden" name={name} value={currentValue} min="0" max="10" readOnly />
+        </div>
+    )
+}
+
+export function ScoreBarRange({nameFrom, nameTo, valueFrom, valueTo, onChangeFrom, onChangeTo, className}: RangeProps) {
+    const [currentValueFrom, setCurrentValueFrom] = useState(valueFrom);
+    const [currentValueTo, setCurrentValueTo] = useState(valueTo);
+
+    function update(next: number[]) {
+        setCurrentValueFrom(next[0]);
+        setCurrentValueTo(next[1]);
+        onChangeFrom?.(next[0]);
+        onChangeTo?.(next[1]);
+    }
+
+    return (
+        <div className={cn(className, "flex items-center gap-3")}>
+            <Slider
+                className="flex-1"
+                value={[currentValueFrom, currentValueTo]}
+                onValueChange={update}
+                min={0}
+                max={10}
+                step={1}
+            />
+            <span className="w-10 text-right text-sm tabular-nums text-muted-foreground">
+                {[currentValueFrom, currentValueTo].join(', ')}
+            </span>
+            <Input type="hidden" name={nameFrom} value={currentValueFrom} min="0" max="10" readOnly />
+            <Input type="hidden" name={nameTo} value={currentValueTo} min="0" max="10" readOnly />
         </div>
     )
 }

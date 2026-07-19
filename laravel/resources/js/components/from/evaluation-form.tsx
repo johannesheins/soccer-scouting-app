@@ -17,7 +17,6 @@ import {
     type Position, Recommendation
 } from "@/types/types";
 import evaluationRoute from "@/routes/evaluation";
-import ScoreBar from "../score-bar";
 import PlayerSearchDialog from "@/pages/player/player-search-dialog";
 import {Input} from "@/components/ui/input";
 import {SingleSelector} from "@/components/ui/single-select";
@@ -25,6 +24,7 @@ import {toClubOptions, toRecommendationOptions} from "@/hooks/form-options";
 import {DateTimePicker} from "@/components/ui/date-time-picker";
 import {Textarea} from "@/components/ui/textarea";
 import {PlayerRequestNameEnum as Name} from "@/enums";
+import {ScoreBar} from "@/components/score-bar";
 
 type Props = {
     evaluation?: EvaluationSmall,
