@@ -35,6 +35,7 @@ class RightSeeder extends Seeder
                 $this->createRight(RightEnum::EvaluationEditAll, 'Alle Bewertung bearbeiten', 'Der Benutzer darf alle Bewertung bearbeiten'),
                 $this->createRight(RightEnum::EvaluationDestroy, 'Bewertung löschen', 'Der Benutzer darf die von ihm erstellten Bewertung löschen'),
                 $this->createRight(RightEnum::EvaluationDestroyAll, 'Alle Bewertung löschen', 'Der Benutzer darf alle Bewertung löschen'),
+                $this->createRight(RightEnum::EvaluationViewCreator, 'Autor sehen ', 'Der Benutzer darf den Autor sehen'),
             ]
         ];
 

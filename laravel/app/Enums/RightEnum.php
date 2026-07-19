@@ -20,4 +20,5 @@ enum RightEnum: int
     case EvaluationEditAll = 13;
     case EvaluationDestroy = 14;
     case EvaluationDestroyAll = 15;
+    case EvaluationViewCreator = 16;
 }
