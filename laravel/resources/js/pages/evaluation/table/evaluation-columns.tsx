@@ -3,9 +3,8 @@
 import {ColumnDef} from "@tanstack/react-table"
 import {Club, Evaluation, PlayerSmall} from "@/types/types";
 import sortHeader from "@/components/table/table-header-sort";
-import {format} from "date-fns";
-import {de} from "date-fns/locale";
 import EvaluationRowActions from "@/pages/evaluation/table/evaluation-row-actions";
+import {date} from "@/locale/date-locale";
 
 const player:ColumnDef<Evaluation> = {
     accessorKey: "player",
@@ -48,10 +47,10 @@ const kickoffDate:ColumnDef<Evaluation> = {
     accessorKey: "kickoff_date",
     header: sortHeader("Anstoß"),
     cell: ({ row }) => {
-        const date = format(new Date(row.getValue('kickoff_date')), "dd.MM.yyyy", {locale: de})
+        const d = date(row.getValue('kickoff_date'))
         const time = row.original.kickoff_time.slice(0, 5)
         return <div className="font-medium grid grid-cols-2 gap-2 text-center">
-            <span>{date}</span>
+            <span>{d}</span>
             <span>{time} Uhr</span>
         </div>
     },
