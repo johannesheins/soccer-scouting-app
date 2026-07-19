@@ -17,9 +17,8 @@ export default function EvaluationSearchForm({evaluationCriteriaGroups}: Props){
     const { data, setData, get, processing, errors } = useForm({
         criteria_scores_from: (useUrlParamBracket('criteria_scores_from') as string[]).map(score => Number(score)),
         criteria_scores_to: (useUrlParamBracket('criteria_scores_to') as string[]).map(score => Number(score)),
+        open_accordion: (useUrlParamBracket('open_accordion') as string[]),
     });
-    console.log(data.criteria_scores_from, useUrlParamBracket('criteria_scores_to'));
-    console.log(data.criteria_scores_to, useUrlParamBracket('criteria_scores_to'));
 
     const flatCriteria = evaluationCriteriaGroups.flatMap(g => g.evaluation_criteria);
 
@@ -32,6 +31,16 @@ export default function EvaluationSearchForm({evaluationCriteriaGroups}: Props){
         router.get(window.location.pathname);
     }
 
+    function toggle(id: string){
+        const val = !Boolean(data.open_accordion[Number(id)]);
+        setData('open_accordion', {...data.open_accordion, [id]: String(Number(val))});
+    }
+
+
+    const openAccordions = Object.entries(data.open_accordion)
+        .filter(([, state]) => Boolean(Number(state)))
+        .map(([id]) => id);
+
     return (
         <>
             <div>
@@ -40,9 +49,9 @@ export default function EvaluationSearchForm({evaluationCriteriaGroups}: Props){
                         <FieldGroup className="gap-4">
                         {evaluationCriteriaGroups.length <= 0 && <p className="p-5">Keine Bewertungskriterien gefunden</p>}
                         {evaluationCriteriaGroups.map(group => (
-                            <Accordion key={group.id} type="multiple" className="grid px-2 relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+                            <Accordion defaultValue={openAccordions} key={group.id} type="multiple" className="grid px-2 relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                                 <AccordionItem value={String(group.id)} >
-                                    <AccordionTrigger>{group.name}</AccordionTrigger>
+                                    <AccordionTrigger onClick={() => toggle(String(group.id))}>{group.name}</AccordionTrigger>
                                     <AccordionContent>
                                         <FieldGroup className="grid sm:grid-cols-2 gap-x-15">
                                             {group.evaluation_criteria.map(criteria => {
