@@ -2,7 +2,7 @@ import {Head, usePage} from "@inertiajs/react";
 import {DataTable} from "@/components/table/data-table";
 import React from "react";
 import EvaluationSearchForm from "@/pages/evaluation/evaluation-search-form";
-import {evaluationColumns} from "@/pages/evaluation/table/evaluation-columns";
+import {useEvaluationColumns} from "@/pages/evaluation/table/evaluation-columns";
 import {Club, Evaluation, EvaluationCriteriaGroups, EvaluationSearchQuery} from "@/types/types";
 
 type Props = {
@@ -13,6 +13,7 @@ type Props = {
 }
 export default function EvaluationSearch() {
     const { evaluationCriteriaGroups, clubs, queryParams, evaluations } = usePage<Props>().props;
+    const evaluationColumns = useEvaluationColumns();
 
     return (
         <>

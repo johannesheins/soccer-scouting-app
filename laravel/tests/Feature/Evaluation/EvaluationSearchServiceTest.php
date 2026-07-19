@@ -3,11 +3,13 @@
 namespace Tests\Feature\Evaluation;
 
 use App\DTOs\EvaluationSearchDTO;
+use App\Enums\RightEnum;
 use App\Models\Evaluation;
 use App\Models\EvaluationCriteria;
 use App\Models\EvaluationCriteriaScore;
+use App\Models\User;
 use App\Services\EvaluationSearchService;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -15,12 +17,17 @@ class EvaluationSearchServiceTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $user;
     private EvaluationSearchService $service;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->service = new EvaluationSearchService();
+        $this->user = $this->createUserWithRight([
+            RightEnum::EvaluationSearch,
+            RightEnum::EvaluationViewAll,
+        ]);
     }
 
     #region criteria_scores_from
@@ -42,7 +49,7 @@ class EvaluationSearchServiceTest extends TestCase
             'score' => 2,
         ]);
 
-        $result = $this->search(['criteria_scores_from' => [$criteria->id => 5]]);
+        $result = $this->search(['criteria_scores_from' => [$criteria->id => 5]], $this->user);
 
         $this->assertCount(1, $result);
         $this->assertSame($match->id, $result->first()->id);
@@ -52,7 +59,7 @@ class EvaluationSearchServiceTest extends TestCase
     {
         Evaluation::factory()->count(3)->create();
 
-        $result = $this->search([]);
+        $result = $this->search([], $this->user);
         $this->assertCount(3, $result);
     }
 
@@ -60,7 +67,7 @@ class EvaluationSearchServiceTest extends TestCase
     {
         Evaluation::factory()->count(3)->create();
 
-        $result = $this->search(['criteria_scores_from' => []]);
+        $result = $this->search(['criteria_scores_from' => [], $this->user]);
         $this->assertCount(3, $result);
     }
     #endregion
@@ -84,7 +91,7 @@ class EvaluationSearchServiceTest extends TestCase
             'score' => 8,
         ]);
 
-        $result = $this->search(['criteria_scores_to' => [$criteria->id => 5]]);
+        $result = $this->search(['criteria_scores_to' => [$criteria->id => 5]], $this->user);
 
         $this->assertCount(1, $result);
         $this->assertSame($match->id, $result->first()->id);
@@ -102,7 +109,7 @@ class EvaluationSearchServiceTest extends TestCase
     {
         Evaluation::factory()->count(3)->create();
 
-        $result = $this->search(['criteria_scores_to' => []]);
+        $result = $this->search(['criteria_scores_to' => []], $this->user);
         $this->assertCount(3, $result);
     }
     #endregion
@@ -136,7 +143,7 @@ class EvaluationSearchServiceTest extends TestCase
         $result = $this->search([
             'criteria_scores_from' => [$criteria->id => 4],
             'criteria_scores_to' => [$criteria->id => 6],
-        ]);
+        ], $this->user);
 
         $this->assertCount(1, $result);
         $this->assertSame($match->id, $result->first()->id);
@@ -179,7 +186,7 @@ class EvaluationSearchServiceTest extends TestCase
                 $criteria1->id => 1,
                 $criteria3->id => 8,
             ],
-        ]);
+        ], $this->user);
 
         $this->assertCount(1, $result);
         $this->assertSame($match->id, $result->first()->id);
@@ -198,7 +205,7 @@ class EvaluationSearchServiceTest extends TestCase
             'score' => 2,
         ]);
 
-        $result = $this->search(['criteria_scores_from' => [$criteria->id => 8]]);
+        $result = $this->search(['criteria_scores_from' => [$criteria->id => 8]], $this->user);
 
         $this->assertCount(0, $result);
     }
@@ -214,7 +221,7 @@ class EvaluationSearchServiceTest extends TestCase
             'evaluation_criteria_id' => $criteria->id,
         ]);
 
-        $result = $this->service->searchEvaluations(new EvaluationSearchDTO([]), ['player', 'homeTeam', 'awayTeam', 'criteriaScores']);
+        $result = $this->service->searchEvaluations(new EvaluationSearchDTO([]), $this->user, ['player', 'homeTeam', 'awayTeam', 'criteriaScores']);
 
         $this->assertTrue($result->first()->relationLoaded('player'));
         $this->assertTrue($result->first()->relationLoaded('homeTeam'));
@@ -223,8 +230,33 @@ class EvaluationSearchServiceTest extends TestCase
     }
     #endregion
 
+    #region EvaluationViewAll right
+    public function test_returns_only_own_evaluations_when_user_lacks_view_all_right(): void
+    {
+        $user = $this->createUserWithRight([RightEnum::EvaluationSearch]);
+
+        $own = Evaluation::factory()->create(['created_by' => $user->id]);
+        Evaluation::factory()->create();
+
+        $result = $this->service->searchEvaluations(new EvaluationSearchDTO([]), $user, []);
+
+        $this->assertCount(1, $result);
+        $this->assertSame($own->id, $result->first()->id);
+    }
+
+    public function test_returns_all_evaluations_when_user_has_view_all_right(): void
+    {
+        Evaluation::factory()->create(['created_by' => $this->user->id]);
+        Evaluation::factory()->count(2)->create();
+
+        $result = $this->service->searchEvaluations(new EvaluationSearchDTO([]), $this->user, []);
+
+        $this->assertCount(3, $result);
+    }
+    #endregion
+
     private function search(array $params): Collection
     {
-        return $this->service->searchEvaluations(new EvaluationSearchDTO($params), []);
+        return $this->service->searchEvaluations(new EvaluationSearchDTO($params), $this->user, []);
     }
 }

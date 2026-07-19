@@ -101,7 +101,7 @@ class EvaluationController extends Controller implements HasMiddleware
 
         $evaluationSearchDTO = new EvaluationSearchDTO($request->validated());
         $evaluationSearchService = new EvaluationSearchService();
-        $evaluations = $evaluationSearchService->searchEvaluations($evaluationSearchDTO, [
+        $evaluations = $evaluationSearchService->searchEvaluations($evaluationSearchDTO, $request->user(), [
             'player',
             'homeTeam',
             'awayTeam',

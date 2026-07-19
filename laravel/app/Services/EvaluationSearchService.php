@@ -3,12 +3,14 @@
 namespace App\Services;
 
 use App\DTOs\EvaluationSearchDTO;
+use App\Enums\RightEnum;
 use App\Models\Evaluation;
+use App\Models\User;
 use Illuminate\Support\Collection;
 
 class EvaluationSearchService
 {
-    public function searchEvaluations(EvaluationSearchDTO $dto, array|string $with): Collection
+    public function searchEvaluations(EvaluationSearchDTO $dto, User $user, array|string $with): Collection
     {
         $query = Evaluation::query();
 
@@ -31,6 +33,10 @@ class EvaluationSearchService
                     $q->where('score', '<=', $to);
                 }
             });
+        }
+
+        if(!$user->hasRight(RightEnum::EvaluationViewAll)){
+            $query->where('created_by', $user->id);
         }
 
         return $query->with($with)->get();

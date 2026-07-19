@@ -2,9 +2,12 @@
 
 import {ColumnDef} from "@tanstack/react-table"
 import {Club, Evaluation, PlayerSmall} from "@/types/types";
+import {User} from "@/types/auth";
 import sortHeader from "@/components/table/table-header-sort";
 import EvaluationRowActions from "@/pages/evaluation/table/evaluation-row-actions";
 import {date} from "@/locale/date-locale";
+import {useHasRight} from "@/hooks/use-has-right";
+import {RightEnum} from "@/enums";
 
 const player:ColumnDef<Evaluation> = {
     accessorKey: "player",
@@ -64,14 +67,28 @@ const score:ColumnDef<Evaluation> = {
     },
 };
 
-export const evaluationColumns: ColumnDef<Evaluation>[] = [
-    player,
-    homeTeam,
-    awayTeam,
-    kickoffDate,
-    score,
-    {
-        id: "actions",
-        cell: ({row}) => <EvaluationRowActions evaluation={row.original}/>,
+const creator:ColumnDef<Evaluation> = {
+    accessorKey: "creator",
+    header: sortHeader("Autor"),
+    cell: ({ row }) => {
+        const creator: User = row.getValue('creator');
+        return <div className="font-medium">{creator.firstname} {creator.lastname}</div>
     },
-];
+};
+
+export function useEvaluationColumns(): ColumnDef<Evaluation>[] {
+    const canViewCreator = useHasRight(RightEnum.EvaluationViewCreator);
+
+    return [
+        player,
+        homeTeam,
+        awayTeam,
+        kickoffDate,
+        score,
+        ...(canViewCreator ? [creator] : []),
+        {
+            id: "actions",
+            cell: ({row}) => <EvaluationRowActions evaluation={row.original}/>,
+        },
+    ];
+}
