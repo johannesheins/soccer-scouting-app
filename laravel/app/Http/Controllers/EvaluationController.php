@@ -86,7 +86,9 @@ class EvaluationController extends Controller implements HasMiddleware
 
     public function destroy(Evaluation $evaluation)
     {
+        $evaluation->delete();
 
+        return redirect()->route('evaluation.index');
     }
 
     public function search(EvaluationSearchRequest $request)
