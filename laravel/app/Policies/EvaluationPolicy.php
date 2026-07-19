@@ -27,7 +27,7 @@ class EvaluationPolicy
             return true;
         }
 
-        return $user->hasRight(RightEnum::EvaluationView) && $evaluation->user()->is($user);
+        return $user->hasRight(RightEnum::EvaluationView) && $evaluation->creator()->is($user);
     }
 
     public function create(User $user): bool
@@ -41,7 +41,7 @@ class EvaluationPolicy
             return true;
         }
 
-        return $user->hasRight(RightEnum::EvaluationEdit) && $evaluation->user()->is($user);
+        return $user->hasRight(RightEnum::EvaluationEdit) && $evaluation->creator()->is($user);
     }
 
     public function delete(User $user, Evaluation $evaluation): bool
@@ -50,6 +50,6 @@ class EvaluationPolicy
             return true;
         }
 
-        return $user->hasRight(RightEnum::EvaluationDestroy) && $evaluation->user()->is($user);
+        return $user->hasRight(RightEnum::EvaluationDestroy) && $evaluation->creator()->is($user);
     }
 }
