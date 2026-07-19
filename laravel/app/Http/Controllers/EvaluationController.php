@@ -15,6 +15,7 @@ use App\Models\Player;
 use App\Models\Position;
 use App\Models\Recommendation;
 use App\Services\EvaluationSearchService;
+use Emargareten\InertiaModal\Modal;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 
@@ -71,7 +72,10 @@ class EvaluationController extends Controller implements HasMiddleware
 
     public function show(Evaluation $evaluation)
     {
-
+        return new Modal('evaluation/evaluation-show', [
+            'evaluation' => $evaluation->loadForEvaluationView(),
+            'evaluationCriteriaGroups' => EvaluationCriteriaGroup::with('evaluationCriteria')->get(),
+        ])->baseRoute('evaluation.index');
     }
 
     public function edit(Evaluation $evaluation)

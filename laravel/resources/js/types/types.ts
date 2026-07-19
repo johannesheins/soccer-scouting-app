@@ -120,10 +120,12 @@ export type Evaluation = {
     kickoff_time: string
     strengths: string,
     weaknesses: string,
-    recommendation_id: number,
+    recommendation: Recommendation,
     comment: string,
     criteria_scores: EvaluationCriteriaScore[]
-    creator: User
+    creator: User,
+    created_at: string,
+    updated_at: string
 }
 
 export type EvaluationSearchQuery = {

@@ -43,6 +43,11 @@ class Evaluation extends Model
         return $this->belongsTo(Recommendation::class);
     }
 
+    public function loadForEvaluationView(): Evaluation
+    {
+        return $this->load('player', 'homeTeam', 'awayTeam', 'criteriaScores', 'recommendation', 'creator');
+    }
+
     protected function casts(): array
     {
         return [
