@@ -4,7 +4,7 @@ import { useState } from 'react';
 import {
     toPositionOptions,
     toPlayerPositionIds,
-    getYearOptions, getFootOptions
+    getFootOptions
 } from '@/hooks/form-options';
 import {
     Field,
@@ -23,6 +23,7 @@ import api from "@/routes/api";
 import {fetchPlayerData} from "@/hooks/fetchApiData";
 import {PlayerRequestNameEnum as Name} from "@/enums";
 import ClubInput from "@/components/input/club-input";
+import YearOfBirthInput from "@/components/input/year-of-birth-input";
 
 const playerRoute = player
 
@@ -39,14 +40,10 @@ export function PlayerFormDialog({onSelectPlayer}: { onSelectPlayer?: (player: P
 
 function Form({edit = false, dialog = false, backHref, onResponse}: { edit?: boolean, dialog?: boolean, backHref?: string|null, onResponse?: (players: Player) => void }) {const { player, positions, clubs } = usePage<Props>().props;
 
-    const yearOfBirthOptions = getYearOptions();
     const footOptions = getFootOptions();
     const positionOptions = toPositionOptions(positions);
     const playerPositions = toPlayerPositionIds(player);
 
-    const [selectedYearOfBirth, setSelectedYearOfBirth] = useState(
-        yearOfBirthOptions.filter(o => o.value === String(player?.year_of_birth))
-    );
     const [selectedStrongFoot, setSelectedStrongFoot] = useState(
         footOptions.filter(o => o.value === player?.strong_foot)
     );
@@ -105,19 +102,7 @@ function Form({edit = false, dialog = false, backHref, onResponse}: { edit?: boo
                             <ClubInput variant="single" name={Name.clubId} clubs={clubs} setData={setData} selectedValues={[Number(data[Name.clubId])]} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor={Name.yearOfBirth}>Jahrgang</FieldLabel>
-                            <SingleSelector
-                                value={selectedYearOfBirth}
-                                onChange={opts => {
-                                    setSelectedYearOfBirth(opts);
-                                    setData(Name.yearOfBirth, opts[0]?.value ?? '');
-                                }}
-                                defaultOptions={yearOfBirthOptions}
-                                placeholder="Jahrgang wählen"
-                                hidePlaceholderWhenSelected
-                                emptyIndicator={<p className="text-center text-sm">Keinen Jahrgang gefunden</p>}
-                            />
-                            <InputError message={errors[Name.yearOfBirth]} />
+                            <YearOfBirthInput variant="single" name={Name.yearOfBirth} setData={setData} selectedValues={[data[Name.yearOfBirth]]} error={errors[Name.yearOfBirth]} />
                         </Field>
                         <Field>
                             <FieldLabel htmlFor={Name.height}>Größe (cm)</FieldLabel>

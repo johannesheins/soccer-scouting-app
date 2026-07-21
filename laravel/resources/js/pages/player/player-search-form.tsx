@@ -8,12 +8,13 @@ import MultipleSelector from "@/components/ui/multi-select";
 import {Button} from "@/components/ui/button";
 import { useState, useEffect } from 'react';
 import type { Option } from '@/components/ui/multi-select';
-import {toPositionOptions, getYearOptions, getFootOptions} from "@/hooks/form-options";
+import {toPositionOptions, getFootOptions} from "@/hooks/form-options";
 import {usePreviousUrl} from "@/hooks/use-previous-url";
 import {Club, Player, Position} from "@/types/types";
 import fetchPlayerSerchData from "@/hooks/fetchApiData";
 import { useUrlParam, useUrlParamBracket } from "@/hooks/useUrlParam";
 import ClubInput from "@/components/input/club-input";
+import YearOfBirthInput from "@/components/input/year-of-birth-input";
 
 type Props = { positions: Position[]; clubs: Club[], returnData?: boolean, onResponse?: (players: Player[]) => void };
 export default function PlayerSearchForm({ positions, clubs, returnData, onResponse }: Props){
@@ -23,11 +24,6 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
     const urlClubIds = useUrlParamBracket('club_ids').map(c => Number(c));
     const urlYearsOfBirth = useUrlParamBracket('years_of_birth');
     const urlStrongFoots = useUrlParamBracket('strong_foots');
-
-    const yearOfBirthOptions = getYearOptions();
-    const [selectedYearsOfBirth, setSelectedYearsOfBirth] = useState<Option[]>(
-        yearOfBirthOptions.filter(o => urlYearsOfBirth.includes(o.value))
-    );
 
     const footOptions = getFootOptions();
     const [selectedStrongFoots, setSelectedStrongFoots] = useState<Option[]>(
@@ -94,19 +90,7 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
                             <ClubInput variant="multiple" name="club_ids" clubs={clubs} setData={setData} selectedValues={urlClubIds} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor="years_of_birth">Jahrgang</FieldLabel>
-                            <MultipleSelector
-                                value={selectedYearsOfBirth}
-                                onChange={opts => {
-                                    setSelectedYearsOfBirth(opts);
-                                    setData('years_of_birth', opts.map(o => o.value));
-                                }}
-                                defaultOptions={yearOfBirthOptions}
-                                placeholder="Jahrgang wählen"
-                                hidePlaceholderWhenSelected
-                                emptyIndicator={<p className="text-center text-sm">Keinen Jahrgang gefunden</p>}
-                            />
-                            <InputError message={errors.years_of_birth} />
+                            <YearOfBirthInput variant="multiple" name="years_of_birth" setData={setData} selectedValues={urlYearsOfBirth} error={errors.years_of_birth} />
                         </Field>
                         <FieldGroup className="grid grid-cols-2 gap-2 items-center">
                             <Field>
