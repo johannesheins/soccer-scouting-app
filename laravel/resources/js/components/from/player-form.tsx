@@ -4,7 +4,6 @@ import { useState } from 'react';
 import {
     toPositionOptions,
     toPlayerPositionIds,
-    toClubOptions,
     getYearOptions, getFootOptions
 } from '@/hooks/form-options';
 import {
@@ -23,6 +22,7 @@ import player from "@/routes/player"; //used as playerRoute
 import api from "@/routes/api";
 import {fetchPlayerData} from "@/hooks/fetchApiData";
 import {PlayerRequestNameEnum as Name} from "@/enums";
+import ClubInput from "@/components/input/club-input";
 
 const playerRoute = player
 
@@ -43,16 +43,12 @@ function Form({edit = false, dialog = false, backHref, onResponse}: { edit?: boo
     const footOptions = getFootOptions();
     const positionOptions = toPositionOptions(positions);
     const playerPositions = toPlayerPositionIds(player);
-    const clubOptions = toClubOptions(clubs);
 
     const [selectedYearOfBirth, setSelectedYearOfBirth] = useState(
         yearOfBirthOptions.filter(o => o.value === String(player?.year_of_birth))
     );
     const [selectedStrongFoot, setSelectedStrongFoot] = useState(
         footOptions.filter(o => o.value === player?.strong_foot)
-    );
-    const [selectedClub, setSelectedClub] = useState(
-        clubOptions.filter(o => o.value === String(player?.club_id))
     );
     const [selectedPositions, setSelectedPositions] = useState(
         positionOptions.filter(o => playerPositions.includes(o.value))
@@ -106,20 +102,7 @@ function Form({edit = false, dialog = false, backHref, onResponse}: { edit?: boo
                             <InputError message={errors[Name.lastname]} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor={Name.clubId}>Club</FieldLabel>
-                            <SingleSelector
-                                value={selectedClub}
-                                onChange={opts => {
-                                    setSelectedClub(opts);
-                                    setData(Name.clubId, opts[0]?.value ?? '');
-                                }}
-                                defaultOptions={clubOptions}
-                                groupBy="group"
-                                placeholder="Verein wählen"
-                                hidePlaceholderWhenSelected
-                                emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
-                            />
-                            <InputError message={errors[Name.clubId]} />
+                            <ClubInput variant="single" name={Name.clubId} clubs={clubs} setData={setData} selectedValues={[Number(data[Name.clubId])]} />
                         </Field>
                         <Field>
                             <FieldLabel htmlFor={Name.yearOfBirth}>Jahrgang</FieldLabel>

@@ -8,18 +8,19 @@ import MultipleSelector from "@/components/ui/multi-select";
 import {Button} from "@/components/ui/button";
 import { useState, useEffect } from 'react';
 import type { Option } from '@/components/ui/multi-select';
-import {toPositionOptions, toClubOptions, getYearOptions, getFootOptions} from "@/hooks/form-options";
+import {toPositionOptions, getYearOptions, getFootOptions} from "@/hooks/form-options";
 import {usePreviousUrl} from "@/hooks/use-previous-url";
 import {Club, Player, Position} from "@/types/types";
 import fetchPlayerSerchData from "@/hooks/fetchApiData";
 import { useUrlParam, useUrlParamBracket } from "@/hooks/useUrlParam";
+import ClubInput from "@/components/input/club-input";
 
 type Props = { positions: Position[]; clubs: Club[], returnData?: boolean, onResponse?: (players: Player[]) => void };
 export default function PlayerSearchForm({ positions, clubs, returnData, onResponse }: Props){
     usePreviousUrl();
 
     const urlPositionIds = useUrlParamBracket('position_ids');
-    const urlClubIds = useUrlParamBracket('club_ids');
+    const urlClubIds = useUrlParamBracket('club_ids').map(c => Number(c));
     const urlYearsOfBirth = useUrlParamBracket('years_of_birth');
     const urlStrongFoots = useUrlParamBracket('strong_foots');
 
@@ -36,11 +37,6 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
     const positionOptions = toPositionOptions(positions);
     const [selectedPositions, setSelectedPositions] = useState<Option[]>(
         positionOptions.filter(o => urlPositionIds.includes(o.value))
-    );
-
-    const clubOptions = toClubOptions(clubs);
-    const [selectedClubs, setSelectedClubs] = useState<Option[]>(
-        clubOptions.filter(o => urlClubIds.includes(o.value))
     );
 
     const { data, setData, get, processing, errors } = useForm({
@@ -95,20 +91,7 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
                             <InputError message={errors.lastname} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor="club_ids">Club</FieldLabel>
-                            <MultipleSelector
-                                value={selectedClubs}
-                                onChange={opts => {
-                                    setSelectedClubs(opts);
-                                    setData('club_ids', opts.map(o => o.value));
-                                }}
-                                defaultOptions={clubOptions}
-                                groupBy="group"
-                                placeholder="Verein wählen"
-                                hidePlaceholderWhenSelected
-                                emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
-                            />
-                            <InputError message={errors.club_ids} />
+                            <ClubInput variant="multiple" name="club_ids" clubs={clubs} setData={setData} selectedValues={urlClubIds} />
                         </Field>
                         <Field>
                             <FieldLabel htmlFor="years_of_birth">Jahrgang</FieldLabel>

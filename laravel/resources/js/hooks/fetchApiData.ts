@@ -1,13 +1,13 @@
 import api from "@/routes/api";
 import type {Player} from "@/types/types";
 
-export default async function fetchPlayerSearchData(data: Record<string, string | string[]>): Promise<Player[]> {
+export default async function fetchPlayerSearchData(data: Record<string, string | string[] | number | number[]>): Promise<Player[]> {
     const params = new URLSearchParams();
     Object.entries(data).forEach(([key, value]) => {
         if (Array.isArray(value)) {
-            value.forEach(v => params.append(key, v));
+            value.forEach(v => params.append(key, String(v)));
         } else {
-            params.append(key, value);
+            params.append(key, String(value));
         }
     });
 
