@@ -29,6 +29,8 @@ class EvaluationSearchRequest extends FormRequest
             'criteria_scores_to' => ['nullable', 'array'],
             'criteria_scores_to.*' => ['nullable', 'integer'],
 
+            'open_tab' => ['nullable', 'string'],
+
             'open_accordion' => ['nullable', 'array'],
             'open_accordion.*' => ['nullable', 'boolean'],
         ];

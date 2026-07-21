@@ -139,5 +139,6 @@ export type EvaluationSearchQuery = {
     player_ids: number[],
     criteria_scores_from: number[]
     criteria_scores_to: number[]
+    open_tab: string,
     open_accordion: boolean[]
 }

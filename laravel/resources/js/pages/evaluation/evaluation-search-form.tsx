@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Field, FieldDescription, FieldGroup, FieldLabel, FieldSet} from "@/components/ui/field";
+import {Field, FieldDescription, FieldGroup, FieldLabel} from "@/components/ui/field";
 import {router, useForm} from "@inertiajs/react";
 import {Button} from "@/components/ui/button";
 import {Club, EvaluationCriteriaGroups, EvaluationSearchQuery, PlayerOption} from "@/types/types";
@@ -10,6 +10,7 @@ import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "@/co
 import MultipleSelector from "@/components/ui/multi-select";
 import {toPlayerOptions} from "@/hooks/form-options";
 import {evaluationSearchRequest} from "@/request/evaluation-search-request";
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 
 type Props = {
     evaluationCriteriaGroups: EvaluationCriteriaGroups[],
@@ -24,14 +25,15 @@ export default function EvaluationSearchForm({evaluationCriteriaGroups, players,
         playerOptions.filter(o => queryParams?.player_ids?.includes(Number(o.value)))
     );
 
+    const flatCriteria = evaluationCriteriaGroups.flatMap(g => g.evaluation_criteria);
+
     const { data, setData, processing, errors } = useForm({
         player_ids: queryParams.player_ids ?? [],
         criteria_scores_from: queryParams.criteria_scores_from ?? [],
         criteria_scores_to: queryParams.criteria_scores_to ?? [],
-        open_accordion: queryParams.open_accordion ?? [],
+        open_tab: queryParams.open_tab ?? 'criteria',
+        open_accordion: queryParams.open_accordion ?? (evaluationCriteriaGroups[0] ? {[evaluationCriteriaGroups[0].id]: true} : {}),
     });
-
-    const flatCriteria = evaluationCriteriaGroups.flatMap(g => g.evaluation_criteria);
 
     async function submit(e: React.SubmitEvent){
         e.preventDefault()
@@ -42,11 +44,14 @@ export default function EvaluationSearchForm({evaluationCriteriaGroups, players,
         router.get(evaluation.search.url());
     }
 
-    function toggle(id: number){
+    function setOpenTab(tab: string){
+        setData('open_tab', tab);
+    }
+
+    function toggleAccordionState(id: number){
         const val = !data.open_accordion[id];
         setData('open_accordion', {...data.open_accordion, [id]: val});
     }
-
 
     const openAccordions = Object.entries(data.open_accordion)
         .filter(([, state]) => Boolean(Number(state)))
@@ -56,32 +61,22 @@ export default function EvaluationSearchForm({evaluationCriteriaGroups, players,
         <>
             <div>
                 <form onSubmit={submit}>
-                    <FieldSet>
-                        <FieldGroup>
-                            <Field>
-                                <FieldLabel>Spieler</FieldLabel>
-                                <MultipleSelector
-                                    value={selectedPlayers}
-                                    onChange={opts => {
-                                        setSelectedPlayers(opts);
-                                        setData('player_ids', opts.map(o => Number(o.value)));
-                                    }}
-                                    defaultOptions={playerOptions}
-                                    groupBy="group"
-                                    placeholder="Spieler wählen"
-                                    hidePlaceholderWhenSelected
-                                    emptyIndicator={<p className="text-center text-sm">Keine Spieler gefunden</p>}
-                                />
-                                <InputError message={errors.player_ids}/>
-                            </Field>
-                        </FieldGroup>
+                    <Tabs defaultValue={data.open_tab}>
+                        <TabsList>
+                            <TabsTrigger value="criteria" onClick={() =>setOpenTab('criteria')}>
+                                Kriterien
+                            </TabsTrigger>
+                            <TabsTrigger value="player" onClick={() =>setOpenTab('player')}>
+                                Spieler
+                            </TabsTrigger>
+                        </TabsList>
 
-                        <FieldGroup className="gap-4">
-                            {evaluationCriteriaGroups.length <= 0 && <p className="p-5">Keine Bewertungskriterien gefunden</p>}
-                            {evaluationCriteriaGroups.map(group => (
-                                <Accordion defaultValue={openAccordions} key={group.id} type="multiple" className="grid px-2 relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                                    <AccordionItem value={String(group.id)} >
-                                        <AccordionTrigger onClick={() => toggle(group.id)}>{group.name}</AccordionTrigger>
+                        <TabsContent value="criteria">
+                            <Accordion defaultValue={openAccordions} type="multiple">
+                                {evaluationCriteriaGroups.length <= 0 && <p className="p-5">Keine Bewertungskriterien gefunden</p>}
+                                {evaluationCriteriaGroups.map(group => (
+                                    <AccordionItem key={group.id} value={String(group.id)} >
+                                        <AccordionTrigger onClick={() => toggleAccordionState(group.id)}>{group.name}</AccordionTrigger>
                                         <AccordionContent>
                                             <FieldGroup className="grid sm:grid-cols-2 gap-x-15">
                                                 {group.evaluation_criteria.map(criteria => {
@@ -107,14 +102,37 @@ export default function EvaluationSearchForm({evaluationCriteriaGroups, players,
                                             </FieldGroup>
                                         </AccordionContent>
                                     </AccordionItem>
-                                </Accordion>
-                            ))}
-                        </FieldGroup>
-                        <Field className="w-fit flex flex-row">
+                                ))}
+                            </Accordion>
+                        </TabsContent>
+
+                        <TabsContent value="player">
+                            <FieldGroup>
+                                <Field>
+                                    <FieldLabel>Spieler</FieldLabel>
+                                    <MultipleSelector
+                                        value={selectedPlayers}
+                                        onChange={opts => {
+                                            setSelectedPlayers(opts);
+                                            setData('player_ids', opts.map(o => Number(o.value)));
+                                        }}
+                                        defaultOptions={playerOptions}
+                                        groupBy="group"
+                                        placeholder="Spieler wählen"
+                                        hidePlaceholderWhenSelected
+                                        emptyIndicator={<p className="text-center text-sm">Keine Spieler gefunden</p>}
+                                    />
+                                    <InputError message={errors.player_ids}/>
+                                </Field>
+                            </FieldGroup>
+                        </TabsContent>
+                        <Field className="w-fit flex flex-row mt-4">
                             <Button type="submit" disabled={processing}>Suchen</Button>
                             <Button type="button" variant="secondary" onClick={resetForm}>Zurücksetzen</Button>
                         </Field>
-                    </FieldSet>
+                    </Tabs>
+                    <FieldGroup>
+                    </FieldGroup>
                 </form>
             </div>
         </>

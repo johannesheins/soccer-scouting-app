@@ -65,7 +65,7 @@ export function PlayerRowActions({player}: { player: Player }) {
                         </DropdownMenuItem>
                     )}
                     {canViewEvaluation && (
-                        <DropdownMenuItem onClick={() => evaluationSearchRequest({player_ids: [player.id]})}>
+                        <DropdownMenuItem onClick={() => evaluationSearchRequest({player_ids: [player.id], open_tab: 'player'})}>
                             Spielerbewertungen anzeigen
                         </DropdownMenuItem>
                     )}
