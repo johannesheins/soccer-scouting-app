@@ -15,6 +15,10 @@ class EvaluationSearchService
         $query = Evaluation::query();
 
         $query->when($dto->playerIds, fn($q) => $q->whereIn('player_id', $dto->playerIds));
+        $query->whereHas('player', function ($q) use ($dto) {
+            $q->when($dto->yearsOfBirth, fn ($q) => $q->whereIn('year_of_birth', $dto->yearsOfBirth))
+                ->when($dto->clubIds, fn ($q) => $q->whereIn('club_id', $dto->clubIds));
+        });
 
         $criteria = array_merge(
             array_keys($dto->criteria_scores_from),

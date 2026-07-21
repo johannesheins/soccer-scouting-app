@@ -11,6 +11,8 @@ import MultipleSelector from "@/components/ui/multi-select";
 import {toPlayerOptions} from "@/hooks/form-options";
 import {evaluationSearchRequest} from "@/request/evaluation-search-request";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
+import ClubInput from "@/components/input/club-input";
+import YearOfBirthInput from "@/components/input/year-of-birth-input";
 
 type Props = {
     evaluationCriteriaGroups: EvaluationCriteriaGroups[],
@@ -18,9 +20,8 @@ type Props = {
     clubs: Club[],
     queryParams: EvaluationSearchQuery,
 };
-export default function EvaluationSearchForm({evaluationCriteriaGroups, players, queryParams}: Props){
+export default function EvaluationSearchForm({evaluationCriteriaGroups, players, clubs, queryParams}: Props){
     const playerOptions = toPlayerOptions(players);
-
     const [selectedPlayers, setSelectedPlayers] = useState(
         playerOptions.filter(o => queryParams?.player_ids?.includes(Number(o.value)))
     );
@@ -28,9 +29,13 @@ export default function EvaluationSearchForm({evaluationCriteriaGroups, players,
     const flatCriteria = evaluationCriteriaGroups.flatMap(g => g.evaluation_criteria);
 
     const { data, setData, processing, errors } = useForm({
-        player_ids: queryParams.player_ids ?? [],
         criteria_scores_from: queryParams.criteria_scores_from ?? [],
         criteria_scores_to: queryParams.criteria_scores_to ?? [],
+
+        player_ids: queryParams.player_ids ?? [],
+        club_ids: queryParams.club_ids ?? [],
+        years_of_birth: queryParams.years_of_birth ?? [],
+
         open_tab: queryParams.open_tab ?? 'criteria',
         open_accordion: queryParams.open_accordion ?? (evaluationCriteriaGroups[0] ? {[evaluationCriteriaGroups[0].id]: true} : {}),
     });
@@ -78,7 +83,7 @@ export default function EvaluationSearchForm({evaluationCriteriaGroups, players,
                                     <AccordionItem key={group.id} value={String(group.id)} >
                                         <AccordionTrigger onClick={() => toggleAccordionState(group.id)}>{group.name}</AccordionTrigger>
                                         <AccordionContent>
-                                            <FieldGroup className="grid sm:grid-cols-2 gap-x-15">
+                                            <FieldGroup className="grid sm:grid-cols-2 xl:grid-cols-3 gap-x-15">
                                                 {group.evaluation_criteria.map(criteria => {
                                                     const flatIndex = flatCriteria.findIndex(c => c.id === criteria.id);
                                                     return (
@@ -107,7 +112,7 @@ export default function EvaluationSearchForm({evaluationCriteriaGroups, players,
                         </TabsContent>
 
                         <TabsContent value="player">
-                            <FieldGroup>
+                            <FieldGroup className="grid sm:grid-cols-2 xl:grid-cols-3">
                                 <Field>
                                     <FieldLabel>Spieler</FieldLabel>
                                     <MultipleSelector
@@ -123,6 +128,12 @@ export default function EvaluationSearchForm({evaluationCriteriaGroups, players,
                                         emptyIndicator={<p className="text-center text-sm">Keine Spieler gefunden</p>}
                                     />
                                     <InputError message={errors.player_ids}/>
+                                </Field>
+                                <Field>
+                                    <ClubInput variant="multiple" name="club_ids" clubs={clubs} setData={setData} selectedValues={queryParams.club_ids} error={errors.club_ids}/>
+                                </Field>
+                                <Field>
+                                    <YearOfBirthInput variant="multiple" name="years_of_birth" setData={setData} selectedValues={queryParams?.years_of_birth} error={errors.years_of_birth} />
                                 </Field>
                             </FieldGroup>
                         </TabsContent>

@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests\Evaluation;
 
+use App\Concerns\PlayerValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 
 class EvaluationSearchRequest extends FormRequest
 {
+    use PlayerValidationRules;
     protected function prepareForValidation(): void
     {
         $query = $this->route('query');
@@ -20,14 +22,18 @@ class EvaluationSearchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'player_ids' => ['nullable', 'array'],
-            'player_ids.*' => ['nullable', 'integer', 'exists:players,id'],
 
             'criteria_scores_from' => ['nullable', 'array'],
             'criteria_scores_from.*' => ['nullable', 'integer'],
-
             'criteria_scores_to' => ['nullable', 'array'],
             'criteria_scores_to.*' => ['nullable', 'integer'],
+
+            'player_ids' => ['nullable', 'array'],
+            'player_ids.*' => $this->playerIdRules('nullable'),
+            'years_of_birth' => ['nullable', 'array'],
+            'years_of_birth.*' => $this->yearOfBirthRules('nullable'),
+            'club_ids' => ['nullable', 'array'],
+            'club_ids.*' => $this->clubIdRules('nullable'),
 
             'open_tab' => ['nullable', 'string'],
 
