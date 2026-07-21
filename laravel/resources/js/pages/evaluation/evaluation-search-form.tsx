@@ -35,9 +35,7 @@ export default function EvaluationSearchForm({evaluationCriteriaGroups, players,
 
     async function submit(e: React.SubmitEvent){
         e.preventDefault()
-        const jsonData = JSON.stringify(data);
-        const base64Encoded = btoa(jsonData);
-        return router.get(evaluation.search.url()+'/'+base64Encoded);
+        return evaluationSearchRequest(data);
     }
 
     function resetForm(){

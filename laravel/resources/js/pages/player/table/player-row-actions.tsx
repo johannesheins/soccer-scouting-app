@@ -24,6 +24,7 @@ import type {Player} from "@/types/types";
 import {useHasRight} from "@/hooks/use-has-right";
 import {PlayerRequestNameEnum as Name, RightEnum} from "@/enums";
 import evaluation from "@/routes/evaluation";
+import {evaluationSearchRequest} from "@/request/evaluation-search-request";
 
 const playerRoute = player;
 export function PlayerRowActions({player}: { player: Player }) {
@@ -63,8 +64,8 @@ export function PlayerRowActions({player}: { player: Player }) {
                             Spielerbewertung erstellen
                         </DropdownMenuItem>
                     )}
-                    {canViewEvaluation && ( //TODO Implement evaluation search with pre-loaded player id
-                        <DropdownMenuItem onClick={() => alert('Feature needs to be implemented.')}>
+                    {canViewEvaluation && (
+                        <DropdownMenuItem onClick={() => evaluationSearchRequest({player_ids: [player.id]})}>
                             Spielerbewertungen anzeigen
                         </DropdownMenuItem>
                     )}
