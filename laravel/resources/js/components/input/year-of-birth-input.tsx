@@ -8,15 +8,15 @@ import {SingleSelector} from "@/components/ui/single-select";
 type Props = {
     variant: "multiple" | "single",
     name: string,
-    setData: (key: string, values: string[]|string) => void,
-    selectedValues: string[],
+    setData: (key: string, values: number[]|number) => void,
+    selectedValues: number[],
     error?: string
 }
 
 export default function YearOfBirthInput({variant = "single", name, selectedValues, setData, error}: Props){
     const yearOfBirthOptions = getYearOptions();
     const [selectedYearOfBirth, setSelectedYearOfBirth] = useState<Option[]>(
-        yearOfBirthOptions.filter(o => selectedValues?.includes(o.value))
+        yearOfBirthOptions.filter(o => selectedValues?.includes(Number(o.value)))
     );
 
     return (
@@ -27,7 +27,7 @@ export default function YearOfBirthInput({variant = "single", name, selectedValu
                     value={selectedYearOfBirth}
                     onChange={opts => {
                         setSelectedYearOfBirth(opts);
-                        setData(name, opts.map(o => o.value));
+                        setData(name, opts.map(o => Number(o.value)));
                     }}
                     defaultOptions={yearOfBirthOptions}
                     placeholder="Jahrgang wählen"
@@ -39,7 +39,7 @@ export default function YearOfBirthInput({variant = "single", name, selectedValu
                     value={selectedYearOfBirth}
                     onChange={opts => {
                         setSelectedYearOfBirth(opts);
-                        setData(name, opts[0]?.value ?? '');
+                        setData(name, Number(opts[0]?.value) ?? '');
                     }}
                     defaultOptions={yearOfBirthOptions}
                     placeholder="Jahrgang wählen"

@@ -22,7 +22,7 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
 
     const urlPositionIds = useUrlParamBracket('position_ids');
     const urlClubIds = useUrlParamBracket('club_ids').map(c => Number(c));
-    const urlYearsOfBirth = useUrlParamBracket('years_of_birth');
+    const urlYearsOfBirth = useUrlParamBracket('years_of_birth').map(y => Number(y));
     const urlStrongFoots = useUrlParamBracket('strong_foots');
 
     const footOptions = getFootOptions();
@@ -69,7 +69,7 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
         <div className="w-full">
             <form onSubmit={submit}>
                 <FieldSet>
-                    <FieldGroup className="grid sm:grid-cols-2 lg:grid-cols-3">
+                    <FieldGroup className="grid sm:grid-cols-2 xl:grid-cols-3">
                         <Field>
                             <FieldLabel htmlFor="firstname">Vorname</FieldLabel>
                             <Input id="firstname"

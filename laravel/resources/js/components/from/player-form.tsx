@@ -99,10 +99,10 @@ function Form({edit = false, dialog = false, backHref, onResponse}: { edit?: boo
                             <InputError message={errors[Name.lastname]} />
                         </Field>
                         <Field>
-                            <ClubInput variant="single" name={Name.clubId} clubs={clubs} setData={setData} selectedValues={[Number(data[Name.clubId])]} />
+                            <ClubInput variant={"single"} name={Name.clubId} clubs={clubs} setData={setData} selectedValues={[Number(data[Name.clubId])]} />
                         </Field>
                         <Field>
-                            <YearOfBirthInput variant="single" name={Name.yearOfBirth} setData={setData} selectedValues={[data[Name.yearOfBirth]]} error={errors[Name.yearOfBirth]} />
+                            <YearOfBirthInput variant="single" name={Name.yearOfBirth} setData={setData} selectedValues={[Number(data[Name.yearOfBirth])]} error={errors[Name.yearOfBirth]} />
                         </Field>
                         <Field>
                             <FieldLabel htmlFor={Name.height}>Größe (cm)</FieldLabel>
