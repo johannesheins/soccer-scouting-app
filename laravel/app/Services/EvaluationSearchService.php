@@ -14,6 +14,8 @@ class EvaluationSearchService
     {
         $query = Evaluation::query();
 
+        $query->when($dto->playerIds, fn($q) => $q->whereIn('player_id', $dto->playerIds));
+
         $criteria = array_merge(
             array_keys($dto->criteria_scores_from),
             array_keys($dto->criteria_scores_to)

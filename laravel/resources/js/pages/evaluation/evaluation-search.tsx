@@ -3,16 +3,17 @@ import {DataTable} from "@/components/table/data-table";
 import React from "react";
 import EvaluationSearchForm from "@/pages/evaluation/evaluation-search-form";
 import {useEvaluationColumns} from "@/pages/evaluation/table/evaluation-columns";
-import {Club, Evaluation, EvaluationCriteriaGroups, EvaluationSearchQuery} from "@/types/types";
+import {Club, Evaluation, EvaluationCriteriaGroups, EvaluationSearchQuery, PlayerOption} from "@/types/types";
 
 type Props = {
     evaluationCriteriaGroups: EvaluationCriteriaGroups[],
+    players: PlayerOption[],
     clubs: Club[];
     queryParams: EvaluationSearchQuery;
     evaluations: Evaluation[];
 }
 export default function EvaluationSearch() {
-    const { evaluationCriteriaGroups, clubs, queryParams, evaluations } = usePage<Props>().props;
+    const { evaluationCriteriaGroups, players, clubs, queryParams, evaluations } = usePage<Props>().props;
     const evaluationColumns = useEvaluationColumns();
 
     return (
@@ -22,6 +23,7 @@ export default function EvaluationSearch() {
                 <div className="relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                     <EvaluationSearchForm
                         evaluationCriteriaGroups={evaluationCriteriaGroups}
+                        players={players}
                         clubs={clubs}
                         queryParams={queryParams}
                     />

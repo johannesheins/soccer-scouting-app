@@ -1,20 +1,31 @@
-import React from "react";
+import React, {useState} from "react";
 import {Field, FieldDescription, FieldGroup, FieldLabel, FieldSet} from "@/components/ui/field";
 import {router, useForm} from "@inertiajs/react";
 import {Button} from "@/components/ui/button";
-import {Club, EvaluationCriteriaGroups, EvaluationSearchQuery} from "@/types/types";
+import {Club, EvaluationCriteriaGroups, EvaluationSearchQuery, PlayerOption} from "@/types/types";
 import {ScoreBarRange} from "@/components/score-bar";
 import InputError from "@/components/input-error";
 import evaluation from "@/routes/evaluation";
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "@/components/ui/accordion";
+import MultipleSelector from "@/components/ui/multi-select";
+import {toPlayerOptions} from "@/hooks/form-options";
+import {evaluationSearchRequest} from "@/request/evaluation-search-request";
 
 type Props = {
     evaluationCriteriaGroups: EvaluationCriteriaGroups[],
+    players: PlayerOption[];
     clubs: Club[],
     queryParams: EvaluationSearchQuery,
 };
-export default function EvaluationSearchForm({evaluationCriteriaGroups, queryParams}: Props){
+export default function EvaluationSearchForm({evaluationCriteriaGroups, players, queryParams}: Props){
+    const playerOptions = toPlayerOptions(players);
+
+    const [selectedPlayers, setSelectedPlayers] = useState(
+        playerOptions.filter(o => queryParams?.player_ids?.includes(Number(o.value)))
+    );
+
     const { data, setData, processing, errors } = useForm({
+        player_ids: queryParams.player_ids ?? [],
         criteria_scores_from: queryParams.criteria_scores_from ?? [],
         criteria_scores_to: queryParams.criteria_scores_to ?? [],
         open_accordion: queryParams.open_accordion ?? [],
@@ -48,6 +59,25 @@ export default function EvaluationSearchForm({evaluationCriteriaGroups, queryPar
             <div>
                 <form onSubmit={submit}>
                     <FieldSet>
+                        <FieldGroup>
+                            <Field>
+                                <FieldLabel>Spieler</FieldLabel>
+                                <MultipleSelector
+                                    value={selectedPlayers}
+                                    onChange={opts => {
+                                        setSelectedPlayers(opts);
+                                        setData('player_ids', opts.map(o => Number(o.value)));
+                                    }}
+                                    defaultOptions={playerOptions}
+                                    groupBy="group"
+                                    placeholder="Spieler wählen"
+                                    hidePlaceholderWhenSelected
+                                    emptyIndicator={<p className="text-center text-sm">Keine Spieler gefunden</p>}
+                                />
+                                <InputError message={errors.player_ids}/>
+                            </Field>
+                        </FieldGroup>
+
                         <FieldGroup className="gap-4">
                             {evaluationCriteriaGroups.length <= 0 && <p className="p-5">Keine Bewertungskriterien gefunden</p>}
                             {evaluationCriteriaGroups.map(group => (

@@ -111,6 +111,7 @@ class EvaluationController extends Controller implements HasMiddleware
 
         return inertia('evaluation/evaluation-search', [
             'evaluationCriteriaGroups' => EvaluationCriteriaGroup::with('evaluationCriteria')->get(),
+            'players' => Player::allForSelectOption()->toArray(),
             'clubs' => Club::orderBy('clubname')->get(['id', 'clubname']),
 
             'queryParams' => $validated,

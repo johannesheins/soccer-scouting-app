@@ -20,6 +20,9 @@ class EvaluationSearchRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'player_ids' => ['nullable', 'array'],
+            'player_ids.*' => ['nullable', 'integer', 'exists:players,id'],
+
             'criteria_scores_from' => ['nullable', 'array'],
             'criteria_scores_from.*' => ['nullable', 'integer'],
 

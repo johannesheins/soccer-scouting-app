@@ -27,6 +27,13 @@ export type PlayerSmall = {
     positions: { id: number }[],
 };
 
+export type PlayerOption = {
+    id: number,
+    firstname: string,
+    lastname: string,
+    club: Club,
+}
+
 export type Player = {
     id: number,
     firstname: string,
@@ -129,6 +136,7 @@ export type Evaluation = {
 }
 
 export type EvaluationSearchQuery = {
+    player_ids: number[],
     criteria_scores_from: number[]
     criteria_scores_to: number[]
     open_accordion: boolean[]
