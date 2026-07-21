@@ -49,38 +49,38 @@ export default function EvaluationSearchForm({evaluationCriteriaGroups, queryPar
                 <form onSubmit={submit}>
                     <FieldSet>
                         <FieldGroup className="gap-4">
-                        {evaluationCriteriaGroups.length <= 0 && <p className="p-5">Keine Bewertungskriterien gefunden</p>}
-                        {evaluationCriteriaGroups.map(group => (
-                            <Accordion defaultValue={openAccordions} key={group.id} type="multiple" className="grid px-2 relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                                <AccordionItem value={String(group.id)} >
-                                    <AccordionTrigger onClick={() => toggle(group.id)}>{group.name}</AccordionTrigger>
-                                    <AccordionContent>
-                                        <FieldGroup className="grid sm:grid-cols-2 gap-x-15">
-                                            {group.evaluation_criteria.map(criteria => {
-                                                const flatIndex = flatCriteria.findIndex(c => c.id === criteria.id);
-                                                return (
-                                                    <Field key={criteria.id}>
-                                                        <div className="flex flex-row justify-between">
-                                                            <FieldLabel htmlFor={'criteria_' + criteria.id}>{criteria.name}</FieldLabel>
-                                                            <FieldDescription>x{criteria.multiplier}</FieldDescription>
-                                                        </div>
-                                                        <ScoreBarRange
-                                                            nameFrom={'criteria_from' + criteria.id}
-                                                            nameTo={'criteria_to' + criteria.id}
-                                                            valueFrom={data.criteria_scores_from[criteria.id] ?? 0}
-                                                            valueTo={data.criteria_scores_to[criteria.id] ?? 10}
-                                                            onChangeFrom={val => setData('criteria_scores_from', {...data.criteria_scores_from, [criteria.id]: val})}
-                                                            onChangeTo={val => setData('criteria_scores_to', {...data.criteria_scores_to, [criteria.id]: val})}
-                                                        />
-                                                        <InputError message={(errors as Record<string, string>)[`criteriaScores.${flatIndex}.score`] ?? ''} />
-                                                    </Field>
-                                                );
-                                            })}
-                                        </FieldGroup>
-                                    </AccordionContent>
-                                </AccordionItem>
-                            </Accordion>
-                        ))}
+                            {evaluationCriteriaGroups.length <= 0 && <p className="p-5">Keine Bewertungskriterien gefunden</p>}
+                            {evaluationCriteriaGroups.map(group => (
+                                <Accordion defaultValue={openAccordions} key={group.id} type="multiple" className="grid px-2 relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+                                    <AccordionItem value={String(group.id)} >
+                                        <AccordionTrigger onClick={() => toggle(group.id)}>{group.name}</AccordionTrigger>
+                                        <AccordionContent>
+                                            <FieldGroup className="grid sm:grid-cols-2 gap-x-15">
+                                                {group.evaluation_criteria.map(criteria => {
+                                                    const flatIndex = flatCriteria.findIndex(c => c.id === criteria.id);
+                                                    return (
+                                                        <Field key={criteria.id}>
+                                                            <div className="flex flex-row justify-between">
+                                                                <FieldLabel htmlFor={'criteria_' + criteria.id}>{criteria.name}</FieldLabel>
+                                                                <FieldDescription>x{criteria.multiplier}</FieldDescription>
+                                                            </div>
+                                                            <ScoreBarRange
+                                                                nameFrom={'criteria_from' + criteria.id}
+                                                                nameTo={'criteria_to' + criteria.id}
+                                                                valueFrom={data.criteria_scores_from[criteria.id] ?? 0}
+                                                                valueTo={data.criteria_scores_to[criteria.id] ?? 10}
+                                                                onChangeFrom={val => setData('criteria_scores_from', {...data.criteria_scores_from, [criteria.id]: val})}
+                                                                onChangeTo={val => setData('criteria_scores_to', {...data.criteria_scores_to, [criteria.id]: val})}
+                                                            />
+                                                            <InputError message={(errors as Record<string, string>)[`criteriaScores.${flatIndex}.score`] ?? ''} />
+                                                        </Field>
+                                                    );
+                                                })}
+                                            </FieldGroup>
+                                        </AccordionContent>
+                                    </AccordionItem>
+                                </Accordion>
+                            ))}
                         </FieldGroup>
                         <Field className="w-fit flex flex-row">
                             <Button type="submit" disabled={processing}>Suchen</Button>
