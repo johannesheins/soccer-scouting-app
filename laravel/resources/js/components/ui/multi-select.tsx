@@ -360,8 +360,8 @@ const MultipleSelector = ({
                                             <>
                                                 {dropdowns.map(option => (
                                                     <CommandItem
-                                                        key={option.label}
-                                                        value={option.label}
+                                                        key={option.value}
+                                                        value={`${option.label} ${option.value}`}
                                                         disabled={option.disable}
                                                         onMouseDown={e => { e.preventDefault(); e.stopPropagation() }}
                                                         onSelect={() => {
