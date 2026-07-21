@@ -53,7 +53,7 @@ trait PlayerValidationRules
         return ['integer', 'exists:positions,id', ...$rules];
     }
 
-    protected function playerId(...$rules): array
+    protected function playerIdRules(...$rules): array
     {
         return ['integer', 'exists:players,id', ...$rules];
     }

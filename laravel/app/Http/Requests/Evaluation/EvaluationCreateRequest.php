@@ -12,7 +12,7 @@ class EvaluationCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            reqN(Name::playerId) => $this->playerId(),
+            reqN(Name::playerId) => $this->playerIdRules(),
         ];
     }
 

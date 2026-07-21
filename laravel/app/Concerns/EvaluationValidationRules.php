@@ -9,7 +9,7 @@ trait EvaluationValidationRules
     protected function evaluationRules(): array
     {
         return [
-            'player_id' => $this->playerId('required'),
+            'player_id' => $this->playerIdRules('required'),
             'home_team_id' => $this->clubIdRules('required'),
             'away_team_id' => $this->clubIdRules('required'),
             'kickoff_date' => ['required', 'date'],
