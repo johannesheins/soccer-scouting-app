@@ -82,7 +82,6 @@ export type EvaluationCriteria = {
     id: number,
     name: string,
     minimum_player_age: number,
-    multiplier: number,
     evaluation_criteria_group_id: number | null,
     group: EvaluationCriteriaGroup | null,
 }

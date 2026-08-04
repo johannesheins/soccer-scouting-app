@@ -21,11 +21,6 @@ export const evaluationCriteriaColumns: ColumnDef<EvaluationCriteria>[] = [
         cell: ({row}) => <div className="font-medium">{row.getValue("minimum_player_age")}</div>,
     },
     {
-        accessorKey: "multiplier",
-        header: sortHeader("Multiplikator"),
-        cell: ({row}) => <div className="font-medium">{row.getValue("multiplier")}</div>,
-    },
-    {
         id: "actions",
         cell: ({row}) => <EvaluationCriteriaRowActions criterion={row.original}/>,
     },

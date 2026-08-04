@@ -12,7 +12,6 @@ return new class extends Migration {
             $table->foreignId('evaluation_criteria_group_id')->nullable()->constrained('evaluation_criteria_groups')->cascadeOnUpdate()->nullOnDelete();
             $table->string('name')->unique();
             $table->unsignedSmallInteger('minimum_player_age')->nullable();
-            $table->unsignedTinyInteger('multiplier')->default(1);
         });
     }
 

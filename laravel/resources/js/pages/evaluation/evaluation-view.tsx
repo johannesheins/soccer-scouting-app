@@ -49,7 +49,6 @@ export default function EvaluationView({evaluation, evaluationCriteriaGroups}: P
                                 <div key={criteria.id}>
                                     <div className="grid grid-flow-col justify-between text-muted-foreground text-xs tracking-wide mb-1">
                                         <p className="uppercase">{criteria.name}</p>
-                                        <p>{criteria.multiplier}x</p>
                                     </div>
                                     <ScoreBar disabled={true} value={scores[criteria.id] ?? 0} className="font-medium"/>
                                 </div>

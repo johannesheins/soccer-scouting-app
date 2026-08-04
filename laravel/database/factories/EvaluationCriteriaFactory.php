@@ -14,7 +14,6 @@ class EvaluationCriteriaFactory extends Factory
         return [
             'name' => $this->faker->unique()->name(),
             'minimum_player_age' => $this->faker->numberBetween(0, 40),
-            'multiplier' => $this->faker->numberBetween(1, 5),
         ];
     }
 }

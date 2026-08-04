@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Field, FieldDescription, FieldGroup, FieldLabel} from "@/components/ui/field";
+import {Field, FieldGroup, FieldLabel} from "@/components/ui/field";
 import {router, useForm} from "@inertiajs/react";
 import {Button} from "@/components/ui/button";
 import {Club, EvaluationCriteriaGroups, EvaluationSearchQuery, PlayerOption} from "@/types/types";
@@ -90,7 +90,6 @@ export default function EvaluationSearchForm({evaluationCriteriaGroups, players,
                                                         <Field key={criteria.id}>
                                                             <div className="flex flex-row justify-between">
                                                                 <FieldLabel htmlFor={'criteria_' + criteria.id}>{criteria.name}</FieldLabel>
-                                                                <FieldDescription>x{criteria.multiplier}</FieldDescription>
                                                             </div>
                                                             <ScoreBarRange
                                                                 nameFrom={'criteria_from' + criteria.id}

@@ -43,7 +43,6 @@ class EvaluationCriteriaControllerTest extends AdministrationTestCase
             ->post(route('evaluation-criteria.store'), [
                 'name' => $data->name,
                 'minimum_player_age' => $data->minimum_player_age,
-                'multiplier' => $data->multiplier,
             ]);
 
         $this->assertAdministrationRoute('evaluation-criteria.index', 'administration/evaluation-criteria/evaluation-criteria-index');
@@ -59,7 +58,7 @@ class EvaluationCriteriaControllerTest extends AdministrationTestCase
                 'minimum_player_age' => '',
             ]);
 
-        $response->assertInvalid(['name', 'multiplier']);
+        $response->assertInvalid(['name']);
     }
 
     public function test_show()
@@ -97,7 +96,6 @@ class EvaluationCriteriaControllerTest extends AdministrationTestCase
             ->put(route('evaluation-criteria.update', $criterion->id), [
                 'name' => $newName,
                 'minimum_player_age' => $criterion->minimum_player_age,
-                'multiplier' => $criterion->multiplier,
             ]);
 
         $this->assertDatabaseHas('evaluation_criteria', ['id' => $criterion->id, 'name' => $newName]);
@@ -114,7 +112,7 @@ class EvaluationCriteriaControllerTest extends AdministrationTestCase
                 'minimum_player_age' => '',
             ]);
 
-        $response->assertInvalid(['name', 'multiplier']);
+        $response->assertInvalid(['name']);
     }
 
     public function test_destroy()

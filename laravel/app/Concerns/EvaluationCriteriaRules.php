@@ -12,7 +12,6 @@ trait EvaluationCriteriaRules
         return [
             'name' => $this->evaluationCriteriaNameRules('required', Rule::unique('evaluation_criteria', 'name')->ignore($this->route('evaluation_criterion'))),
             'minimum_player_age' => $this->evaluationCriteriaMinimumPlayerAgeRules('nullable'),
-            'multiplier' => $this->evaluationCriteriaMultiplierRules('required'),
             'evaluation_criteria_group_id' => $this->evaluationCriteriaGroupIdRules('nullable'),
         ];
     }
@@ -24,10 +23,6 @@ trait EvaluationCriteriaRules
 
     protected function evaluationCriteriaMinimumPlayerAgeRules(...$rules): array
     {
-        return ['integer', ...$rules];
-    }
-
-    protected function evaluationCriteriaMultiplierRules(...$rules): array{
         return ['integer', ...$rules];
     }
 }

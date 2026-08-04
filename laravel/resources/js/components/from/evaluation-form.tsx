@@ -1,7 +1,7 @@
 import {Head, router, useForm, usePage} from '@inertiajs/react';
 import React, {useEffect, useState} from 'react';
 import {
-    Field, FieldDescription,
+    Field,
     FieldGroup,
     FieldLabel,
     FieldLegend,
@@ -174,7 +174,6 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                                                 <Field key={criteria.id}>
                                                     <div className="flex flex-row justify-between">
                                                         <FieldLabel htmlFor={'criteria_' + criteria.id}>{criteria.name}</FieldLabel>
-                                                        <FieldDescription>x{criteria.multiplier}</FieldDescription>
                                                     </div>
                                                     <ScoreBar name={'criteria_' + criteria.id} value={data.criteriaScores[criteria.id] ?? 0} onChange={val => setData('criteriaScores', {...data.criteriaScores, [criteria.id]: val})} />
                                                     <InputError message={(errors as Record<string, string>)[`criteriaScores.${flatIndex}.score`] ?? ''} />

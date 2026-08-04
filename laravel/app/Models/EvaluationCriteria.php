@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['name', 'minimum_player_age', 'multiplier', 'evaluation_criteria_group_id'])]
+#[Fillable(['name', 'minimum_player_age', 'evaluation_criteria_group_id'])]
 class EvaluationCriteria extends Model
 {
     use HasFactory;

@@ -27,7 +27,6 @@ export default function EvaluationCriteriaForm({ edit = false, backHref = null }
     const { data, setData, post, put, processing, errors } = useForm({
         name: evaluationCriterion?.name ?? '',
         minimum_player_age: evaluationCriterion?.minimum_player_age ?? '',
-        multiplier: evaluationCriterion?.multiplier ?? 1,
         evaluation_criteria_group_id: evaluationCriterion?.evaluation_criteria_group_id ?? null as number | null,
     });
 
@@ -80,17 +79,6 @@ export default function EvaluationCriteriaForm({ edit = false, backHref = null }
                                     onChange={e => setData('minimum_player_age', e.target.value === '' ? '' : Number(e.target.value))}
                                 />
                                 <InputError message={errors.minimum_player_age} />
-                            </Field>
-                            <Field>
-                                <FieldLabel htmlFor="multiplier">Multiplikator</FieldLabel>
-                                <Input
-                                    id="multiplier"
-                                    type="number"
-                                    min={1}
-                                    value={data.multiplier}
-                                    onChange={e => setData('multiplier', Number(e.target.value))}
-                                />
-                                <InputError message={errors.multiplier} />
                             </Field>
                         </FieldGroup>
                         <Field className="w-fit flex-row">
