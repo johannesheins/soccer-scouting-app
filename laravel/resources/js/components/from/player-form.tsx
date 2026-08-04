@@ -24,6 +24,7 @@ import {fetchPlayerData} from "@/hooks/fetchApiData";
 import {PlayerRequestNameEnum as Name} from "@/enums";
 import ClubInput from "@/components/input/club-input";
 import YearOfBirthInput from "@/components/input/year-of-birth-input";
+import HeightInput from "@/components/input/height-input";
 
 const playerRoute = player
 
@@ -105,14 +106,8 @@ function Form({edit = false, dialog = false, backHref, onResponse}: { edit?: boo
                             <YearOfBirthInput variant="single" name={Name.yearOfBirth} setData={setData} selectedValues={[Number(data[Name.yearOfBirth])]} error={errors[Name.yearOfBirth]} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor={Name.height}>Größe (cm)</FieldLabel>
-                            <Input id={Name.height}
-                                   value={data[Name.height]}
-                                   onChange={e => setData(Name.height, e.target.value)}
-                                   placeholder="Größe eintragen"
-                                   type="number"
-                            />
-                            <InputError message={errors[Name.height]} />
+                            {/*Its always zero --- is fixed must be tested*/}
+                            <HeightInput name={Name.height} value={data[Name.height]} setData={setData} error={errors[Name.height]} />
                         </Field>
                         <Field>
                             <FieldLabel htmlFor={Name.strongFoot}>Starker Fuß</FieldLabel>

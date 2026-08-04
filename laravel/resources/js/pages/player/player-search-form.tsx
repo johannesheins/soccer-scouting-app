@@ -15,6 +15,7 @@ import fetchPlayerSerchData from "@/hooks/fetchApiData";
 import { useUrlParam, useUrlParamBracket } from "@/hooks/useUrlParam";
 import ClubInput from "@/components/input/club-input";
 import YearOfBirthInput from "@/components/input/year-of-birth-input";
+import HeightRangeInput from "@/components/input/height-range-input";
 
 type Props = { positions: Position[]; clubs: Club[], returnData?: boolean, onResponse?: (players: Player[]) => void };
 export default function PlayerSearchForm({ positions, clubs, returnData, onResponse }: Props){
@@ -93,26 +94,7 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
                             <YearOfBirthInput variant="multiple" name="years_of_birth" setData={setData} selectedValues={urlYearsOfBirth} error={errors.years_of_birth} />
                         </Field>
                         <FieldGroup className="grid grid-cols-2 gap-2 items-center">
-                            <Field>
-                                <FieldLabel htmlFor="height_from">Größe von</FieldLabel>
-                                <Input id="height_from"
-                                       value={data.height_from}
-                                       onChange={e => setData('height_from', e.target.value)}
-                                       placeholder="Größe eintragen"
-                                       type="number"
-                                />
-                                <InputError message={errors.height_from} />
-                            </Field>
-                            <Field>
-                                <FieldLabel htmlFor="height_to">Größe bis</FieldLabel>
-                                <Input id="height_to"
-                                       value={data.height_to}
-                                       onChange={e => setData('height_to', e.target.value)}
-                                       placeholder="Größe eintragen"
-                                       type="number"
-                                />
-                                <InputError message={errors.height_to} />
-                            </Field>
+                            <HeightRangeInput nameFrom="height_from" nameTo="height_to" valueFrom={data.height_from} valueTo={data.height_to} setData={setData} errorFrom={errors.height_from} errorTo={errors.height_to} />
                         </FieldGroup>
                         <Field>
                             <FieldLabel htmlFor="strong_foot">Starker Fuß</FieldLabel>
