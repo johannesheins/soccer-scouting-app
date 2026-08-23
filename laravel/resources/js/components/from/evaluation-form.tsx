@@ -25,6 +25,7 @@ import {DateTimePicker} from "@/components/ui/date-time-picker";
 import {Textarea} from "@/components/ui/textarea";
 import {PlayerRequestNameEnum as Name} from "@/enums";
 import {ScoreBar} from "@/components/score-bar";
+import {ScoreCalculationService} from "@/services/score-calculation-service";
 
 type Props = {
     evaluation?: EvaluationSmall,
@@ -69,6 +70,8 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
             (evaluation?.criteria_scores ?? []).map(s => [s.evaluation_criteria_id, s.score])
         ) as Record<number, number>,
     });
+
+    const calculateScores = new ScoreCalculationService(data.criteriaScores, evaluationCriteriaGroups);
 
     const flatCriteria = evaluationCriteriaGroups.flatMap(g => g.evaluation_criteria);
 
@@ -166,15 +169,16 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                         {evaluationCriteriaGroups.map(group => (
                             <div key={group.id} className="grid gap-y-4 relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                                 <FieldSet>
-                                    <FieldLegend>{group.name}</FieldLegend>
+                                    <FieldLegend className="flex justify-between w-full">
+                                        <span>{group.name}</span>
+                                        <span>{calculateScores.getGroupScore(group.id)}</span>
+                                    </FieldLegend>
                                     <FieldGroup className="grid sm:grid-cols-2 gap-x-15">
                                         {group.evaluation_criteria.map(criteria => {
                                             const flatIndex = flatCriteria.findIndex(c => c.id === criteria.id);
                                             return (
                                                 <Field key={criteria.id}>
-                                                    <div className="flex flex-row justify-between">
-                                                        <FieldLabel htmlFor={'criteria_' + criteria.id}>{criteria.name}</FieldLabel>
-                                                    </div>
+                                                    <FieldLabel htmlFor={'criteria_' + criteria.id}>{criteria.name}</FieldLabel>
                                                     <ScoreBar name={'criteria_' + criteria.id} value={data.criteriaScores[criteria.id] ?? 0} onChange={val => setData('criteriaScores', {...data.criteriaScores, [criteria.id]: val})} />
                                                     <InputError message={(errors as Record<string, string>)[`criteriaScores.${flatIndex}.score`] ?? ''} />
                                                 </Field>
@@ -239,14 +243,19 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                         <Input type="hidden" name={Name.playerId} value={player?.id ?? selectedPlayer?.id ?? data[Name.playerId] ?? ''} onChange={(val) => setData(Name.playerId, String(val))}/>
                     </form>
 
-                    <Field className="w-fit flex-row">
-                        <Button type="submit" form="evaluation-from" disabled={processing}>{edit ? 'Aktualisieren' : 'Erstellen'}</Button>
-                        {edit && backHref && (
-                            <Button variant="secondary" type="button" onClick={() => router.get(backHref)}>
-                                Zurück
-                            </Button>
-                        )}
-                    </Field>
+                    <FieldGroup className="grid grid-cols-2">
+                        <Field className="w-fit flex-row">
+                            <Button type="submit" form="evaluation-from" disabled={processing}>{edit ? 'Aktualisieren' : 'Erstellen'}</Button>
+                            {edit && backHref && (
+                                <Button variant="secondary" type="button" onClick={() => router.get(backHref)}>
+                                    Zurück
+                                </Button>
+                            )}
+                        </Field>
+                        <Field>
+                            <span className="text-end font-medium">Gesamt: {calculateScores.getTotalScore()}</span>
+                        </Field>
+                    </FieldGroup>
                 </div>
             </div>
         </>
