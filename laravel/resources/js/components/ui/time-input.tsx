@@ -5,15 +5,15 @@ import { Input } from "@/components/ui/input"
 import InputError from "@/components/input-error"
 import {cn} from "@/lib/utils";
 
-type Props = { name: string; errorMessage?: string; label?: string; onChange?: (value: string) => void }
-export function TimeInput({ name, errorMessage, label, onChange }: Props) {
+type Props = { name: string; value?: string; errorMessage?: string; label?: string; onChange?: (value: string) => void }
+export function TimeInput({ name, value, errorMessage, label, onChange }: Props) {
     const hoursRef = React.useRef<HTMLInputElement>(null);
     const minutesRef = React.useRef<HTMLInputElement>(null);
 
     const isPlaceholder = Number(hoursRef.current?.value) === 0 && Number(minutesRef.current?.value) === 0
 
-    const [hours, setHours] = React.useState('')
-    const [minutes, setMinutes] = React.useState('')
+    const [hours, setHours] = React.useState(value ? value.split(':')[0] : '')
+    const [minutes, setMinutes] = React.useState(value ? value.split(':')[1] : '')
     const pad = (v: string) => v.padStart(2, "0")
 
     const isFirstRender = React.useRef(true)

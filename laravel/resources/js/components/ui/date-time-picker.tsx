@@ -21,16 +21,18 @@ import {cn} from "@/lib/utils";
 type Props = {
     dateLabel?: string,
     dateName: string,
+    dateValue?: string,
     dateErrorMessage?: string,
     dateOnChange?: (value: string) => void,
     timeLabel?: string,
     timeName: string,
+    timeValue?: string,
     timeErrorMessage?: string,
     timeOnChange?: (value: string) => void,
 }
-export function DateTimePicker({ dateLabel, dateName, dateErrorMessage, dateOnChange, timeName, timeErrorMessage, timeLabel, timeOnChange }: Props) {
+export function DateTimePicker({ dateLabel, dateName, dateValue, dateErrorMessage, dateOnChange, timeName, timeValue, timeErrorMessage, timeLabel, timeOnChange }: Props) {
     const [open, setOpen] = React.useState(false)
-    const [date, setDate] = React.useState<Date | undefined>(undefined)
+    const [date, setDate] = React.useState<Date | undefined>(dateValue ? new Date(dateValue) : undefined)
     const isPlaceholder = !date
 
     return (
@@ -67,7 +69,7 @@ export function DateTimePicker({ dateLabel, dateName, dateErrorMessage, dateOnCh
                 <Input type="hidden" name={dateName} value={date ? format(date, "yyyy-MM-dd") : ''} readOnly/>
                 <InputError message={dateErrorMessage}/>
             </Field>
-            <TimeInput name={timeName} errorMessage={timeErrorMessage} label={timeLabel} onChange={timeOnChange}/>
+            <TimeInput name={timeName} value={timeValue} errorMessage={timeErrorMessage} label={timeLabel} onChange={timeOnChange}/>
         </FieldGroup>
     )
 }

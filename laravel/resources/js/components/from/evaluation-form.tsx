@@ -53,7 +53,7 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
 
     const recommendationOptions = toRecommendationOptions(recommendations);
     const [selectedRecommendation, setSelectedRecommendation] = useState(
-        recommendationOptions.filter(o => o.value === String(evaluation?.home_team_id))
+        recommendationOptions.filter(o => o.value === String(evaluation?.recommendation_id))
     );
 
     const { data, setData, transform, post, put, processing, errors } = useForm({
@@ -151,11 +151,13 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                                     <DateTimePicker
                                         dateLabel="Datum"
                                         dateName="kickoff_date"
+                                        dateValue={evaluation?.kickoff_date}
                                         dateErrorMessage={errors.kickoff_date}
                                         dateOnChange={(val) => setData('kickoff_date', val)}
 
                                         timeLabel="Zeit"
                                         timeName="kickoff_time"
+                                        timeValue={evaluation?.kickoff_time}
                                         timeErrorMessage={errors.kickoff_time}
                                         timeOnChange={(val) => setData('kickoff_time', val)}
                                     />

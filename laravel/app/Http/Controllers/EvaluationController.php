@@ -80,7 +80,14 @@ class EvaluationController extends Controller implements HasMiddleware
 
     public function edit(Evaluation $evaluation)
     {
-
+        return inertia('evaluation/evaluation-edit', [
+            'evaluation' => $evaluation->load('player', 'criteriaScores'),
+            'evaluationCriteriaGroups' => EvaluationCriteriaGroup::with('evaluationCriteria')->get(),
+            'positions' => Position::with('positionGroup:id,name')->orderBy('id')->get(['id', 'position_code', 'position_group_id']),
+            'clubs' => Club::orderBy('clubname')->get(['id', 'clubname']),
+            'recommendations' => Recommendation::all(),
+            'player' => $evaluation->player->loadForPlayerView(),
+        ]);
     }
 
     public function update(EvaluationStoreRequest $request, Evaluation $evaluation)
