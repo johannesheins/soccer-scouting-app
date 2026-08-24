@@ -13,7 +13,7 @@ trait EvaluationValidationRules
             'home_team_id' => $this->clubIdRules('required'),
             'away_team_id' => $this->clubIdRules('required'),
             'kickoff_date' => ['required', 'date'],
-            'kickoff_time' => ['required', 'date_format:H:i'],
+            'kickoff_time' => ['required', 'date_format:H:i,H:i:s'],
 
             'criteriaScores' => ['required', 'array'],
             'criteriaScores.*.evaluation_criteria_id' => ['required', 'exists:evaluation_criteria,id'],

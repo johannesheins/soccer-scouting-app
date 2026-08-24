@@ -92,7 +92,17 @@ class EvaluationController extends Controller implements HasMiddleware
 
     public function update(EvaluationStoreRequest $request, Evaluation $evaluation)
     {
+        $validated = $request->validated();
+        $evaluation->update($validated);
+        $evaluation->criteriaScores()->delete();
 
+        foreach ($validated['criteriaScores'] as $criteriaScore) {
+            EvaluationCriteriaScore::create(
+                $criteriaScore + ['evaluation_id' => $evaluation->id]
+            );
+        }
+
+        return redirect()->route('evaluation.index');
     }
 
     public function destroy(Evaluation $evaluation)

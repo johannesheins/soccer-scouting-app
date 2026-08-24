@@ -38,9 +38,9 @@ type Props = {
 
 export default function EvaluationForm({ edit = false, backHref = null }: { edit?: boolean, backHref?: string | null }){
     const { evaluation, evaluationCriteriaGroups, positions, clubs, recommendations, player } = usePage<Props>().props;
-    const [selectedPlayer, setSelectedPlayer] = useState<Player>();
+    const [selectedPlayer, setSelectedPlayer] = useState<Player>(player);
     useEffect(() => {
-        setData(Name.playerId, String(selectedPlayer?.id));
+        setData(Name.playerId, String(selectedPlayer?.id) ?? '');
     }, [selectedPlayer]);
 
     const clubOptions = toClubOptions(clubs);
@@ -57,7 +57,7 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
     );
 
     const { data, setData, transform, post, put, processing, errors } = useForm({
-        [Name.playerId]: String(player?.id) ?? evaluation?.player_id ?? '',
+        [Name.playerId]: String(evaluation?.player_id ?? ''),
         home_team_id: evaluation?.home_team_id ?? '',
         away_team_id: evaluation?.away_team_id ?? '',
         kickoff_date: evaluation?.kickoff_date ?? '',
