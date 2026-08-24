@@ -132,6 +132,9 @@ export type Evaluation = {
     creator: User,
     created_at: string,
     updated_at: string
+
+    total_score?: number,
+    group_scores?: number[]
 }
 
 export type EvaluationSearchQuery = {

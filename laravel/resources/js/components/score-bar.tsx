@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
+import ScoreDisplay from "@/components/score-display";
 
 type DefaultProps = {
     name?: string,
@@ -22,6 +23,8 @@ type RangeProps = {
     disabled?: boolean
 }
 
+export const MAX_SCORE = 10;
+
 export function ScoreBar({name, value, onChange, className, disabled = false}: DefaultProps) {
     const [currentValue, setCurrentValue] = useState(value);
 
@@ -37,13 +40,11 @@ export function ScoreBar({name, value, onChange, className, disabled = false}: D
                 value={[currentValue]}
                 onValueChange={update}
                 min={0}
-                max={10}
+                max={MAX_SCORE}
                 step={1}
                 disabled={disabled}
             />
-            <span className="w-10 text-right text-sm tabular-nums text-foreground">
-                {currentValue}
-            </span>
+            <ScoreDisplay currentValue={currentValue} maxScore={MAX_SCORE} />
             <Input type="hidden" name={name} value={currentValue} min="0" max="10" readOnly />
         </div>
     )
@@ -67,7 +68,7 @@ export function ScoreBarRange({nameFrom, nameTo, valueFrom, valueTo, onChangeFro
                 value={[currentValueFrom, currentValueTo]}
                 onValueChange={update}
                 min={0}
-                max={10}
+                max={MAX_SCORE}
                 step={1}
                 disabled={disabled}
             />

@@ -1,4 +1,4 @@
-import {EvaluationCriteriaGroups} from "@/types/types";
+import {EvaluationCriteriaGroups, EvaluationCriteriaScore} from "@/types/types";
 
 type scores = Record<number, number>;
 type CriteriaScore = number[];
@@ -8,8 +8,14 @@ export class ScoreCalculationService {
     groupScores: CriteriaScore;
     totalScore: number;
 
-    constructor(scores: Record<number, number>, criteriaGroups: EvaluationCriteriaGroups[]) {
-        this.scores = scores;
+    constructor(scores: Record<number, number>|number[]|EvaluationCriteriaScore[], criteriaGroups: EvaluationCriteriaGroups[]) {
+        if(Array.isArray(scores) && scores.every(score => typeof score === 'object')) {
+            scores = Object.fromEntries(
+                (scores as EvaluationCriteriaScore[]).map(score => [score.evaluation_criteria_id, score.score])
+            ) as Record<number, number>;
+        }
+
+        this.scores = scores as Record<number, number>;
 
         this.criteriaGroups = criteriaGroups;
         this.groupScores = [];
@@ -31,6 +37,10 @@ export class ScoreCalculationService {
 
     public getTotalScore(){
         return this.totalScore;
+    }
+
+    public getGroupScores(){
+        return this.groupScores;
     }
 
     public getGroupScore(groupId: number){

@@ -24,8 +24,9 @@ import {toClubOptions, toRecommendationOptions} from "@/hooks/form-options";
 import {DateTimePicker} from "@/components/ui/date-time-picker";
 import {Textarea} from "@/components/ui/textarea";
 import {PlayerRequestNameEnum as Name} from "@/enums";
-import {ScoreBar} from "@/components/score-bar";
+import {MAX_SCORE, ScoreBar} from "@/components/score-bar";
 import {ScoreCalculationService} from "@/services/score-calculation-service";
+import ScoreDisplay from "@/components/score-display";
 
 type Props = {
     evaluation?: EvaluationSmall,
@@ -173,7 +174,7 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                                 <FieldSet>
                                     <FieldLegend className="flex justify-between w-full">
                                         <span>{group.name}</span>
-                                        <span>{calculateScores.getGroupScore(group.id)}</span>
+                                        <ScoreDisplay currentValue={calculateScores.getGroupScore(group.id)} maxScore={MAX_SCORE * group.evaluation_criteria.length} />
                                     </FieldLegend>
                                     <FieldGroup className="grid sm:grid-cols-2 gap-x-15">
                                         {group.evaluation_criteria.map(criteria => {

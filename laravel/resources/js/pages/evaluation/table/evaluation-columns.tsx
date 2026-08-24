@@ -60,10 +60,10 @@ const kickoffDate:ColumnDef<Evaluation> = {
 };
 
 const score:ColumnDef<Evaluation> = {
-    accessorKey: "score",
+    accessorKey: "total_score",
     header: sortHeader("Punkte"),
     cell: ({ row }) => {
-        return <div className="font-medium">{row.getValue('score')}</div>
+        return <div className="font-medium">{row.getValue('total_score')}</div>
     },
 };
 

@@ -4,6 +4,7 @@ import React from "react";
 import EvaluationSearchForm from "@/pages/evaluation/evaluation-search-form";
 import {useEvaluationColumns} from "@/pages/evaluation/table/evaluation-columns";
 import {Club, Evaluation, EvaluationCriteriaGroups, EvaluationSearchQuery, PlayerOption} from "@/types/types";
+import {ScoreCalculationService} from "@/services/score-calculation-service";
 
 type Props = {
     evaluationCriteriaGroups: EvaluationCriteriaGroups[],
@@ -15,6 +16,14 @@ type Props = {
 export default function EvaluationSearch() {
     const { evaluationCriteriaGroups, players, clubs, queryParams, evaluations } = usePage<Props>().props;
     const evaluationColumns = useEvaluationColumns();
+
+    evaluations.map(evaluation => {
+        const scoreCalculation = new ScoreCalculationService(evaluation.criteria_scores, evaluationCriteriaGroups);
+        scoreCalculation.calculate();
+
+        evaluation.total_score = scoreCalculation.getTotalScore();
+        evaluation.group_scores = scoreCalculation.getGroupScores();
+    });
 
     return (
         <>
