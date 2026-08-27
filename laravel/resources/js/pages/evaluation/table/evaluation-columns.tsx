@@ -52,10 +52,7 @@ const kickoffDate:ColumnDef<Evaluation> = {
     cell: ({ row }) => {
         const d = date(row.getValue('kickoff_date'))
         const time = row.original.kickoff_time.slice(0, 5)
-        return <div className="font-medium grid grid-cols-2 gap-2 text-center">
-            <span>{d}</span>
-            <span>{time} Uhr</span>
-        </div>
+        return <div className="font-medium">{d} {time} Uhr</div>
     },
 };
 
