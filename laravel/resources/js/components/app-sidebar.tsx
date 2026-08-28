@@ -1,5 +1,5 @@
 import {Link} from '@inertiajs/react';
-import {FileUserIcon, LayoutGrid, Settings, User} from 'lucide-react';
+import {FileUserIcon, LayoutGrid, Settings, Shield, User} from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -13,11 +13,12 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import {RightEnum} from "@/enums";
+import {administration, dashboard} from "@/routes";
+import club from "@/routes/club";
+import evaluation from "@/routes/evaluation";
 import player from "@/routes/player";
 import type { NavItem } from '@/types';
-import {administration, dashboard} from "@/routes";
-import {RightEnum} from "@/enums";
-import evaluation from "@/routes/evaluation";
 
 const mainNavItems: NavItem[] = [
     {
@@ -36,6 +37,12 @@ const mainNavItems: NavItem[] = [
         href: evaluation.index(),
         icon: FileUserIcon,
         right: RightEnum.EvaluationIndex,
+    },
+    {
+        title: 'Verein',
+        href: club.index(),
+        icon: Shield,
+        right: RightEnum.ClubIndex,
     },
 ];
 

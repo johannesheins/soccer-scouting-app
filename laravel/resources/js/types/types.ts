@@ -1,4 +1,4 @@
-import {User} from "@/types/auth";
+import type {User} from "@/types/auth";
 
 export type PositionGroup = {
     id: number,
@@ -14,6 +14,8 @@ export type Position = {
 export type Club = {
     id: number,
     clubname: string,
+    zip_code?: string,
+    city?: string,
 };
 
 export type PlayerSmall = {

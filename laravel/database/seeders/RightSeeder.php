@@ -36,7 +36,15 @@ class RightSeeder extends Seeder
                 $this->createRight(RightEnum::EvaluationDestroy, 'Bewertung löschen', 'Der Benutzer darf die von ihm erstellten Bewertung löschen'),
                 $this->createRight(RightEnum::EvaluationDestroyAll, 'Alle Bewertung löschen', 'Der Benutzer darf alle Bewertung löschen'),
                 $this->createRight(RightEnum::EvaluationViewCreator, 'Autor sehen ', 'Der Benutzer darf den Autor sehen'),
-            ]
+            ],
+            'Verein' => [
+                $this->createRight(RightEnum::ClubIndex, 'Verein Übersicht', 'Der Benutzer darf die Übersicht für die Vereine sehen'),
+                $this->createRight(RightEnum::ClubSearch, 'Verein suchen', 'Der Benutzer darf nach Vereinen suchen'),
+                $this->createRight(RightEnum::ClubCreate, 'Verein erstellen', 'Der Benutzer darf Vereine erstellen'),
+                $this->createRight(RightEnum::ClubView, 'Verein ansehen', 'Der Benutzer darf Vereine ansehen'),
+                $this->createRight(RightEnum::ClubEdit, 'Verein bearbeiten', 'Der Benutzer darf Vereine bearbeiten'),
+                $this->createRight(RightEnum::ClubDestroy, 'Verein löschen', 'Der Benutzer darf Vereine löschen'),
+            ],
         ];
 
         Right::unguarded(function () use ($rightGroups) {

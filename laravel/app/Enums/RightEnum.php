@@ -21,4 +21,11 @@ enum RightEnum: int
     case EvaluationDestroy = 14;
     case EvaluationDestroyAll = 15;
     case EvaluationViewCreator = 16;
+
+    case ClubIndex = 17;
+    case ClubSearch = 18;
+    case ClubCreate = 19;
+    case ClubView = 20;
+    case ClubEdit = 21;
+    case ClubDestroy = 22;
 }

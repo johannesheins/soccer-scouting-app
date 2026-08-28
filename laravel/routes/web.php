@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClubController;
+use App\Http\Controllers\ClubSearchController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerSearchController;
@@ -20,6 +21,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('evaluation/search/{query?}', [EvaluationController::class, 'search'])->name('evaluation.search');
     Route::resource('evaluation', EvaluationController::class)->names('evaluation');
 
+    Route::get('club/search', [ClubSearchController::class, 'index'])->name('club.search');
     Route::resource('club', ClubController::class)->names('club');
 
 
