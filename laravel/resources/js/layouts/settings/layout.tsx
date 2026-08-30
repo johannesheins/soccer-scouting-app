@@ -9,6 +9,7 @@ import { edit as editAppearance } from '@/routes/appearance';
 import { edit } from '@/routes/profile';
 import { edit as editSecurity } from '@/routes/security';
 import type { NavItem } from '@/types';
+import dashboard from '@/routes/settings/dashboard';
 
 const sidebarNavItems: NavItem[] = [
     {
@@ -24,6 +25,11 @@ const sidebarNavItems: NavItem[] = [
     {
         title: 'Erscheinungsbild',
         href: editAppearance(),
+        icon: null,
+    },
+    {
+        title: 'Dashboard',
+        href: dashboard.index(),
         icon: null,
     },
 ];

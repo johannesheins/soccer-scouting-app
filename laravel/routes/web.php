@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClubController;
 use App\Http\Controllers\ClubSearchController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerSearchController;
@@ -13,7 +14,7 @@ Route::inertia('/', 'welcome', [
 ])->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'dashboard')->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('player/search', [PlayerSearchController::class, 'index'])->name('player.search');
     Route::resource('player', PlayerController::class)->names('player');

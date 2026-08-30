@@ -60,6 +60,11 @@ class User extends Authenticatable
         return $this->hasMany(Evaluation::class);
     }
 
+    public function pinnedClubs(): BelongsToMany
+    {
+        return $this->belongsToMany(Club::class, 'user_pinned_clubs');
+    }
+
     public function hasRight(RightEnum $right): bool
     {
         if ($this->isAdministrator()) {
