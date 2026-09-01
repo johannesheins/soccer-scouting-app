@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -60,9 +61,9 @@ class User extends Authenticatable
         return $this->hasMany(Evaluation::class);
     }
 
-    public function pinnedClubs(): BelongsToMany
+    public function playerQuickSearchClubs(): BelongsToMany
     {
-        return $this->belongsToMany(Club::class, 'user_pinned_clubs');
+        return $this->belongsToMany(Club::class, 'player_quick_search_user_clubs');
     }
 
     public function hasRight(RightEnum $right): bool

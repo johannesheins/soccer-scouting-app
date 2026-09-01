@@ -6,8 +6,10 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $user = auth()->user();
+
         return inertia('dashboard', [
-            'userPinnedClubs' => auth()->user()->pinnedClubs()->get(['id', 'clubname']),
+            'playerQuickSearchClubs' => $user->playerQuickSearchClubs()->get(['id', 'clubname']),
         ]);
     }
 }

@@ -9,24 +9,25 @@ import MultipleSelector from "@/components/ui/multi-select";
 import type {Option} from "@/components/ui/multi-select";
 import {toClubOptions} from "@/hooks/form-options";
 import dashboard from "@/routes/settings/dashboard";
-import type {Club} from "@/types/types";
+import {Club} from "@/types/types";
 import {useHasRight} from "@/hooks/use-has-right";
 import {RightEnum} from "@/enums";
+import {Field} from "@/components/ui/field";
 
-type Props = { clubs: Club[]; userPinnedClubs: Club[] };
+type Props = { clubs: Club[]; playerQuickSearchUserClubs: Club[] };
 
 export default function Dashboard() {
-    const { clubs, userPinnedClubs } = usePage<Props>().props;
+    const { clubs, playerQuickSearchUserClubs } = usePage<Props>().props;
     const clubOptions = toClubOptions(clubs);
-    const pinnedClubIds = userPinnedClubs.map(c => c.id);
+    const playerQuickSearchClubs = playerQuickSearchUserClubs.map(c => c.id);
     const [selectedClubs, setSelectedClubs] = useState<Option[]>(
-        clubOptions.filter(o => pinnedClubIds.includes(Number(o.value)))
+        clubOptions.filter(o => playerQuickSearchClubs.includes(Number(o.value)))
     );
 
     const canSearchPlayers = useHasRight(RightEnum.PlayerSearch);
 
     const { setData, post, processing, errors } = useForm({
-        club_ids: pinnedClubIds,
+        club_ids: playerQuickSearchClubs,
     })
 
     function submit(){
@@ -58,11 +59,11 @@ export default function Dashboard() {
                 <div className="space-y-6">
                     <Heading
                         variant="small"
-                        title="Angepinnte Vereine"
+                        title="Spieler-Schnellsuche"
                         description="Lege drei Verine fest, welche auf dem Dashboard angezeigt werden sollen"
                     />
 
-                    <div className="grid gap-2">
+                    <Field className="grid gap-2">
                         <Label htmlFor="clubs">Vereine</Label>
 
                         <MultipleSelector
@@ -80,7 +81,27 @@ export default function Dashboard() {
                             className="mt-2"
                             message={errors.club_ids}
                         />
-                    </div>
+                    </Field>
+
+                    <Field className="grid gap-2">
+                        <Label htmlFor="clubs">Vereine</Label>
+
+                        <MultipleSelector
+                            value={selectedClubs}
+                            onChange={onChange}
+                            defaultOptions={clubOptions}
+                            maxSelected={3}
+                            groupBy="group"
+                            placeholder="Vereine wählen"
+                            hidePlaceholderWhenSelected
+                            emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
+                        />
+
+                        <InputError
+                            className="mt-2"
+                            message={errors.club_ids}
+                        />
+                    </Field>
 
                     <div className="flex items-center gap-4">
                         <Button disabled={processing} onClick={submit}>

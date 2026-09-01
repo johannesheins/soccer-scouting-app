@@ -1,6 +1,7 @@
 import {Head, Link, usePage} from '@inertiajs/react';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import { dashboard } from '@/routes';
+import dashboardSettings from '@/routes/settings/dashboard';
 import player from "@/routes/player";
 import AccessGuard from "@/components/access-guard";
 import {useHasRight} from "@/hooks/use-has-right";
@@ -8,12 +9,14 @@ import {RightEnum} from "@/enums";
 import {getYears} from "@/hooks/form-options";
 import type {Club} from "@/types/types";
 
-type Props = { userPinnedClubs: Club[] };
+type Props = { playerQuickSearchClubs: Club[] };
 export default function Dashboard() {
-    const { userPinnedClubs } = usePage<Props>().props;
+    const { playerQuickSearchClubs } = usePage<Props>().props;
     const canSearch = useHasRight(RightEnum.PlayerSearch);
 
     const years = getYears(new Date().getFullYear() - 13, null, 6);
+
+    const hasPlayerQuickSearchClubs = playerQuickSearchClubs.length > 0;
 
     return (
         <>
@@ -23,11 +26,17 @@ export default function Dashboard() {
                     <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
                         <AccessGuard active={canSearch} title="Keine Berechtigung">
                             <div className="grid grid-cols-1 gap-1 p-1 items-center h-full w-full">
-                                {userPinnedClubs.map((club) => (
-                                    <Link href={generateUrlForPlayerSearch('club_ids[]', String(club.id))} title="Spieler mit Jahrgang suchen" className="flex flex-col gap-2 justify-center items-center h-full">
-                                        <p className="text-icon-color font-bold">{club.clubname}</p>
+                                {hasPlayerQuickSearchClubs ? (
+                                    playerQuickSearchClubs.map((club) => (
+                                        <Link href={generateUrlForPlayerSearch('club_ids[]', String(club.id))} title="Spieler mit Jahrgang suchen">
+                                            <p className="text-icon-color font-bold text-center">{club.clubname}</p>
+                                        </Link>
+                                    ))
+                                ) : (
+                                    <Link href={dashboardSettings.index.url()}>
+                                        <p className="text-icon-color font-bold text-center">Wähle bis zu drei Vereine für die Spieler-Schnellsuche</p>
                                     </Link>
-                                ))}
+                                )}
                             </div>
                         </AccessGuard>
                     </div>

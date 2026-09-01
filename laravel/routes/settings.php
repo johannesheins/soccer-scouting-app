@@ -24,5 +24,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('settings/appearance', 'settings/appearance')->name('appearance.edit');
 
     Route::get('settings/dashboard', [DashboardSettingsController::class, 'index'])->name('settings.dashboard.index');
-    Route::post('settings/dashboard/update-pinned-clubs', [DashboardSettingsController::class, 'updatePinnedClubs'])->name('settings.dashboard.update-pinned-clubs');
+    Route::post('settings/dashboard/update-pinned-clubs', [DashboardSettingsController::class, 'updatePlayerQuickSearchSettings'])->name('settings.dashboard.update-pinned-clubs');
 });

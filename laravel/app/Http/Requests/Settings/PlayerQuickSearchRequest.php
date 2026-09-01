@@ -5,7 +5,7 @@ namespace App\Http\Requests\Settings;
 use App\Concerns\ClubValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PinnedClubsUpdateRequest extends FormRequest
+class PlayerQuickSearchRequest extends FormRequest
 {
     use ClubValidationRules;
 
