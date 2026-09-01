@@ -10,10 +10,11 @@ type Props = {
     name: string,
     setData: (key: string, values: number[]|number) => void,
     selectedValues: number[],
-    error?: string
+    error?: string,
+    maxSelected?: number;
 }
 
-export default function YearOfBirthInput({variant = "single", name, selectedValues, setData, error}: Props){
+export default function YearOfBirthInput({variant = "single", name, selectedValues, setData, error, maxSelected}: Props){
     const yearOfBirthOptions = getYearOptions();
     const [selectedYearOfBirth, setSelectedYearOfBirth] = useState<Option[]>(
         yearOfBirthOptions.filter(o => selectedValues?.includes(Number(o.value)))
@@ -33,6 +34,7 @@ export default function YearOfBirthInput({variant = "single", name, selectedValu
                     placeholder="Jahrgang wählen"
                     hidePlaceholderWhenSelected
                     emptyIndicator={<p className="text-center text-sm">Keinen Jahrgang gefunden</p>}
+                    maxSelected={maxSelected}
                 />
             ) : (
                 <SingleSelector

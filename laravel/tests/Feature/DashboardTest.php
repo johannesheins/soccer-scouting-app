@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class DashboardTest extends TestCase
@@ -23,5 +24,23 @@ class DashboardTest extends TestCase
 
         $response = $this->get(route('dashboard'));
         $response->assertOk();
+    }
+
+    public function test_dashboard_shows_the_users_player_quick_search_years_of_birth()
+    {
+        $user = User::factory()->create();
+        $user->playerQuickSearchYearsOfBirth()->createMany([
+            ['year_of_birth' => 2010],
+            ['year_of_birth' => 2012],
+        ]);
+
+        $response = $this->actingAs($user)
+            ->get(route('dashboard'));
+
+        $response->assertInertia(
+            fn (Assert $page) => $page
+            ->component('dashboard')
+            ->has('playerQuickSearchUserYears', 2)
+        );
     }
 }

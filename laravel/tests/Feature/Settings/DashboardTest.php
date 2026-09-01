@@ -26,6 +26,7 @@ class DashboardTest extends TestCase
             ->component('settings/dashboard')
             ->has('clubs', 3)
             ->has('playerQuickSearchUserClubs', 0)
+            ->has('playerQuickSearchUserYears', 0)
         );
     }
 
@@ -42,6 +43,24 @@ class DashboardTest extends TestCase
             fn (Assert $page) => $page
             ->component('settings/dashboard')
             ->has('playerQuickSearchUserClubs', 2)
+        );
+    }
+
+    public function test_dashboard_page_shows_the_users_player_quick_search_years_of_birth()
+    {
+        $user = User::factory()->create();
+        $user->playerQuickSearchYearsOfBirth()->createMany([
+            ['year_of_birth' => 2010],
+            ['year_of_birth' => 2012],
+        ]);
+
+        $response = $this->actingAs($user)
+            ->get(route('settings.dashboard.index'));
+
+        $response->assertInertia(
+            fn (Assert $page) => $page
+            ->component('settings/dashboard')
+            ->has('playerQuickSearchUserYears', 2)
         );
     }
 
@@ -145,6 +164,100 @@ class DashboardTest extends TestCase
             ]);
 
         $response->assertInvalid(['club_ids.0']);
+    }
+
+    public function test_player_quick_search_years_of_birth_can_be_updated()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)
+            ->post(route('settings.dashboard.update-pinned-clubs'), [
+                'years_of_birth' => [2010, 2011, 2012],
+            ]);
+
+        $response
+            ->assertSessionHasNoErrors()
+            ->assertRedirect(route('settings.dashboard.index'));
+
+        collect([2010, 2011, 2012])->each(fn (int $year) => $this->assertDatabaseHas('player_quick_search_user_years_of_births', [
+            'user_id' => $user->id,
+            'year_of_birth' => $year,
+        ]));
+    }
+
+    public function test_player_quick_search_years_of_birth_replaces_the_previous_selection()
+    {
+        $user = User::factory()->create();
+        $user->playerQuickSearchYearsOfBirth()->create(['year_of_birth' => 2005]);
+
+        $this->actingAs($user)
+            ->post(route('settings.dashboard.update-pinned-clubs'), [
+                'years_of_birth' => [2010],
+            ]);
+
+        $this->assertDatabaseMissing('player_quick_search_user_years_of_births', ['user_id' => $user->id, 'year_of_birth' => 2005]);
+        $this->assertDatabaseHas('player_quick_search_user_years_of_births', ['user_id' => $user->id, 'year_of_birth' => 2010]);
+    }
+
+    public function test_player_quick_search_years_of_birth_can_be_cleared()
+    {
+        $user = User::factory()->create();
+        $user->playerQuickSearchYearsOfBirth()->create(['year_of_birth' => 2010]);
+
+        $response = $this->actingAs($user)
+            ->post(route('settings.dashboard.update-pinned-clubs'), [
+                'years_of_birth' => [],
+            ]);
+
+        $response->assertSessionHasNoErrors();
+        $this->assertDatabaseMissing('player_quick_search_user_years_of_births', ['user_id' => $user->id, 'year_of_birth' => 2010]);
+    }
+
+    public function test_player_quick_search_years_of_birth_defaults_to_empty_when_field_is_omitted()
+    {
+        $user = User::factory()->create();
+        $user->playerQuickSearchYearsOfBirth()->create(['year_of_birth' => 2010]);
+
+        $response = $this->actingAs($user)
+            ->post(route('settings.dashboard.update-pinned-clubs'), []);
+
+        $response->assertSessionHasNoErrors();
+        $this->assertDatabaseMissing('player_quick_search_user_years_of_births', ['user_id' => $user->id, 'year_of_birth' => 2010]);
+    }
+
+    public function test_player_quick_search_years_of_birth_does_not_affect_other_users()
+    {
+        $user = User::factory()->create();
+        $otherUser = User::factory()->create();
+        $otherUser->playerQuickSearchYearsOfBirth()->create(['year_of_birth' => 2010]);
+
+        $this->actingAs($user)
+            ->post(route('settings.dashboard.update-pinned-clubs'), [
+                'years_of_birth' => [2010],
+            ]);
+
+        $this->assertDatabaseHas('player_quick_search_user_years_of_births', ['user_id' => $user->id, 'year_of_birth' => 2010]);
+        $this->assertDatabaseHas('player_quick_search_user_years_of_births', ['user_id' => $otherUser->id, 'year_of_birth' => 2010]);
+    }
+
+    public function test_player_quick_search_years_of_birth_validates_at_most_six()
+    {
+        $response = $this->actingAs(User::factory()->create())
+            ->post(route('settings.dashboard.update-pinned-clubs'), [
+                'years_of_birth' => [2005, 2006, 2007, 2008, 2009, 2010, 2011],
+            ]);
+
+        $response->assertInvalid(['years_of_birth']);
+    }
+
+    public function test_player_quick_search_years_of_birth_validates_four_digits()
+    {
+        $response = $this->actingAs(User::factory()->create())
+            ->post(route('settings.dashboard.update-pinned-clubs'), [
+                'years_of_birth' => [999],
+            ]);
+
+        $response->assertInvalid(['years_of_birth.0']);
     }
 
     public function test_dashboard_index_guest_redirect_login()

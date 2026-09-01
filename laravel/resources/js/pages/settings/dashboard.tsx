@@ -9,25 +9,29 @@ import MultipleSelector from "@/components/ui/multi-select";
 import type {Option} from "@/components/ui/multi-select";
 import {toClubOptions} from "@/hooks/form-options";
 import dashboard from "@/routes/settings/dashboard";
-import {Club} from "@/types/types";
+import {Club, playerQuickSearchUserClubs, PlayerQuickSearchUserYears} from "@/types/types";
 import {useHasRight} from "@/hooks/use-has-right";
 import {RightEnum} from "@/enums";
 import {Field} from "@/components/ui/field";
+import YearOfBirthInput from "@/components/input/year-of-birth-input";
 
-type Props = { clubs: Club[]; playerQuickSearchUserClubs: Club[] };
+type Props = { clubs: Club[]; playerQuickSearchUserClubs: playerQuickSearchUserClubs, playerQuickSearchUserYears: PlayerQuickSearchUserYears };
 
 export default function Dashboard() {
-    const { clubs, playerQuickSearchUserClubs } = usePage<Props>().props;
+    const { clubs, playerQuickSearchUserClubs, playerQuickSearchUserYears } = usePage<Props>().props;
+
     const clubOptions = toClubOptions(clubs);
     const playerQuickSearchClubs = playerQuickSearchUserClubs.map(c => c.id);
+    const playerQuickSearchYears = playerQuickSearchUserYears.map(y => y.year_of_birth);
     const [selectedClubs, setSelectedClubs] = useState<Option[]>(
         clubOptions.filter(o => playerQuickSearchClubs.includes(Number(o.value)))
     );
 
     const canSearchPlayers = useHasRight(RightEnum.PlayerSearch);
 
-    const { setData, post, processing, errors } = useForm({
+    const { data, setData, post, processing, errors } = useForm({
         club_ids: playerQuickSearchClubs,
+        years_of_birth: playerQuickSearchYears,
     })
 
     function submit(){
@@ -86,16 +90,7 @@ export default function Dashboard() {
                     <Field className="grid gap-2">
                         <Label htmlFor="clubs">Vereine</Label>
 
-                        <MultipleSelector
-                            value={selectedClubs}
-                            onChange={onChange}
-                            defaultOptions={clubOptions}
-                            maxSelected={3}
-                            groupBy="group"
-                            placeholder="Vereine wählen"
-                            hidePlaceholderWhenSelected
-                            emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
-                        />
+                        <YearOfBirthInput variant="multiple" name="years_of_birth" setData={setData} selectedValues={data.years_of_birth} error={errors.years_of_birth} maxSelected={6}/>
 
                         <InputError
                             className="mt-2"

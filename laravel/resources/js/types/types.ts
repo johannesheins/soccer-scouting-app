@@ -150,3 +150,9 @@ export type EvaluationSearchQuery = {
     open_tab: string,
     open_accordion: boolean[]
 }
+
+export type playerQuickSearchUserClubs = Club[]
+
+export type PlayerQuickSearchUserYears = {
+    year_of_birth: number
+}[]

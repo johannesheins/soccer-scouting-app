@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -17,7 +16,7 @@ use App\Enums\RightEnum as RightEnum;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
-#[Fillable(['firstname', 'lastname', 'email', 'password'])]
+#[Fillable(['firstname', 'lastname', 'email', 'password', 'year_of_birth'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -64,6 +63,11 @@ class User extends Authenticatable
     public function playerQuickSearchClubs(): BelongsToMany
     {
         return $this->belongsToMany(Club::class, 'player_quick_search_user_clubs');
+    }
+
+    public function playerQuickSearchYearsOfBirth(): HasMany
+    {
+        return $this->hasMany(PlayerQuickSearchUserYearsOfBirth::class);
     }
 
     public function hasRight(RightEnum $right): bool

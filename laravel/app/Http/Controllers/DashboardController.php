@@ -10,6 +10,7 @@ class DashboardController extends Controller
 
         return inertia('dashboard', [
             'playerQuickSearchClubs' => $user->playerQuickSearchClubs()->get(['id', 'clubname']),
+            'playerQuickSearchUserYears' => $user->playerQuickSearchYearsOfBirth()->get(['year_of_birth']),
         ]);
     }
 }
