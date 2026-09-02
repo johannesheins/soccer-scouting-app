@@ -21,7 +21,7 @@ trait EvaluationValidationRules
 
             'strengths' => $this->strengthsRules('nullable'),
             'weaknesses' => $this->weaknessesRules('nullable'),
-            'recommendation_id' => $this->recommendationIdRules('nullable'),
+            'recommendation_id' => $this->recommendationIdRules('required'),
             'comment' => $this->commentRules('nullable'),
         ];
     }

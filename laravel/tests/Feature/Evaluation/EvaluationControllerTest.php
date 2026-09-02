@@ -135,6 +135,7 @@ class EvaluationControllerTest extends TestCase
         $homeTeam = Club::factory()->create();
         $awayTeam = Club::factory()->create();
         $criteria = EvaluationCriteria::factory(3)->create();
+        $recommendation = Recommendation::factory()->create();
 
         $response = $this->actingAs($this->user)
             ->post(route('evaluation.store'), [
@@ -147,6 +148,7 @@ class EvaluationControllerTest extends TestCase
                     'evaluation_criteria_id' => $criterion->id,
                     'score' => $index + 1,
                 ])->all(),
+                'recommendation_id' => $recommendation->id,
             ]);
 
         $response->assertRedirect(route('evaluation.index'));
@@ -192,6 +194,7 @@ class EvaluationControllerTest extends TestCase
             'away_team_id',
             'kickoff_date',
             'kickoff_time',
+            'recommendation_id',
             'criteriaScores',
         ]);
     }
@@ -563,6 +566,7 @@ class EvaluationControllerTest extends TestCase
         $awayTeam = Club::factory()->create();
         $oldCriteria = EvaluationCriteria::factory()->create();
         $newCriteria = EvaluationCriteria::factory()->create();
+        $recommendation = Recommendation::factory()->create();
 
         EvaluationCriteriaScore::factory()->create([
             'evaluation_id' => $evaluation->id,
@@ -579,6 +583,7 @@ class EvaluationControllerTest extends TestCase
                 'criteriaScores' => [
                     ['evaluation_criteria_id' => $newCriteria->id, 'score' => 5],
                 ],
+                'recommendation_id' => $recommendation->id,
             ]);
 
         $response->assertRedirect(route('evaluation.index'));
@@ -601,6 +606,7 @@ class EvaluationControllerTest extends TestCase
         $homeTeam = Club::factory()->create();
         $awayTeam = Club::factory()->create();
         $criteria = EvaluationCriteria::factory()->create();
+        $recommendation = Recommendation::factory()->create();
 
         $response = $this->put(route('evaluation.update', $evaluation), [
             'player_id' => $player->id,
@@ -611,6 +617,7 @@ class EvaluationControllerTest extends TestCase
             'criteriaScores' => [
                 ['evaluation_criteria_id' => $criteria->id, 'score' => 8],
             ],
+            'recommendation_id' => $recommendation->id,
         ]);
 
         $response->assertRedirect(route('login'));
@@ -630,6 +637,7 @@ class EvaluationControllerTest extends TestCase
             'kickoff_date',
             'kickoff_time',
             'criteriaScores',
+            'recommendation_id',
         ]);
     }
 }
