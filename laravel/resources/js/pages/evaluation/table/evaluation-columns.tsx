@@ -51,8 +51,7 @@ const kickoffDate:ColumnDef<Evaluation> = {
     header: sortHeader("Anstoß"),
     cell: ({ row }) => {
         const d = date(row.getValue('kickoff_date'))
-        const time = row.original.kickoff_time.slice(0, 5)
-        return <div className="font-medium">{d} {time} Uhr</div>
+        return <div className="font-medium">{d}</div>
     },
 };
 

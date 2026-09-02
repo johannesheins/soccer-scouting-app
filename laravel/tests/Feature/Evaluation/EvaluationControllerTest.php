@@ -95,7 +95,6 @@ class EvaluationControllerTest extends TestCase
                 'home_team_id' => $homeTeam->id,
                 'away_team_id' => $awayTeam->id,
                 'kickoff_date' => '2026-08-01',
-                'kickoff_time' => '15:30',
                 'strengths' => 'Good positioning',
                 'weaknesses' => 'Weak on the left foot',
                 'recommendation_id' => $recommendation->id,
@@ -119,7 +118,6 @@ class EvaluationControllerTest extends TestCase
 
         $evaluation = Evaluation::where('player_id', $player->id)->firstOrFail();
         $this->assertSame('2026-08-01', $evaluation->kickoff_date->toDateString());
-        $this->assertSame('15:30', $evaluation->kickoff_time->format('H:i'));
 
         $this->assertDatabaseHas('evaluation_criteria_scores', [
             'evaluation_id' => $evaluation->id,
@@ -144,7 +142,6 @@ class EvaluationControllerTest extends TestCase
                 'home_team_id' => $homeTeam->id,
                 'away_team_id' => $awayTeam->id,
                 'kickoff_date' => '2026-08-01',
-                'kickoff_time' => '15:30',
                 'criteriaScores' => $criteria->map(fn ($criterion, $index) => [
                     'evaluation_criteria_id' => $criterion->id,
                     'score' => $index + 1,
@@ -175,7 +172,6 @@ class EvaluationControllerTest extends TestCase
             'home_team_id' => $homeTeam->id,
             'away_team_id' => $awayTeam->id,
             'kickoff_date' => '2026-08-01',
-            'kickoff_time' => '15:30',
             'criteriaScores' => [
                 ['evaluation_criteria_id' => $criteria->id, 'score' => 8],
             ],
@@ -194,7 +190,6 @@ class EvaluationControllerTest extends TestCase
             'home_team_id',
             'away_team_id',
             'kickoff_date',
-            'kickoff_time',
             'recommendation_id',
             'criteriaScores',
         ]);
@@ -212,7 +207,6 @@ class EvaluationControllerTest extends TestCase
                 'home_team_id' => $homeTeam->id,
                 'away_team_id' => $awayTeam->id,
                 'kickoff_date' => '2026-08-01',
-                'kickoff_time' => '15:30',
                 'criteriaScores' => [
                     ['evaluation_criteria_id' => $criteria->id, 'score' => 8],
                 ],
@@ -233,7 +227,6 @@ class EvaluationControllerTest extends TestCase
                 'home_team_id' => 999,
                 'away_team_id' => $awayTeam->id,
                 'kickoff_date' => '2026-08-01',
-                'kickoff_time' => '15:30',
                 'criteriaScores' => [
                     ['evaluation_criteria_id' => $criteria->id, 'score' => 8],
                 ],
@@ -254,7 +247,6 @@ class EvaluationControllerTest extends TestCase
                 'home_team_id' => $homeTeam->id,
                 'away_team_id' => 999,
                 'kickoff_date' => '2026-08-01',
-                'kickoff_time' => '15:30',
                 'criteriaScores' => [
                     ['evaluation_criteria_id' => $criteria->id, 'score' => 8],
                 ],
@@ -276,35 +268,12 @@ class EvaluationControllerTest extends TestCase
                 'home_team_id' => $homeTeam->id,
                 'away_team_id' => $awayTeam->id,
                 'kickoff_date' => 'not-a-date',
-                'kickoff_time' => '15:30',
                 'criteriaScores' => [
                     ['evaluation_criteria_id' => $criteria->id, 'score' => 8],
                 ],
             ]);
 
         $response->assertInvalid(['kickoff_date']);
-    }
-
-    public function test_store_validates_kickoff_time_format(): void
-    {
-        $player = Player::factory()->create();
-        $homeTeam = Club::factory()->create();
-        $awayTeam = Club::factory()->create();
-        $criteria = EvaluationCriteria::factory()->create();
-
-        $response = $this->actingAs($this->user)
-            ->post(route('evaluation.store'), [
-                'player_id' => $player->id,
-                'home_team_id' => $homeTeam->id,
-                'away_team_id' => $awayTeam->id,
-                'kickoff_date' => '2026-08-01',
-                'kickoff_time' => 'not-a-time',
-                'criteriaScores' => [
-                    ['evaluation_criteria_id' => $criteria->id, 'score' => 8],
-                ],
-            ]);
-
-        $response->assertInvalid(['kickoff_time']);
     }
 
     public function test_store_validates_recommendation_exists(): void
@@ -320,7 +289,6 @@ class EvaluationControllerTest extends TestCase
                 'home_team_id' => $homeTeam->id,
                 'away_team_id' => $awayTeam->id,
                 'kickoff_date' => '2026-08-01',
-                'kickoff_time' => '15:30',
                 'recommendation_id' => 999,
                 'criteriaScores' => [
                     ['evaluation_criteria_id' => $criteria->id, 'score' => 8],
@@ -343,7 +311,6 @@ class EvaluationControllerTest extends TestCase
                 'home_team_id' => $homeTeam->id,
                 'away_team_id' => $awayTeam->id,
                 'kickoff_date' => '2026-08-01',
-                'kickoff_time' => '15:30',
                 'strengths' => str_repeat('a', 256),
                 'criteriaScores' => [
                     ['evaluation_criteria_id' => $criteria->id, 'score' => 8],
@@ -366,7 +333,6 @@ class EvaluationControllerTest extends TestCase
                 'home_team_id' => $homeTeam->id,
                 'away_team_id' => $awayTeam->id,
                 'kickoff_date' => '2026-08-01',
-                'kickoff_time' => '15:30',
                 'weaknesses' => str_repeat('a', 256),
                 'criteriaScores' => [
                     ['evaluation_criteria_id' => $criteria->id, 'score' => 8],
@@ -389,7 +355,6 @@ class EvaluationControllerTest extends TestCase
                 'home_team_id' => $homeTeam->id,
                 'away_team_id' => $awayTeam->id,
                 'kickoff_date' => '2026-08-01',
-                'kickoff_time' => '15:30',
                 'comment' => str_repeat('a', 65536),
                 'criteriaScores' => [
                     ['evaluation_criteria_id' => $criteria->id, 'score' => 8],
@@ -411,7 +376,6 @@ class EvaluationControllerTest extends TestCase
                 'home_team_id' => $homeTeam->id,
                 'away_team_id' => $awayTeam->id,
                 'kickoff_date' => '2026-08-01',
-                'kickoff_time' => '15:30',
                 'criteriaScores' => [
                     ['evaluation_criteria_id' => 999, 'score' => 8],
                 ],
@@ -433,7 +397,6 @@ class EvaluationControllerTest extends TestCase
                 'home_team_id' => $homeTeam->id,
                 'away_team_id' => $awayTeam->id,
                 'kickoff_date' => '2026-08-01',
-                'kickoff_time' => '15:30',
                 'criteriaScores' => [
                     ['evaluation_criteria_id' => $criteria->id, 'score' => 'not-a-number'],
                 ],
@@ -455,7 +418,6 @@ class EvaluationControllerTest extends TestCase
                 'home_team_id' => $homeTeam->id,
                 'away_team_id' => $awayTeam->id,
                 'kickoff_date' => '2026-08-01',
-                'kickoff_time' => '15:30',
                 'criteriaScores' => [
                     ['evaluation_criteria_id' => $criteria->id, 'score' => 11],
                 ],
@@ -524,7 +486,6 @@ class EvaluationControllerTest extends TestCase
                 'home_team_id' => $homeTeam->id,
                 'away_team_id' => $awayTeam->id,
                 'kickoff_date' => '2026-08-01',
-                'kickoff_time' => '15:30',
                 'strengths' => 'Good positioning',
                 'weaknesses' => 'Weak on the left foot',
                 'recommendation_id' => $recommendation->id,
@@ -548,7 +509,6 @@ class EvaluationControllerTest extends TestCase
 
         $evaluation->refresh();
         $this->assertSame('2026-08-01', $evaluation->kickoff_date->toDateString());
-        $this->assertSame('15:30', $evaluation->kickoff_time->format('H:i'));
 
         $this->assertDatabaseHas('evaluation_criteria_scores', [
             'evaluation_id' => $evaluation->id,
@@ -580,7 +540,6 @@ class EvaluationControllerTest extends TestCase
                 'home_team_id' => $homeTeam->id,
                 'away_team_id' => $awayTeam->id,
                 'kickoff_date' => '2026-08-01',
-                'kickoff_time' => '15:30',
                 'criteriaScores' => [
                     ['evaluation_criteria_id' => $newCriteria->id, 'score' => 5],
                 ],
@@ -614,7 +573,6 @@ class EvaluationControllerTest extends TestCase
             'home_team_id' => $homeTeam->id,
             'away_team_id' => $awayTeam->id,
             'kickoff_date' => '2026-08-01',
-            'kickoff_time' => '15:30',
             'criteriaScores' => [
                 ['evaluation_criteria_id' => $criteria->id, 'score' => 8],
             ],
@@ -636,13 +594,13 @@ class EvaluationControllerTest extends TestCase
             'home_team_id',
             'away_team_id',
             'kickoff_date',
-            'kickoff_time',
             'criteriaScores',
             'recommendation_id',
         ]);
     }
 
-    public function test_update_date_can_not_be_in_future(): void{
+    public function test_update_date_can_not_be_in_future(): void
+    {
         $dateTime = new DateTime('now');
 
         $response = $this->actingAs($this->user)

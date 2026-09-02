@@ -34,7 +34,7 @@ export default function EvaluationView({evaluation, evaluationCriteriaGroups}: P
                 </CardTitle>
                 <div className="grid grid-cols-2 text-muted-foreground text-sm">
                     <p>
-                        {date(evaluation?.kickoff_date)} {evaluation.kickoff_time.slice(0, 5)} Uhr
+                        {date(evaluation?.kickoff_date)}
                     </p>
                     <a href={player.show.url(evaluation.player.id)} className="text-end">
                         {evaluation.player.firstname} {evaluation?.player.lastname}

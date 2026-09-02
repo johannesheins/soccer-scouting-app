@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable('player_id', 'created_by', 'home_team_id', 'away_team_id', 'kickoff', 'kickoff_date', 'kickoff_time', 'strengths', 'weaknesses', 'recommendation_id', 'comment')]
+#[Fillable('player_id', 'created_by', 'home_team_id', 'away_team_id', 'kickoff', 'kickoff_date', 'strengths', 'weaknesses', 'recommendation_id', 'comment')]
 class Evaluation extends Model
 {
     use HasFactory;
@@ -53,7 +53,6 @@ class Evaluation extends Model
         return [
             'kickoff' => 'datetime',
             'kickoff_date' => 'date',
-            'kickoff_time' => 'datetime:H:i:s',
         ];
     }
 }

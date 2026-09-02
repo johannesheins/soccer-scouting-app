@@ -110,7 +110,6 @@ export type EvaluationSmall = {
     home_team_id: number,
     away_team_id: number,
     kickoff_date: string
-    kickoff_time: string
     strengths: string,
     weaknesses: string,
     recommendation_id: number,
@@ -125,7 +124,6 @@ export type Evaluation = {
     home_team: Club,
     away_team: Club,
     kickoff_date: string
-    kickoff_time: string
     strengths: string,
     weaknesses: string,
     recommendation: Recommendation,

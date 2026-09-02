@@ -21,7 +21,6 @@ class EvaluationFactory extends Factory
             'home_team_id' => Club::factory(),
             'away_team_id' => Club::factory(),
             'kickoff_date' => Carbon::now()->format('Y-m-d'),
-            'kickoff_time' => Carbon::now()->format("H:i:s"),
             'strengths' => $this->faker->text(),
             'weaknesses' => $this->faker->text(),
             'recommendation_id' => Recommendation::factory(),

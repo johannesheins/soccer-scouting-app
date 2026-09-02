@@ -21,7 +21,7 @@ import PlayerSearchDialog from "@/pages/player/player-search-dialog";
 import {Input} from "@/components/ui/input";
 import {SingleSelector} from "@/components/ui/single-select";
 import {toClubOptions, toRecommendationOptions} from "@/hooks/form-options";
-import {DateTimePicker} from "@/components/ui/date-time-picker";
+import {DatePicker} from "@/components/ui/date-picker";
 import {Textarea} from "@/components/ui/textarea";
 import {PlayerRequestNameEnum as Name} from "@/enums";
 import {MAX_SCORE, ScoreBar} from "@/components/score-bar";
@@ -62,7 +62,6 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
         home_team_id: evaluation?.home_team_id ?? '',
         away_team_id: evaluation?.away_team_id ?? '',
         kickoff_date: evaluation?.kickoff_date ?? '',
-        kickoff_time: evaluation?.kickoff_time ?? '',
         strengths: evaluation?.strengths ?? '',
         weaknesses: evaluation?.weaknesses ?? '',
         recommendation_id: evaluation?.recommendation_id ?? '',
@@ -149,18 +148,12 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                                     <InputError message={errors.home_team_id} />
                                 </Field>
                                 <Field>
-                                    <DateTimePicker
+                                    <DatePicker
                                         dateLabel="Datum"
                                         dateName="kickoff_date"
                                         dateValue={evaluation?.kickoff_date}
                                         dateErrorMessage={errors.kickoff_date}
                                         dateOnChange={(val) => setData('kickoff_date', val)}
-
-                                        timeLabel="Zeit"
-                                        timeName="kickoff_time"
-                                        timeValue={evaluation?.kickoff_time}
-                                        timeErrorMessage={errors.kickoff_time}
-                                        timeOnChange={(val) => setData('kickoff_time', val)}
                                     />
                                 </Field>
                             </FieldGroup>
