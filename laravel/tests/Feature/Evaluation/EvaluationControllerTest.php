@@ -12,6 +12,7 @@ use App\Models\Player;
 use App\Models\Position;
 use App\Models\Recommendation;
 use App\Models\User;
+use DateTime;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -639,5 +640,16 @@ class EvaluationControllerTest extends TestCase
             'criteriaScores',
             'recommendation_id',
         ]);
+    }
+
+    public function test_update_date_can_not_be_in_future(): void{
+        $dateTime = new DateTime('now');
+
+        $response = $this->actingAs($this->user)
+            ->post(route('evaluation.store'), [
+                'kickoff_date' => $dateTime->modify('+1 day')->format('Y-m-d'),
+            ]);
+
+        $response->assertInvalid(['kickoff_date']);
     }
 }
