@@ -7,7 +7,7 @@ import {MAX_SCORE, ScoreBar} from "@/components/score-bar";
 import React from "react";
 import {Badge} from "@/components/ui/badge";
 import {useHasRight} from "@/hooks/use-has-right";
-import {RightEnum} from "@/enums";
+import {GameEvaluationPermissions} from "@/enums";
 import {ScoreCalculationService} from "@/services/score-calculation-service";
 import ScoreDisplay from "@/components/score-display";
 
@@ -16,7 +16,7 @@ type Props = {
     evaluationCriteriaGroups: EvaluationCriteriaGroups[]
 }
 export default function EvaluationView({evaluation, evaluationCriteriaGroups}: Props) {
-    const canViewCreator = useHasRight(RightEnum.EvaluationViewCreator);
+    const canViewCreator = useHasRight(GameEvaluationPermissions.ViewCreator);
 
     const scores: number[] = []
     evaluation.criteria_scores.forEach(criteria => {

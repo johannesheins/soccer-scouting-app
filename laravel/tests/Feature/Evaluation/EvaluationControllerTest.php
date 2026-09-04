@@ -2,7 +2,8 @@
 
 namespace Tests\Feature\Evaluation;
 
-use App\Enums\RightEnum;
+use App\Enums\Permission\EvaluationPermissions;
+use App\Enums\Permission\GameEvaluationPermissions;
 use App\Models\Club;
 use App\Models\Evaluation;
 use App\Models\EvaluationCriteria;
@@ -26,15 +27,15 @@ class EvaluationControllerTest extends TestCase
     {
         parent::setUp();
         $this->user = $this->createUserWithRight([
-            RightEnum::EvaluationIndex,
-            RightEnum::EvaluationSearch,
-            RightEnum::EvaluationCreate,
-            RightEnum::EvaluationView,
-            RightEnum::EvaluationViewAll,
-            RightEnum::EvaluationEdit,
-            RightEnum::EvaluationEditAll,
-            RightEnum::EvaluationDestroy,
-            RightEnum::EvaluationDestroyAll
+            EvaluationPermissions::Index,
+            EvaluationPermissions::Search,
+            GameEvaluationPermissions::Create,
+            GameEvaluationPermissions::View,
+            GameEvaluationPermissions::ViewAll,
+            GameEvaluationPermissions::Edit,
+            GameEvaluationPermissions::EditAll,
+            GameEvaluationPermissions::Destroy,
+            GameEvaluationPermissions::DestroyAll
         ]);
     }
     public function test_index()
@@ -43,7 +44,7 @@ class EvaluationControllerTest extends TestCase
             ->get(route('evaluation.index'));
 
         $response->assertOk();
-        $this->assertRights(RightEnum::EvaluationIndex, 'evaluation.index');
+        $this->assertRights(EvaluationPermissions::Index, 'evaluation.index');
     }
 
     public function test_index_guest_redirect_login(): void
@@ -78,7 +79,7 @@ class EvaluationControllerTest extends TestCase
             ->has('evaluationCriteriaGroups.0.evaluation_criteria', 3)
             ->has('recommendations', 4)
         );
-        $this->assertRights(RightEnum::EvaluationCreate, 'evaluation.create');
+        $this->assertRights(GameEvaluationPermissions::Create, 'evaluation.create');
     }
 
     public function test_store_creates_evaluation(): void
@@ -125,7 +126,7 @@ class EvaluationControllerTest extends TestCase
             'score' => 8,
         ]);
 
-        $this->assertRights(RightEnum::EvaluationCreate, 'evaluation.store');
+        $this->assertRights(GameEvaluationPermissions::Create, 'evaluation.store');
     }
 
     public function test_store_creates_a_criteria_score_for_each_entry(): void
@@ -459,7 +460,7 @@ class EvaluationControllerTest extends TestCase
             ->has('evaluationCriteriaGroups.0.evaluation_criteria', 3)
             ->has('recommendations', 4)
         );
-        $this->assertRights(RightEnum::EvaluationEditAll, ['evaluation.edit', $evaluation]);
+        $this->assertRights(GameEvaluationPermissions::EditAll, ['evaluation.edit', $evaluation]);
     }
 
     public function test_edit_guest_redirect_login(): void
@@ -516,7 +517,7 @@ class EvaluationControllerTest extends TestCase
             'score' => 8,
         ]);
 
-        $this->assertRights(RightEnum::EvaluationEditAll, ['evaluation.update', $evaluation]);
+        $this->assertRights(GameEvaluationPermissions::EditAll, ['evaluation.update', $evaluation]);
     }
 
     public function test_update_replaces_criteria_scores(): void

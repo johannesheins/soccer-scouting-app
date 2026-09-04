@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use App\Enums\RightEnum;
+use App\Interfaces\PermissionsInterface;
 use App\Models\Right;
 use App\Models\User;
 use App\Models\UserGroup;
@@ -22,14 +22,14 @@ abstract class TestCase extends BaseTestCase
         }
     }
 
-    public function assertRights(RightEnum $right, string|array $route, ?string $method = null): void
+    public function assertRights(PermissionsInterface $right, string|array $route, ?string $method = null): void
     {
         $this->assertHasRight($right, $route, $method);
         $this->assertHasRightAsAdministrator($right, $route, $method);
         $this->assertHasNoRight($right, $route, $method);
     }
 
-    private function assertHasNoRight(RightEnum $right, string|array $route, ?string $method = null): void
+    private function assertHasNoRight(PermissionsInterface $right, string|array $route, ?string $method = null): void
     {
         $this->inRollback(function () use ($right, $route, $method): void {
             $user = User::factory()->create();
@@ -43,7 +43,7 @@ abstract class TestCase extends BaseTestCase
         });
     }
 
-    private function assertHasRight(RightEnum $right, string|array $route, ?string $method = null): void
+    private function assertHasRight(PermissionsInterface $right, string|array $route, ?string $method = null): void
     {
         $this->inRollback(function () use ($right, $route, $method): void {
             $user = $this->createUserWithRight([$right]);
@@ -58,7 +58,7 @@ abstract class TestCase extends BaseTestCase
         });
     }
 
-    private function assertHasRightAsAdministrator(RightEnum $right, string|array $route, ?string $method = null): void
+    private function assertHasRightAsAdministrator(PermissionsInterface $right, string|array $route, ?string $method = null): void
     {
         $this->inRollback(function () use ($right, $route, $method): void {
             $user = User::factory()->administrator()->create();

@@ -3,7 +3,7 @@
 namespace Tests\Feature\Player;
 
 use App\Enums\FootEnum;
-use App\Enums\RightEnum;
+use App\Enums\Permission\PlayerPermissions;
 use App\Models\Club;
 use App\Models\Player;
 use App\Models\Position;
@@ -24,12 +24,12 @@ class PlayerControllerTest extends TestCase
     {
         parent::setUp();
         $this->user = $this->createUserWithRight([
-            RightEnum::PlayerIndex,
-            RightEnum::PlayerSearch,
-            RightEnum::PlayerCreate,
-            RightEnum::PlayerView,
-            RightEnum::PlayerEdit,
-            RightEnum::PlayerDestroy,
+            PlayerPermissions::Index,
+            PlayerPermissions::Search,
+            PlayerPermissions::Create,
+            PlayerPermissions::View,
+            PlayerPermissions::Edit,
+            PlayerPermissions::Destroy,
         ]);
     }
 
@@ -56,7 +56,7 @@ class PlayerControllerTest extends TestCase
             ->where('positions.0.id', $firstPosition->id)
             ->where('positions.0.position_code', $firstPosition->position_code)
         );
-        $this->assertRights(RightEnum::PlayerIndex, 'player.index');
+        $this->assertRights(PlayerPermissions::Index, 'player.index');
     }
 
     public function test_index_guest_redirect_login(): void
@@ -90,7 +90,7 @@ class PlayerControllerTest extends TestCase
             ->where('positions.0.id', $firstPosition->id)
             ->where('positions.0.position_code', $firstPosition->position_code)
         );
-        $this->assertRights(RightEnum::PlayerCreate, 'player.create');
+        $this->assertRights(PlayerPermissions::Create, 'player.create');
     }
 
     public function test_create_guest_redirect_login(): void
@@ -129,7 +129,7 @@ class PlayerControllerTest extends TestCase
         $player = Player::where('firstname', 'John')->first();
         $positions->each(fn ($pos) => $this->assertDatabaseHas('player_positions', ['player_id' => $player->id, 'position_id' => $pos->id]));
 
-        $this->assertRights(RightEnum::PlayerCreate, 'player.create');
+        $this->assertRights(PlayerPermissions::Create, 'player.create');
     }
 
     public function test_store_guest_redirect_login(): void
@@ -344,7 +344,7 @@ class PlayerControllerTest extends TestCase
             ->where('modal.props.player.strong_foot', FootEnum::LEFT->value)
         );
 
-        $this->assertRights(RightEnum::PlayerView, ['player.show', $player->id]);
+        $this->assertRights(PlayerPermissions::View, ['player.show', $player->id]);
     }
 
     public function test_show_returns_404_for_nonexistent_player(): void
@@ -386,7 +386,7 @@ class PlayerControllerTest extends TestCase
             ->has('player.positions', 2)
         );
 
-        $this->assertRights(RightEnum::PlayerEdit, ['player.edit', $player->id]);
+        $this->assertRights(PlayerPermissions::Edit, ['player.edit', $player->id]);
     }
 
     public function test_edit_guest_redirect_login(): void
@@ -434,7 +434,7 @@ class PlayerControllerTest extends TestCase
         $this->assertDatabaseHas('player_positions', ['player_id' => $player->id, 'position_id' => $newPosition->id]);
         $oldPosition->each(fn ($pos) => $this->assertDatabaseMissing('player_positions', ['player_id' => $player->id, 'position_id' => $pos->id]));
 
-        $this->assertRights(RightEnum::PlayerEdit, ['player.update', $player]);
+        $this->assertRights(PlayerPermissions::Edit, ['player.update', $player]);
     }
 
     public function test_update_guest_redirect_login(): void
@@ -611,7 +611,7 @@ class PlayerControllerTest extends TestCase
         ]);
         $player->positions()->attach($position->id);
 
-        $this->assertRights(RightEnum::PlayerDestroy, ['player.destroy', $player->id]);
+        $this->assertRights(PlayerPermissions::Destroy, ['player.destroy', $player->id]);
 
         $response = $this->actingAs($this->user)
             ->delete(route('player.destroy', $player->id));

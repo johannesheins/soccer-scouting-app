@@ -5,14 +5,14 @@ import dashboardSettings from '@/routes/settings/dashboard';
 import player from "@/routes/player";
 import AccessGuard from "@/components/access-guard";
 import {useHasRight} from "@/hooks/use-has-right";
-import {RightEnum} from "@/enums";
+import {PlayerPermissions} from "@/enums";
 import {playerQuickSearchUserClubs, PlayerQuickSearchUserYears} from "@/types/types";
 import {cn} from "@/lib/utils";
 
 type Props = { playerQuickSearchClubs: playerQuickSearchUserClubs, playerQuickSearchUserYears: PlayerQuickSearchUserYears };
 export default function Dashboard() {
     const { playerQuickSearchClubs, playerQuickSearchUserYears } = usePage<Props>().props;
-    const canSearch = useHasRight(RightEnum.PlayerSearch);
+    const canSearch = useHasRight(PlayerPermissions.Search);
 
     const years = playerQuickSearchUserYears.map(year => (year.year_of_birth));
 

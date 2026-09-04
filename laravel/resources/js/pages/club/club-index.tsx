@@ -1,13 +1,13 @@
 import {Head, Link} from '@inertiajs/react';
 import {ShieldPlus, Search} from 'lucide-react';
 import AccessGuard from "@/components/access-guard";
-import {RightEnum} from "@/enums";
+import {ClubPermissions} from "@/enums";
 import {useHasRight} from "@/hooks/use-has-right";
 import club from "@/routes/club";
 
 export default function ClubIndex() {
-    const canCreate = useHasRight(RightEnum.ClubCreate);
-    const canSearch = useHasRight(RightEnum.ClubSearch);
+    const canCreate = useHasRight(ClubPermissions.Create);
+    const canSearch = useHasRight(ClubPermissions.Search);
 
     return (
         <>

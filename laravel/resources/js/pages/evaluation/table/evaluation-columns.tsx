@@ -7,7 +7,7 @@ import sortHeader from "@/components/table/table-header-sort";
 import EvaluationRowActions from "@/pages/evaluation/table/evaluation-row-actions";
 import {date} from "@/locale/date-locale";
 import {useHasRight} from "@/hooks/use-has-right";
-import {RightEnum} from "@/enums";
+import {GameEvaluationPermissions} from "@/enums";
 
 const player:ColumnDef<Evaluation> = {
     accessorKey: "player",
@@ -73,7 +73,7 @@ const creator:ColumnDef<Evaluation> = {
 };
 
 export function useEvaluationColumns(): ColumnDef<Evaluation>[] {
-    const canViewCreator = useHasRight(RightEnum.EvaluationViewCreator);
+    const canViewCreator = useHasRight(GameEvaluationPermissions.ViewCreator);
 
     return [
         player,

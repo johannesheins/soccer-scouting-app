@@ -21,7 +21,7 @@ import {
 import {router} from "@inertiajs/react";
 import evaluation from "@/routes/evaluation";
 import {useHasRight} from "@/hooks/use-has-right";
-import {RightEnum} from "@/enums";
+import {GameEvaluationPermissions, PlayerPermissions} from "@/enums";
 import {useUser} from "@/hooks/use-auth";
 import player from "@/routes/player";
 const evaluationRoute = evaluation;
@@ -30,11 +30,11 @@ export default function EvaluationRowActions({evaluation}: { evaluation: Evaluat
 
     const currentUserIsCreator = evaluation.creator.id ?? null === useUser().id;
 
-    const canView = useHasRight(RightEnum.EvaluationViewAll) || (useHasRight(RightEnum.EvaluationView) && currentUserIsCreator)
-    const canViewPlayer = useHasRight(RightEnum.PlayerView);
+    const canView = useHasRight(GameEvaluationPermissions.ViewAll) || (useHasRight(GameEvaluationPermissions.View) && currentUserIsCreator)
+    const canViewPlayer = useHasRight(PlayerPermissions.View);
 
-    const canEdit = useHasRight(RightEnum.EvaluationEditAll) || (useHasRight(RightEnum.EvaluationEdit) && currentUserIsCreator);
-    const canDelete = useHasRight(RightEnum.EvaluationDestroyAll) || (useHasRight(RightEnum.EvaluationDestroy) && currentUserIsCreator);
+    const canEdit = useHasRight(GameEvaluationPermissions.EditAll) || (useHasRight(GameEvaluationPermissions.Edit) && currentUserIsCreator);
+    const canDelete = useHasRight(GameEvaluationPermissions.DestroyAll) || (useHasRight(GameEvaluationPermissions.Destroy) && currentUserIsCreator);
 
     const showPlayerSeparator = canView && canViewPlayer;
     const showEditDeleteSeparator = (canView || canViewPlayer) && (canDelete || canEdit);

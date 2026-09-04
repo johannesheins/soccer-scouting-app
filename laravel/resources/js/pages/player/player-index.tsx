@@ -4,14 +4,14 @@ import PlayerSearchForm from "@/pages/player/player-search-form";
 import player from "@/routes/player";
 import AccessGuard from "@/components/access-guard";
 import {useHasRight} from "@/hooks/use-has-right";
-import {RightEnum} from "@/enums";
+import {PlayerPermissions} from "@/enums";
 import type {Club, Position} from "@/types/types";
 
 type Props = { positions: Position[]; clubs: Club[] };
 export default function PlayerIndex() {
     const { positions, clubs } = usePage<Props>().props;
-    const canCreate = useHasRight(RightEnum.PlayerCreate);
-    const canSearch = useHasRight(RightEnum.PlayerSearch);
+    const canCreate = useHasRight(PlayerPermissions.Create);
+    const canSearch = useHasRight(PlayerPermissions.Search);
 
     return (
         <>

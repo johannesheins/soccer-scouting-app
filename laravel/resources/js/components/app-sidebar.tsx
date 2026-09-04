@@ -13,7 +13,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import {RightEnum} from "@/enums";
+import {ClubPermissions, EvaluationPermissions, PlayerPermissions} from "@/enums";
 import {administration, dashboard} from "@/routes";
 import club from "@/routes/club";
 import evaluation from "@/routes/evaluation";
@@ -30,19 +30,19 @@ const mainNavItems: NavItem[] = [
         title: 'Spieler',
         href: player.index(),
         icon: User,
-        right: RightEnum.PlayerIndex,
+        right: PlayerPermissions.Index,
     },
     {
         title: 'Bewertung',
         href: evaluation.index(),
         icon: FileUserIcon,
-        right: RightEnum.EvaluationIndex,
+        right: EvaluationPermissions.Index,
     },
     {
         title: 'Verein',
         href: club.index(),
         icon: Shield,
-        right: RightEnum.ClubIndex,
+        right: ClubPermissions.Index,
     },
 ];
 

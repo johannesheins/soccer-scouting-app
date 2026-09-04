@@ -11,7 +11,7 @@ import {toClubOptions} from "@/hooks/form-options";
 import dashboard from "@/routes/settings/dashboard";
 import {Club, playerQuickSearchUserClubs, PlayerQuickSearchUserYears} from "@/types/types";
 import {useHasRight} from "@/hooks/use-has-right";
-import {RightEnum} from "@/enums";
+import {PlayerPermissions} from "@/enums";
 import {Field} from "@/components/ui/field";
 import YearOfBirthInput from "@/components/input/year-of-birth-input";
 
@@ -27,7 +27,7 @@ export default function Dashboard() {
         clubOptions.filter(o => playerQuickSearchClubs.includes(Number(o.value)))
     );
 
-    const canSearchPlayers = useHasRight(RightEnum.PlayerSearch);
+    const canSearchPlayers = useHasRight(PlayerPermissions.Search);
 
     const { data, setData, post, processing, errors } = useForm({
         club_ids: playerQuickSearchClubs,

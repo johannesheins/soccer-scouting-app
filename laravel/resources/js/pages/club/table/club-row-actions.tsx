@@ -19,7 +19,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {RightEnum} from "@/enums";
+import {ClubPermissions} from "@/enums";
 import {useHasRight} from "@/hooks/use-has-right";
 import club from "@/routes/club";
 import type {Club} from "@/types/types";
@@ -27,9 +27,9 @@ import type {Club} from "@/types/types";
 const clubRoute = club;
 export function ClubRowActions({club}: { club: Club }) {
     const [deleteOpen, setDeleteOpen] = useState(false);
-    const canView = useHasRight(RightEnum.ClubView);
-    const canEdit = useHasRight(RightEnum.ClubEdit);
-    const canDelete = useHasRight(RightEnum.ClubDestroy);
+    const canView = useHasRight(ClubPermissions.View);
+    const canEdit = useHasRight(ClubPermissions.Edit);
+    const canDelete = useHasRight(ClubPermissions.Destroy);
 
     if (!canView && !canEdit && !canDelete) {
 return null;

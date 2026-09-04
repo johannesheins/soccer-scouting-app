@@ -22,19 +22,19 @@ import {
 } from "@/components/ui/dropdown-menu"
 import type {Player} from "@/types/types";
 import {useHasRight} from "@/hooks/use-has-right";
-import {PlayerRequestNameEnum as Name, RightEnum} from "@/enums";
+import {GameEvaluationPermissions, PlayerPermissions, PlayerRequestNameEnum as Name} from "@/enums";
 import evaluation from "@/routes/evaluation";
 import {evaluationSearchRequest} from "@/request/evaluation-search-request";
 
 const playerRoute = player;
 export function PlayerRowActions({player}: { player: Player }) {
     const [deleteOpen, setDeleteOpen] = useState(false);
-    const canView = useHasRight(RightEnum.PlayerView);
-    const canEdit = useHasRight(RightEnum.PlayerEdit);
-    const canDelete = useHasRight(RightEnum.PlayerDestroy);
+    const canView = useHasRight(PlayerPermissions.View);
+    const canEdit = useHasRight(PlayerPermissions.Edit);
+    const canDelete = useHasRight(PlayerPermissions.Destroy);
 
-    const canCreateEvaluation = useHasRight(RightEnum.EvaluationCreate);
-    const canViewEvaluation = useHasRight(RightEnum.EvaluationView);
+    const canCreateEvaluation = useHasRight(GameEvaluationPermissions.Create);
+    const canViewEvaluation = useHasRight(GameEvaluationPermissions.View);
 
     if (!canView && !canEdit && !canDelete && !canCreateEvaluation && !canViewEvaluation) return null;
 

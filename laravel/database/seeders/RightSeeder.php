@@ -2,12 +2,14 @@
 
 namespace Database\Seeders;
 
-use App\Enums\RightEnum;
+use App\Enums\Permission\ClubPermissions;
+use App\Enums\Permission\EvaluationPermissions;
+use App\Enums\Permission\GameEvaluationPermissions;
+use App\Enums\Permission\PlayerPermissions;
+use App\Interfaces\PermissionsInterface;
 use App\Models\Right;
 use App\Models\RightGroup;
 use Illuminate\Database\Seeder;
-
-use function Laravel\Prompts\error;
 
 class RightSeeder extends Seeder
 {
@@ -18,32 +20,34 @@ class RightSeeder extends Seeder
     {
         $rightGroups = [
             'Spieler' => [
-                $this->createRight(RightEnum::PlayerIndex, 'Spieler Übersicht', 'Der Benutzer darf die Übersicht für die Spieler sehen'),
-                $this->createRight(RightEnum::PlayerSearch, 'Spieler suchen', 'Der Benutzer darf nach Spielern suchen'),
-                $this->createRight(RightEnum::PlayerCreate, 'Spieler erstellen', 'Der Benutzer darf Spieler erstellen'),
-                $this->createRight(RightEnum::PlayerView, 'Spieler ansehen', 'Der Benutzer darf Spieler ansehen'),
-                $this->createRight(RightEnum::PlayerEdit, 'Spieler bearbeiten', 'Der Benutzer darf Spieler bearbeiten'),
-                $this->createRight(RightEnum::PlayerDestroy, 'Spieler löschen', 'Der Benutzer darf Spieler löschen'),
+                $this->createRight(PlayerPermissions::Index, 'Spielerübersicht', 'Der Benutzer darf die Übersicht für die Spieler sehen'),
+                $this->createRight(PlayerPermissions::Search, 'Spieler suchen', 'Der Benutzer darf nach Spielern suchen'),
+                $this->createRight(PlayerPermissions::Create, 'Spieler erstellen', 'Der Benutzer darf Spieler erstellen'),
+                $this->createRight(PlayerPermissions::View, 'Spieler ansehen', 'Der Benutzer darf Spieler ansehen'),
+                $this->createRight(PlayerPermissions::Edit, 'Spieler bearbeiten', 'Der Benutzer darf Spieler bearbeiten'),
+                $this->createRight(PlayerPermissions::Destroy, 'Spieler löschen', 'Der Benutzer darf Spieler löschen'),
             ],
             'Bewertung' => [
-                $this->createRight(RightEnum::EvaluationIndex, 'Bewertungs Übersicht', 'Der Benutzer darf die Übersicht für die Bewertung sehen'),
-                $this->createRight(RightEnum::EvaluationSearch, 'Bewertung suchen', 'Der Benutzer darf nach Bewertungen suchen'),
-                $this->createRight(RightEnum::EvaluationCreate, 'Bewertung erstellen', 'Der Benutzer darf Bewertungen erstellen'),
-                $this->createRight(RightEnum::EvaluationView, 'Bewertung ansehen', 'Der Benutzer darf die von ihm erstellten Bewertungen ansehen'),
-                $this->createRight(RightEnum::EvaluationViewAll, 'Alle Bewertung ansehen', 'Der Benutzer darf alle Bewertungen ansehen'),
-                $this->createRight(RightEnum::EvaluationEdit, 'Bewertung bearbeiten', 'Der Benutzer darf die von ihm erstellten Bewertung bearbeiten'),
-                $this->createRight(RightEnum::EvaluationEditAll, 'Alle Bewertung bearbeiten', 'Der Benutzer darf alle Bewertung bearbeiten'),
-                $this->createRight(RightEnum::EvaluationDestroy, 'Bewertung löschen', 'Der Benutzer darf die von ihm erstellten Bewertung löschen'),
-                $this->createRight(RightEnum::EvaluationDestroyAll, 'Alle Bewertung löschen', 'Der Benutzer darf alle Bewertung löschen'),
-                $this->createRight(RightEnum::EvaluationViewCreator, 'Autor sehen ', 'Der Benutzer darf den Autor sehen'),
+                $this->createRight(EvaluationPermissions::Index, 'Bewertungsübersicht', 'Der Benutzer darf die Übersicht für die Bewertung sehen'),
+                $this->createRight(EvaluationPermissions::Search, 'Bewertung suchen', 'Der Benutzer darf nach Bewertungen suchen'),
+            ],
+            'Spielbewertung' => [
+                $this->createRight(GameEvaluationPermissions::Create, 'Spielbewertung erstellen', 'Der Benutzer darf Spielbewertung erstellen'),
+                $this->createRight(GameEvaluationPermissions::View, 'Spielbewertung ansehen', 'Der Benutzer darf die von ihm erstellten Spielbewertung ansehen'),
+                $this->createRight(GameEvaluationPermissions::ViewAll, 'Alle Spielbewertung ansehen', 'Der Benutzer darf alle Spielbewertung ansehen'),
+                $this->createRight(GameEvaluationPermissions::Edit, 'Spielbewertung bearbeiten', 'Der Benutzer darf die von ihm erstellten Spielbewertung bearbeiten'),
+                $this->createRight(GameEvaluationPermissions::EditAll, 'Alle Spielbewertung bearbeiten', 'Der Benutzer darf alle Spielbewertung bearbeiten'),
+                $this->createRight(GameEvaluationPermissions::Destroy, 'Spielbewertung löschen', 'Der Benutzer darf die von ihm erstellten Spielbewertung löschen'),
+                $this->createRight(GameEvaluationPermissions::DestroyAll, 'Alle Spielbewertung löschen', 'Der Benutzer darf alle Spielbewertung löschen'),
+                $this->createRight(GameEvaluationPermissions::ViewCreator, 'Autor sehen ', 'Der Benutzer darf den Autor sehen'),
             ],
             'Verein' => [
-                $this->createRight(RightEnum::ClubIndex, 'Verein Übersicht', 'Der Benutzer darf die Übersicht für die Vereine sehen'),
-                $this->createRight(RightEnum::ClubSearch, 'Verein suchen', 'Der Benutzer darf nach Vereinen suchen'),
-                $this->createRight(RightEnum::ClubCreate, 'Verein erstellen', 'Der Benutzer darf Vereine erstellen'),
-                $this->createRight(RightEnum::ClubView, 'Verein ansehen', 'Der Benutzer darf Vereine ansehen'),
-                $this->createRight(RightEnum::ClubEdit, 'Verein bearbeiten', 'Der Benutzer darf Vereine bearbeiten'),
-                $this->createRight(RightEnum::ClubDestroy, 'Verein löschen', 'Der Benutzer darf Vereine löschen'),
+                $this->createRight(ClubPermissions::Index, 'Verein Übersicht', 'Der Benutzer darf die Übersicht für die Vereine sehen'),
+                $this->createRight(ClubPermissions::Search, 'Verein suchen', 'Der Benutzer darf nach Vereinen suchen'),
+                $this->createRight(ClubPermissions::Create, 'Verein erstellen', 'Der Benutzer darf Vereine erstellen'),
+                $this->createRight(ClubPermissions::View, 'Verein ansehen', 'Der Benutzer darf Vereine ansehen'),
+                $this->createRight(ClubPermissions::Edit, 'Verein bearbeiten', 'Der Benutzer darf Vereine bearbeiten'),
+                $this->createRight(ClubPermissions::Destroy, 'Verein löschen', 'Der Benutzer darf Vereine löschen'),
             ],
         ];
 
@@ -57,7 +61,7 @@ class RightSeeder extends Seeder
         });
     }
 
-    private function createRight(RightEnum $id, string $name, string $description): array
+    private function createRight(PermissionsInterface $id, string $name, string $description): array
     {
         return [
             'id' => $id->value,

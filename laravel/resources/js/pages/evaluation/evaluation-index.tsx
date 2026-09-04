@@ -3,13 +3,13 @@ import {FilePlus, FileSearch} from 'lucide-react';
 import player from "@/routes/player";
 import AccessGuard from "@/components/access-guard";
 import {useHasRight} from "@/hooks/use-has-right";
-import {RightEnum} from "@/enums";
+import {EvaluationPermissions, GameEvaluationPermissions} from "@/enums";
 import {PlaceholderPattern} from "@/components/ui/placeholder-pattern";
 import evaluation from "@/routes/evaluation";
 
 export default function EvaluationIndex() {
-    const canCreate = useHasRight(RightEnum.EvaluationCreate);
-    const canSearch = useHasRight(RightEnum.EvaluationSearch);
+    const canCreate = useHasRight(GameEvaluationPermissions.Create);
+    const canSearch = useHasRight(EvaluationPermissions.Search);
 
     return (
         <>

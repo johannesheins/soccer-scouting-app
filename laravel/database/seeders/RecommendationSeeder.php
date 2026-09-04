@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Enums\RecommendationEnum;
-use App\Enums\RightEnum;
 use App\Models\Recommendation;
 use Illuminate\Database\Seeder;
 

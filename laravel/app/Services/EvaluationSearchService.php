@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\DTOs\EvaluationSearchDTO;
-use App\Enums\RightEnum;
+use App\Enums\Permission\GameEvaluationPermissions;
 use App\Models\Evaluation;
 use App\Models\User;
 use Illuminate\Support\Collection;
@@ -41,7 +41,7 @@ class EvaluationSearchService
             });
         }
 
-        if(!$user->hasRight(RightEnum::EvaluationViewAll)){
+        if(!$user->hasRight(GameEvaluationPermissions::ViewAll)){
             $query->where('created_by', $user->id);
         }
 

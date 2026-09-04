@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
-use App\Enums\RightEnum as RightEnum;
+use App\Interfaces\PermissionsInterface;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
@@ -70,7 +70,7 @@ class User extends Authenticatable
         return $this->hasMany(PlayerQuickSearchUserYearsOfBirth::class);
     }
 
-    public function hasRight(RightEnum $right): bool
+    public function hasRight(PermissionsInterface $right): bool
     {
         if ($this->isAdministrator()) {
             return true;

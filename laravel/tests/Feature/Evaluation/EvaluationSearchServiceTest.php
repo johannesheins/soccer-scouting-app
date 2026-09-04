@@ -3,7 +3,8 @@
 namespace Tests\Feature\Evaluation;
 
 use App\DTOs\EvaluationSearchDTO;
-use App\Enums\RightEnum;
+use App\Enums\Permission\EvaluationPermissions;
+use App\Enums\Permission\GameEvaluationPermissions;
 use App\Models\Evaluation;
 use App\Models\EvaluationCriteria;
 use App\Models\EvaluationCriteriaScore;
@@ -25,8 +26,8 @@ class EvaluationSearchServiceTest extends TestCase
         parent::setUp();
         $this->service = new EvaluationSearchService();
         $this->user = $this->createUserWithRight([
-            RightEnum::EvaluationSearch,
-            RightEnum::EvaluationViewAll,
+            EvaluationPermissions::Search,
+            GameEvaluationPermissions::ViewAll,
         ]);
     }
 
@@ -233,7 +234,7 @@ class EvaluationSearchServiceTest extends TestCase
     #region EvaluationViewAll right
     public function test_returns_only_own_evaluations_when_user_lacks_view_all_right(): void
     {
-        $user = $this->createUserWithRight([RightEnum::EvaluationSearch]);
+        $user = $this->createUserWithRight([EvaluationPermissions::Search]);
 
         $own = Evaluation::factory()->create(['created_by' => $user->id]);
         Evaluation::factory()->create();

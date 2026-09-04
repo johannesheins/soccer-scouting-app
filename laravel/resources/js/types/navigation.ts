@@ -1,11 +1,13 @@
 import type { InertiaLinkProps } from '@inertiajs/react';
 import type { LucideIcon } from 'lucide-react';
-import type { RightEnum } from '@/enums';
+import type { ClubPermissions, EvaluationPermissions, GameEvaluationPermissions, PlayerPermissions } from '@/enums';
 
 export type BreadcrumbItem = {
     title: string;
     href: NonNullable<InertiaLinkProps['href']>;
 };
+
+export type PermissionEnum = PlayerPermissions | EvaluationPermissions | GameEvaluationPermissions | ClubPermissions;
 
 export type NavItem = {
     title: string;
@@ -14,5 +16,5 @@ export type NavItem = {
     target?: '_self' | '_blank' | '_parent' | '_top',
     isAdministrationOnly?: boolean;
     isActive?: boolean;
-    right?: RightEnum;
+    right?: PermissionEnum;
 };

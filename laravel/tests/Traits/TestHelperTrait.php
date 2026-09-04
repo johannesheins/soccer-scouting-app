@@ -2,7 +2,7 @@
 
 namespace Tests\Traits;
 
-use App\Enums\RightEnum;
+use App\Interfaces\PermissionsInterface;
 use App\Models\Right;
 use App\Models\User;
 use App\Models\UserGroup;
@@ -52,7 +52,7 @@ trait TestHelperTrait
     }
 
     /**
-     * @param RightEnum[] $rights
+     * @param PermissionsInterface[] $rights
      * @return User
      */
     public function createUserWithRight(array $rights): User

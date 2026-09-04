@@ -74,12 +74,19 @@ class EnumsGenerate extends Command
                 continue;
             }
 
-            if(! str_ends_with($file, 'Enum.php')){
+            if(! str_ends_with($file, '.php')){
                 continue;
             }
 
             $file = str_replace('.php', '', $file);
-            $enums[] = str_replace(app_path(self::BASE_DIR), '', "{$dirName}/{$file}");
+            $relativeName = str_replace(app_path(self::BASE_DIR), '', "{$dirName}/{$file}");
+            $class = 'App\\Enums'.str_replace('/', '\\', $relativeName);
+
+            if(! enum_exists($class)){
+                continue;
+            }
+
+            $enums[] = $relativeName;
         }
 
         return $enums;

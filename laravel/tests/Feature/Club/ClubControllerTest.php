@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Club;
 
-use App\Enums\RightEnum;
+use App\Enums\Permission\ClubPermissions;
 use App\Models\Club;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -18,12 +18,12 @@ class ClubControllerTest extends TestCase
     {
         parent::setUp();
         $this->user = $this->createUserWithRight([
-            RightEnum::ClubIndex,
-            RightEnum::ClubSearch,
-            RightEnum::ClubCreate,
-            RightEnum::ClubView,
-            RightEnum::ClubEdit,
-            RightEnum::ClubDestroy,
+            ClubPermissions::Index,
+            ClubPermissions::Search,
+            ClubPermissions::Create,
+            ClubPermissions::View,
+            ClubPermissions::Edit,
+            ClubPermissions::Destroy,
         ]);
     }
 
@@ -38,7 +38,7 @@ class ClubControllerTest extends TestCase
             fn ($page) => $page
             ->component('club/club-index')
         );
-        $this->assertRights(RightEnum::ClubIndex, 'club.index');
+        $this->assertRights(ClubPermissions::Index, 'club.index');
     }
 
     public function test_index_guest_redirect_login(): void
@@ -60,7 +60,7 @@ class ClubControllerTest extends TestCase
             fn ($page) => $page
             ->component('club/club-create')
         );
-        $this->assertRights(RightEnum::ClubCreate, 'club.create');
+        $this->assertRights(ClubPermissions::Create, 'club.create');
     }
 
     public function test_create_guest_redirect_login(): void
@@ -88,7 +88,7 @@ class ClubControllerTest extends TestCase
             'city' => 'Testhausen',
         ]);
 
-        $this->assertRights(RightEnum::ClubCreate, 'club.create');
+        $this->assertRights(ClubPermissions::Create, 'club.create');
     }
 
     public function test_store_guest_redirect_login(): void
@@ -183,7 +183,7 @@ class ClubControllerTest extends TestCase
             ->where('modal.props.club.city', 'Testhausen')
         );
 
-        $this->assertRights(RightEnum::ClubView, ['club.show', $club->id]);
+        $this->assertRights(ClubPermissions::View, ['club.show', $club->id]);
     }
 
     public function test_show_returns_404_for_nonexistent_club(): void
@@ -215,7 +215,7 @@ class ClubControllerTest extends TestCase
             ->where('club.city', 'Testhausen')
         );
 
-        $this->assertRights(RightEnum::ClubEdit, ['club.edit', $club->id]);
+        $this->assertRights(ClubPermissions::Edit, ['club.edit', $club->id]);
     }
 
     public function test_edit_guest_redirect_login(): void
@@ -254,7 +254,7 @@ class ClubControllerTest extends TestCase
             'city' => 'Neustadt',
         ]);
 
-        $this->assertRights(RightEnum::ClubEdit, ['club.update', $club]);
+        $this->assertRights(ClubPermissions::Edit, ['club.update', $club]);
     }
 
     public function test_update_guest_redirect_login(): void
@@ -302,7 +302,7 @@ class ClubControllerTest extends TestCase
     {
         $club = Club::factory()->create();
 
-        $this->assertRights(RightEnum::ClubDestroy, ['club.destroy', $club->id]);
+        $this->assertRights(ClubPermissions::Destroy, ['club.destroy', $club->id]);
 
         $response = $this->actingAs($this->user)
             ->delete(route('club.destroy', $club));
