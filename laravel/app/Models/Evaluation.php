@@ -8,29 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable('player_id', 'created_by', 'home_team_id', 'away_team_id', 'kickoff', 'kickoff_date', 'strengths', 'weaknesses', 'recommendation_id', 'comment')]
+#[Fillable('date', 'created_by', 'strengths', 'weaknesses', 'recommendation_id', 'comment')]
 class Evaluation extends Model
 {
     use HasFactory;
 
-    public function player(): BelongsTo
-    {
-        return $this->belongsTo(Player::class);
-    }
-
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
-    }
-
-    public function homeTeam(): BelongsTo
-    {
-        return $this->belongsTo(Club::class, 'home_team_id');
-    }
-
-    public function awayTeam(): BelongsTo
-    {
-        return $this->belongsTo(Club::class, 'away_team_id');
     }
 
     public function criteriaScores(): HasMany
@@ -51,8 +36,7 @@ class Evaluation extends Model
     protected function casts(): array
     {
         return [
-            'kickoff' => 'datetime',
-            'kickoff_date' => 'date',
+            'date' => 'date',
         ];
     }
 }

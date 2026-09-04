@@ -8,22 +8,22 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up(): void
-    {
-        Schema::create('evaluations', function (Blueprint $table){
-            $table->id();
-            $table->foreignIdFor(Player::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignIdFor(User::class)->nullable()->constrained()->nullOnDelete()->cascadeOnUpdate();
-            $table->foreignIdFor(Club::class, 'home_team_id')->nullable()->constrained()->nullOnDelete()->cascadeOnUpdate();
-            $table->foreignIdFor(Club::class, 'away_team_id')->nullable()->constrained()->nullOnDelete()->cascadeOnUpdate();
-            $table->dateTime('kickoff');
-            $table->text('comment')->nullable();
-            $table->timestamps();
-        });
-    }
-
-    public function down(): void
-    {
-        Schema::dropIfExists('evaluations');
-    }
+//    public function up(): void
+//    {
+//        Schema::create('evaluations', function (Blueprint $table){
+//            $table->id();
+//            $table->foreignIdFor(Player::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+//            $table->foreignIdFor(User::class)->nullable()->constrained()->nullOnDelete()->cascadeOnUpdate();
+//            $table->foreignIdFor(Club::class, 'home_team_id')->nullable()->constrained()->nullOnDelete()->cascadeOnUpdate();
+//            $table->foreignIdFor(Club::class, 'away_team_id')->nullable()->constrained()->nullOnDelete()->cascadeOnUpdate();
+//            $table->dateTime('kickoff');
+//            $table->text('comment')->nullable();
+//            $table->timestamps();
+//        });
+//    }
+//
+//    public function down(): void
+//    {
+//        Schema::dropIfExists('evaluations');
+//    }
 };

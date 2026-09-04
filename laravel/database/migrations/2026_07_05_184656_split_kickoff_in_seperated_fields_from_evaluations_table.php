@@ -6,39 +6,39 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up(): void
-    {
-        Schema::table('evaluations', function (Blueprint $table){
-            $table->date('kickoff_date')->nullable()->after('kickoff');
-        });
-
-        foreach(Evaluation::all() as $evaluation){
-            $kickoff = new DateTime($evaluation->kickoff);
-            $evaluation->update([
-                'kickoff_date' => $kickoff->format('Y-m-d'),
-            ]);
-        }
-
-        Schema::table('evaluations', function (Blueprint $table){
-            $table->dropColumn('kickoff');
-        });
-    }
-
-    public function down(): void
-    {
-        Schema::table('evaluations', function (Blueprint $table){
-            $table->dateTime('kickoff')->nullable()->after('kickoff_date');
-        });
-
-        foreach (Evaluation::all() as $evaluation) {
-            $kickoff = new DateTime($evaluation->kickoff_date);
-            $evaluation->update([
-                'kickoff' => $kickoff->format('Y-m-d H:i:s'),
-            ]);
-        }
-
-        Schema::table('evaluations', function (Blueprint $table){
-            $table->dropColumn('kickoff_date');
-        });
-    }
+//    public function up(): void
+//    {
+//        Schema::table('evaluations', function (Blueprint $table){
+//            $table->date('kickoff_date')->nullable()->after('kickoff');
+//        });
+//
+//        foreach(Evaluation::all() as $evaluation){
+//            $kickoff = new DateTime($evaluation->kickoff);
+//            $evaluation->update([
+//                'kickoff_date' => $kickoff->format('Y-m-d'),
+//            ]);
+//        }
+//
+//        Schema::table('evaluations', function (Blueprint $table){
+//            $table->dropColumn('kickoff');
+//        });
+//    }
+//
+//    public function down(): void
+//    {
+//        Schema::table('evaluations', function (Blueprint $table){
+//            $table->dateTime('kickoff')->nullable()->after('kickoff_date');
+//        });
+//
+//        foreach (Evaluation::all() as $evaluation) {
+//            $kickoff = new DateTime($evaluation->kickoff_date);
+//            $evaluation->update([
+//                'kickoff' => $kickoff->format('Y-m-d H:i:s'),
+//            ]);
+//        }
+//
+//        Schema::table('evaluations', function (Blueprint $table){
+//            $table->dropColumn('kickoff_date');
+//        });
+//    }
 };
