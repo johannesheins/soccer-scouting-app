@@ -1,5 +1,7 @@
 import {Head, router, useForm, usePage} from '@inertiajs/react';
 import React from 'react';
+import InputError from "@/components/input-error";
+import {Button} from "@/components/ui/button";
 import {
     Field,
     FieldGroup,
@@ -7,10 +9,8 @@ import {
     FieldSet,
 } from "@/components/ui/field"
 import {Input} from "@/components/ui/input";
-import {Button} from "@/components/ui/button";
-import InputError from "@/components/input-error";
-import {EvaluationCriteriaGroup} from "@/types/types";
 import evaluationCriteriaGroup from "@/routes/evaluation-criteria-group";
+import type {EvaluationCriteriaGroup} from "@/types/evaluation-criteria";
 
 type Props = { evaluationCriteriaGroup?: EvaluationCriteriaGroup };
 

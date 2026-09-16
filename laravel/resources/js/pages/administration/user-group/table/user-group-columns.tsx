@@ -1,6 +1,6 @@
-import {ColumnDef} from "@tanstack/react-table";
-import {UserGroup} from "@/types/types";
+import type {ColumnDef} from "@tanstack/react-table";
 import sortHeader from "@/components/table/table-header-sort";
+import type {UserGroup} from "@/types/user-group";
 import {UserGroupRowActions} from "./user-group-row-actions";
 
 export const userGroupColumns: ColumnDef<UserGroup>[] = [

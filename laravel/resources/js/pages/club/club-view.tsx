@@ -1,6 +1,6 @@
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {Separator} from "@/components/ui/separator";
-import type {Club} from "@/types/types";
+import type {Club} from "@/types/club";
 
 export function ClubView({club, button}: { club: Club, button?: any }) {
     return (

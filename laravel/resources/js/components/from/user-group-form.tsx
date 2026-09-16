@@ -1,5 +1,14 @@
 import {Head, router, useForm, usePage} from '@inertiajs/react';
 import React from 'react';
+import InputError from "@/components/input-error";
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion"
+import {Button} from "@/components/ui/button";
+import {Checkbox} from "@/components/ui/checkbox";
 import {
     Field, FieldContent,
     FieldDescription,
@@ -8,17 +17,9 @@ import {
     FieldSet,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input";
-import {Button} from "@/components/ui/button";
-import InputError from "@/components/input-error";
-import {Right, RightGroup, UserGroup} from "@/types/types";
 import userGroup from "@/routes/administration/user-group";
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from "@/components/ui/accordion"
-import {Checkbox} from "@/components/ui/checkbox";
+import type {Right, RightGroup} from "@/types/right";
+import type {UserGroup} from "@/types/user-group";
 
 const userGroupRoute = userGroup;
 

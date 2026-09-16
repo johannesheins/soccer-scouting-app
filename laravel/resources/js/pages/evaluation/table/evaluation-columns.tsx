@@ -1,13 +1,15 @@
 "use client"
 
-import {ColumnDef} from "@tanstack/react-table"
-import {Club, Evaluation, PlayerSmall} from "@/types/types";
-import {User} from "@/types/auth";
+import type {ColumnDef} from "@tanstack/react-table"
 import sortHeader from "@/components/table/table-header-sort";
-import EvaluationRowActions from "@/pages/evaluation/table/evaluation-row-actions";
-import {date} from "@/locale/date-locale";
-import {useHasRight} from "@/hooks/use-has-right";
 import {GameEvaluationPermissions} from "@/enums";
+import {useHasRight} from "@/hooks/use-has-right";
+import {date} from "@/locale/date-locale";
+import EvaluationRowActions from "@/pages/evaluation/table/evaluation-row-actions";
+import type {User} from "@/types/auth";
+import type {Club} from "@/types/club";
+import type {Evaluation} from "@/types/evaluation/evaluation";
+import type {PlayerSmall} from "@/types/player";
 
 const player:ColumnDef<Evaluation> = {
     accessorKey: "player",

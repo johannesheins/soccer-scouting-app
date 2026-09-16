@@ -2,18 +2,19 @@ import {Head, useForm, usePage} from '@inertiajs/react';
 import React, {useState} from "react";
 import DashboardController from "@/actions/App/Http/Controllers/Settings/DashboardController";
 import Heading from '@/components/heading';
+import YearOfBirthInput from "@/components/input/year-of-birth-input";
 import InputError from "@/components/input-error";
 import {Button} from "@/components/ui/button";
+import {Field} from "@/components/ui/field";
 import { Label } from '@/components/ui/label';
 import MultipleSelector from "@/components/ui/multi-select";
 import type {Option} from "@/components/ui/multi-select";
-import {toClubOptions} from "@/hooks/form-options";
-import dashboard from "@/routes/settings/dashboard";
-import {Club, playerQuickSearchUserClubs, PlayerQuickSearchUserYears} from "@/types/types";
-import {useHasRight} from "@/hooks/use-has-right";
 import {PlayerPermissions} from "@/enums";
-import {Field} from "@/components/ui/field";
-import YearOfBirthInput from "@/components/input/year-of-birth-input";
+import {toClubOptions} from "@/hooks/form-options";
+import {useHasRight} from "@/hooks/use-has-right";
+import dashboard from "@/routes/settings/dashboard";
+import type {Club} from "@/types/club";
+import type {playerQuickSearchUserClubs, PlayerQuickSearchUserYears} from "@/types/player";
 
 type Props = { clubs: Club[]; playerQuickSearchUserClubs: playerQuickSearchUserClubs, playerQuickSearchUserYears: PlayerQuickSearchUserYears };
 

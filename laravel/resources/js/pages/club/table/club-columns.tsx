@@ -2,7 +2,7 @@
 
 import type {ColumnDef} from "@tanstack/react-table"
 import sortHeader from "@/components/table/table-header-sort";
-import type {Club} from "@/types/types";
+import type {Club} from "@/types/club";
 import {ClubRowActions} from "./club-row-actions";
 
 const clubname:ColumnDef<Club> = {

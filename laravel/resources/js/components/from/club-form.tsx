@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import {ClubRequestNameEnum as Name} from "@/enums";
 import club from "@/routes/club";
-import type {Club} from "@/types/types";
+import type {Club} from "@/types/club";
 
 const clubRoute = club
 

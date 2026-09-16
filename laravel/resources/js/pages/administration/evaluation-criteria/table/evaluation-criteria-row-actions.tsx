@@ -1,13 +1,7 @@
-import type {EvaluationCriteria} from "@/types/types";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
-import {Button} from "@/components/ui/button";
+import {router} from "@inertiajs/react";
+import {Link} from "@inertiajs/react";
 import {MoreHorizontal} from "lucide-react";
+import {useState} from "react";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -18,10 +12,16 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@/components/ui/alert-dialog";
-import {router} from "@inertiajs/react";
+import {Button} from "@/components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 import evaluationCriteria from "@/routes/evaluation-criteria";
-import {Link} from "@inertiajs/react";
-import {useState} from "react";
+import type {EvaluationCriteria} from "@/types/evaluation-criteria";
 
 export function EvaluationCriteriaRowActions({criterion}: { criterion: EvaluationCriteria }) {
     const [deleteOpen, setDeleteOpen] = useState(false);

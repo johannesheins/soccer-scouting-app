@@ -1,10 +1,10 @@
 import {Head, Link, usePage} from '@inertiajs/react';
-import {administration} from '@/routes';
+import {Plus} from "lucide-react";
 import {DataTable} from "@/components/table/data-table";
 import {evaluationCriteriaColumns} from "@/pages/administration/evaluation-criteria/table/evaluation-criteria-columns";
-import {EvaluationCriteria} from "@/types/types";
-import {Plus} from "lucide-react";
+import {administration} from '@/routes';
 import evaluationCriteria from "@/routes/evaluation-criteria";
+import type {EvaluationCriteria} from "@/types/evaluation-criteria";
 
 type Props = { evaluation_criteria: EvaluationCriteria[] }
 

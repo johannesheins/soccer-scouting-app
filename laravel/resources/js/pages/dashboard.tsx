@@ -1,13 +1,13 @@
 import {Head, Link, usePage} from '@inertiajs/react';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
-import { dashboard } from '@/routes';
-import dashboardSettings from '@/routes/settings/dashboard';
-import player from "@/routes/player";
 import AccessGuard from "@/components/access-guard";
-import {useHasRight} from "@/hooks/use-has-right";
+import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import {PlayerPermissions} from "@/enums";
-import {playerQuickSearchUserClubs, PlayerQuickSearchUserYears} from "@/types/types";
+import {useHasRight} from "@/hooks/use-has-right";
 import {cn} from "@/lib/utils";
+import { dashboard } from '@/routes';
+import player from "@/routes/player";
+import dashboardSettings from '@/routes/settings/dashboard';
+import type {playerQuickSearchUserClubs, PlayerQuickSearchUserYears} from "@/types/player";
 
 type Props = { playerQuickSearchClubs: playerQuickSearchUserClubs, playerQuickSearchUserYears: PlayerQuickSearchUserYears };
 export default function Dashboard() {

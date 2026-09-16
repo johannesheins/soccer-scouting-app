@@ -1,5 +1,5 @@
 import api from "@/routes/api";
-import type {Player} from "@/types/types";
+import type {Player} from "@/types/player";
 
 export default async function fetchPlayerSearchData(data: Record<string, string | string[] | number | number[]>): Promise<Player[]> {
     const params = new URLSearchParams();

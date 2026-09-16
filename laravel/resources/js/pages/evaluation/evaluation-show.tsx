@@ -1,7 +1,8 @@
-import {Evaluation, EvaluationCriteriaGroups} from "@/types/types";
-import {useModal} from "@/lib/inertia-modal";
 import {Dialog, DialogContent} from "@/components/ui/dialog";
+import {useModal} from "@/lib/inertia-modal";
 import EvaluationView from "@/pages/evaluation/evaluation-view";
+import type {Evaluation} from "@/types/evaluation/evaluation";
+import type {EvaluationCriteriaGroups} from "@/types/evaluation-criteria";
 
 type Props = {
     evaluation: Evaluation,

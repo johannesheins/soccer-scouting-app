@@ -1,4 +1,4 @@
-import {UserGroupSmall} from "@/types/types";
+import type {UserGroupSmall} from "@/types/user-group";
 
 export type User = {
     id: number;

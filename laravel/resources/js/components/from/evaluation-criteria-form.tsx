@@ -1,5 +1,7 @@
 import {Head, router, useForm, usePage} from '@inertiajs/react';
 import React, {useState} from 'react';
+import InputError from "@/components/input-error";
+import {Button} from "@/components/ui/button";
 import {
     Field,
     FieldGroup,
@@ -7,12 +9,10 @@ import {
     FieldSet,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input";
-import {Button} from "@/components/ui/button";
-import InputError from "@/components/input-error";
-import {EvaluationCriteria, EvaluationCriteriaGroup} from "@/types/types";
-import evaluationCriteriaRoute from "@/routes/evaluation-criteria";
 import {SingleSelector} from "@/components/ui/single-select";
 import {toEvaluationCriteriaGroupOptions} from "@/hooks/form-options";
+import evaluationCriteriaRoute from "@/routes/evaluation-criteria";
+import type {EvaluationCriteria, EvaluationCriteriaGroup} from "@/types/evaluation-criteria";
 
 type Props = { evaluationCriterion?: EvaluationCriteria, evaluation_criteria_groups: EvaluationCriteriaGroup[] };
 

@@ -1,11 +1,12 @@
 import {Head, Link, usePage} from '@inertiajs/react';
 import {UserRoundPlus, UserSearch} from 'lucide-react';
+import AccessGuard from "@/components/access-guard";
+import {PlayerPermissions} from "@/enums";
+import {useHasRight} from "@/hooks/use-has-right";
 import PlayerSearchForm from "@/pages/player/player-search-form";
 import player from "@/routes/player";
-import AccessGuard from "@/components/access-guard";
-import {useHasRight} from "@/hooks/use-has-right";
-import {PlayerPermissions} from "@/enums";
-import type {Club, Position} from "@/types/types";
+import type {Club} from "@/types/club";
+import type {Position} from "@/types/position";
 
 type Props = { positions: Position[]; clubs: Club[] };
 export default function PlayerIndex() {

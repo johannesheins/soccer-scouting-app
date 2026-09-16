@@ -1,10 +1,12 @@
 "use client"
 
-import {ColumnDef} from "@tanstack/react-table"
-import {Club, Player, Position} from "@/types/types";
-import {PlayerRowActions} from "./player-row-actions";
+import type {ColumnDef} from "@tanstack/react-table"
 import sortHeader from "@/components/table/table-header-sort";
 import {PlayerSelectRowActions} from "@/pages/player/table/player-select-row-actions";
+import type {Club} from "@/types/club";
+import type {Player} from "@/types/player";
+import type {Position} from "@/types/position";
+import {PlayerRowActions} from "./player-row-actions";
 
 const firstname:ColumnDef<Player> = {
     accessorKey: "firstname",

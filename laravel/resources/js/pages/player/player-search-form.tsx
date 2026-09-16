@@ -1,21 +1,23 @@
-import player from "@/routes/player";
 import {router, useForm} from "@inertiajs/react";
 import React from "react";
+import { useState, useEffect } from 'react';
+import ClubInput from "@/components/input/club-input";
+import HeightRangeInput from "@/components/input/height-range-input";
+import YearOfBirthInput from "@/components/input/year-of-birth-input";
+import InputError from "@/components/input-error";
+import {Button} from "@/components/ui/button";
 import {Field, FieldGroup, FieldLabel, FieldSet} from "@/components/ui/field";
 import {Input} from "@/components/ui/input";
-import InputError from "@/components/input-error";
 import MultipleSelector from "@/components/ui/multi-select";
-import {Button} from "@/components/ui/button";
-import { useState, useEffect } from 'react';
 import type { Option } from '@/components/ui/multi-select';
+import fetchPlayerSerchData from "@/hooks/fetchApiData";
 import {toPositionOptions, getFootOptions} from "@/hooks/form-options";
 import {usePreviousUrl} from "@/hooks/use-previous-url";
-import {Club, Player, Position} from "@/types/types";
-import fetchPlayerSerchData from "@/hooks/fetchApiData";
 import { useUrlParam, useUrlParamBracket } from "@/hooks/useUrlParam";
-import ClubInput from "@/components/input/club-input";
-import YearOfBirthInput from "@/components/input/year-of-birth-input";
-import HeightRangeInput from "@/components/input/height-range-input";
+import player from "@/routes/player";
+import type {Club} from "@/types/club";
+import type {Player} from "@/types/player";
+import type {Position} from "@/types/position";
 
 type Props = { positions: Position[]; clubs: Club[], returnData?: boolean, onResponse?: (players: Player[]) => void };
 export default function PlayerSearchForm({ positions, clubs, returnData, onResponse }: Props){
@@ -62,7 +64,9 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
     }
 
     useEffect(() => {
-        if (!returnData) return;
+        if (!returnData) {
+            return;
+        }
         fetchPlayerSerchData(data).then(players => onResponse?.(players));
     }, []);
 

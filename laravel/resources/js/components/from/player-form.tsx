@@ -1,11 +1,11 @@
 import {Head, router, useForm, usePage} from '@inertiajs/react';
 import React from 'react';
 import { useState } from 'react';
-import {
-    toPositionOptions,
-    toPlayerPositionIds,
-    getFootOptions
-} from '@/hooks/form-options';
+import ClubInput from "@/components/input/club-input";
+import HeightInput from "@/components/input/height-input";
+import YearOfBirthInput from "@/components/input/year-of-birth-input";
+import InputError from "@/components/input-error";
+import {Button} from "@/components/ui/button";
 import {
     Field,
     FieldGroup,
@@ -13,18 +13,20 @@ import {
     FieldSet,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input";
-import {Button} from "@/components/ui/button";
-import InputError from "@/components/input-error";
-import type {Club, Player, PlayerSmall, Position} from "@/types/types";
-import {SingleSelector} from "@/components/ui/single-select";
 import MultipleSelector from "@/components/ui/multi-select";
-import player from "@/routes/player"; //used as playerRoute
-import api from "@/routes/api";
-import {fetchPlayerData} from "@/hooks/fetchApiData";
+import {SingleSelector} from "@/components/ui/single-select";
 import {PlayerRequestNameEnum as Name} from "@/enums";
-import ClubInput from "@/components/input/club-input";
-import YearOfBirthInput from "@/components/input/year-of-birth-input";
-import HeightInput from "@/components/input/height-input";
+import {fetchPlayerData} from "@/hooks/fetchApiData";
+import {
+    toPositionOptions,
+    toPlayerPositionIds,
+    getFootOptions
+} from '@/hooks/form-options';
+import api from "@/routes/api";
+import player from "@/routes/player"; //used as playerRoute
+import type {Club} from "@/types/club";
+import type {Player, PlayerSmall} from "@/types/player";
+import type {Position} from "@/types/position";
 
 const playerRoute = player
 
@@ -39,7 +41,8 @@ export function PlayerFormDialog({onSelectPlayer}: { onSelectPlayer?: (player: P
 }
 
 
-function Form({edit = false, dialog = false, backHref, onResponse}: { edit?: boolean, dialog?: boolean, backHref?: string|null, onResponse?: (players: Player) => void }) {const { player, positions, clubs } = usePage<Props>().props;
+function Form({edit = false, dialog = false, backHref, onResponse}: { edit?: boolean, dialog?: boolean, backHref?: string|null, onResponse?: (players: Player) => void }) {
+const { player, positions, clubs } = usePage<Props>().props;
 
     const footOptions = getFootOptions();
     const positionOptions = toPositionOptions(positions);

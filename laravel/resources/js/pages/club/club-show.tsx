@@ -1,7 +1,7 @@
 import {Dialog, DialogContent} from '@/components/ui/dialog';
 import { useModal } from '@/lib/inertia-modal';
 import { ClubView } from '@/pages/club/club-view';
-import type { Club } from '@/types/types';
+import type { Club } from '@/types/club';
 
 export default function ClubShow({ club }: { club: Club }) {
     const { close } = useModal();

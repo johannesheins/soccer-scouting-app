@@ -22,7 +22,7 @@ import {
 import {ClubPermissions} from "@/enums";
 import {useHasRight} from "@/hooks/use-has-right";
 import club from "@/routes/club";
-import type {Club} from "@/types/types";
+import type {Club} from "@/types/club";
 
 const clubRoute = club;
 export function ClubRowActions({club}: { club: Club }) {

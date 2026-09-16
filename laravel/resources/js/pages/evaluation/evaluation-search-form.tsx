@@ -1,18 +1,21 @@
-import React, {useState} from "react";
-import {Field, FieldGroup, FieldLabel} from "@/components/ui/field";
 import {router, useForm} from "@inertiajs/react";
-import {Button} from "@/components/ui/button";
-import {Club, EvaluationCriteriaGroups, EvaluationSearchQuery, PlayerOption} from "@/types/types";
-import {ScoreBarRange} from "@/components/score-bar";
-import InputError from "@/components/input-error";
-import evaluation from "@/routes/evaluation";
-import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "@/components/ui/accordion";
-import MultipleSelector from "@/components/ui/multi-select";
-import {toPlayerOptions} from "@/hooks/form-options";
-import {evaluationSearchRequest} from "@/request/evaluation-search-request";
-import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
+import React, {useState} from "react";
 import ClubInput from "@/components/input/club-input";
 import YearOfBirthInput from "@/components/input/year-of-birth-input";
+import InputError from "@/components/input-error";
+import {ScoreBarRange} from "@/components/score-bar";
+import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "@/components/ui/accordion";
+import {Button} from "@/components/ui/button";
+import {Field, FieldGroup, FieldLabel} from "@/components/ui/field";
+import MultipleSelector from "@/components/ui/multi-select";
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
+import {toPlayerOptions} from "@/hooks/form-options";
+import {evaluationSearchRequest} from "@/request/evaluation-search-request";
+import evaluation from "@/routes/evaluation";
+import type {Club} from "@/types/club";
+import type {EvaluationSearchQuery} from "@/types/evaluation/evaluation-search-query";
+import type {EvaluationCriteriaGroups} from "@/types/evaluation-criteria";
+import type {PlayerOption} from "@/types/player";
 
 type Props = {
     evaluationCriteriaGroups: EvaluationCriteriaGroups[],
