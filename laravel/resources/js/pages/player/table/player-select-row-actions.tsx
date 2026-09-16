@@ -6,7 +6,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import type {Player} from "@/types/types";
+import type {Player} from "@/types/player";
 
 export function PlayerSelectRowActions({player, onClick}: { player: Player, onClick: (player: Player) => void }) {
     return (

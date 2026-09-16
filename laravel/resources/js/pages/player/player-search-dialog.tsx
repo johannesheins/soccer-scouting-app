@@ -1,12 +1,14 @@
-import type {Club, Player, Position} from "@/types/types";
-import {Dialog, DialogContent, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
-import PlayerSearchForm from "@/pages/player/player-search-form";
-import {DataTable} from "@/components/table/data-table";
-import {playerColumns, playerSelectColumns} from "@/pages/player/table/player-columns";
 import React, {useState} from "react";
+import {DataTable} from "@/components/table/data-table";
 import {Button} from "@/components/ui/button";
-import {PlayerView} from "@/pages/player/player-view";
+import {Dialog, DialogContent, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
 import PlayerCreateDialog from "@/pages/player/player-create-dialog";
+import PlayerSearchForm from "@/pages/player/player-search-form";
+import {PlayerView} from "@/pages/player/player-view";
+import {playerColumns, playerSelectColumns} from "@/pages/player/table/player-columns";
+import type {Club} from "@/types/club";
+import type {Player} from "@/types/player";
+import type {Position} from "@/types/position";
 
 
 type Props = {

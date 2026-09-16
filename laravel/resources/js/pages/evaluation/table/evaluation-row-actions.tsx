@@ -1,12 +1,4 @@
-import {Evaluation} from "@/types/types";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
-import {Button} from "@/components/ui/button";
+import {router} from "@inertiajs/react";
 import {MoreHorizontal} from "lucide-react";
 import {useState} from "react";
 import {
@@ -18,12 +10,20 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@/components/ui/alert-dialog";
-import {router} from "@inertiajs/react";
-import evaluation from "@/routes/evaluation";
-import {useHasRight} from "@/hooks/use-has-right";
+import {Button} from "@/components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 import {GameEvaluationPermissions, PlayerPermissions} from "@/enums";
 import {useUser} from "@/hooks/use-auth";
+import {useHasRight} from "@/hooks/use-has-right";
+import evaluation from "@/routes/evaluation";
 import player from "@/routes/player";
+import type {Evaluation} from "@/types/evaluation/evaluation";
 const evaluationRoute = evaluation;
 export default function EvaluationRowActions({evaluation}: { evaluation: Evaluation }) {
     const [deleteOpen, setDeleteOpen] = useState(false);

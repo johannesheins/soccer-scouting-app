@@ -1,9 +1,8 @@
 import {Head, Link, router, useForm, usePage} from '@inertiajs/react';
 import React from 'react';
 import { useState } from 'react';
-import {
-    toUserGroupOptions
-} from '@/hooks/form-options';
+import InputError from "@/components/input-error";
+import {Button} from "@/components/ui/button";
 import {
     Field,
     FieldGroup,
@@ -11,13 +10,12 @@ import {
     FieldSet,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input";
-import {Button} from "@/components/ui/button";
-import InputError from "@/components/input-error";
-import type {UserGroup, UserGroupSmall} from "@/types/types";
 import MultipleSelector from "@/components/ui/multi-select";
-import {User} from "@/types";
-import user from "@/routes/administration/user";
 import { Separator } from "@/components/ui/separator"
+import {toUserGroupOptions} from '@/hooks/form-options';
+import user from "@/routes/administration/user";
+import type {User} from "@/types";
+import type {UserGroup} from "@/types/user-group";
 
 type Props = { user: User, userGroups: UserGroup[]; };
 

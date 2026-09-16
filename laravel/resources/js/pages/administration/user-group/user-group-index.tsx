@@ -1,10 +1,10 @@
 import {Head, Link, usePage} from '@inertiajs/react';
-import {administration} from '@/routes';
+import {Plus} from "lucide-react";
 import {DataTable} from "@/components/table/data-table";
 import {userGroupColumns} from "@/pages/administration/user-group/table/user-group-columns";
-import {UserGroup} from "@/types/types";
-import {Plus} from "lucide-react";
+import {administration} from '@/routes';
 import userGroup from "@/routes/administration/user-group";
+import type {UserGroup} from "@/types/user-group";
 
 type Props = {userGroups: UserGroup[]}
 export default function UserGroupIndex() {

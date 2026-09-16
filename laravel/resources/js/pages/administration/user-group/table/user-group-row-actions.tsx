@@ -1,13 +1,6 @@
-import type {UserGroup} from "@/types/types";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
-import {Button} from "@/components/ui/button";
+import {router} from "@inertiajs/react";
 import {MoreHorizontal} from "lucide-react";
+import {useState} from "react";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -17,9 +10,16 @@ import {
     AlertDialogHeader,
     AlertDialogTitle
 } from "@/components/ui/alert-dialog";
-import {router} from "@inertiajs/react";
+import {Button} from "@/components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 import userGroup from "@/routes/administration/user-group";
-import {useState} from "react";
+import type {UserGroup} from "@/types/user-group";
 
 export function UserGroupRowActions({userGroup: ug}: { userGroup: UserGroup }) {
     const [deleteOpen, setDeleteOpen] = useState(false);

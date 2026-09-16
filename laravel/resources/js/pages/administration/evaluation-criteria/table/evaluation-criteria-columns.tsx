@@ -1,6 +1,6 @@
-import {ColumnDef} from "@tanstack/react-table";
-import {EvaluationCriteria} from "@/types/types";
+import type {ColumnDef} from "@tanstack/react-table";
 import sortHeader from "@/components/table/table-header-sort";
+import type {EvaluationCriteria} from "@/types/evaluation-criteria";
 import {EvaluationCriteriaRowActions} from "./evaluation-criteria-row-actions";
 
 export const evaluationCriteriaColumns: ColumnDef<EvaluationCriteria>[] = [

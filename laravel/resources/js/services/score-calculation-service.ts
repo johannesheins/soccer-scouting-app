@@ -1,4 +1,4 @@
-import {EvaluationCriteriaGroups, EvaluationCriteriaScore} from "@/types/types";
+import type {EvaluationCriteriaGroups, EvaluationCriteriaScore} from "@/types/evaluation-criteria";
 
 type scores = Record<number, number>;
 type CriteriaScore = number[];

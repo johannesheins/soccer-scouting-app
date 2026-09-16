@@ -1,10 +1,14 @@
 import {Head, usePage} from "@inertiajs/react";
-import {DataTable} from "@/components/table/data-table";
 import React from "react";
+import {DataTable} from "@/components/table/data-table";
 import EvaluationSearchForm from "@/pages/evaluation/evaluation-search-form";
 import {useEvaluationColumns} from "@/pages/evaluation/table/evaluation-columns";
-import {Club, Evaluation, EvaluationCriteriaGroups, EvaluationSearchQuery, PlayerOption} from "@/types/types";
 import {ScoreCalculationService} from "@/services/score-calculation-service";
+import type {Club} from "@/types/club";
+import type {Evaluation} from "@/types/evaluation/evaluation";
+import type {EvaluationSearchQuery} from "@/types/evaluation/evaluation-search-query";
+import type {EvaluationCriteriaGroups} from "@/types/evaluation-criteria";
+import type {PlayerOption} from "@/types/player";
 
 type Props = {
     evaluationCriteriaGroups: EvaluationCriteriaGroups[],

@@ -1,11 +1,12 @@
-import player from "@/routes/player";
 import {Head, usePage} from "@inertiajs/react";
 import React from "react";
-import type {Club, Player, Position} from "@/types/types";
-
 import {DataTable} from "@/components/table/data-table";
-import {playerColumns} from "@/pages/player/table/player-columns";
 import PlayerSearchForm from "@/pages/player/player-search-form";
+import {playerColumns} from "@/pages/player/table/player-columns";
+import player from "@/routes/player";
+import type {Club} from "@/types/club";
+import type {Player} from "@/types/player";
+import type {Position} from "@/types/position";
 
 type Props = { positions: Position[]; clubs: Club[]; players: Player[]};
 

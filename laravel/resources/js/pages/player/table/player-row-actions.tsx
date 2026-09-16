@@ -1,5 +1,5 @@
 import {router} from "@inertiajs/react";
-import player from "@/routes/player";
+import {MoreHorizontal} from "lucide-react"
 import {useState} from "react";
 import {
     AlertDialog,
@@ -11,7 +11,6 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import {MoreHorizontal} from "lucide-react"
 import {Button} from "@/components/ui/button"
 import {
     DropdownMenu,
@@ -20,11 +19,12 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import type {Player} from "@/types/types";
-import {useHasRight} from "@/hooks/use-has-right";
 import {GameEvaluationPermissions, PlayerPermissions, PlayerRequestNameEnum as Name} from "@/enums";
-import evaluation from "@/routes/evaluation";
+import {useHasRight} from "@/hooks/use-has-right";
 import {evaluationSearchRequest} from "@/request/evaluation-search-request";
+import evaluation from "@/routes/evaluation";
+import player from "@/routes/player";
+import type {Player} from "@/types/player";
 
 const playerRoute = player;
 export function PlayerRowActions({player}: { player: Player }) {
@@ -36,7 +36,9 @@ export function PlayerRowActions({player}: { player: Player }) {
     const canCreateEvaluation = useHasRight(GameEvaluationPermissions.Create);
     const canViewEvaluation = useHasRight(GameEvaluationPermissions.View);
 
-    if (!canView && !canEdit && !canDelete && !canCreateEvaluation && !canViewEvaluation) return null;
+    if (!canView && !canEdit && !canDelete && !canCreateEvaluation && !canViewEvaluation) {
+        return null;
+    }
 
     const showEvaluationSeparator = canView && (canCreateEvaluation || canViewEvaluation);
     const showEditDeleteSeparator = (canView || canCreateEvaluation || canViewEvaluation) && (canEdit || canDelete);

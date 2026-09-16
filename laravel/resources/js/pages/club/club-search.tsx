@@ -5,7 +5,7 @@ import {DataTable} from "@/components/table/data-table";
 import ClubSearchForm from "@/pages/club/club-search-form";
 import {clubColumns} from "@/pages/club/table/club-columns";
 import club from "@/routes/club";
-import type {Club} from "@/types/types";
+import type {Club} from "@/types/club";
 
 type Props = { clubs: Club[] };
 

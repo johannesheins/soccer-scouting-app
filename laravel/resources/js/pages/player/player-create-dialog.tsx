@@ -1,9 +1,9 @@
-import {Dialog, DialogContent, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
+import {UserRoundPlus} from "lucide-react";
 import React, {useState} from "react";
 import {PlayerFormDialog} from "@/components/from/player-form";
 import {Button} from "@/components/ui/button";
-import {UserRoundPlus} from "lucide-react";
-import type { Player} from "@/types/types";
+import {Dialog, DialogContent, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
+import type { Player} from "@/types/player";
 
 type Props = {
     onCreatedPlayer?: (player: Player) => void,

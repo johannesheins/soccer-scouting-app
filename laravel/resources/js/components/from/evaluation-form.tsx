@@ -1,5 +1,10 @@
 import {Head, router, useForm, usePage} from '@inertiajs/react';
 import React, {useEffect, useState} from 'react';
+import InputError from "@/components/input-error";
+import {MAX_SCORE, ScoreBar} from "@/components/score-bar";
+import ScoreDisplay from "@/components/score-display";
+import {Button} from "@/components/ui/button";
+import {DatePicker} from "@/components/ui/date-picker";
 import {
     Field,
     FieldGroup,
@@ -7,26 +12,20 @@ import {
     FieldLegend,
     FieldSet,
 } from "@/components/ui/field"
-import {Button} from "@/components/ui/button";
-import InputError from "@/components/input-error";
-import {
-    type Club,
-    EvaluationSmall,
-    EvaluationCriteriaGroups,
-    Player,
-    type Position, Recommendation
-} from "@/types/types";
-import evaluationRoute from "@/routes/evaluation";
-import PlayerSearchDialog from "@/pages/player/player-search-dialog";
 import {Input} from "@/components/ui/input";
 import {SingleSelector} from "@/components/ui/single-select";
-import {toClubOptions, toRecommendationOptions} from "@/hooks/form-options";
-import {DatePicker} from "@/components/ui/date-picker";
 import {Textarea} from "@/components/ui/textarea";
 import {PlayerRequestNameEnum as Name} from "@/enums";
-import {MAX_SCORE, ScoreBar} from "@/components/score-bar";
+import {toClubOptions, toRecommendationOptions} from "@/hooks/form-options";
+import PlayerSearchDialog from "@/pages/player/player-search-dialog";
+import evaluationRoute from "@/routes/evaluation";
 import {ScoreCalculationService} from "@/services/score-calculation-service";
-import ScoreDisplay from "@/components/score-display";
+import type {Club} from "@/types/club";
+import type {EvaluationSmall} from "@/types/evaluation/evaluation";
+import type {EvaluationCriteriaGroups} from "@/types/evaluation-criteria";
+import type {Player} from "@/types/player";
+import type {Position} from "@/types/position";
+import type {Recommendation} from "@/types/recommendation";
 
 type Props = {
     evaluation?: EvaluationSmall,

@@ -1,8 +1,8 @@
-import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {Badge} from "@/components/ui/badge";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {Separator} from "@/components/ui/separator";
-import type {Player} from "@/types/types";
 import club from "@/routes/club";
+import type {Player} from "@/types/player";
 
 export function PlayerView({player, button}: { player: Player, button?: any }) {
     return (

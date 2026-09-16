@@ -1,15 +1,16 @@
-import {Evaluation, EvaluationCriteriaGroups} from "@/types/types";
+import React from "react";
+import {MAX_SCORE, ScoreBar} from "@/components/score-bar";
+import ScoreDisplay from "@/components/score-display";
+import {Badge} from "@/components/ui/badge";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {Separator} from "@/components/ui/separator";
-import player from "@/routes/player";
-import {date} from "@/locale/date-locale";
-import {MAX_SCORE, ScoreBar} from "@/components/score-bar";
-import React from "react";
-import {Badge} from "@/components/ui/badge";
-import {useHasRight} from "@/hooks/use-has-right";
 import {GameEvaluationPermissions} from "@/enums";
+import {useHasRight} from "@/hooks/use-has-right";
+import {date} from "@/locale/date-locale";
+import player from "@/routes/player";
 import {ScoreCalculationService} from "@/services/score-calculation-service";
-import ScoreDisplay from "@/components/score-display";
+import type {Evaluation} from "@/types/evaluation/evaluation";
+import type {EvaluationCriteriaGroups} from "@/types/evaluation-criteria";
 
 type Props = {
     evaluation: Evaluation

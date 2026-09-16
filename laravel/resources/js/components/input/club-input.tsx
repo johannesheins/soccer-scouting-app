@@ -1,10 +1,11 @@
-import {FieldLabel} from "@/components/ui/field";
-import MultipleSelector, {type Option} from "@/components/ui/multi-select";
-import InputError from "@/components/input-error";
 import React, {useState} from "react";
-import {toClubOptions} from "@/hooks/form-options";
-import {Club} from "@/types/types";
+import InputError from "@/components/input-error";
+import {FieldLabel} from "@/components/ui/field";
+import MultipleSelector from "@/components/ui/multi-select";
+import type {Option} from "@/components/ui/multi-select";
 import {SingleSelector} from "@/components/ui/single-select";
+import {toClubOptions} from "@/hooks/form-options";
+import type {Club} from "@/types/club";
 
 type Props = {
     variant: "multiple" | "single",
