@@ -13,6 +13,14 @@ if [ -z "$IMAGE_REPO" ] || [ -z "$COMPOSE_FILE" ]; then
     exit 1
 fi
 
+if [ -n "$GHCR_TOKEN" ]; then
+    if [ -z "$GHCR_USER" ]; then
+        echo "GHCR_USER must be set when GHCR_TOKEN is set." >&2
+        exit 1
+    fi
+    printf '%s' "$GHCR_TOKEN" | docker login "${IMAGE_REPO%%/*}" -u "$GHCR_USER" --password-stdin
+fi
+
 docker compose -f "$COMPOSE_FILE" build --no-cache
 
 docker tag soccer-scouting-app-php "$IMAGE_REPO/php:latest"
