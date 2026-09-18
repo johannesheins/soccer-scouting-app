@@ -1,6 +1,6 @@
 import {Head, useForm, usePage} from '@inertiajs/react';
 import React, {useState} from "react";
-import DashboardController from "@/actions/App/Http/Controllers/Settings/DashboardController";
+import DashboardSettingsController from "@/actions/App/Http/Controllers/Settings/DashboardSettingsController";
 import Heading from '@/components/heading';
 import YearOfBirthInput from "@/components/input/year-of-birth-input";
 import InputError from "@/components/input-error";
@@ -36,7 +36,7 @@ export default function Dashboard() {
     })
 
     function submit(){
-        post(DashboardController.updatePinnedClubs.url());
+        post(DashboardSettingsController.updatePlayerQuickSearchSettings.url());
     }
 
     function onChange(options: Option[]){
