@@ -9,7 +9,7 @@ import {Field} from "@/components/ui/field";
 import { Label } from '@/components/ui/label';
 import MultipleSelector from "@/components/ui/multi-select";
 import type {Option} from "@/components/ui/multi-select";
-import {PlayerPermissions} from "@/enums";
+import {PlayerPermissions} from "@/enums/permission/player-permissions";
 import {toClubOptions} from "@/hooks/form-options";
 import {useHasRight} from "@/hooks/use-has-right";
 import dashboard from "@/routes/settings/dashboard";

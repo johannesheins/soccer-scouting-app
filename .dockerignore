@@ -12,6 +12,7 @@ laravel/node_modules
 laravel/vendor
 laravel/storage/logs
 laravel/public/hot
+laravel/resources/js/enums
 # laravel/.env
 # laravel/.env.*
 # !laravel/.env.example
