@@ -4,6 +4,7 @@ use App\Http\Controllers\ClubController;
 use App\Http\Controllers\ClubSearchController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EvaluationController;
+use App\Http\Controllers\Evaluations\GameEvaluationController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerSearchController;
 use Illuminate\Support\Facades\Route;
@@ -20,7 +21,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('player', PlayerController::class)->names('player');
 
     Route::get('evaluation/search/{query?}', [EvaluationController::class, 'search'])->name('evaluation.search');
-    Route::resource('evaluation', EvaluationController::class)->names('evaluation');
+    Route::get('evaluation', [EvaluationController::class, 'index'])->name('evaluation.index');
+    Route::resource('game-evaluation', GameEvaluationController::class)->names('game-evaluation');
 
     Route::get('club/search', [ClubSearchController::class, 'index'])->name('club.search');
     Route::resource('club', ClubController::class)->names('club');

@@ -6,6 +6,7 @@ import {useHasRight} from "@/hooks/use-has-right";
 import {EvaluationPermissions, GameEvaluationPermissions} from "@/enums";
 import {PlaceholderPattern} from "@/components/ui/placeholder-pattern";
 import evaluation from "@/routes/evaluation";
+import gameEvaluation from "@/routes/game-evaluation";
 
 export default function EvaluationIndex() {
     const canCreate = useHasRight(GameEvaluationPermissions.Create);
@@ -18,17 +19,17 @@ export default function EvaluationIndex() {
                 <div className="grid auto-rows-min gap-4 md:grid-cols-2">
                     <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
                         <AccessGuard active={canCreate} title="Keine Berechtigung">
-                            <Link href={evaluation.create()} title="Spieler-Bewertung erstellen" className="flex flex-col gap-2 justify-center items-center h-full">
+                            <Link href={gameEvaluation.create()} title="Spielbewertung erstellen" className="flex flex-col gap-2 justify-center items-center h-full">
                                 <FilePlus className={"size-10 icon-color"}/>
-                                <p className="text-icon-color font-bold">Spieler-Bewertung erstellen</p>
+                                <p className="text-icon-color font-bold">Spielbewertung erstellen</p>
                             </Link>
                         </AccessGuard>
                     </div>
                     <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
                         <AccessGuard active={canSearch} title="Keine Berechtigung">
-                            <Link href={evaluation.search()} title="Spieler-Bewertung suchen" className="flex flex-col gap-2 justify-center items-center h-full">
+                            <Link href={evaluation.search()} title="Bewertung suchen" className="flex flex-col gap-2 justify-center items-center h-full">
                                 <FileSearch className={"size-10 icon-color"}/>
-                                <p className="text-icon-color font-bold">Spieler-Bewertung suchen</p>
+                                <p className="text-icon-color font-bold">Bewertung suchen</p>
                             </Link>
                         </AccessGuard>
                     </div>
@@ -44,7 +45,7 @@ export default function EvaluationIndex() {
 EvaluationIndex.layout = {
     breadcrumbs: [
         {
-            title: 'Spieler-Bewertungen',
+            title: 'Bewertungen',
             href: evaluation.index(),
         },
     ],

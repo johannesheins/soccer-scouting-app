@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable('evaluation_id', 'evaluation_criteria_id', 'score')]
+#[Fillable('game_evaluation_id', 'player_evaluation_id', 'evaluation_criteria_id', 'score')]
 class EvaluationCriteriaScore extends Model
 {
     use HasFactory;
 
-    public function evaluation(): BelongsTo
+    public function gameEvaluation(): BelongsTo
     {
-        return $this->belongsTo(Evaluation::class);
+        return $this->belongsTo(GameEvaluation::class);
     }
 
     public function evaluationCriterion(): BelongsTo

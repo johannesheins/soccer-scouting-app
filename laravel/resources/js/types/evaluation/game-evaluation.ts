@@ -5,7 +5,7 @@ import type {PlayerSmall} from "@/types/player";
 export type GameEvaluationSmall = EvaluationSmall & {
     player_id: number,
     home_team_id: number,
-    away_team_id: number,
+    guest_team_id: number,
 }
 
 export type GameEvaluation = Evaluation & {

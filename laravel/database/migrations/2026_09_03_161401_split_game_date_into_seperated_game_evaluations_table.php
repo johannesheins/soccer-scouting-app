@@ -31,9 +31,9 @@ return new class extends Migration {
 
         Schema::table('player_evaluations', function (Blueprint $table){
             $table->foreignIdFor(Player::class)->nullable()->after('id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignIdFor(Club::class, 'home_team_id')->nullable()->after('player_id')->constrained()->cascadeOnUpdate()->nullOnDelete();
-            $table->foreignIdFor(Club::class, 'guest_team_id')->nullable()->after('home_team_id')->constrained()->cascadeOnUpdate()->nullOnDelete();
         });
+
+        Schema::dropIfExists('evaluations');
     }
 
     public function down(): void

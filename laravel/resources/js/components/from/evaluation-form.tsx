@@ -18,26 +18,37 @@ import {Textarea} from "@/components/ui/textarea";
 import {PlayerRequestNameEnum as Name} from "@/enums";
 import {toClubOptions, toRecommendationOptions} from "@/hooks/form-options";
 import PlayerSearchDialog from "@/pages/player/player-search-dialog";
-import evaluationRoute from "@/routes/evaluation";
 import {ScoreCalculationService} from "@/services/score-calculation-service";
 import type {Club} from "@/types/club";
-import type {EvaluationSmall} from "@/types/evaluation/evaluation";
+import {EvaluationRoutes, EvaluationSmallType, EvaluationSmallTypeMap} from "@/types/evaluation/evaluation";
 import type {EvaluationCriteriaGroups} from "@/types/evaluation-criteria";
 import type {Player} from "@/types/player";
 import type {Position} from "@/types/position";
 import type {Recommendation} from "@/types/recommendation";
+import {GameEvaluationSmall} from "@/types/evaluation/game-evaluation";
 
-type Props = {
-    evaluation?: EvaluationSmall,
-    evaluationCriteriaGroups: EvaluationCriteriaGroups[],
-    positions: Position[];
-    clubs: Club[],
-    recommendations: Recommendation[],
-    player: Player,
-};
 
-export default function EvaluationForm({ edit = false, backHref = null }: { edit?: boolean, backHref?: string | null }){
+export default function EvaluationForm<T extends  EvaluationSmallType>({ type, route, edit = false, backHref = null }: {
+    type: T,
+    route: EvaluationRoutes
+    edit?: boolean,
+    backHref?: string | null
+}){
+    type Props = {
+        evaluation?: EvaluationSmallTypeMap[T],
+        evaluationCriteriaGroups: EvaluationCriteriaGroups[],
+        positions: Position[];
+        clubs: Club[],
+        recommendations: Recommendation[],
+        player: Player,
+    };
+
+    const isGameEvaluation = type === 'game';
+
     const { evaluation, evaluationCriteriaGroups, positions, clubs, recommendations, player } = usePage<Props>().props;
+
+    const gameEvaluation = isGameEvaluation ? (evaluation as GameEvaluationSmall | undefined) : undefined;
+
     const [selectedPlayer, setSelectedPlayer] = useState<Player>(player);
     useEffect(() => {
         setData(Name.playerId, String(selectedPlayer?.id) ?? '');
@@ -48,7 +59,7 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
         clubOptions.filter(o => o.value === String(evaluation?.home_team_id))
     );
     const [selectedAwayTeam, setSelectedAwayTeam] = useState(
-        clubOptions.filter(o => o.value === String(evaluation?.away_team_id))
+        clubOptions.filter(o => o.value === String(evaluation?.guest_team_id))
     );
 
     const recommendationOptions = toRecommendationOptions(recommendations);
@@ -57,10 +68,12 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
     );
 
     const { data, setData, transform, post, put, processing, errors } = useForm({
-        [Name.playerId]: String(evaluation?.player_id ?? ''),
-        home_team_id: evaluation?.home_team_id ?? '',
-        away_team_id: evaluation?.away_team_id ?? '',
-        kickoff_date: evaluation?.kickoff_date ?? '',
+        ...(isGameEvaluation && {
+            [Name.playerId]: String(gameEvaluation?.player_id ?? ''),
+            home_team_id: gameEvaluation?.home_team_id ?? '',
+            guest_team_id: gameEvaluation?.guest_team_id ?? '',
+        }),
+        date: gameEvaluation?.date ?? '',
         strengths: evaluation?.strengths ?? '',
         weaknesses: evaluation?.weaknesses ?? '',
         recommendation_id: evaluation?.recommendation_id ?? '',
@@ -87,9 +100,9 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
     function submit(e: React.FormEvent) {
         e.preventDefault();
         if (edit && evaluation?.id) {
-            return put(evaluationRoute.update.url(evaluation.id));
+            return put(route.update.url(evaluation.id));
         }
-        return post(evaluationRoute.store.url());
+        return post(route.store.url());
     }
 
     return (
@@ -114,45 +127,50 @@ export default function EvaluationForm({ edit = false, backHref = null }: { edit
                         <FieldSet>
                             <FieldLegend>Spieldaten</FieldLegend>
                             <FieldGroup className="grid grid-cols-2 gap-4">
-                                <Field>
-                                    <FieldLabel htmlFor="home_team_id">Heimverein</FieldLabel>
-                                    <SingleSelector
-                                        value={selectedHomeTeam}
-                                        onChange={opts => {
-                                            setSelectedHomeTeam(opts);
-                                            setData('home_team_id', opts[0]?.value ?? '');
-                                        }}
-                                        defaultOptions={clubOptions}
-                                        groupBy="group"
-                                        placeholder="Heimmverein wählen"
-                                        hidePlaceholderWhenSelected
-                                        emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
-                                    />
-                                    <InputError message={errors.home_team_id} />
-                                </Field>
-                                <Field>
-                                    <FieldLabel htmlFor="away_team_id">Gastverein</FieldLabel>
-                                    <SingleSelector
-                                        value={selectedAwayTeam}
-                                        onChange={opts => {
-                                            setSelectedAwayTeam(opts);
-                                            setData('away_team_id', opts[0]?.value ?? '');
-                                        }}
-                                        defaultOptions={clubOptions}
-                                        groupBy="group"
-                                        placeholder="Gastverein wählen"
-                                        hidePlaceholderWhenSelected
-                                        emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
-                                    />
-                                    <InputError message={errors.home_team_id} />
-                                </Field>
+                                {isGameEvaluation && (
+                                    <>
+                                        <Field>
+                                            <FieldLabel htmlFor="home_team_id">Heimverein</FieldLabel>
+                                            <SingleSelector
+                                                value={selectedHomeTeam}
+                                                onChange={opts => {
+                                                    setSelectedHomeTeam(opts);
+                                                    setData('home_team_id', opts[0]?.value ?? '');
+                                                }}
+                                                defaultOptions={clubOptions}
+                                                groupBy="group"
+                                                placeholder="Heimmverein wählen"
+                                                hidePlaceholderWhenSelected
+                                                emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
+                                            />
+                                            <InputError message={errors.home_team_id} />
+                                        </Field>
+                                        <Field>
+                                            <FieldLabel htmlFor="guest_team_id">Gastverein</FieldLabel>
+                                            <SingleSelector
+                                                value={selectedAwayTeam}
+                                                onChange={opts => {
+                                                    setSelectedAwayTeam(opts);
+                                                    setData('guest_team_id', opts[0]?.value ?? '');
+                                                }}
+                                                defaultOptions={clubOptions}
+                                                groupBy="group"
+                                                placeholder="Gastverein wählen"
+                                                hidePlaceholderWhenSelected
+                                                emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
+                                            />
+                                            <InputError message={errors.home_team_id} />
+                                        </Field>
+                                    </>
+                                )}
+
                                 <Field>
                                     <DatePicker
                                         dateLabel="Datum"
-                                        dateName="kickoff_date"
-                                        dateValue={evaluation?.kickoff_date}
-                                        dateErrorMessage={errors.kickoff_date}
-                                        dateOnChange={(val) => setData('kickoff_date', val)}
+                                        dateName="date"
+                                        dateValue={evaluation?.date}
+                                        dateErrorMessage={errors.date}
+                                        dateOnChange={(val) => setData('date', val)}
                                     />
                                 </Field>
                             </FieldGroup>

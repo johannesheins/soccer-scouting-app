@@ -4,15 +4,10 @@ namespace App\Concerns;
 
 trait EvaluationValidationRules
 {
-    use PlayerValidationRules;
-    use ClubValidationRules;
     protected function evaluationRules(): array
     {
         return [
-            'player_id' => $this->playerIdRules('required'),
-            'home_team_id' => $this->clubIdRules('required'),
-            'away_team_id' => $this->clubIdRules('required'),
-            'kickoff_date' => ['required', 'date', 'before_or_equal:today'],
+            'date' => ['required', 'date', 'before_or_equal:today'],
 
             'criteriaScores' => ['required', 'array'],
             'criteriaScores.*.evaluation_criteria_id' => ['required', 'exists:evaluation_criteria,id'],

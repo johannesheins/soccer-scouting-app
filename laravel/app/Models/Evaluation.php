@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Interfaces\EvaluationInterface;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable('date', 'created_by', 'strengths', 'weaknesses', 'recommendation_id', 'comment')]
-class Evaluation extends Model
+class Evaluation extends Model implements EvaluationInterface
 {
     use HasFactory;
 
@@ -30,7 +31,7 @@ class Evaluation extends Model
 
     public function loadForEvaluationView(): Evaluation
     {
-        return $this->load('player', 'homeTeam', 'awayTeam', 'criteriaScores', 'recommendation', 'creator');
+        return $this->load('player', 'homeTeam', 'guestTeam', 'criteriaScores', 'recommendation', 'creator');
     }
 
     protected function casts(): array
