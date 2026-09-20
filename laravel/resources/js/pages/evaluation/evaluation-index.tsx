@@ -1,12 +1,11 @@
 import {Head, Link} from '@inertiajs/react';
 import {FilePlus, FileSearch} from 'lucide-react';
-import player from "@/routes/player";
 import AccessGuard from "@/components/access-guard";
 import {useHasRight} from "@/hooks/use-has-right";
 import {EvaluationPermissions, GameEvaluationPermissions} from "@/enums";
 import {PlaceholderPattern} from "@/components/ui/placeholder-pattern";
 import evaluation from "@/routes/evaluation";
-import gameEvaluation from "@/routes/game-evaluation";
+import gameEvaluation from "@/routes/evaluation/game";
 
 export default function EvaluationIndex() {
     const canCreate = useHasRight(GameEvaluationPermissions.Create);

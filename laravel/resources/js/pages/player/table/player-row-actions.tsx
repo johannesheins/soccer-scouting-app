@@ -22,7 +22,7 @@ import {
 import {GameEvaluationPermissions, PlayerPermissions, PlayerRequestNameEnum as Name} from "@/enums";
 import {useHasRight} from "@/hooks/use-has-right";
 import {evaluationSearchRequest} from "@/request/evaluation-search-request";
-import evaluation from "@/routes/evaluation";
+import gameEvaluation from "@/routes/evaluation/game";
 import player from "@/routes/player";
 import type {Player} from "@/types/player";
 
@@ -62,7 +62,7 @@ export function PlayerRowActions({player}: { player: Player }) {
                     {showEvaluationSeparator && <DropdownMenuSeparator/>}
 
                     {canCreateEvaluation && (
-                        <DropdownMenuItem onClick={() => router.visit(evaluation.create.url({query: {[Name.playerId]: player.id}}))}>
+                        <DropdownMenuItem onClick={() => router.visit(gameEvaluation.create.url({query: {[Name.playerId]: player.id}}))}>
                             Spielerbewertung erstellen
                         </DropdownMenuItem>
                     )}

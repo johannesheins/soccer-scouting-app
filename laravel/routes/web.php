@@ -20,9 +20,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('player/search', [PlayerSearchController::class, 'index'])->name('player.search');
     Route::resource('player', PlayerController::class)->names('player');
 
-    Route::get('evaluation/search/{query?}', [EvaluationController::class, 'search'])->name('evaluation.search');
-    Route::get('evaluation', [EvaluationController::class, 'index'])->name('evaluation.index');
-    Route::resource('game-evaluation', GameEvaluationController::class)->names('game-evaluation');
+    Route::group(['prefix' => 'evaluation', 'as' => 'evaluation.'], function () {
+        Route::get('search/{query?}', [EvaluationController::class, 'search'])->name('search');
+        Route::get('', [EvaluationController::class, 'index'])->name('index');
+        Route::resource('game', GameEvaluationController::class)->parameters(['game' => 'game_evaluation'])->names('game');
+    });
 
     Route::get('club/search', [ClubSearchController::class, 'index'])->name('club.search');
     Route::resource('club', ClubController::class)->names('club');

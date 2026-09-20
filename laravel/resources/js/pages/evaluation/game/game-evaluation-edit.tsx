@@ -1,6 +1,6 @@
 import evaluation from "@/routes/evaluation";
 import EvaluationForm from "@/components/from/evaluation-form";
-import gameEvaluation from "@/routes/game-evaluation";
+import gameEvaluation from "@/routes/evaluation/game";
 
 export default function GameEvaluationEdit() {
     console.log('game evaluation edit');

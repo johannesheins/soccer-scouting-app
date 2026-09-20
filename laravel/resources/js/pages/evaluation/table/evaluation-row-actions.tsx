@@ -21,10 +21,10 @@ import {
 import {GameEvaluationPermissions, PlayerPermissions} from "@/enums";
 import {useUser} from "@/hooks/use-auth";
 import {useHasRight} from "@/hooks/use-has-right";
-import evaluation from "@/routes/evaluation";
+import gameEvaluationRoute from "@/routes/evaluation/game";
 import player from "@/routes/player";
 import type {Evaluation} from "@/types/evaluation/evaluation";
-const evaluationRoute = evaluation;
+
 export default function EvaluationRowActions({evaluation}: { evaluation: Evaluation }) {
     const [deleteOpen, setDeleteOpen] = useState(false);
 
@@ -50,7 +50,7 @@ export default function EvaluationRowActions({evaluation}: { evaluation: Evaluat
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     {canView && (
-                        <DropdownMenuItem onClick={() => router.visit(evaluationRoute.show.url(evaluation.id))}>
+                        <DropdownMenuItem onClick={() => router.visit(gameEvaluationRoute.show.url(evaluation.id))}>
                             Bewertung ansehen
                         </DropdownMenuItem>
                     )}
@@ -66,7 +66,7 @@ export default function EvaluationRowActions({evaluation}: { evaluation: Evaluat
                     {showEditDeleteSeparator && <DropdownMenuSeparator/>}
 
                     {canEdit && (
-                        <DropdownMenuItem onClick={() => router.visit(evaluationRoute.edit.url(evaluation.id))}>
+                        <DropdownMenuItem onClick={() => router.visit(gameEvaluationRoute.edit.url(evaluation.id))}>
                             Bewertung bearbeiten
                         </DropdownMenuItem>
                     )}
@@ -89,7 +89,7 @@ export default function EvaluationRowActions({evaluation}: { evaluation: Evaluat
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>Abbrechen</AlertDialogCancel>
-                        <AlertDialogAction variant="destructive" onClick={() => router.delete(evaluationRoute.destroy.url(evaluation.id))}>
+                        <AlertDialogAction variant="destructive" onClick={() => router.delete(gameEvaluationRoute.destroy.url(evaluation.id))}>
                             Löschen
                         </AlertDialogAction>
                     </AlertDialogFooter>

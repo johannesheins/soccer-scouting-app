@@ -16,7 +16,7 @@ class GameEvaluationControllerTest extends EvaluationControllerTest
 
     protected function routeName(): string
     {
-        return 'game-evaluation';
+        return 'evaluation.game';
     }
 
     protected function permissionEnum(): string
