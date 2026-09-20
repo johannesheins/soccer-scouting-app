@@ -42,7 +42,7 @@ class GameEvaluationController extends Controller implements HasMiddleware
             $player = Player::find($playerId)->loadForPlayerView();
         }
 
-        return inertia('evaluation/game-evaluation/game-evaluation-create', [
+        return inertia('evaluation/game/game-evaluation-create', [
             'evaluationCriteriaGroups' => EvaluationCriteriaGroup::with('evaluationCriteria')->get(),
             'positions' => Position::with('positionGroup:id,name')->orderBy('id')->get(['id', 'position_code', 'position_group_id']),
             'clubs' => Club::orderBy('clubname')->get(['id', 'clubname']),
@@ -69,7 +69,7 @@ class GameEvaluationController extends Controller implements HasMiddleware
 
     public function edit(GameEvaluation $gameEvaluation)
     {
-        return inertia('evaluation/game-evaluation/game-evaluation-edit', [
+        return inertia('evaluation/game/game-evaluation-edit', [
             'evaluation' => $gameEvaluation->load('player', 'criteriaScores'),
             'evaluationCriteriaGroups' => EvaluationCriteriaGroup::with('evaluationCriteria')->get(),
             'positions' => Position::with('positionGroup:id,name')->orderBy('id')->get(['id', 'position_code', 'position_group_id']),

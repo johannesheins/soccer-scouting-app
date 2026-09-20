@@ -26,7 +26,7 @@ class GameEvaluationControllerTest extends EvaluationControllerTest
 
     protected function componentPrefix(): string
     {
-        return 'evaluation/game-evaluation/game-evaluation';
+        return 'evaluation/game/game-evaluation';
     }
 
     protected function typePayload(): array
