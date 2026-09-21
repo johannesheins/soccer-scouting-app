@@ -1,5 +1,6 @@
 import EvaluationForm from "@/components/from/evaluation-form";
 import gameEvaluation from "@/routes/evaluation/game";
+import evaluation from "@/routes/evaluation";
 
 export default function GameEvaluationCreate() {
     return <EvaluationForm type="game" route={gameEvaluation}/>;
@@ -8,8 +9,8 @@ export default function GameEvaluationCreate() {
 GameEvaluationCreate.layout = {
     breadcrumbs: [
         {
-            title: 'Spielbewertungen',
-            href: gameEvaluation.index(),
+            title: 'Bewertung',
+            href: evaluation.index(),
         },
         {
             title: 'Spielbewertungen erstellen',
