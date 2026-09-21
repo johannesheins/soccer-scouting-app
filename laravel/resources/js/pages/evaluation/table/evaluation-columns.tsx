@@ -26,33 +26,33 @@ const homeTeam:ColumnDef<Evaluation> = {
     sortingFn: (a, b) => {
         const ca: Club = a.getValue("home_team")
         const cb: Club = b.getValue("home_team")
-        return ca.clubname.localeCompare(cb.clubname)
+        return ca?.clubname.localeCompare(cb?.clubname)
     },
     cell: ({row}) => {
         const club: Club = row.getValue("home_team")
-        return <div className="font-medium">{club.clubname}</div>
+        return <div className="font-medium">{club?.clubname}</div>
     },
 };
 
 const awayTeam:ColumnDef<Evaluation> = {
-    accessorKey: "away_team",
+    accessorKey: "guest_team",
     header: sortHeader("Gastverein"),
     sortingFn: (a, b) => {
-        const ca: Club = a.getValue("away_team")
-        const cb: Club = b.getValue("away_team")
-        return ca.clubname.localeCompare(cb.clubname)
+        const ca: Club = a.getValue("guest_team")
+        const cb: Club = b.getValue("guest_team")
+        return ca?.clubname.localeCompare(cb?.clubname)
     },
     cell: ({row}) => {
-        const club: Club = row.getValue("away_team")
-        return <div className="font-medium">{club.clubname}</div>
+        const club: Club = row.getValue("guest_team")
+        return <div className="font-medium">{club?.clubname}</div>
     },
 };
 
 const kickoffDate:ColumnDef<Evaluation> = {
-    accessorKey: "kickoff_date",
-    header: sortHeader("Anstoß"),
+    accessorKey: "date",
+    header: sortHeader("Datum"),
     cell: ({ row }) => {
-        const d = date(row.getValue('kickoff_date'))
+        const d = date(row.getValue('date'))
         return <div className="font-medium">{d}</div>
     },
 };

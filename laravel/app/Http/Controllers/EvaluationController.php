@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DTOs\EvaluationSearchDTO;
+use App\Enums\EvaluationTypes;
 use App\Http\Requests\Evaluation\EvaluationSearchRequest;
 use App\Models\Club;
 use App\Models\Evaluation;
@@ -42,13 +43,24 @@ class EvaluationController extends Controller implements HasMiddleware
 
         $evaluationSearchDTO = new EvaluationSearchDTO($request->validated());
         $evaluationSearchService = new EvaluationSearchService();
-        $evaluations = $evaluationSearchService->searchEvaluations($evaluationSearchDTO, $request->user(), [
-            'player',
-            'homeTeam',
-            'awayTeam',
-            'criteriaScores',
-            'creator'
-        ])->toArray();
+        $evaluations = $evaluationSearchService->searchEvaluations(
+            dto: $evaluationSearchDTO,
+            user: $request->user(),
+            with: [
+                'criteriaScores',
+                'creator'
+            ],
+            withFor: [
+                EvaluationTypes::GAME->value => [
+                    'player',
+                    'homeTeam',
+                    'guestTeam'
+                ],
+                EvaluationTypes::PLAYER->value => [
+                    'player',
+                ],
+            ]
+        );
 
         return inertia('evaluation/evaluation-search', [
             'evaluationCriteriaGroups' => EvaluationCriteriaGroup::with('evaluationCriteria')->get(),
@@ -56,7 +68,7 @@ class EvaluationController extends Controller implements HasMiddleware
             'clubs' => Club::orderBy('clubname')->get(['id', 'clubname']),
 
             'queryParams' => $validated,
-            'evaluations' => $evaluations,
+            'evaluations' => $evaluations->toArray(),
         ]);
     }
 }
