@@ -25,4 +25,9 @@ class PlayerEvaluation extends Evaluation implements EvaluationInterface
     {
         return $this->belongsTo(Player::class);
     }
+
+    public function loadForView(): Evaluation
+    {
+        return parent::loadForView()->load('player');
+    }
 }

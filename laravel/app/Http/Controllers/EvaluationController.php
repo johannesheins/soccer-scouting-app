@@ -29,14 +29,6 @@ class EvaluationController extends Controller implements HasMiddleware
         return inertia('evaluation/evaluation-index');
     }
 
-    public function show(Evaluation $evaluation)
-    {
-        return new Modal('evaluation/evaluation-show', [
-            'evaluation' => $evaluation->loadForEvaluationView(),
-            'evaluationCriteriaGroups' => EvaluationCriteriaGroup::with('evaluationCriteria')->get(),
-        ])->baseRoute('evaluation.index');
-    }
-
     public function search(EvaluationSearchRequest $request)
     {
         $validated = $request->validated();

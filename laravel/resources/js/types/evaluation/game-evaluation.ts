@@ -11,5 +11,5 @@ export type GameEvaluationSmall = EvaluationSmall & {
 export type GameEvaluation = Evaluation & {
     player: PlayerSmall,
     home_team: Club,
-    away_team: Club,
+    guest_team: Club,
 }

@@ -47,9 +47,9 @@ class Evaluation extends Model implements EvaluationInterface
         return Attribute::get(fn () => $this->evaluationType->value);
     }
 
-    public function loadForEvaluationView(): Evaluation
+    public function loadForView(): Evaluation
     {
-        throw new LogicException(static::class . ' must implement '. __FUNCTION__ .'().');
+        return $this->load('criteriaScores', 'recommendation', 'creator');
     }
 
     protected function casts(): array

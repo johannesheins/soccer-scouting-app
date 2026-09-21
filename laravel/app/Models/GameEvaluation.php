@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\EvaluationTypes;
+use App\Interfaces\EvaluationInterface;
 use App\Policies\GameEvaluationPolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
@@ -33,5 +34,10 @@ class GameEvaluation extends Evaluation
     public function guestTeam(): BelongsTo
     {
         return $this->belongsTo(Club::class, 'guest_team_id');
+    }
+
+    public function loadForView(): Evaluation
+    {
+        return parent::loadForView()->load('player', 'homeTeam', 'guestTeam');
     }
 }

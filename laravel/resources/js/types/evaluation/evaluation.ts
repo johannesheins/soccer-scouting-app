@@ -4,6 +4,7 @@ import type {Recommendation} from "@/types/recommendation";
 import {GameEvaluation, GameEvaluationSmall} from "@/types/evaluation/game-evaluation";
 import type {RouteQueryOptions} from "@/wayfinder";
 import {PlayerEvaluation, PlayerEvaluationSmall} from "@/types/evaluation/player-evaluation";
+import {EvaluationTypes} from "@/enums";
 
 export type EvaluationSmall = {
     id: number,
@@ -16,6 +17,7 @@ export type EvaluationSmall = {
     created_by: number,
     created_at: string,
     updated_at: string,
+    evaluation_type: EvaluationTypes
 }
 
 export type EvaluationSmallTypeMap = {

@@ -43,6 +43,20 @@ class GameEvaluationControllerTest extends EvaluationControllerTest
         return ['player_id', 'home_team_id', 'guest_team_id'];
     }
 
+    public function test_show_includes_home_and_guest_team(): void
+    {
+        $evaluation = GameEvaluation::factory()->create(['created_by' => $this->user->id]);
+
+        $response = $this->actingAs($this->user)
+            ->get(route($this->typeRoute('show'), $evaluation));
+
+        $response->assertInertia(
+            fn ($page) => $page
+            ->where('modal.props.evaluation.home_team.id', $evaluation->home_team_id)
+            ->where('modal.props.evaluation.guest_team.id', $evaluation->guest_team_id)
+        );
+    }
+
     public function test_store_validates_player_exists(): void
     {
         $response = $this->actingAs($this->user)

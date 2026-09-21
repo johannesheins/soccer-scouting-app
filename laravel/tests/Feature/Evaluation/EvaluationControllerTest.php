@@ -404,7 +404,11 @@ abstract class EvaluationControllerTest extends TestCase
             ->component('evaluation/evaluation-index')
             ->where('modal.component', 'evaluation/evaluation-show')
             ->where('modal.props.evaluation.id', $evaluation->id)
+            ->where('modal.props.evaluation.evaluation_type', $evaluation->evaluation_type)
             ->has('modal.props.evaluation.criteria_scores', 1)
+            ->has('modal.props.evaluation.recommendation')
+            ->has('modal.props.evaluation.creator')
+            ->has('modal.props.evaluation.player')
         );
 
         $this->assertRights($this->right('ViewAll'), [$this->typeRoute('show'), $evaluation]);

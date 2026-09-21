@@ -4,20 +4,33 @@ import ScoreDisplay from "@/components/score-display";
 import {Badge} from "@/components/ui/badge";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {Separator} from "@/components/ui/separator";
-import {GameEvaluationPermissions} from "@/enums";
+import {GameEvaluationPermissions, PlayerEvaluationPermissions} from "@/enums";
 import {useHasRight} from "@/hooks/use-has-right";
 import {date} from "@/locale/date-locale";
-import player from "@/routes/player";
+import playerRoute from "@/routes/player";
 import {ScoreCalculationService} from "@/services/score-calculation-service";
 import type {Evaluation} from "@/types/evaluation/evaluation";
 import type {EvaluationCriteriaGroups} from "@/types/evaluation-criteria";
+import {GameEvaluation} from "@/types/evaluation/game-evaluation";
+import {PlayerEvaluation} from "@/types/evaluation/player-evaluation";
 
 type Props = {
     evaluation: Evaluation
     evaluationCriteriaGroups: EvaluationCriteriaGroups[]
 }
 export default function EvaluationView({evaluation, evaluationCriteriaGroups}: Props) {
-    const canViewCreator = useHasRight(GameEvaluationPermissions.ViewCreator);
+    const isGameEvaluation = evaluation.evaluation_type === 'game';
+    const isPlayerEvaluation = evaluation.evaluation_type === 'player';
+
+    const canViewCreator = (
+        isGameEvaluation && useHasRight(GameEvaluationPermissions.ViewCreator)
+        || isPlayerEvaluation && useHasRight(PlayerEvaluationPermissions.ViewCreator)
+    );
+
+    const gameEvaluation = isGameEvaluation ? (evaluation as GameEvaluation) : undefined;
+    const playerEvaluation = isPlayerEvaluation ? (evaluation as PlayerEvaluation) : undefined;
+
+    const player = gameEvaluation?.player ?? playerEvaluation?.player;
 
     const scores: number[] = []
     evaluation.criteria_scores.forEach(criteria => {
@@ -30,16 +43,25 @@ export default function EvaluationView({evaluation, evaluationCriteriaGroups}: P
         <Card className="border-none shadow-none py-1 w-full">
             <CardHeader className="pb-2">
                 <CardTitle className='grid grid-cols-[3fr_1fr]'>
-                    <p className="text-2xl">{evaluation.home_team.clubname} - {evaluation.away_team.clubname}</p>
-                    <p className="text-2xl text-end">{calculateScores.getTotalScore()} Punkte</p>
+                    {isGameEvaluation && (
+                        <p>{gameEvaluation?.home_team.clubname} - {gameEvaluation?.guest_team.clubname}</p>
+                    )}
+                    {isPlayerEvaluation && (
+                        <a href={playerRoute.show.url(gameEvaluation?.player.id ?? playerEvaluation?.player.id ?? '')} className="text-2xl">
+                            {player?.firstname} {player?.lastname}
+                        </a>
+                    )}
+                    <p className="text-2xl text-end col-start-2">{calculateScores.getTotalScore()} Punkte</p>
                 </CardTitle>
                 <div className="grid grid-cols-2 text-muted-foreground text-sm">
                     <p>
-                        {date(evaluation?.kickoff_date)}
+                        {date(evaluation?.date)}
                     </p>
-                    <a href={player.show.url(evaluation.player.id)} className="text-end">
-                        {evaluation.player.firstname} {evaluation?.player.lastname}
-                    </a>
+                    {isGameEvaluation && (
+                        <a href={playerRoute.show.url(gameEvaluation?.player.id ?? playerEvaluation?.player.id ?? '')} className="text-end">
+                            {player?.firstname} {player?.lastname}
+                        </a>
+                    )}
                 </div>
             </CardHeader>
 

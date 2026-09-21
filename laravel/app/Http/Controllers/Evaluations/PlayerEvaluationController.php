@@ -64,7 +64,7 @@ class PlayerEvaluationController extends Controller implements HasMiddleware
     public function show(PlayerEvaluation $playerEvaluation)
     {
         return new Modal('evaluation/evaluation-show', [
-            'evaluation' => $playerEvaluation->loadForEvaluationView(),
+            'evaluation' => $playerEvaluation->loadForView(),
             'evaluationCriteriaGroups' => EvaluationCriteriaGroup::with('evaluationCriteria')->get(),
         ])->baseRoute('evaluation.index');
     }

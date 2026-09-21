@@ -19,10 +19,16 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {GameEvaluationPermissions, PlayerPermissions, PlayerRequestNameEnum as Name} from "@/enums";
+import {
+    GameEvaluationPermissions,
+    PlayerEvaluationPermissions,
+    PlayerPermissions,
+    PlayerRequestNameEnum as Name
+} from "@/enums";
 import {useHasRight} from "@/hooks/use-has-right";
 import {evaluationSearchRequest} from "@/request/evaluation-search-request";
 import gameEvaluation from "@/routes/evaluation/game";
+import playerEvaluation from "@/routes/evaluation/player";
 import player from "@/routes/player";
 import type {Player} from "@/types/player";
 
@@ -33,15 +39,16 @@ export function PlayerRowActions({player}: { player: Player }) {
     const canEdit = useHasRight(PlayerPermissions.Edit);
     const canDelete = useHasRight(PlayerPermissions.Destroy);
 
-    const canCreateEvaluation = useHasRight(GameEvaluationPermissions.Create);
-    const canViewEvaluation = useHasRight(GameEvaluationPermissions.View);
+    const canCreateGameEvaluation = useHasRight(GameEvaluationPermissions.Create);
+    const canCreatePlayerEvaluation = useHasRight(GameEvaluationPermissions.Create);
+    const canViewEvaluation = useHasRight(GameEvaluationPermissions.View) || useHasRight(PlayerEvaluationPermissions.View);
 
-    if (!canView && !canEdit && !canDelete && !canCreateEvaluation && !canViewEvaluation) {
+    if (!canView && !canEdit && !canDelete && !canCreateGameEvaluation && !canCreatePlayerEvaluation && !canViewEvaluation) {
         return null;
     }
 
-    const showEvaluationSeparator = canView && (canCreateEvaluation || canViewEvaluation);
-    const showEditDeleteSeparator = (canView || canCreateEvaluation || canViewEvaluation) && (canEdit || canDelete);
+    const showEvaluationSeparator = canView && (canCreateGameEvaluation || canCreatePlayerEvaluation || canViewEvaluation);
+    const showEditDeleteSeparator = (canView || canCreateGameEvaluation || canCreatePlayerEvaluation || canViewEvaluation) && (canEdit || canDelete);
 
     return (
         <>
@@ -61,14 +68,19 @@ export function PlayerRowActions({player}: { player: Player }) {
 
                     {showEvaluationSeparator && <DropdownMenuSeparator/>}
 
-                    {canCreateEvaluation && (
+                    {canCreateGameEvaluation && (
                         <DropdownMenuItem onClick={() => router.visit(gameEvaluation.create.url({query: {[Name.playerId]: player.id}}))}>
-                            Spielerbewertung erstellen
+                            Spielbewertung erstellen
+                        </DropdownMenuItem>
+                    )}
+                    {canCreatePlayerEvaluation && (
+                        <DropdownMenuItem onClick={() => router.visit(playerEvaluation.create.url({query: {[Name.playerId]: player.id}}))}>
+                            Interne Spielerbewertung erstellen
                         </DropdownMenuItem>
                     )}
                     {canViewEvaluation && (
                         <DropdownMenuItem onClick={() => evaluationSearchRequest({player_ids: [player.id], open_tab: 'player'})}>
-                            Spielerbewertungen anzeigen
+                            Bewertung anzeigen
                         </DropdownMenuItem>
                     )}
 

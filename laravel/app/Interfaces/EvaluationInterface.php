@@ -15,6 +15,6 @@ interface EvaluationInterface
     public function creator(): BelongsTo;
     public function criteriaScores(): HasMany;
     public function recommendation(): BelongsTo;
-    public function loadForEvaluationView(): Evaluation;
+    public function loadForView(): Evaluation;
     function evaluationType(): Attribute;
 }
