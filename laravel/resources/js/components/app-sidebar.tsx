@@ -22,7 +22,7 @@ import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Dashboard',
+        title: 'Startseite',
         href: dashboard(),
         icon: LayoutGrid,
     },

@@ -28,7 +28,7 @@ const sidebarNavItems: NavItem[] = [
         icon: null,
     },
     {
-        title: 'Dashboard',
+        title: 'Startseite',
         href: dashboard.index(),
         icon: null,
     },

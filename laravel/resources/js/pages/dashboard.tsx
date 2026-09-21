@@ -21,7 +21,7 @@ export default function Dashboard() {
 
     return (
         <>
-            <Head title="Dashboard" />
+            <Head title="Startseite" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3">
                     <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
@@ -56,7 +56,7 @@ export default function Dashboard() {
                                     ))
                                 ) : (
                                     <Link href={dashboardSettings.index.url()}>
-                                        <p className="text-icon-color font-bold text-center">Wähle bis zu drei Vereine für die Spieler-Schnellsuche</p>
+                                        <p className="text-icon-color font-bold text-center">Wähle bis zu sechs Jahrgänge für die Spieler-Schnellsuche</p>
                                     </Link>
                                 )}
                             </div>
@@ -80,7 +80,7 @@ function generateUrlForPlayerSearch(key: string, value: string): string {
 Dashboard.layout = {
     breadcrumbs: [
         {
-            title: 'Dashboard',
+            title: 'Startseite',
             href: dashboard(),
         },
     ],

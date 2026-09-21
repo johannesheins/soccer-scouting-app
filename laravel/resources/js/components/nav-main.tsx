@@ -21,7 +21,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
     if(activeAndAllowedItems.length > 0) {
         return (
             <SidebarGroup className="px-2 py-0">
-                <SidebarGroupLabel>Platform</SidebarGroupLabel>
+                <SidebarGroupLabel>Navigation</SidebarGroupLabel>
                 <SidebarMenu>
                     {activeAndAllowedItems.map((item) => (
                         <SidebarMenuItem key={item.title}>

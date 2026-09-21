@@ -46,7 +46,7 @@ export default function Dashboard() {
 
     return (
         <>
-            <Head title="Dashboardeinstellungen" />
+            <Head title="Startseite - Einstellungen" />
 
             <h1 className="sr-only">Dashboardeinstellungen</h1>
 
@@ -54,8 +54,8 @@ export default function Dashboard() {
                 <div className="space-y-6">
                     <Heading
                         variant="small"
-                        title="Keine Einstellungen für das Dashboard verfügbar"
-                        description="Dir fehlen die nötigen Berechtigungen, um Dashboard-Einstellungen vorzunehmen"
+                        title="Keine Einstellungen für die Startseite verfügbar"
+                        description="Dir fehlen die nötigen Berechtigungen, um Einstellung an der Startseite vorzunehmen"
                     />
                 </div>
             )}
@@ -65,7 +65,7 @@ export default function Dashboard() {
                     <Heading
                         variant="small"
                         title="Spieler-Schnellsuche"
-                        description="Lege drei Verine fest, welche auf dem Dashboard angezeigt werden sollen"
+                        description="Lege fest, welche Vereine und Jahrgänge auf der Startseite angezeigt werden sollen"
                     />
 
                     <Field className="grid gap-2">
@@ -89,14 +89,7 @@ export default function Dashboard() {
                     </Field>
 
                     <Field className="grid gap-2">
-                        <Label htmlFor="clubs">Vereine</Label>
-
                         <YearOfBirthInput variant="multiple" name="years_of_birth" setData={setData} selectedValues={data.years_of_birth} error={errors.years_of_birth} maxSelected={6}/>
-
-                        <InputError
-                            className="mt-2"
-                            message={errors.club_ids}
-                        />
                     </Field>
 
                     <div className="flex items-center gap-4">
