@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Enums\Permission\ClubPermissions;
 use App\Enums\Permission\EvaluationPermissions;
 use App\Enums\Permission\GameEvaluationPermissions;
+use App\Enums\Permission\PlayerEvaluationPermissions;
 use App\Enums\Permission\PlayerPermissions;
 use App\Interfaces\PermissionsInterface;
 use App\Models\Right;
@@ -39,7 +40,17 @@ class RightSeeder extends Seeder
                 $this->createRight(GameEvaluationPermissions::EditAll, 'Alle Spielbewertung bearbeiten', 'Der Benutzer darf alle Spielbewertung bearbeiten'),
                 $this->createRight(GameEvaluationPermissions::Destroy, 'Spielbewertung löschen', 'Der Benutzer darf die von ihm erstellten Spielbewertung löschen'),
                 $this->createRight(GameEvaluationPermissions::DestroyAll, 'Alle Spielbewertung löschen', 'Der Benutzer darf alle Spielbewertung löschen'),
-                $this->createRight(GameEvaluationPermissions::ViewCreator, 'Autor sehen ', 'Der Benutzer darf den Autor sehen'),
+                $this->createRight(GameEvaluationPermissions::ViewCreator, 'Autor der Spielbewertung sehen', 'Der Benutzer darf den Autor sehen'),
+            ],
+            'Interne Spielerbewertung' => [
+                $this->createRight(PlayerEvaluationPermissions::Create, 'Interne Spielerbewertung erstellen', 'Der Benutzer darf interne Spielerbewertungen erstellen'),
+                $this->createRight(PlayerEvaluationPermissions::View, 'Interne Spielerbewertung ansehen', 'Der Benutzer darf die von ihm erstellten internen Spielerbewertungen ansehen'),
+                $this->createRight(PlayerEvaluationPermissions::ViewAll, 'Alle internen Spielerbewertungen ansehen', 'Der Benutzer darf alle internen Spielerbewertungen ansehen'),
+                $this->createRight(PlayerEvaluationPermissions::Edit, 'Interne Spielerbewertung bearbeiten', 'Der Benutzer darf die von ihm erstellten internen Spielerbewertungen bearbeiten'),
+                $this->createRight(PlayerEvaluationPermissions::EditAll, 'Alle internen Spielerbewertungen bearbeiten', 'Der Benutzer darf alle internen Spielerbewertungen bearbeiten'),
+                $this->createRight(PlayerEvaluationPermissions::Destroy, 'Interne Spielerbewertung löschen', 'Der Benutzer darf die von ihm erstellten internen Spielerbewertungen löschen'),
+                $this->createRight(PlayerEvaluationPermissions::DestroyAll, 'Alle internen Spielerbewertungen löschen', 'Der Benutzer darf alle internen Spielerbewertungen löschen'),
+                $this->createRight(PlayerEvaluationPermissions::ViewCreator, 'Autor der internen Spielerbewertung sehen', 'Der Benutzer darf den Autor einer internen Spielerbewertung sehen'),
             ],
             'Verein' => [
                 $this->createRight(ClubPermissions::Index, 'Verein Übersicht', 'Der Benutzer darf die Übersicht für die Vereine sehen'),
@@ -55,7 +66,7 @@ class RightSeeder extends Seeder
             foreach ($rightGroups as $groupName => $rights) {
                 $group = RightGroup::updateOrCreate(['name' => $groupName]);
                 foreach ($rights as $right) {
-                    $group->rights()->updateOrCreate(['id' => $right['id']], $right);
+                    Right::updateOrCreate(['id' => $right['id']], $right + ['right_group_id' => $group->id]);
                 }
             }
         });
