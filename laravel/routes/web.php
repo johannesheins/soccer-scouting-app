@@ -5,6 +5,7 @@ use App\Http\Controllers\ClubSearchController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\Evaluations\GameEvaluationController;
+use App\Http\Controllers\Evaluations\PlayerEvaluationController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerSearchController;
 use Illuminate\Support\Facades\Route;
@@ -23,7 +24,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::group(['prefix' => 'evaluation', 'as' => 'evaluation.'], function () {
         Route::get('search/{query?}', [EvaluationController::class, 'search'])->name('search');
         Route::get('', [EvaluationController::class, 'index'])->name('index');
-        Route::resource('game', GameEvaluationController::class)->parameters(['game' => 'game_evaluation'])->names('game');
+
+        Route::resource('game', GameEvaluationController::class)
+            ->parameters(['game' => 'game_evaluation'])->except('index')
+            ->names('game');
+
+        Route::resource('player', PlayerEvaluationController::class)
+            ->parameters(['player' => 'player_evaluation'])
+            ->except('index'
+            )->names('player');
     });
 
     Route::get('club/search', [ClubSearchController::class, 'index'])->name('club.search');

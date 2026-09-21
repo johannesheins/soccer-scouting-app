@@ -3,6 +3,7 @@ import type {EvaluationCriteriaScore} from "@/types/evaluation-criteria";
 import type {Recommendation} from "@/types/recommendation";
 import {GameEvaluation, GameEvaluationSmall} from "@/types/evaluation/game-evaluation";
 import type {RouteQueryOptions} from "@/wayfinder";
+import {PlayerEvaluation, PlayerEvaluationSmall} from "@/types/evaluation/player-evaluation";
 
 export type EvaluationSmall = {
     id: number,
@@ -19,6 +20,7 @@ export type EvaluationSmall = {
 
 export type EvaluationSmallTypeMap = {
     game: GameEvaluationSmall,
+    player: PlayerEvaluationSmall,
 }
 
 export type EvaluationSmallType = keyof EvaluationSmallTypeMap;
@@ -33,9 +35,10 @@ export type Evaluation = EvaluationSmall & {
 
 export type EvaluationTypeMap = {
     game: GameEvaluation,
+    player: PlayerEvaluation,
 }
 
 export type EvaluationRoutes = {
     store: { url: (options?: RouteQueryOptions) => string };
-    update: { url: (args: string | number, options?: RouteQueryOptions) => string };
+    update: { url: (args: number, options?: RouteQueryOptions) => string };
 };

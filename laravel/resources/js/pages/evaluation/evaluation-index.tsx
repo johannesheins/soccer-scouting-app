@@ -2,13 +2,15 @@ import {Head, Link} from '@inertiajs/react';
 import {FilePlus, FileSearch} from 'lucide-react';
 import AccessGuard from "@/components/access-guard";
 import {useHasRight} from "@/hooks/use-has-right";
-import {EvaluationPermissions, GameEvaluationPermissions} from "@/enums";
+import {EvaluationPermissions, GameEvaluationPermissions, PlayerEvaluationPermissions} from "@/enums";
 import {PlaceholderPattern} from "@/components/ui/placeholder-pattern";
 import evaluation from "@/routes/evaluation";
 import gameEvaluation from "@/routes/evaluation/game";
+import playerEvaluation from "@/routes/evaluation/player";
 
 export default function EvaluationIndex() {
-    const canCreate = useHasRight(GameEvaluationPermissions.Create);
+    const canCreateGameEvaluation = useHasRight(GameEvaluationPermissions.Create);
+    const canCreatePlayerEvaluation = useHasRight(PlayerEvaluationPermissions.Create);
     const canSearch = useHasRight(EvaluationPermissions.Search);
 
     return (
@@ -17,10 +19,18 @@ export default function EvaluationIndex() {
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="grid auto-rows-min gap-4 md:grid-cols-2">
                     <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <AccessGuard active={canCreate} title="Keine Berechtigung">
+                        <AccessGuard active={canCreateGameEvaluation} title="Keine Berechtigung">
                             <Link href={gameEvaluation.create()} title="Spielbewertung erstellen" className="flex flex-col gap-2 justify-center items-center h-full">
                                 <FilePlus className={"size-10 icon-color"}/>
                                 <p className="text-icon-color font-bold">Spielbewertung erstellen</p>
+                            </Link>
+                        </AccessGuard>
+                    </div>
+                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                        <AccessGuard active={canCreatePlayerEvaluation} title="Keine Berechtigung">
+                            <Link href={playerEvaluation.create()} title="Interne Spielerbewertung erstellen" className="flex flex-col gap-2 justify-center items-center h-full">
+                                <FilePlus className={"size-10 icon-color"}/>
+                                <p className="text-icon-color font-bold">Interne Spielerbewertung erstellen</p>
                             </Link>
                         </AccessGuard>
                     </div>

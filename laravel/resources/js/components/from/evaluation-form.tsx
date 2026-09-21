@@ -26,6 +26,7 @@ import type {Player} from "@/types/player";
 import type {Position} from "@/types/position";
 import type {Recommendation} from "@/types/recommendation";
 import {GameEvaluationSmall} from "@/types/evaluation/game-evaluation";
+import {PlayerEvaluationSmall} from "@/types/evaluation/player-evaluation";
 
 
 export default function EvaluationForm<T extends  EvaluationSmallType>({ type, route, edit = false, backHref = null }: {
@@ -44,10 +45,12 @@ export default function EvaluationForm<T extends  EvaluationSmallType>({ type, r
     };
 
     const isGameEvaluation = type === 'game';
+    const isPlayerEvaluation = type === 'player';
 
     const { evaluation, evaluationCriteriaGroups, positions, clubs, recommendations, player } = usePage<Props>().props;
 
     const gameEvaluation = isGameEvaluation ? (evaluation as GameEvaluationSmall | undefined) : undefined;
+    const playerEvaluation = isPlayerEvaluation ? (evaluation as PlayerEvaluationSmall | undefined) : undefined;
 
     const [selectedPlayer, setSelectedPlayer] = useState<Player>(player);
     useEffect(() => {
@@ -56,10 +59,10 @@ export default function EvaluationForm<T extends  EvaluationSmallType>({ type, r
 
     const clubOptions = toClubOptions(clubs);
     const [selectedHomeTeam, setSelectedHomeTeam] = useState(
-        clubOptions.filter(o => o.value === String(evaluation?.home_team_id))
+        clubOptions.filter(o => o.value === String(gameEvaluation?.home_team_id))
     );
     const [selectedAwayTeam, setSelectedAwayTeam] = useState(
-        clubOptions.filter(o => o.value === String(evaluation?.guest_team_id))
+        clubOptions.filter(o => o.value === String(gameEvaluation?.guest_team_id))
     );
 
     const recommendationOptions = toRecommendationOptions(recommendations);
@@ -68,12 +71,14 @@ export default function EvaluationForm<T extends  EvaluationSmallType>({ type, r
     );
 
     const { data, setData, transform, post, put, processing, errors } = useForm({
+        ...((isGameEvaluation || isPlayerEvaluation) && {
+            [Name.playerId]: String(gameEvaluation?.player_id ?? playerEvaluation?.player_id ?? ''),
+        }),
         ...(isGameEvaluation && {
-            [Name.playerId]: String(gameEvaluation?.player_id ?? ''),
             home_team_id: gameEvaluation?.home_team_id ?? '',
             guest_team_id: gameEvaluation?.guest_team_id ?? '',
         }),
-        date: gameEvaluation?.date ?? '',
+        date: evaluation?.date ?? '',
         strengths: evaluation?.strengths ?? '',
         weaknesses: evaluation?.weaknesses ?? '',
         recommendation_id: evaluation?.recommendation_id ?? '',
