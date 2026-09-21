@@ -8,7 +8,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use LogicException;
 
+/**
+ * Abstract class
+ */
 #[Fillable('date', 'created_by', 'strengths', 'weaknesses', 'recommendation_id', 'comment')]
 class Evaluation extends Model implements EvaluationInterface
 {
@@ -21,7 +25,7 @@ class Evaluation extends Model implements EvaluationInterface
 
     public function criteriaScores(): HasMany
     {
-        return $this->hasMany(EvaluationCriteriaScore::class, 'evaluation_id');
+        throw new LogicException(static::class . ' must implement '. __FUNCTION__ .'().');
     }
 
     public function recommendation(): BelongsTo
@@ -31,7 +35,7 @@ class Evaluation extends Model implements EvaluationInterface
 
     public function loadForEvaluationView(): Evaluation
     {
-        return $this->load('player', 'homeTeam', 'guestTeam', 'criteriaScores', 'recommendation', 'creator');
+        throw new LogicException(static::class . ' must implement '. __FUNCTION__ .'().');
     }
 
     protected function casts(): array
