@@ -193,6 +193,19 @@ class EvaluationSearchServiceTest extends TestCase
         $this->assertSame([0, 1, 2, 3], $result->keys()->all());
     }
 
+    public function test_serialized_results_contain_the_evaluation_type(): void
+    {
+        GameEvaluation::factory()->create();
+        PlayerEvaluation::factory()->create();
+
+        $types = $this->search([])->map(fn (Evaluation $evaluation) => $evaluation->toArray()['evaluation_type']);
+
+        $this->assertEqualsCanonicalizing(
+            [EvaluationTypes::GAME->value, EvaluationTypes::PLAYER->value],
+            $types->all(),
+        );
+    }
+
     public function test_sorts_evaluations_of_both_types_by_created_at_descending(): void
     {
         $oldestGame = GameEvaluation::factory()->create(['created_at' => Carbon::parse('2026-01-01')]);

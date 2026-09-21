@@ -5,17 +5,17 @@ import EvaluationSearchForm from "@/pages/evaluation/evaluation-search-form";
 import {useEvaluationColumns} from "@/pages/evaluation/table/evaluation-columns";
 import {ScoreCalculationService} from "@/services/score-calculation-service";
 import type {Club} from "@/types/club";
-import type {Evaluation} from "@/types/evaluation/evaluation";
 import type {EvaluationSearchQuery} from "@/types/evaluation/evaluation-search-query";
 import type {EvaluationCriteriaGroups} from "@/types/evaluation-criteria";
 import type {PlayerOption} from "@/types/player";
+import {EvaluationSearchResult} from "@/types/evaluation/search";
 
 type Props = {
     evaluationCriteriaGroups: EvaluationCriteriaGroups[],
     players: PlayerOption[],
     clubs: Club[];
     queryParams: EvaluationSearchQuery;
-    evaluations: Evaluation[];
+    evaluations: EvaluationSearchResult[];
 }
 export default function EvaluationSearch() {
     const { evaluationCriteriaGroups, players, clubs, queryParams, evaluations } = usePage<Props>().props;

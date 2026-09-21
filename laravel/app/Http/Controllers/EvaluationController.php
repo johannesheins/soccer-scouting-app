@@ -48,7 +48,7 @@ class EvaluationController extends Controller implements HasMiddleware
             user: $request->user(),
             with: [
                 'criteriaScores',
-                'creator'
+                'creator',
             ],
             withFor: [
                 EvaluationTypes::GAME->value => [

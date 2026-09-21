@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\EvaluationTypes;
 use App\Policies\GameEvaluationPolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
@@ -12,6 +13,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[Fillable('date', 'created_by', 'strengths', 'weaknesses', 'recommendation_id', 'comment', 'player_id', 'home_team_id', 'guest_team_id')]
 class GameEvaluation extends Evaluation
 {
+    protected ?EvaluationTypes $evaluationType = EvaluationTypes::GAME;
+
     public function criteriaScores(): HasMany
     {
         return $this->hasMany(EvaluationCriteriaScore::class, 'game_evaluation_id');

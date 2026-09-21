@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\EvaluationTypes;
 use App\Interfaces\EvaluationInterface;
 use App\Policies\PlayerEvaluationPolicy;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -13,6 +14,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[Fillable('date', 'created_by', 'strengths', 'weaknesses', 'recommendation_id', 'comment', 'player_id')]
 class PlayerEvaluation extends Evaluation implements EvaluationInterface
 {
+    protected ?EvaluationTypes $evaluationType = EvaluationTypes::PLAYER;
+
     public function criteriaScores(): HasMany
     {
         return $this->hasMany(EvaluationCriteriaScore::class, 'player_evaluation_id');
