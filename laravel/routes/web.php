@@ -9,14 +9,9 @@ use App\Http\Controllers\Evaluations\PlayerEvaluationController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerSearchController;
 use Illuminate\Support\Facades\Route;
-use Laravel\Fortify\Features;
-
-Route::inertia('/', 'welcome', [
-    'canRegister' => Features::enabled(Features::registration()),
-])->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('player/search', [PlayerSearchController::class, 'index'])->name('player.search');
     Route::resource('player', PlayerController::class)->names('player');
@@ -27,12 +22,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::resource('game', GameEvaluationController::class)
             ->parameters(['game' => 'game_evaluation'])->except('index')
-            ->names('game');
+        ->names('game');
 
         Route::resource('player', PlayerEvaluationController::class)
             ->parameters(['player' => 'player_evaluation'])
             ->except('index'
-            )->names('player');
+        )->names('player');
     });
 
     Route::get('club/search', [ClubSearchController::class, 'index'])->name('club.search');
