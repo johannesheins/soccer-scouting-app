@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[UsePolicy(GameEvaluationPolicy::class)]
-#[Fillable('date', 'created_by', 'strengths', 'weaknesses', 'recommendation_id', 'comment', 'player_id', 'home_club_id', 'guest_club_id')]
+#[Fillable('date', 'created_by', 'strengths', 'weaknesses', 'recommendation_id', 'comment', 'player_id', 'home_club_id', 'home_team', 'guest_club_id', 'guest_team')]
 class GameEvaluation extends Evaluation
 {
     protected ?EvaluationTypes $evaluationType = EvaluationTypes::GAME;

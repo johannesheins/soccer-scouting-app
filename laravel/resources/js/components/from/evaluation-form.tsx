@@ -76,7 +76,9 @@ export default function EvaluationForm<T extends  EvaluationSmallType>({ type, r
         }),
         ...(isGameEvaluation && {
             home_club_id: gameEvaluation?.home_club_id ?? '',
+            home_team: gameEvaluation?.home_team ?? '',
             guest_club_id: gameEvaluation?.guest_club_id ?? '',
+            guest_team: gameEvaluation?.guest_team ?? '',
         }),
         date: evaluation?.date ?? '',
         strengths: evaluation?.strengths ?? '',
@@ -134,38 +136,68 @@ export default function EvaluationForm<T extends  EvaluationSmallType>({ type, r
                             <FieldGroup className="grid grid-cols-2 gap-4">
                                 {isGameEvaluation && (
                                     <>
-                                        <Field>
-                                            <FieldLabel htmlFor="home_club_id">Heimverein</FieldLabel>
-                                            <SingleSelector
-                                                value={selectedHomeClub}
-                                                onChange={opts => {
-                                                    setSelectedHomeClub(opts);
-                                                    setData('home_club_id', opts[0]?.value ?? '');
-                                                }}
-                                                defaultOptions={clubOptions}
-                                                groupBy="group"
-                                                placeholder="Heimmverein wählen"
-                                                hidePlaceholderWhenSelected
-                                                emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
-                                            />
-                                            <InputError message={errors.home_club_id} />
-                                        </Field>
-                                        <Field>
-                                            <FieldLabel htmlFor="guest_club_id">Gastverein</FieldLabel>
-                                            <SingleSelector
-                                                value={selectedGuestClub}
-                                                onChange={opts => {
-                                                    setSelectedGuestClub(opts);
-                                                    setData('guest_club_id', opts[0]?.value ?? '');
-                                                }}
-                                                defaultOptions={clubOptions}
-                                                groupBy="group"
-                                                placeholder="Gastverein wählen"
-                                                hidePlaceholderWhenSelected
-                                                emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
-                                            />
-                                            <InputError message={errors.guest_club_id} />
-                                        </Field>
+                                        <FieldGroup className="grid grid-cols-[3fr_1fr] gap-4">
+                                            <Field>
+                                                <FieldLabel htmlFor="home_club_id">Heimverein</FieldLabel>
+                                                <SingleSelector
+                                                    value={selectedHomeClub}
+                                                    onChange={opts => {
+                                                        setSelectedHomeClub(opts);
+                                                        setData('home_club_id', opts[0]?.value ?? '');
+                                                    }}
+                                                    defaultOptions={clubOptions}
+                                                    groupBy="group"
+                                                    placeholder="Heimmverein wählen"
+                                                    hidePlaceholderWhenSelected
+                                                    emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
+                                                />
+                                                <InputError message={errors.home_club_id} />
+                                            </Field>
+                                            <Field>
+                                                <FieldLabel htmlFor="home_team">Mannschaft</FieldLabel>
+                                                <Input
+                                                    type="text"
+                                                    name="home_team"
+                                                    id="home_team"
+                                                    value={data.home_team}
+                                                    onChange={e => setData('home_team', e.target.value)}
+                                                    placeholder="U19 III"
+                                                    maxLength={7}
+                                                />
+                                                <InputError message={errors.home_team} />
+                                            </Field>
+                                        </FieldGroup>
+                                        <FieldGroup className="grid grid-cols-[3fr_1fr] gap-4">
+                                            <Field>
+                                                <FieldLabel htmlFor="guest_club_id">Gastverein</FieldLabel>
+                                                <SingleSelector
+                                                    value={selectedGuestClub}
+                                                    onChange={opts => {
+                                                        setSelectedGuestClub(opts);
+                                                        setData('guest_club_id', opts[0]?.value ?? '');
+                                                    }}
+                                                    defaultOptions={clubOptions}
+                                                    groupBy="group"
+                                                    placeholder="Gastverein wählen"
+                                                    hidePlaceholderWhenSelected
+                                                    emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
+                                                />
+                                                <InputError message={errors.guest_club_id} />
+                                            </Field>
+                                            <Field>
+                                                <FieldLabel htmlFor="guest_team">Mannschaft</FieldLabel>
+                                                <Input
+                                                    type="text"
+                                                    name="guest_team"
+                                                    id="guest_team"
+                                                    value={data.guest_team}
+                                                    onChange={e => setData('guest_team', e.target.value)}
+                                                    placeholder="U19 III"
+                                                    maxLength={7}
+                                                />
+                                                <InputError message={errors.guest_team} />
+                                            </Field>
+                                        </FieldGroup>
                                     </>
                                 )}
 

@@ -36,7 +36,9 @@ class EvaluationServiceTest extends TestCase
             'recommendation_id' => Recommendation::factory()->create()->id,
             'player_id' => Player::factory()->create()->id,
             'home_club_id' => Club::factory()->create()->id,
+            'home_team' => 'U19',
             'guest_club_id' => Club::factory()->create()->id,
+            'guest_team' => 'U19 II',
             'criteriaScores' => [
                 ['evaluation_criteria_id' => EvaluationCriteria::factory()->create()->id, 'score' => 8],
             ],
@@ -71,7 +73,9 @@ class EvaluationServiceTest extends TestCase
         $this->assertSame($data['recommendation_id'], $stored->recommendation_id);
         $this->assertSame($data['player_id'], $stored->player_id);
         $this->assertSame($data['home_club_id'], $stored->home_club_id);
+        $this->assertSame($data['home_team'], $stored->home_team);
         $this->assertSame($data['guest_club_id'], $stored->guest_club_id);
+        $this->assertSame($data['guest_team'], $stored->guest_team);
     }
 
     public function test_create_returns_the_given_evaluation_instance(): void
@@ -167,7 +171,9 @@ class EvaluationServiceTest extends TestCase
         $this->assertSame($data['recommendation_id'], $stored->recommendation_id);
         $this->assertSame($data['player_id'], $stored->player_id);
         $this->assertSame($data['home_club_id'], $stored->home_club_id);
+        $this->assertSame($data['home_team'], $stored->home_team);
         $this->assertSame($data['guest_club_id'], $stored->guest_club_id);
+        $this->assertSame($data['guest_team'], $stored->guest_team);
     }
 
     public function test_update_returns_the_given_evaluation_instance(): void

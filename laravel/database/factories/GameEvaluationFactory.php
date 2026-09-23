@@ -15,7 +15,9 @@ class GameEvaluationFactory extends EvaluationFactory
         return parent::definition() + [
             'player_id' => Player::factory(),
             'home_club_id' => Club::factory(),
+            'home_team' => 'U19',
             'guest_club_id' => Club::factory(),
+            'guest_team' => 'U19 II',
         ];
     }
 }

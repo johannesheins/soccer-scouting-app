@@ -34,4 +34,9 @@ trait ClubValidationRules
     {
         return ['nullable', 'string', 'max:255', ...$rules];
     }
+
+    protected function teamRules(...$rules): array
+    {
+        return ['nullable', 'string', 'max:7', ...$rules];
+    }
 }

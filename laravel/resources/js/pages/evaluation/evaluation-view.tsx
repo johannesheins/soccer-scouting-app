@@ -44,7 +44,7 @@ export default function EvaluationView({evaluation, evaluationCriteriaGroups}: P
             <CardHeader className="pb-2">
                 <CardTitle className='grid grid-cols-[3fr_1fr]'>
                     {isGameEvaluation && (
-                        <p>{gameEvaluation?.home_club.clubname} - {gameEvaluation?.guest_club.clubname}</p>
+                        <p>{gameEvaluation?.home_club.clubname} {gameEvaluation?.home_team} - {gameEvaluation?.guest_club.clubname} {gameEvaluation?.guest_team}</p>
                     )}
                     {isPlayerEvaluation && (
                         <a href={playerRoute.show.url(gameEvaluation?.player.id ?? playerEvaluation?.player.id ?? '')} className="text-2xl">
