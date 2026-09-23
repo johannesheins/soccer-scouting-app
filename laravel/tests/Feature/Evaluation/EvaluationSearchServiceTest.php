@@ -287,14 +287,14 @@ class EvaluationSearchServiceTest extends TestCase
         PlayerEvaluation::factory()->create();
 
         $result = $this->search([], withFor: [
-            EvaluationTypes::GAME->value => ['player', 'homeTeam', 'guestTeam'],
+            EvaluationTypes::GAME->value => ['player', 'homeClub', 'guestClub'],
             EvaluationTypes::PLAYER->value => ['player'],
         ]);
 
         $game = $result->first(fn ($evaluation) => $evaluation instanceof GameEvaluation);
         $this->assertTrue($game->relationLoaded('player'));
-        $this->assertTrue($game->relationLoaded('homeTeam'));
-        $this->assertTrue($game->relationLoaded('guestTeam'));
+        $this->assertTrue($game->relationLoaded('homeClub'));
+        $this->assertTrue($game->relationLoaded('guestClub'));
 
         $player = $result->first(fn ($evaluation) => $evaluation instanceof PlayerEvaluation);
         $this->assertTrue($player->relationLoaded('player'));
@@ -306,12 +306,12 @@ class EvaluationSearchServiceTest extends TestCase
         PlayerEvaluation::factory()->create();
 
         $result = $this->search([], withFor: [
-            EvaluationTypes::GAME->value => ['homeTeam'],
+            EvaluationTypes::GAME->value => ['homeClub'],
             EvaluationTypes::PLAYER->value => [],
         ]);
 
         $game = $result->first(fn ($evaluation) => $evaluation instanceof GameEvaluation);
-        $this->assertTrue($game->relationLoaded('homeTeam'));
+        $this->assertTrue($game->relationLoaded('homeClub'));
 
         $player = $result->first(fn ($evaluation) => $evaluation instanceof PlayerEvaluation);
         $this->assertFalse($player->relationLoaded('player'));

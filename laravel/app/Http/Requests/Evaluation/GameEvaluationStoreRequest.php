@@ -16,8 +16,8 @@ class GameEvaluationStoreRequest extends EvaluationStoreRequest
     {
         return parent::rules() + [
             'player_id' => $this->playerIdRules('required'),
-            'home_team_id' => $this->clubIdRules('required'),
-            'guest_team_id' => $this->clubIdRules('required'),
+            'home_club_id' => $this->clubIdRules('required'),
+            'guest_club_id' => $this->clubIdRules('required'),
         ];
     }
 

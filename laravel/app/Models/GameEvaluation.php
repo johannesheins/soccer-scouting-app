@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[UsePolicy(GameEvaluationPolicy::class)]
-#[Fillable('date', 'created_by', 'strengths', 'weaknesses', 'recommendation_id', 'comment', 'player_id', 'home_team_id', 'guest_team_id')]
+#[Fillable('date', 'created_by', 'strengths', 'weaknesses', 'recommendation_id', 'comment', 'player_id', 'home_club_id', 'guest_club_id')]
 class GameEvaluation extends Evaluation
 {
     protected ?EvaluationTypes $evaluationType = EvaluationTypes::GAME;
@@ -26,18 +26,18 @@ class GameEvaluation extends Evaluation
         return $this->belongsTo(Player::class, 'player_id');
     }
 
-    public function homeTeam(): BelongsTo
+    public function homeClub(): BelongsTo
     {
-        return $this->belongsTo(Club::class, 'home_team_id');
+        return $this->belongsTo(Club::class, 'home_club_id');
     }
 
-    public function guestTeam(): BelongsTo
+    public function guestClub(): BelongsTo
     {
-        return $this->belongsTo(Club::class, 'guest_team_id');
+        return $this->belongsTo(Club::class, 'guest_club_id');
     }
 
     public function loadForView(): Evaluation
     {
-        return parent::loadForView()->load('player', 'homeTeam', 'guestTeam');
+        return parent::loadForView()->load('player', 'homeClub', 'guestClub');
     }
 }

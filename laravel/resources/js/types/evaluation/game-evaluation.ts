@@ -4,12 +4,12 @@ import type {PlayerSmall} from "@/types/player";
 
 export type GameEvaluationSmall = EvaluationSmall & {
     player_id: number,
-    home_team_id: number,
-    guest_team_id: number,
+    home_club_id: number,
+    guest_club_id: number,
 }
 
 export type GameEvaluation = Evaluation & {
     player: PlayerSmall,
-    home_team: Club,
-    guest_team: Club,
+    home_club: Club,
+    guest_club: Club,
 }

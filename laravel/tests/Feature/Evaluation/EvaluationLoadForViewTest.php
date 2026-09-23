@@ -18,7 +18,7 @@ class EvaluationLoadForViewTest extends TestCase
         $result = $evaluation->loadForView();
 
         $this->assertSame($evaluation, $result);
-        foreach (['criteriaScores', 'recommendation', 'creator', 'player', 'homeTeam', 'guestTeam'] as $relation) {
+        foreach (['criteriaScores', 'recommendation', 'creator', 'player', 'homeClub', 'guestClub'] as $relation) {
             $this->assertTrue($result->relationLoaded($relation), $relation);
         }
     }

@@ -58,11 +58,11 @@ export default function EvaluationForm<T extends  EvaluationSmallType>({ type, r
     }, [selectedPlayer]);
 
     const clubOptions = toClubOptions(clubs);
-    const [selectedHomeTeam, setSelectedHomeTeam] = useState(
-        clubOptions.filter(o => o.value === String(gameEvaluation?.home_team_id))
+    const [selectedHomeClub, setSelectedHomeClub] = useState(
+        clubOptions.filter(o => o.value === String(gameEvaluation?.home_club_id))
     );
-    const [selectedAwayTeam, setSelectedAwayTeam] = useState(
-        clubOptions.filter(o => o.value === String(gameEvaluation?.guest_team_id))
+    const [selectedGuestClub, setSelectedGuestClub] = useState(
+        clubOptions.filter(o => o.value === String(gameEvaluation?.guest_club_id))
     );
 
     const recommendationOptions = toRecommendationOptions(recommendations);
@@ -75,8 +75,8 @@ export default function EvaluationForm<T extends  EvaluationSmallType>({ type, r
             [Name.playerId]: String(gameEvaluation?.player_id ?? playerEvaluation?.player_id ?? ''),
         }),
         ...(isGameEvaluation && {
-            home_team_id: gameEvaluation?.home_team_id ?? '',
-            guest_team_id: gameEvaluation?.guest_team_id ?? '',
+            home_club_id: gameEvaluation?.home_club_id ?? '',
+            guest_club_id: gameEvaluation?.guest_club_id ?? '',
         }),
         date: evaluation?.date ?? '',
         strengths: evaluation?.strengths ?? '',
@@ -135,12 +135,12 @@ export default function EvaluationForm<T extends  EvaluationSmallType>({ type, r
                                 {isGameEvaluation && (
                                     <>
                                         <Field>
-                                            <FieldLabel htmlFor="home_team_id">Heimverein</FieldLabel>
+                                            <FieldLabel htmlFor="home_club_id">Heimverein</FieldLabel>
                                             <SingleSelector
-                                                value={selectedHomeTeam}
+                                                value={selectedHomeClub}
                                                 onChange={opts => {
-                                                    setSelectedHomeTeam(opts);
-                                                    setData('home_team_id', opts[0]?.value ?? '');
+                                                    setSelectedHomeClub(opts);
+                                                    setData('home_club_id', opts[0]?.value ?? '');
                                                 }}
                                                 defaultOptions={clubOptions}
                                                 groupBy="group"
@@ -148,15 +148,15 @@ export default function EvaluationForm<T extends  EvaluationSmallType>({ type, r
                                                 hidePlaceholderWhenSelected
                                                 emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
                                             />
-                                            <InputError message={errors.home_team_id} />
+                                            <InputError message={errors.home_club_id} />
                                         </Field>
                                         <Field>
-                                            <FieldLabel htmlFor="guest_team_id">Gastverein</FieldLabel>
+                                            <FieldLabel htmlFor="guest_club_id">Gastverein</FieldLabel>
                                             <SingleSelector
-                                                value={selectedAwayTeam}
+                                                value={selectedGuestClub}
                                                 onChange={opts => {
-                                                    setSelectedAwayTeam(opts);
-                                                    setData('guest_team_id', opts[0]?.value ?? '');
+                                                    setSelectedGuestClub(opts);
+                                                    setData('guest_club_id', opts[0]?.value ?? '');
                                                 }}
                                                 defaultOptions={clubOptions}
                                                 groupBy="group"
@@ -164,7 +164,7 @@ export default function EvaluationForm<T extends  EvaluationSmallType>({ type, r
                                                 hidePlaceholderWhenSelected
                                                 emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
                                             />
-                                            <InputError message={errors.home_team_id} />
+                                            <InputError message={errors.guest_club_id} />
                                         </Field>
                                     </>
                                 )}

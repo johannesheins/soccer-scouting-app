@@ -20,30 +20,30 @@ const player:ColumnDef<Evaluation> = {
     },
 };
 
-const homeTeam:ColumnDef<Evaluation> = {
-    accessorKey: "home_team",
+const homeClub:ColumnDef<Evaluation> = {
+    accessorKey: "home_club",
     header: sortHeader("Heimverein"),
     sortingFn: (a, b) => {
-        const ca: Club = a.getValue("home_team")
-        const cb: Club = b.getValue("home_team")
+        const ca: Club = a.getValue("home_club")
+        const cb: Club = b.getValue("home_club")
         return ca?.clubname.localeCompare(cb?.clubname)
     },
     cell: ({row}) => {
-        const club: Club = row.getValue("home_team")
+        const club: Club = row.getValue("home_club")
         return <div className="font-medium">{club?.clubname}</div>
     },
 };
 
-const awayTeam:ColumnDef<Evaluation> = {
-    accessorKey: "guest_team",
+const guestClub:ColumnDef<Evaluation> = {
+    accessorKey: "guest_club",
     header: sortHeader("Gastverein"),
     sortingFn: (a, b) => {
-        const ca: Club = a.getValue("guest_team")
-        const cb: Club = b.getValue("guest_team")
+        const ca: Club = a.getValue("guest_club")
+        const cb: Club = b.getValue("guest_club")
         return ca?.clubname.localeCompare(cb?.clubname)
     },
     cell: ({row}) => {
-        const club: Club = row.getValue("guest_team")
+        const club: Club = row.getValue("guest_club")
         return <div className="font-medium">{club?.clubname}</div>
     },
 };
@@ -79,8 +79,8 @@ export function useEvaluationColumns(): ColumnDef<Evaluation>[] {
 
     return [
         player,
-        homeTeam,
-        awayTeam,
+        homeClub,
+        guestClub,
         kickoffDate,
         score,
         ...(canViewCreator ? [creator] : []),

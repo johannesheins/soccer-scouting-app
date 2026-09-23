@@ -50,8 +50,8 @@ class EvaluationSearchControllerTest extends TestCase
             ->where('evaluations.1.id', $game->id)
             ->where('evaluations.1.evaluation_type', EvaluationTypes::GAME->value)
             ->has('evaluations.1.player')
-            ->has('evaluations.1.home_team')
-            ->has('evaluations.1.guest_team')
+            ->has('evaluations.1.home_club')
+            ->has('evaluations.1.guest_club')
         );
         $this->assertRights(EvaluationPermissions::Search, 'evaluation.search');
     }

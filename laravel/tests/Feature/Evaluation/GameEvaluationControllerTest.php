@@ -33,17 +33,17 @@ class GameEvaluationControllerTest extends EvaluationControllerTest
     {
         return [
             'player_id' => Player::factory()->create()->id,
-            'home_team_id' => Club::factory()->create()->id,
-            'guest_team_id' => Club::factory()->create()->id,
+            'home_club_id' => Club::factory()->create()->id,
+            'guest_club_id' => Club::factory()->create()->id,
         ];
     }
 
     protected function requiredTypeFields(): array
     {
-        return ['player_id', 'home_team_id', 'guest_team_id'];
+        return ['player_id', 'home_club_id', 'guest_club_id'];
     }
 
-    public function test_show_includes_home_and_guest_team(): void
+    public function test_show_includes_home_and_guest_club(): void
     {
         $evaluation = GameEvaluation::factory()->create(['created_by' => $this->user->id]);
 
@@ -52,8 +52,8 @@ class GameEvaluationControllerTest extends EvaluationControllerTest
 
         $response->assertInertia(
             fn ($page) => $page
-            ->where('modal.props.evaluation.home_team.id', $evaluation->home_team_id)
-            ->where('modal.props.evaluation.guest_team.id', $evaluation->guest_team_id)
+            ->where('modal.props.evaluation.home_club.id', $evaluation->home_club_id)
+            ->where('modal.props.evaluation.guest_club.id', $evaluation->guest_club_id)
         );
     }
 
@@ -65,19 +65,19 @@ class GameEvaluationControllerTest extends EvaluationControllerTest
         $response->assertInvalid(['player_id']);
     }
 
-    public function test_store_validates_home_team_exists(): void
+    public function test_store_validates_home_club_exists(): void
     {
         $response = $this->actingAs($this->user)
-            ->post(route($this->typeRoute('store')), $this->payload(['home_team_id' => 999]));
+            ->post(route($this->typeRoute('store')), $this->payload(['home_club_id' => 999]));
 
-        $response->assertInvalid(['home_team_id']);
+        $response->assertInvalid(['home_club_id']);
     }
 
-    public function test_store_validates_guest_team_exists(): void
+    public function test_store_validates_guest_club_exists(): void
     {
         $response = $this->actingAs($this->user)
-            ->post(route($this->typeRoute('store')), $this->payload(['guest_team_id' => 999]));
+            ->post(route($this->typeRoute('store')), $this->payload(['guest_club_id' => 999]));
 
-        $response->assertInvalid(['guest_team_id']);
+        $response->assertInvalid(['guest_club_id']);
     }
 }

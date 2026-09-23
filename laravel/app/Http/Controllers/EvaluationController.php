@@ -45,8 +45,8 @@ class EvaluationController extends Controller implements HasMiddleware
             withFor: [
                 EvaluationTypes::GAME->value => [
                     'player',
-                    'homeTeam',
-                    'guestTeam'
+                    'homeClub',
+                    'guestClub'
                 ],
                 EvaluationTypes::PLAYER->value => [
                     'player',
