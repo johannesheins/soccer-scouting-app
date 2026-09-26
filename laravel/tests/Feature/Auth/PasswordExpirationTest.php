@@ -27,6 +27,17 @@ class PasswordExpirationTest extends TestCase
             ->assertInertia(fn (Assert $page) => $page->component('auth/password-expired'));
     }
 
+    public function test_user_with_expired_password_can_logout()
+    {
+        $user = User::factory()->create(['password_expires_at' => now()->subDay()]);
+
+        $this->actingAs($user)
+            ->post(route('logout'))
+            ->assertRedirect('/');
+
+        $this->assertGuest();
+    }
+
     public function test_user_with_valid_password_can_access_the_app()
     {
         $user = User::factory()->create(['password_expires_at' => now()->addDay()]);
