@@ -114,4 +114,17 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Password Expiration
+    |--------------------------------------------------------------------------
+    |
+    | Here you may define the number of days a user's password stays valid
+    | after it has been renewed. Once it expires, the user is redirected to
+    | the password expired screen and has to choose a new password.
+    |
+    */
+
+    'password_expires_after' => (int) env('AUTH_PASSWORD_EXPIRES_AFTER', 365),
+
 ];

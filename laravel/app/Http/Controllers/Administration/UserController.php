@@ -36,6 +36,7 @@ class UserController extends Controller
             'email' => $validated['email'],
             'password' => $validated['password'],
         ]);
+        $user->markPasswordAsExpired();
         $user->userGroups()->attach($validated['user_groups'] ?? []);
 
         return redirect(route('administration.user.index'));

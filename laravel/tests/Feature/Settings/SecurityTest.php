@@ -4,6 +4,7 @@ namespace Tests\Feature\Settings;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Testing\AssertableInertia as Assert;
 use Laravel\Fortify\Features;
@@ -128,5 +129,43 @@ class SecurityTest extends TestCase
         $response
             ->assertSessionHasErrors('current_password')
             ->assertRedirect(route('security.edit'));
+    }
+
+    public function test_new_password_must_be_different_from_current_password()
+    {
+        $user = User::factory()->create();
+
+        $response = $this
+            ->actingAs($user)
+            ->from(route('security.edit'))
+            ->put(route('user-password.update'), [
+                'current_password' => 'password',
+                'password' => 'password',
+                'password_confirmation' => 'password',
+            ]);
+
+        $response
+            ->assertSessionHasErrors('password')
+            ->assertRedirect(route('security.edit'));
+    }
+
+    public function test_password_update_renews_password_expiration()
+    {
+        Carbon::setTestNow('2026-01-01 12:00:00');
+        config(['auth.password_expires_after' => 30]);
+
+        $user = User::factory()->create();
+
+        $this
+            ->actingAs($user)
+            ->from(route('security.edit'))
+            ->put(route('user-password.update'), [
+                'current_password' => 'password',
+                'password' => 'new-password',
+                'password_confirmation' => 'new-password',
+            ])
+            ->assertSessionHasNoErrors();
+
+        $this->assertEquals('2026-01-31 12:00:00', $user->refresh()->password_expires_at->format('Y-m-d H:i:s'));
     }
 }
