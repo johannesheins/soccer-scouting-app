@@ -9,23 +9,17 @@ export default function PasswordExpired() {
         <>
             <Head title="Passwort abgelaufen" />
 
-            <div className="space-y-6">
-                <PasswordUpdateForm
-                    action={ExpiredPasswordController.update()}
-                />
-
-                <TextLink
-                    href={logout()}
-                    className="mx-auto block text-center text-sm"
-                >
+            <PasswordUpdateForm action={ExpiredPasswordController.update()}>
+                <TextLink href={logout()} className="ml-auto text-sm">
                     Abmelden
                 </TextLink>
-            </div>
+            </PasswordUpdateForm>
         </>
     );
 }
 
 PasswordExpired.layout = {
     title: 'Passwort abgelaufen',
-    description: 'Dein Passwort ist abgelaufen. Bitte lege ein neues Passwort fest, um fortzufahren',
+    description:
+        'Dein Passwort ist abgelaufen. Bitte lege ein neues Passwort fest, um fortzufahren',
 };
