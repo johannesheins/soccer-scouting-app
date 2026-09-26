@@ -21,10 +21,12 @@ export class ScoreCalculationService {
         this.groupScores = [];
         this.totalScore = 0;
 
-        this.calculate()
+        this.calculate();
     }
 
     public calculate() {
+        this.resetScores();
+
         this.criteriaGroups.forEach(group => {
             this.groupScores[group.id] = 0;
             group.evaluation_criteria.forEach(evaluationCriteria => {
@@ -33,6 +35,11 @@ export class ScoreCalculationService {
                 this.totalScore += score;
             })
         })
+    }
+
+    private resetScores(){
+        this.totalScore = 0;
+        this.groupScores = [];
     }
 
     public getTotalScore(){
