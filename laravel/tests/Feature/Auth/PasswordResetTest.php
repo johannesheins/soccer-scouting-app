@@ -79,6 +79,28 @@ class PasswordResetTest extends TestCase
         });
     }
 
+    public function test_password_reset_renews_expired_password()
+    {
+        Notification::fake();
+
+        $user = User::factory()->create(['password_expires_at' => now()->subDay()]);
+
+        $this->post(route('password.email'), ['email' => $user->email]);
+
+        Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
+            $this->post(route('password.update'), [
+                'token' => $notification->token,
+                'email' => $user->email,
+                'password' => 'new-password',
+                'password_confirmation' => 'new-password',
+            ])->assertSessionHasNoErrors();
+
+            return true;
+        });
+
+        $this->assertTrue($user->refresh()->hasValidPassword());
+    }
+
     public function test_password_cannot_be_reset_with_invalid_token(): void
     {
         $user = User::factory()->create();

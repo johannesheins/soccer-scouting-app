@@ -62,6 +62,7 @@ class UserControllerTest extends AdministrationTestCase
             'email' => 'test@example.com'
         ]);
         $createdUser = User::where('email', 'test@example.com')->first();
+        $this->assertFalse($createdUser->hasValidPassword());
         $this->assertDatabaseHas('user_group_members', [
             'user_group_id' => $userGroups->first()->id,
             'user_id' => $createdUser->id,

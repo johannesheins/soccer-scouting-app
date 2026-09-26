@@ -10,7 +10,7 @@ use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerSearchController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'password.renewed'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('player/search', [PlayerSearchController::class, 'index'])->name('player.search');
