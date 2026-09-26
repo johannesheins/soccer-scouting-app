@@ -1,5 +1,6 @@
 import { Form } from '@inertiajs/react';
 import { useRef } from 'react';
+import type { ReactNode } from 'react';
 import SecurityController from '@/actions/App/Http/Controllers/Settings/SecurityController';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
@@ -9,10 +10,12 @@ import type { RouteDefinition } from '@/wayfinder';
 
 type Props = {
     action?: RouteDefinition<'put'>;
+    children?: ReactNode;
 };
 
 export default function PasswordUpdateForm({
     action = SecurityController.update(),
+    children,
 }: Props) {
     const passwordInput = useRef<HTMLInputElement>(null);
     const currentPasswordInput = useRef<HTMLInputElement>(null);
@@ -98,6 +101,8 @@ export default function PasswordUpdateForm({
                         >
                             Passwort speichern
                         </Button>
+
+                        {children}
                     </div>
                 </>
             )}
