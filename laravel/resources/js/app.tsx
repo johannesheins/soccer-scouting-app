@@ -11,6 +11,9 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 const pages = import.meta.glob('./pages/**/*.tsx');
 
+// Referenced from app.blade.php via Vite::asset(), so it must end up in the manifest
+import.meta.glob('./images/favicon.png', { eager: true });
+
 setupInertiaModal((name) => (pages[`./pages/${name}.tsx`] as () => Promise<any>)());
 
 createInertiaApp({
