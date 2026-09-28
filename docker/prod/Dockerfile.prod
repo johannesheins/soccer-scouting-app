@@ -3,7 +3,7 @@
 # ---- Stage 1: PHP production dependencies + generated TypeScript enums ----
 FROM composer:2 AS vendor
 WORKDIR /app
-COPY laravel/composer*.json ./
+COPY laravel/composer.json laravel/composer.lock ./
 RUN composer install \
     --no-dev \
     --no-scripts \
