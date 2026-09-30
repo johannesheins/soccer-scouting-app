@@ -82,6 +82,17 @@ return [
 
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
 
+    /*
+    | Locales a user can pick in the appearance settings (stored in the
+    | "locale" cookie). Each needs a lang/{locale}.json file, except "en",
+    | which uses the English translation keys as they are.
+    */
+
+    'available_locales' => [
+        'en' => 'English',
+        'de' => 'Deutsch',
+    ],
+
     'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
 
     /*

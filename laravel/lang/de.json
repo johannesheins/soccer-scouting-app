@@ -42,6 +42,7 @@
     "Choose :name": "Wählen Sie :name",
     "Choose File": "Datei wählen",
     "Choose Image": "Bild wählen",
+    "Choose the language used throughout the app": "Wähle die Sprache der Anwendung",
     "Choose which clubs and years of birth are shown on the home page": "Lege fest, welche Vereine und Jahrgänge auf der Startseite angezeigt werden sollen",
     "City": "Stadt",
     "Clear all": "Alle entfernen",
@@ -211,6 +212,7 @@
     "Invitation cancelled.": "Einladung abgebrochen.",
     "Invitation declined.": "Einladung abgelehnt.",
     "Invitation sent.": "Einladung gesendet.",
+    "Language": "Sprache",
     "Last name": "Nachname",
     "Last updated": "Zuletzt geändert",
     "Left": "Links",
@@ -505,6 +507,7 @@
     "Weaknesses": "Schwächen",
     "Web Server is Down": "Webserver ist ausgefallen",
     "When you enable two-factor authentication, you will be prompted for a secure PIN during login. This PIN can be retrieved from a TOTP-supported application on your phone.": "Wenn du die Zwei-Faktor-Authentifizierung aktivierst, wirst du beim Login nach einem sicheren PIN gefragt. Dieser PIN kann aus einer TOTP-App auf deinem Smartphone abgerufen werden.",
+    "Which language should be used?": "Welche Sprache soll verwendet werden?",
     "Whoops!": "Ups!",
     "Year of birth": "Jahrgang",
     "Yes": "Ja",
@@ -513,6 +516,7 @@
     "You left the team \":name\"": "Sie haben das Team „:name“ verlassen.",
     "You will be prompted for a secure, random PIN during login, which you can retrieve from the TOTP-supported application on your phone.": "Beim Login wirst du nach einem sicheren, zufälligen PIN gefragt, den du aus der TOTP-App auf deinem Smartphone abrufen kannst.",
     "You've been invited to join :teamName": "Sie wurden zum Team „:teamName“ eingeladen.",
+    "Your account is set to :account, but this browser is set to :browser.": "Dein Konto ist auf :account eingestellt, dieser Browser aber auf :browser.",
     "Your email address is unverified.": "Deine E-Mail-Adresse ist nicht verifiziert.",
     "Your password has expired. Please set a new password to continue": "Dein Passwort ist abgelaufen. Bitte lege ein neues Passwort fest, um fortzufahren"
 }

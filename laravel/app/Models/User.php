@@ -6,6 +6,7 @@ namespace App\Models;
 use App\Concerns\MustRenewPassword;
 use App\Contracts\Auth\MustRenewPassword as MustRenewPasswordContract;
 use Database\Factories\UserFactory;
+use Illuminate\Contracts\Translation\HasLocalePreference;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,9 +19,9 @@ use App\Interfaces\PermissionsInterface;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
-#[Fillable(['firstname', 'lastname', 'email', 'password', 'year_of_birth'])]
+#[Fillable(['firstname', 'lastname', 'email', 'password', 'year_of_birth', 'locale'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
-class User extends Authenticatable implements MustRenewPasswordContract
+class User extends Authenticatable implements HasLocalePreference, MustRenewPasswordContract
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory;
@@ -28,6 +29,11 @@ class User extends Authenticatable implements MustRenewPasswordContract
     use MustRenewPassword;
     use Notifiable;
     use TwoFactorAuthenticatable;
+
+    public function preferredLocale(): ?string
+    {
+        return $this->locale;
+    }
 
     /**
      * Get the attributes that should be cast.

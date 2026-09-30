@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -45,10 +46,23 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'name' => config('app.name'),
             'locale' => app()->getLocale(),
+            'locales' => config('app.available_locales'),
+            'localeConflict' => $this->localeConflict($user, $request->cookie('locale')),
             'auth' => [
                 'user' => $user,
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
+    }
+
+    private function localeConflict(?User $user, mixed $cookie): ?array
+    {
+        $saved = $user?->locale;
+
+        if (! HandleLocale::isAvailable($saved) || ! HandleLocale::isAvailable($cookie) || $saved === $cookie) {
+            return null;
+        }
+
+        return ['account' => $saved, 'browser' => $cookie];
     }
 }

@@ -29,6 +29,8 @@ export default function AppearanceToggleTab({ //TODO Refactor to Tabs from shadc
             {tabs.map(({ value, icon: Icon, label }) => (
                 <button
                     key={value}
+                    type="button"
+                    aria-pressed={appearance === value}
                     onClick={() => updateAppearance(value)}
                     className={cn(
                         'flex items-center rounded-md px-3.5 py-1.5 transition-colors',
