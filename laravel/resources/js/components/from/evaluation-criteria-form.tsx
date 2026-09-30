@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import {SingleSelector} from "@/components/ui/single-select";
 import {toEvaluationCriteriaGroupOptions} from "@/hooks/form-options";
+import { t } from '@/locale/translate';
 import evaluationCriteriaRoute from "@/routes/evaluation-criteria";
 import type {EvaluationCriteria, EvaluationCriteriaGroup} from "@/types/evaluation-criteria";
 
@@ -42,11 +43,11 @@ export default function EvaluationCriteriaForm({ edit = false, backHref = null }
         <>
             <div className="max-w-6xl">
                 <form onSubmit={submit}>
-                    <Head title={"Bewertungskriterium " + (edit ? 'bearbeiten' : 'erstellen')} />
+                    <Head title={edit ? t('Edit evaluation criterion') : t('Create evaluation criterion')} />
                     <FieldSet>
                         <FieldGroup>
                             <Field>
-                                <FieldLabel htmlFor="name">Name</FieldLabel>
+                                <FieldLabel htmlFor="name">{t('Name')}</FieldLabel>
                                 <Input
                                     id="name"
                                     value={data.name}
@@ -55,7 +56,7 @@ export default function EvaluationCriteriaForm({ edit = false, backHref = null }
                                 <InputError message={errors.name} />
                             </Field>
                             <Field>
-                                <FieldLabel>Gruppe</FieldLabel>
+                                <FieldLabel>{t('Group')}</FieldLabel>
                                 <SingleSelector
                                     value={selectedGroup}
                                     onChange={opts => {
@@ -63,14 +64,14 @@ export default function EvaluationCriteriaForm({ edit = false, backHref = null }
                                         setData('evaluation_criteria_group_id', opts[0] ? Number(opts[0].value) : null);
                                     }}
                                     options={groupOptions}
-                                    placeholder="Gruppe wählen..."
+                                    placeholder={t('Select a group...')}
                                 />
                                 <InputError message={errors.evaluation_criteria_group_id} />
                             </Field>
                         </FieldGroup>
                         <FieldGroup className="grid sm:grid-cols-[1fr_1fr]">
                             <Field>
-                                <FieldLabel htmlFor="minimum_player_age">Mindestalter</FieldLabel>
+                                <FieldLabel htmlFor="minimum_player_age">{t('Minimum age')}</FieldLabel>
                                 <Input
                                     id="minimum_player_age"
                                     type="number"
@@ -82,10 +83,10 @@ export default function EvaluationCriteriaForm({ edit = false, backHref = null }
                             </Field>
                         </FieldGroup>
                         <Field className="w-fit flex-row">
-                            <Button type="submit" disabled={processing}>{edit ? 'Aktualisieren' : 'Erstellen'}</Button>
+                            <Button type="submit" disabled={processing}>{edit ? t('Update') : t('Create')}</Button>
                             {edit && backHref && (
                                 <Button variant="secondary" type="button" onClick={() => router.get(backHref)}>
-                                    Zurück
+                                    {t('Back')}
                                 </Button>
                             )}
                         </Field>

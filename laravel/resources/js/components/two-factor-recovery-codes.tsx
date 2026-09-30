@@ -10,6 +10,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import { t } from '@/locale/translate';
 import { regenerateRecoveryCodes } from '@/routes/two-factor';
 
 type Props = {
@@ -57,12 +58,12 @@ export default function TwoFactorRecoveryCodes({
             <CardHeader>
                 <CardTitle className="flex gap-3">
                     <LockKeyhole className="size-4" aria-hidden="true" />
-                    2FA-Wiederherstellungscodes
+                    {t('2FA recovery codes')}
                 </CardTitle>
                 <CardDescription>
-                    Wiederherstellungscodes ermöglichen dir den Zugang zu deinem
-                    Konto, falls du dein 2FA-Gerät verlierst. Bewahre sie in
-                    einem sicheren Passwort-Manager auf.
+                    {t(
+                        'Recovery codes let you regain access if you lose your 2FA device. Store them in a secure password manager.',
+                    )}
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -77,7 +78,7 @@ export default function TwoFactorRecoveryCodes({
                             className="size-4"
                             aria-hidden="true"
                         />
-                        Wiederherstellungscodes {codesAreVisible ? 'ausblenden' : 'anzeigen'}
+                        {codesAreVisible ? t('Hide recovery codes') : t('View recovery codes')}
                     </Button>
 
                     {canRegenerateCodes && (
@@ -94,7 +95,7 @@ export default function TwoFactorRecoveryCodes({
                                     disabled={processing}
                                     aria-describedby="regenerate-warning"
                                 >
-                                    <RefreshCw /> Codes neu generieren
+                                    <RefreshCw /> {t('Regenerate codes')}
                                 </Button>
                             )}
                         </Form>
@@ -114,7 +115,7 @@ export default function TwoFactorRecoveryCodes({
                                     ref={codesSectionRef}
                                     className="grid gap-1 rounded-lg bg-muted p-4 font-mono text-sm"
                                     role="list"
-                                    aria-label="Wiederherstellungscodes"
+                                    aria-label={t('Recovery codes')}
                                 >
                                     {recoveryCodesList.length ? (
                                         recoveryCodesList.map((code, index) => (
@@ -129,7 +130,7 @@ export default function TwoFactorRecoveryCodes({
                                     ) : (
                                         <div
                                             className="space-y-2"
-                                            aria-label="Wiederherstellungscodes werden geladen"
+                                            aria-label={t('Loading recovery codes')}
                                         >
                                             {Array.from(
                                                 { length: 8 },
@@ -147,11 +148,11 @@ export default function TwoFactorRecoveryCodes({
 
                                 <div className="text-xs text-muted-foreground select-none">
                                     <p id="regenerate-warning">
-                                        Jeder Wiederherstellungscode kann einmal
-                                        verwendet werden und wird danach entfernt.
-                                        Falls du mehr benötigst, klicke oben auf{' '}
+                                        {t(
+                                            'Each recovery code can be used once and is removed afterwards. If you need more, click',
+                                        )}{' '}
                                         <span className="font-bold">
-                                            Codes neu generieren
+                                            {t('Regenerate codes')}
                                         </span>
                                         .
                                     </p>

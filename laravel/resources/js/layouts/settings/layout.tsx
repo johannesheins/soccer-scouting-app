@@ -5,30 +5,31 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { cn, toUrl } from '@/lib/utils';
+import { t } from '@/locale/translate';
 import { edit as editAppearance } from '@/routes/appearance';
 import { edit } from '@/routes/profile';
 import { edit as editSecurity } from '@/routes/security';
-import type { NavItem } from '@/types';
 import dashboard from '@/routes/settings/dashboard';
+import type { NavItem } from '@/types';
 
-const sidebarNavItems: NavItem[] = [
+const sidebarNavItems = (): NavItem[] => [
     {
-        title: 'Profil',
+        title: t('Profile'),
         href: edit(),
         icon: null,
     },
     {
-        title: 'Sicherheit',
+        title: t('Security'),
         href: editSecurity(),
         icon: null,
     },
     {
-        title: 'Erscheinungsbild',
+        title: t('Appearance'),
         href: editAppearance(),
         icon: null,
     },
     {
-        title: 'Startseite',
+        title: t('Home'),
         href: dashboard.index(),
         icon: null,
     },
@@ -40,17 +41,17 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
     return (
         <div className="px-4 py-6">
             <Heading
-                title="Einstellungen"
-                description="Verwalte dein Profil und deine Kontoeinstellungen"
+                title={t('Settings')}
+                description={t('Manage your profile and account settings')}
             />
 
             <div className="flex flex-col lg:flex-row lg:space-x-12">
                 <aside className="w-full max-w-xl lg:w-48">
                     <nav
                         className="flex flex-col space-y-1 space-x-0"
-                        aria-label="Einstellungen"
+                        aria-label={t('Settings')}
                     >
-                        {sidebarNavItems.map((item, index) => (
+                        {sidebarNavItems().map((item, index) => (
                             <Button
                                 key={`${toUrl(item.href)}-${index}`}
                                 size="sm"

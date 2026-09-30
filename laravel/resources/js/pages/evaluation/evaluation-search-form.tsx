@@ -10,6 +10,7 @@ import {Field, FieldGroup, FieldLabel} from "@/components/ui/field";
 import MultipleSelector from "@/components/ui/multi-select";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {toPlayerOptions} from "@/hooks/form-options";
+import { t } from '@/locale/translate';
 import {evaluationSearchRequest} from "@/request/evaluation-search-request";
 import evaluation from "@/routes/evaluation";
 import type {Club} from "@/types/club";
@@ -72,16 +73,16 @@ export default function EvaluationSearchForm({evaluationCriteriaGroups, players,
                     <Tabs defaultValue={data.open_tab}>
                         <TabsList>
                             <TabsTrigger value="criteria" onClick={() =>setOpenTab('criteria')}>
-                                Kriterien
+                                {t('Criteria')}
                             </TabsTrigger>
                             <TabsTrigger value="player" onClick={() =>setOpenTab('player')}>
-                                Spieler
+                                {t('Player')}
                             </TabsTrigger>
                         </TabsList>
 
                         <TabsContent value="criteria">
                             <Accordion defaultValue={openAccordions} type="multiple">
-                                {evaluationCriteriaGroups.length <= 0 && <p className="p-5">Keine Bewertungskriterien gefunden</p>}
+                                {evaluationCriteriaGroups.length <= 0 && <p className="p-5">{t('No evaluation criteria found')}</p>}
                                 {evaluationCriteriaGroups.map(group => (
                                     <AccordionItem key={group.id} value={String(group.id)} >
                                         <AccordionTrigger onClick={() => toggleAccordionState(group.id)}>{group.name}</AccordionTrigger>
@@ -116,7 +117,7 @@ export default function EvaluationSearchForm({evaluationCriteriaGroups, players,
                         <TabsContent value="player">
                             <FieldGroup className="grid sm:grid-cols-2 xl:grid-cols-3">
                                 <Field>
-                                    <FieldLabel>Spieler</FieldLabel>
+                                    <FieldLabel>{t('Players')}</FieldLabel>
                                     <MultipleSelector
                                         value={selectedPlayers}
                                         onChange={opts => {
@@ -125,9 +126,9 @@ export default function EvaluationSearchForm({evaluationCriteriaGroups, players,
                                         }}
                                         defaultOptions={playerOptions}
                                         groupBy="group"
-                                        placeholder="Spieler wählen"
+                                        placeholder={t('Select players')}
                                         hidePlaceholderWhenSelected
-                                        emptyIndicator={<p className="text-center text-sm">Keine Spieler gefunden</p>}
+                                        emptyIndicator={<p className="text-center text-sm">{t('No players found')}</p>}
                                     />
                                     <InputError message={errors.player_ids}/>
                                 </Field>
@@ -140,8 +141,8 @@ export default function EvaluationSearchForm({evaluationCriteriaGroups, players,
                             </FieldGroup>
                         </TabsContent>
                         <Field className="w-fit flex flex-row mt-4">
-                            <Button type="submit" disabled={processing}>Suchen</Button>
-                            <Button type="button" variant="secondary" onClick={resetForm}>Zurücksetzen</Button>
+                            <Button type="submit" disabled={processing}>{t('Search')}</Button>
+                            <Button type="button" variant="secondary" onClick={resetForm}>{t('Reset')}</Button>
                         </Field>
                     </Tabs>
                     <FieldGroup>

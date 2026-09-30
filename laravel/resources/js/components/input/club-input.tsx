@@ -5,6 +5,7 @@ import MultipleSelector from "@/components/ui/multi-select";
 import type {Option} from "@/components/ui/multi-select";
 import {SingleSelector} from "@/components/ui/single-select";
 import {toClubOptions} from "@/hooks/form-options";
+import { t } from '@/locale/translate';
 import type {Club} from "@/types/club";
 
 type Props = {
@@ -24,7 +25,7 @@ export default function ClubInput({variant = "single", name, clubs, selectedValu
 
     return (
         <>
-            <FieldLabel htmlFor={name}>Club</FieldLabel>
+            <FieldLabel htmlFor={name}>{t('Club')}</FieldLabel>
             {variant === "multiple" ? (
                 <MultipleSelector
                     value={selectedClub}
@@ -34,9 +35,9 @@ export default function ClubInput({variant = "single", name, clubs, selectedValu
                     }}
                     defaultOptions={clubOptions}
                     groupBy="group"
-                    placeholder="Verein wählen"
+                    placeholder={t('Select a club')}
                     hidePlaceholderWhenSelected
-                    emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
+                    emptyIndicator={<p className="text-center text-sm">{t('No club found')}</p>}
                 />
             ) : (
                 <SingleSelector
@@ -47,9 +48,9 @@ export default function ClubInput({variant = "single", name, clubs, selectedValu
                     }}
                     defaultOptions={clubOptions}
                     groupBy="group"
-                    placeholder="Verein wählen"
+                    placeholder={t('Select a club')}
                     hidePlaceholderWhenSelected
-                    emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
+                    emptyIndicator={<p className="text-center text-sm">{t('No club found')}</p>}
                 />
             )}
             <InputError message={error} />

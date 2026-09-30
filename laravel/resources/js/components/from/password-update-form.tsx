@@ -6,6 +6,7 @@ import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { t } from '@/locale/translate';
 import type { RouteDefinition } from '@/wayfinder';
 
 type Props = {
@@ -48,7 +49,7 @@ export default function PasswordUpdateForm({
                 <>
                     <div className="grid gap-2">
                         <Label htmlFor="current_password">
-                            Aktuelles Passwort
+                            {t('Current password')}
                         </Label>
 
                         <PasswordInput
@@ -57,14 +58,14 @@ export default function PasswordUpdateForm({
                             name="current_password"
                             className="mt-1 block w-full"
                             autoComplete="current-password"
-                            placeholder="Aktuelles Passwort"
+                            placeholder={t('Current password')}
                         />
 
                         <InputError message={errors.current_password} />
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="password">Neues Passwort</Label>
+                        <Label htmlFor="password">{t('New password')}</Label>
 
                         <PasswordInput
                             id="password"
@@ -72,7 +73,7 @@ export default function PasswordUpdateForm({
                             name="password"
                             className="mt-1 block w-full"
                             autoComplete="new-password"
-                            placeholder="Neues Passwort"
+                            placeholder={t('New password')}
                         />
 
                         <InputError message={errors.password} />
@@ -80,7 +81,7 @@ export default function PasswordUpdateForm({
 
                     <div className="grid gap-2">
                         <Label htmlFor="password_confirmation">
-                            Passwort bestätigen
+                            {t('Confirm password')}
                         </Label>
 
                         <PasswordInput
@@ -88,7 +89,7 @@ export default function PasswordUpdateForm({
                             name="password_confirmation"
                             className="mt-1 block w-full"
                             autoComplete="new-password"
-                            placeholder="Passwort bestätigen"
+                            placeholder={t('Confirm password')}
                         />
 
                         <InputError message={errors.password_confirmation} />
@@ -99,7 +100,7 @@ export default function PasswordUpdateForm({
                             disabled={processing}
                             data-test="update-password-button"
                         >
-                            Passwort speichern
+                            {t('Save password')}
                         </Button>
 
                         {children}

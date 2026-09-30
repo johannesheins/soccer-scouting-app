@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { t } from '@/locale/translate';
 import { useEffect } from 'react'
 import { Command as CommandPrimitive, useCommandState } from 'cmdk'
 import { XIcon } from 'lucide-react'
@@ -232,7 +233,7 @@ const MultipleSelector = ({
                     onChange?.(newOptions)
                 }}
             >
-                {`Create "${inputValue}"`}
+                {t('Create ":value"', { value: inputValue })}
             </CommandItem>
         )
 
@@ -294,7 +295,7 @@ const MultipleSelector = ({
                                 onKeyDown={e => { if (e.key === 'Enter') handleUnselect(option) }}
                                 onMouseDown={e => { e.preventDefault(); e.stopPropagation() }}
                                 onClick={() => handleUnselect(option)}
-                                aria-label='Remove'
+                                aria-label={t('Remove')}
                             >
                                 <XIcon size={14} aria-hidden='true' />
                             </button>
@@ -326,7 +327,7 @@ const MultipleSelector = ({
                             'text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute top-0 right-0 flex size-9 items-center justify-center rounded-md border border-transparent transition-[color,box-shadow] outline-none focus-visible:ring-[3px]',
                             (hideClearAllButton || disabled || selected.length < 1 || selected.filter(s => s.fixed).length === selected.length) && 'hidden'
                         )}
-                        aria-label='Clear all'
+                        aria-label={t('Clear all')}
                     >
                         <XIcon size={16} aria-hidden='true' />
                     </button>

@@ -1,4 +1,4 @@
-import { createInertiaApp } from '@inertiajs/react';
+import { createInertiaApp, router } from '@inertiajs/react';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { initializeTheme } from '@/hooks/use-appearance';
@@ -6,6 +6,7 @@ import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 import { setupInertiaModal } from '@/lib/inertia-modal';
+import { setActiveLocale } from '@/locale/translate';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -13,6 +14,8 @@ const pages = import.meta.glob('./pages/**/*.tsx');
 
 // Referenced from app.blade.php via Vite::asset(), so it must end up in the manifest
 import.meta.glob('./images/favicon.png', { eager: true });
+
+router.on('navigate', (event) => setActiveLocale(event.detail.page.props.locale));
 
 setupInertiaModal((name) => (pages[`./pages/${name}.tsx`] as () => Promise<any>)());
 

@@ -1,23 +1,24 @@
+import UserGroupForm from "@/components/from/user-group-form";
+import { t } from '@/locale/translate';
 import {administration} from '@/routes';
 import userGroup from "@/routes/administration/user-group";
-import UserGroupForm from "@/components/from/user-group-form";
 
 export default function UserGroupEdit() {
     return <UserGroupForm edit backHref={userGroup.index.url()}/>;
 }
 
-UserGroupEdit.layout = {
+UserGroupEdit.layout = () => ({
     breadcrumbs: [
         {
-            title: 'Verwaltung',
+            title: t('Administration'),
             href: administration(),
         },
         {
-            title: 'Benutzergruppen',
+            title: t('User groups'),
             href: userGroup.index(),
         },
         {
-            title: 'Benutzergruppe bearbeiten'
+            title: t('Edit user group')
         }
     ],
-};
+});

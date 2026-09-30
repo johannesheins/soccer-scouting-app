@@ -17,6 +17,7 @@ import {
     FieldSet,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input";
+import { t } from '@/locale/translate';
 import userGroup from "@/routes/administration/user-group";
 import type {Right, RightGroup} from "@/types/right";
 import type {UserGroup} from "@/types/user-group";
@@ -59,7 +60,7 @@ export default function UserGroupForm({ edit = false, backHref = null }: { edit?
                 <Checkbox id={"rg"+rGroup.id} onCheckedChange={(checked) => selectAll(rGroup.rights, checked === true)}/>
                 <FieldContent>
                     <FieldLabel htmlFor={"rg"+rGroup.id} className={"text-foreground italic"}>
-                        Alle ab-/anwählen
+                        {t('Select / deselect all')}
                     </FieldLabel>
                 </FieldContent>
             </Field>
@@ -91,11 +92,11 @@ export default function UserGroupForm({ edit = false, backHref = null }: { edit?
         <>
             <div className="max-w-6xl">
                 <form onSubmit={submit}>
-                    <Head title={"Benutzergruppe " + (edit ? 'bearbeiten' : 'erstellen')} />
+                    <Head title={edit ? t('Edit user group') : t('Create user group')} />
                     <FieldSet>
                         <FieldGroup>
                             <Field>
-                                <FieldLabel htmlFor="name">Gruppenname</FieldLabel>
+                                <FieldLabel htmlFor="name">{t('Group name')}</FieldLabel>
                                 <Input id="name"
                                        value={data.name}
                                        onChange={e => setData('name', e.target.value)}
@@ -115,8 +116,8 @@ export default function UserGroupForm({ edit = false, backHref = null }: { edit?
                             <InputError message={errors.rights} />
                         </FieldGroup>
                         <Field className="w-fit flex-row">
-                            <Button type="submit" disabled={processing}>{edit ? 'Aktualisieren' : 'Erstellen'}</Button>
-                            {edit && backHref && <Button variant="secondary" type="button" onClick={() => router.get(backHref)}>Zurück</Button>}
+                            <Button type="submit" disabled={processing}>{edit ? t('Update') : t('Create')}</Button>
+                            {edit && backHref && <Button variant="secondary" type="button" onClick={() => router.get(backHref)}>{t('Back')}</Button>}
                         </Field>
                     </FieldSet>
                 </form>

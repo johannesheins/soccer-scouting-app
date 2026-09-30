@@ -1,4 +1,5 @@
 import {router} from "@inertiajs/react";
+import { t } from '@/locale/translate';
 import {MoreHorizontal} from "lucide-react";
 import {useState} from "react";
 import {
@@ -70,14 +71,14 @@ export default function EvaluationRowActions({evaluation}: { evaluation: Evaluat
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="h-8 w-8 p-0">
-                        <span className="sr-only">Menü öffnen</span>
+                        <span className="sr-only">{t('Open menu')}</span>
                         <MoreHorizontal className="h-4 w-4"/>
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     {canView && (
                         <DropdownMenuItem onClick={() => router.visit(evaluationRoute.show.url(evaluation.id))}>
-                            Bewertung ansehen
+                            {t('View evaluation')}
                         </DropdownMenuItem>
                     )}
 
@@ -85,7 +86,7 @@ export default function EvaluationRowActions({evaluation}: { evaluation: Evaluat
 
                     {canViewPlayer && (
                         <DropdownMenuItem onClick={() => router.visit(player.show.url(gameEvaluation?.player.id ?? playerEvaluation?.player.id ?? ''))}>
-                            Spieler ansehen
+                            {t('View player')}
                         </DropdownMenuItem>
                     )}
 
@@ -93,13 +94,13 @@ export default function EvaluationRowActions({evaluation}: { evaluation: Evaluat
 
                     {canEdit && (
                         <DropdownMenuItem onClick={() => router.visit(evaluationRoute.edit.url(evaluation.id))}>
-                            Bewertung bearbeiten
+                            {t('Edit evaluation')}
                         </DropdownMenuItem>
                     )}
 
                     {canDelete && (
                         <DropdownMenuItem onSelect={() => setDeleteOpen(true)} className="text-destructive!">
-                            Bewertung löschen
+                            {t('Delete evaluation')}
                         </DropdownMenuItem>
                     )}
                 </DropdownMenuContent>
@@ -108,15 +109,15 @@ export default function EvaluationRowActions({evaluation}: { evaluation: Evaluat
             <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Bewertung wirklich löschen?</AlertDialogTitle>
+                        <AlertDialogTitle>{t('Delete this evaluation?')}</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Diese Aktion kann nicht rückgängig gemacht werden.
+                            {t('This action cannot be undone.')}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                        <AlertDialogCancel>{t('Cancel')}</AlertDialogCancel>
                         <AlertDialogAction variant="destructive" onClick={() => router.delete(evaluationRoute.destroy.url(evaluation.id))}>
-                            Löschen
+                            {t('Delete')}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>

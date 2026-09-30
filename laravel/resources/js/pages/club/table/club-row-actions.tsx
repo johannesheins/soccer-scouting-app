@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import {ClubPermissions} from "@/enums";
 import {useHasRight} from "@/hooks/use-has-right";
+import { t } from '@/locale/translate';
 import club from "@/routes/club";
 import type {Club} from "@/types/club";
 
@@ -42,14 +43,14 @@ return null;
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="h-8 w-8 p-0">
-                        <span className="sr-only">Menü öffnen</span>
+                        <span className="sr-only">{t('Open menu')}</span>
                         <MoreHorizontal className="h-4 w-4"/>
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     {canView && (
                         <DropdownMenuItem onClick={() => router.visit(clubRoute.show.url(club.id))}>
-                            Verein ansehen
+                            {t('View club')}
                         </DropdownMenuItem>
                     )}
 
@@ -57,12 +58,12 @@ return null;
 
                     {canEdit && (
                         <DropdownMenuItem onClick={() => router.visit(clubRoute.edit.url(club.id))}>
-                            Verein bearbeiten
+                            {t('Edit club')}
                         </DropdownMenuItem>
                     )}
                     {canDelete && (
                         <DropdownMenuItem onSelect={() => setDeleteOpen(true)} className="text-destructive!">
-                            Verein löschen
+                            {t('Delete club')}
                         </DropdownMenuItem>
                     )}
                 </DropdownMenuContent>
@@ -71,15 +72,15 @@ return null;
             <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Verein wirklich löschen?</AlertDialogTitle>
+                        <AlertDialogTitle>{t('Delete this club?')}</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Diese Aktion kann nicht rückgängig gemacht werden.
+                            {t('This action cannot be undone.')}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                        <AlertDialogCancel>{t('Cancel')}</AlertDialogCancel>
                         <AlertDialogAction variant="destructive" onClick={() => router.delete(clubRoute.destroy.url(club.id))}>
-                            Löschen
+                            {t('Delete')}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>

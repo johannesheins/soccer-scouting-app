@@ -6,9 +6,10 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { useCurrentUrl } from '@/hooks/use-current-url';
-import type { NavItem } from '@/types';
 import { useUser } from '@/hooks/use-auth';
+import { useCurrentUrl } from '@/hooks/use-current-url';
+import { t } from '@/locale/translate';
+import type { NavItem } from '@/types';
 
 export function NavMain({ items = [] }: { items: NavItem[] }) {
     const user = useUser();
@@ -21,7 +22,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
     if(activeAndAllowedItems.length > 0) {
         return (
             <SidebarGroup className="px-2 py-0">
-                <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+                <SidebarGroupLabel>{t('Navigation')}</SidebarGroupLabel>
                 <SidebarMenu>
                     {activeAndAllowedItems.map((item) => (
                         <SidebarMenuItem key={item.title}>

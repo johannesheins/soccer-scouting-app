@@ -14,41 +14,42 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import {ClubPermissions, EvaluationPermissions, PlayerPermissions} from "@/enums";
+import { t } from '@/locale/translate';
 import {administration, dashboard} from "@/routes";
 import club from "@/routes/club";
 import evaluation from "@/routes/evaluation";
 import player from "@/routes/player";
 import type { NavItem } from '@/types';
 
-const mainNavItems: NavItem[] = [
+const mainNavItems = (): NavItem[] => [
     {
-        title: 'Startseite',
+        title: t('Home'),
         href: dashboard(),
         icon: LayoutGrid,
     },
     {
-        title: 'Spieler',
+        title: t('Players'),
         href: player.index(),
         icon: User,
         right: PlayerPermissions.Index,
     },
     {
-        title: 'Bewertung',
+        title: t('Evaluations'),
         href: evaluation.index(),
         icon: FileUserIcon,
         right: EvaluationPermissions.Index,
     },
     {
-        title: 'Verein',
+        title: t('Clubs'),
         href: club.index(),
         icon: Shield,
         right: ClubPermissions.Index,
     },
 ];
 
-const footerNavItems: NavItem[] = [
+const footerNavItems = (): NavItem[] => [
     {
-        title: 'Verwaltung',
+        title: t('Administration'),
         href: administration(),
         icon: Settings,
         isAdministrationOnly: true
@@ -71,11 +72,11 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain items={mainNavItems()} />
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
+                <NavFooter items={footerNavItems()} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

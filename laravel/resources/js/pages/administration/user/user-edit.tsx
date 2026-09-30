@@ -1,23 +1,24 @@
+import UserForm from "@/components/from/user-form";
+import { t } from '@/locale/translate';
 import {administration} from '@/routes';
 import user from "@/routes/administration/user";
-import UserForm from "@/components/from/user-form";
 
 export default function UserEdit() {
     return <UserForm edit backHref={user.index.url()}/>;
 }
 
-UserEdit.layout = {
+UserEdit.layout = () => ({
     breadcrumbs: [
         {
-            title: 'Verwaltung',
+            title: t('Administration'),
             href: administration(),
         },
         {
-            title: 'Benutzer',
+            title: t('Users'),
             href: user.index(),
         },
         {
-            title: 'Benutzer bearbeiten'
+            title: t('Edit user')
         }
     ],
-};
+});

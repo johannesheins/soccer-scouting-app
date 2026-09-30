@@ -1,4 +1,5 @@
 import { Form, Head, Link } from '@inertiajs/react';
+import { t } from '@/locale/translate';
 import { useUser } from '@/hooks/use-auth';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import DeleteUser from '@/components/delete-user';
@@ -21,15 +22,15 @@ export default function Profile({
 
     return (
         <>
-            <Head title="Profileinstellungen" />
+            <Head title={t('Profile settings')} />
 
-            <h1 className="sr-only">Profileinstellungen</h1>
+            <h1 className="sr-only">{t('Profile settings')}</h1>
 
             <div className="space-y-6">
                 <Heading
                     variant="small"
-                    title="Profilinformationen"
-                    description="Aktualisiere deinen Namen und deine E-Mail-Adresse"
+                    title={t('Profile information')}
+                    description={t('Update your name and email address')}
                 />
 
                 <Form
@@ -43,7 +44,7 @@ export default function Profile({
                     {({ processing, errors }) => (
                         <>
                             <div className="grid gap-2">
-                                <Label htmlFor="firstname">Vorname</Label>
+                                <Label htmlFor="firstname">{t('First name')}</Label>
 
                                 <Input
                                     id="firstname"
@@ -52,7 +53,7 @@ export default function Profile({
                                     name="firstname"
                                     required
                                     autoComplete="given-name"
-                                    placeholder="Vorname"
+                                    placeholder={t('First name')}
                                 />
 
                                 <InputError
@@ -62,7 +63,7 @@ export default function Profile({
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="lastname">Nachname</Label>
+                                <Label htmlFor="lastname">{t('Last name')}</Label>
 
                                 <Input
                                     id="lastname"
@@ -71,7 +72,7 @@ export default function Profile({
                                     name="lastname"
                                     required
                                     autoComplete="family-name"
-                                    placeholder="Nachname"
+                                    placeholder={t('Last name')}
                                 />
 
                                 <InputError
@@ -81,7 +82,7 @@ export default function Profile({
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="email">E-Mail-Adresse</Label>
+                                <Label htmlFor="email">{t('Email address')}</Label>
 
                                 <Input
                                     id="email"
@@ -91,7 +92,7 @@ export default function Profile({
                                     name="email"
                                     required
                                     autoComplete="username"
-                                    placeholder="E-Mail-Adresse"
+                                    placeholder={t('Email address')}
                                 />
 
                                 <InputError
@@ -104,22 +105,24 @@ export default function Profile({
                                 user.email_verified_at === null && (
                                     <div>
                                         <p className="-mt-4 text-sm text-muted-foreground">
-                                            Deine E-Mail-Adresse ist nicht verifiziert.{' '}
+                                            {t('Your email address is unverified.')}{' '}
                                             <Link
                                                 href={send()}
                                                 as="button"
                                                 className="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
                                             >
-                                                Klicke hier, um die Bestätigungs-E-Mail
-                                                erneut zu senden.
+                                                {t(
+                                                    'Click here to resend the verification email.',
+                                                )}
                                             </Link>
                                         </p>
 
                                         {status ===
                                             'verification-link-sent' && (
                                             <div className="mt-2 text-sm font-medium text-green-600">
-                                                Ein neuer Bestätigungslink wurde
-                                                an deine E-Mail-Adresse gesendet.
+                                                {t(
+                                                    'A new verification link has been sent to your email address.',
+                                                )}
                                             </div>
                                         )}
                                     </div>
@@ -130,7 +133,7 @@ export default function Profile({
                                     disabled={processing}
                                     data-test="update-profile-button"
                                 >
-                                    Speichern
+                                    {t('Save')}
                                 </Button>
                             </div>
                         </>
@@ -143,11 +146,11 @@ export default function Profile({
     );
 }
 
-Profile.layout = {
+Profile.layout = () => ({
     breadcrumbs: [
         {
-            title: 'Profileinstellungen',
+            title: t('Profile settings'),
             href: edit(),
         },
     ],
-};
+});

@@ -18,6 +18,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { t } from '@/locale/translate';
 import userGroup from "@/routes/administration/user-group";
 import type {UserGroup} from "@/types/user-group";
 
@@ -29,17 +30,17 @@ export function UserGroupRowActions({userGroup: ug}: { userGroup: UserGroup }) {
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="h-8 w-8 p-0">
-                        <span className="sr-only">Menü öffnen</span>
+                        <span className="sr-only">{t('Open menu')}</span>
                         <MoreHorizontal className="h-4 w-4"/>
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuItem onClick={() => router.visit(userGroup.edit.url(ug.id))}>
-                        Benutzergruppe bearbeiten
+                        {t('Edit user group')}
                     </DropdownMenuItem>
                     <DropdownMenuSeparator/>
                     <DropdownMenuItem onSelect={() => setDeleteOpen(true)} className="text-destructive!">
-                        Benutzergruppe löschen
+                        {t('Delete user group')}
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
@@ -47,15 +48,15 @@ export function UserGroupRowActions({userGroup: ug}: { userGroup: UserGroup }) {
             <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Benutzergruppe wirklich löschen?</AlertDialogTitle>
+                        <AlertDialogTitle>{t('Delete this user group?')}</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Diese Aktion kann nicht rückgängig gemacht werden.
+                            {t('This action cannot be undone.')}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                        <AlertDialogCancel>{t('Cancel')}</AlertDialogCancel>
                         <AlertDialogAction variant="destructive" onClick={() => router.delete(userGroup.destroy.url(ug.id))}>
-                            Löschen
+                            {t('Delete')}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>

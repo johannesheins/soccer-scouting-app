@@ -9,6 +9,7 @@ import {
     FieldSet,
 } from "@/components/ui/field"
 import {Input} from "@/components/ui/input";
+import { t } from '@/locale/translate';
 import evaluationCriteriaGroup from "@/routes/evaluation-criteria-group";
 import type {EvaluationCriteriaGroup} from "@/types/evaluation-criteria";
 
@@ -35,11 +36,11 @@ export default function EvaluationCriteriaGroupForm({edit = false, backHref = nu
     return (
         <div className="max-w-6xl">
             <form onSubmit={submit}>
-                <Head title={"Kriteriengruppe " + (edit ? 'bearbeiten' : 'erstellen')}/>
+                <Head title={edit ? t('Edit criteria group') : t('Create criteria group')}/>
                 <FieldSet>
                     <FieldGroup>
                         <Field>
-                            <FieldLabel htmlFor="name">Name</FieldLabel>
+                            <FieldLabel htmlFor="name">{t('Name')}</FieldLabel>
                             <Input
                                 id="name"
                                 value={data.name}
@@ -49,10 +50,10 @@ export default function EvaluationCriteriaGroupForm({edit = false, backHref = nu
                         </Field>
                     </FieldGroup>
                     <Field className="w-fit flex-row">
-                        <Button type="submit" disabled={processing}>{edit ? 'Aktualisieren' : 'Erstellen'}</Button>
+                        <Button type="submit" disabled={processing}>{edit ? t('Update') : t('Create')}</Button>
                         {edit && backHref && (
                             <Button variant="secondary" type="button" onClick={() => router.get(backHref)}>
-                                Zurück
+                                {t('Back')}
                             </Button>
                         )}
                     </Field>

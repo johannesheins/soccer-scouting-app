@@ -1,4 +1,5 @@
 import { Form, Head } from '@inertiajs/react';
+import { t } from '@/locale/translate';
 import { ShieldCheck } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import PasswordUpdateForm from '@/components/from/password-update-form';
@@ -45,15 +46,15 @@ export default function Security({
 
     return (
         <>
-            <Head title="Sicherheitseinstellungen" />
+            <Head title={t('Security settings')} />
 
-            <h1 className="sr-only">Sicherheitseinstellungen</h1>
+            <h1 className="sr-only">{t('Security settings')}</h1>
 
             <div className="space-y-6">
                 <Heading
                     variant="small"
-                    title="Passwort aktualisieren"
-                    description="Stelle sicher, dass dein Konto ein langes, zufälliges Passwort verwendet"
+                    title={t('Update password')}
+                    description={t('Ensure your account is using a long, random password to stay secure')}
                 />
 
                 <PasswordUpdateForm />
@@ -63,15 +64,15 @@ export default function Security({
                 <div className="space-y-6">
                     <Heading
                         variant="small"
-                        title="Zwei-Faktor-Authentifizierung"
-                        description="Verwalte deine Zwei-Faktor-Authentifizierungseinstellungen"
+                        title={t('Two-factor authentication')}
+                        description={t('Manage your two-factor authentication settings')}
                     />
                     {twoFactorEnabled ? (
                         <div className="flex flex-col items-start justify-start space-y-4">
                             <p className="text-sm text-muted-foreground">
-                                Beim Login wirst du nach einem sicheren, zufälligen
-                                PIN gefragt, den du aus der TOTP-App auf deinem
-                                Smartphone abrufen kannst.
+                                {t(
+                                    'You will be prompted for a secure, random PIN during login, which you can retrieve from the TOTP-supported application on your phone.',
+                                )}
                             </p>
 
                             <div className="relative inline">
@@ -82,7 +83,7 @@ export default function Security({
                                             type="submit"
                                             disabled={processing}
                                         >
-                                            2FA deaktivieren
+                                            {t('Disable 2FA')}
                                         </Button>
                                     )}
                                 </Form>
@@ -97,10 +98,9 @@ export default function Security({
                     ) : (
                         <div className="flex flex-col items-start justify-start space-y-4">
                             <p className="text-sm text-muted-foreground">
-                                Wenn du die Zwei-Faktor-Authentifizierung aktivierst,
-                                wirst du beim Login nach einem sicheren PIN gefragt.
-                                Dieser PIN kann aus einer TOTP-App auf deinem
-                                Smartphone abgerufen werden.
+                                {t(
+                                    'When you enable two-factor authentication, you will be prompted for a secure PIN during login. This PIN can be retrieved from a TOTP-supported application on your phone.',
+                                )}
                             </p>
 
                             <div>
@@ -109,7 +109,7 @@ export default function Security({
                                         onClick={() => setShowSetupModal(true)}
                                     >
                                         <ShieldCheck />
-                                        Einrichtung fortsetzen
+                                        {t('Continue setup')}
                                     </Button>
                                 ) : (
                                     <Form
@@ -124,7 +124,7 @@ export default function Security({
                                                 type="submit"
                                                 disabled={processing}
                                             >
-                                                2FA aktivieren
+                                                {t('Enable 2FA')}
                                             </Button>
                                         )}
                                     </Form>
@@ -150,11 +150,11 @@ export default function Security({
     );
 }
 
-Security.layout = {
+Security.layout = () => ({
     breadcrumbs: [
         {
-            title: 'Sicherheitseinstellungen',
+            title: t('Security settings'),
             href: edit(),
         },
     ],
-};
+});

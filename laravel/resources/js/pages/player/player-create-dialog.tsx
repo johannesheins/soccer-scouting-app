@@ -1,4 +1,5 @@
 import {UserRoundPlus} from "lucide-react";
+import { t } from '@/locale/translate';
 import React, {useState} from "react";
 import {PlayerFormDialog} from "@/components/from/player-form";
 import {Button} from "@/components/ui/button";
@@ -23,7 +24,7 @@ export default function PlayerCreateDialog({onCreatedPlayer}: Props){
                 <Button variant="outline"><UserRoundPlus/></Button>
             </DialogTrigger>
             <DialogContent variant="large">
-                <DialogTitle>Spielersuche</DialogTitle>
+                <DialogTitle>{t('Create player')}</DialogTitle>
 
                 <PlayerFormDialog onSelectPlayer={handleCreatedPlayer}/>
             </DialogContent>

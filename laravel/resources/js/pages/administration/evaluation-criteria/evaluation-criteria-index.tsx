@@ -1,6 +1,7 @@
 import {Head, Link, usePage} from '@inertiajs/react';
 import {Plus} from "lucide-react";
 import {DataTable} from "@/components/table/data-table";
+import { t } from '@/locale/translate';
 import {evaluationCriteriaColumns} from "@/pages/administration/evaluation-criteria/table/evaluation-criteria-columns";
 import {administration} from '@/routes';
 import evaluationCriteria from "@/routes/evaluation-criteria";
@@ -13,31 +14,31 @@ export default function EvaluationCriteriaIndex() {
 
     return (
         <>
-            <Head title="Bewertungskriterien"/>
+            <Head title={t('Evaluation criteria')}/>
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="relative aspect-video md:aspect-32/9 overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                    <Link href={evaluationCriteria.create()} title="Bewertungskriterium erstellen"
+                    <Link href={evaluationCriteria.create()} title={t('Create evaluation criterion')}
                           className="flex flex-col gap-2 justify-center items-center h-full">
                         <Plus className={"size-10 icon-color"}/>
-                        <p className="text-icon-color font-bold">Bewertungskriterium erstellen</p>
+                        <p className="text-icon-color font-bold">{t('Create evaluation criterion')}</p>
                     </Link>
                 </div>
                 <div className="content-center relative flex-1 overflow-hidden rounded-xl md:min-h-min dark:border-sidebar-border">
-                    <DataTable columns={evaluationCriteriaColumns} data={evaluation_criteria} textOnEmpty="Keine Bewertungskriterien gefunden."/>
+                    <DataTable columns={evaluationCriteriaColumns} data={evaluation_criteria} textOnEmpty={t('No evaluation criteria found.')}/>
                 </div>
             </div>
         </>
     );
 }
 
-EvaluationCriteriaIndex.layout = {
+EvaluationCriteriaIndex.layout = () => ({
     breadcrumbs: [
         {
-            title: 'Verwaltung',
+            title: t('Administration'),
             href: administration(),
         },
         {
-            title: 'Bewertungskriterien'
+            title: t('Evaluation criteria')
         }
     ],
-};
+});

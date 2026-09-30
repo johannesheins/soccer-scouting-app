@@ -20,6 +20,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { t } from '@/locale/translate';
 import evaluationCriteriaGroup from "@/routes/evaluation-criteria-group";
 import type {EvaluationCriteriaGroup} from "@/types/evaluation-criteria";
 
@@ -31,17 +32,17 @@ export function EvaluationCriteriaGroupRowActions({group}: { group: EvaluationCr
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="h-8 w-8 p-0">
-                        <span className="sr-only">Menü öffnen</span>
+                        <span className="sr-only">{t('Open menu')}</span>
                         <MoreHorizontal className="h-4 w-4"/>
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuItem asChild>
-                        <Link href={evaluationCriteriaGroup.edit.url(group.id)}>Bearbeiten</Link>
+                        <Link href={evaluationCriteriaGroup.edit.url(group.id)}>{t('Edit')}</Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator/>
                     <DropdownMenuItem onSelect={() => setDeleteOpen(true)} className="text-destructive!">
-                        Kriteriengruppe löschen
+                        {t('Delete criteria group')}
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
@@ -49,16 +50,16 @@ export function EvaluationCriteriaGroupRowActions({group}: { group: EvaluationCr
             <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Kriteriengruppe wirklich löschen?</AlertDialogTitle>
+                        <AlertDialogTitle>{t('Delete this criteria group?')}</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Diese Aktion kann nicht rückgängig gemacht werden. Kriterien in dieser Gruppe werden keiner Gruppe mehr zugeordnet.
+                            {t('This action cannot be undone. Criteria in this group will no longer be assigned to a group.')}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                        <AlertDialogCancel>{t('Cancel')}</AlertDialogCancel>
                         <AlertDialogAction variant="destructive"
                                           onClick={() => router.delete(evaluationCriteriaGroup.destroy.url(group.id))}>
-                            Löschen
+                            {t('Delete')}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>

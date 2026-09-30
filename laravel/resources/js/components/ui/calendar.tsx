@@ -1,4 +1,5 @@
 import * as React from "react"
+import { currentLanguageTag } from "@/locale/translate"
 import {
   ChevronDownIcon,
   ChevronLeftIcon,
@@ -39,7 +40,7 @@ function Calendar({
       captionLayout={captionLayout}
       formatters={{
         formatMonthDropdown: (date) =>
-          date.toLocaleString("de-DE", { month: "long" }),
+          date.toLocaleString(currentLanguageTag(), { month: "long" }),
         ...formatters,
       }}
       classNames={{

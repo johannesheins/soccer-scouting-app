@@ -1,6 +1,11 @@
-import {format as f, Locale} from "date-fns";
-import {de} from "date-fns/locale";
+import type { Locale } from 'date-fns';
+import { format as f } from 'date-fns';
+import { dateFnsLocale } from '@/locale/translate';
 
-export function date(date: string, format: string = "dd.MM.yyyy", locale: Locale = de): string {
-    return f(new Date(date), format, {locale: locale})
+export function date(
+    date: string,
+    format: string = 'P',
+    locale: Locale = dateFnsLocale(),
+): string {
+    return f(new Date(date), format, { locale: locale });
 }

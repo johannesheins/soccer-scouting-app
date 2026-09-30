@@ -22,6 +22,7 @@ import {
     toPlayerPositionIds,
     getFootOptions
 } from '@/hooks/form-options';
+import { t } from '@/locale/translate';
 import api from "@/routes/api";
 import player from "@/routes/player"; //used as playerRoute
 import type {Club} from "@/types/club";
@@ -81,24 +82,24 @@ const { player, positions, clubs } = usePage<Props>().props;
     return (
         <>
             <form onSubmit={submit}>
-                <Head title={"Spieler " + (edit ? 'bearbeiten' : 'erstellen')} />
+                <Head title={edit ? t('Edit player') : t('Create player')} />
                 <FieldSet>
                     <FieldGroup className="grid sm:grid-cols-2 lg:grid-cols-3">
                         <Field>
-                            <FieldLabel htmlFor={Name.firstname}>Vorname</FieldLabel>
+                            <FieldLabel htmlFor={Name.firstname}>{t('First name')}</FieldLabel>
                             <Input id={Name.firstname}
                                    value={data[Name.firstname]}
                                    onChange={e => setData(Name.firstname, e.target.value)}
-                                   placeholder="Vorname eintragen"
+                                   placeholder={t('Enter first name')}
                             />
                             <InputError message={errors[Name.firstname]} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor={Name.lastname}>Nachname</FieldLabel>
+                            <FieldLabel htmlFor={Name.lastname}>{t('Last name')}</FieldLabel>
                             <Input id={Name.lastname} type="text"
                                    value={data[Name.lastname]}
                                    onChange={e => setData(Name.lastname, e.target.value)}
-                                   placeholder="Nachname eintragen"
+                                   placeholder={t('Enter last name')}
                             />
                             <InputError message={errors[Name.lastname]} />
                         </Field>
@@ -113,7 +114,7 @@ const { player, positions, clubs } = usePage<Props>().props;
                             <HeightInput name={Name.height} value={data[Name.height]} setData={setData} error={errors[Name.height]} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor={Name.strongFoot}>Starker Fuß</FieldLabel>
+                            <FieldLabel htmlFor={Name.strongFoot}>{t('Strong foot')}</FieldLabel>
                             <SingleSelector
                                 value={selectedStrongFoot}
                                 onChange={opts => {
@@ -122,14 +123,14 @@ const { player, positions, clubs } = usePage<Props>().props;
                                 }}
                                 defaultOptions={footOptions}
                                 groupBy="group"
-                                placeholder="Starken Fuß wählen"
+                                placeholder={t('Select strong foot')}
                                 hidePlaceholderWhenSelected
-                                emptyIndicator={<p className="text-center text-sm">Kein treffer</p>}
+                                emptyIndicator={<p className="text-center text-sm">{t('No results')}</p>}
                             />
                             <InputError message={errors[Name.strongFoot]} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor={Name.positionIds}>Position</FieldLabel>
+                            <FieldLabel htmlFor={Name.positionIds}>{t('Position')}</FieldLabel>
                             <MultipleSelector
                                 value={selectedPositions}
                                 onChange={opts => {
@@ -138,16 +139,16 @@ const { player, positions, clubs } = usePage<Props>().props;
                                 }}
                                 defaultOptions={positionOptions}
                                 groupBy="group"
-                                placeholder="Position wählen"
+                                placeholder={t('Select a position')}
                                 hidePlaceholderWhenSelected
-                                emptyIndicator={<p className="text-center text-sm">Keine Positionen gefunden</p>}
+                                emptyIndicator={<p className="text-center text-sm">{t('No positions found')}</p>}
                             />
                             <InputError message={errors[Name.positionIds]} />
                         </Field>
                     </FieldGroup>
                     <Field className="w-fit flex-row">
-                        <Button type="submit" disabled={processing}>{edit ? 'Aktualisieren' : 'Erstellen'}</Button>
-                        {edit && backHref && <Button variant="secondary" type="button" onClick={() => router.get(backHref)}>Zurück</Button>}
+                        <Button type="submit" disabled={processing}>{edit ? t('Update') : t('Create')}</Button>
+                        {edit && backHref && <Button variant="secondary" type="button" onClick={() => router.get(backHref)}>{t('Back')}</Button>}
                     </Field>
                 </FieldSet>
             </form>

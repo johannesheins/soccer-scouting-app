@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input";
 import {ClubRequestNameEnum as Name} from "@/enums";
+import { t } from '@/locale/translate';
 import club from "@/routes/club";
 import type {Club} from "@/types/club";
 
@@ -39,40 +40,40 @@ export default function ClubForm({ edit = false, backHref = null }: { edit?: boo
     return (
         <>
             <form onSubmit={submit}>
-                <Head title={"Verein " + (edit ? 'bearbeiten' : 'erstellen')} />
+                <Head title={edit ? t('Edit club') : t('Create club')} />
                 <FieldSet>
                     <FieldGroup className="grid sm:grid-cols-2 lg:grid-cols-3">
                         <Field>
-                            <FieldLabel htmlFor={Name.clubname}>Vereinsname</FieldLabel>
+                            <FieldLabel htmlFor={Name.clubname}>{t('Club name')}</FieldLabel>
                             <Input id={Name.clubname}
                                    value={data[Name.clubname]}
                                    onChange={e => setData(Name.clubname, e.target.value)}
-                                   placeholder="Vereinsname eintragen"
+                                   placeholder={t('Enter club name')}
                             />
                             <InputError message={errors[Name.clubname]} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor={Name.zipCode}>PLZ</FieldLabel>
+                            <FieldLabel htmlFor={Name.zipCode}>{t('Postcode')}</FieldLabel>
                             <Input id={Name.zipCode}
                                    value={data[Name.zipCode]}
                                    onChange={e => setData(Name.zipCode, e.target.value)}
-                                   placeholder="PLZ eintragen"
+                                   placeholder={t('Enter postcode')}
                             />
                             <InputError message={errors[Name.zipCode]} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor={Name.city}>Stadt</FieldLabel>
+                            <FieldLabel htmlFor={Name.city}>{t('City')}</FieldLabel>
                             <Input id={Name.city}
                                    value={data[Name.city]}
                                    onChange={e => setData(Name.city, e.target.value)}
-                                   placeholder="Stadt eintragen"
+                                   placeholder={t('Enter city')}
                             />
                             <InputError message={errors[Name.city]} />
                         </Field>
                     </FieldGroup>
                     <Field className="w-fit flex-row">
-                        <Button type="submit" disabled={processing}>{edit ? 'Aktualisieren' : 'Erstellen'}</Button>
-                        {edit && backHref && <Button variant="secondary" type="button" onClick={() => router.get(backHref)}>Zurück</Button>}
+                        <Button type="submit" disabled={processing}>{edit ? t('Update') : t('Create')}</Button>
+                        {edit && backHref && <Button variant="secondary" type="button" onClick={() => router.get(backHref)}>{t('Back')}</Button>}
                     </Field>
                 </FieldSet>
             </form>

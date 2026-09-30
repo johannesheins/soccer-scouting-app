@@ -1,23 +1,24 @@
+import EvaluationCriteriaGroupForm from "@/components/from/evaluation-criteria-group-form";
+import { t } from '@/locale/translate';
 import {administration} from '@/routes';
 import evaluationCriteriaGroup from "@/routes/evaluation-criteria-group";
-import EvaluationCriteriaGroupForm from "@/components/from/evaluation-criteria-group-form";
 
 export default function EvaluationCriteriaGroupEdit() {
     return <EvaluationCriteriaGroupForm edit backHref={evaluationCriteriaGroup.index.url()}/>;
 }
 
-EvaluationCriteriaGroupEdit.layout = {
+EvaluationCriteriaGroupEdit.layout = () => ({
     breadcrumbs: [
         {
-            title: 'Verwaltung',
+            title: t('Administration'),
             href: administration(),
         },
         {
-            title: 'Kriteriengruppen',
+            title: t('Criteria groups'),
             href: evaluationCriteriaGroup.index(),
         },
         {
-            title: 'Kriteriengruppe bearbeiten',
+            title: t('Edit criteria group'),
         },
     ],
-};
+});

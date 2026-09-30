@@ -1,4 +1,5 @@
 import {Head, useForm, usePage} from '@inertiajs/react';
+import { t } from '@/locale/translate';
 import React, {useState} from "react";
 import DashboardSettingsController from "@/actions/App/Http/Controllers/Settings/DashboardSettingsController";
 import Heading from '@/components/heading';
@@ -46,16 +47,16 @@ export default function Dashboard() {
 
     return (
         <>
-            <Head title="Startseite - Einstellungen" />
+            <Head title={t('Home settings')} />
 
-            <h1 className="sr-only">Dashboardeinstellungen</h1>
+            <h1 className="sr-only">{t('Home settings')}</h1>
 
             {!canSearchPlayers && (
                 <div className="space-y-6">
                     <Heading
                         variant="small"
-                        title="Keine Einstellungen für die Startseite verfügbar"
-                        description="Dir fehlen die nötigen Berechtigungen, um Einstellung an der Startseite vorzunehmen"
+                        title={t('No home page settings available')}
+                        description={t('You don\'t have permission to change the home page settings')}
                     />
                 </div>
             )}
@@ -64,12 +65,12 @@ export default function Dashboard() {
                 <div className="space-y-6">
                     <Heading
                         variant="small"
-                        title="Spieler-Schnellsuche"
-                        description="Lege fest, welche Vereine und Jahrgänge auf der Startseite angezeigt werden sollen"
+                        title={t('Player quick search')}
+                        description={t('Choose which clubs and years of birth are shown on the home page')}
                     />
 
                     <Field className="grid gap-2">
-                        <Label htmlFor="clubs">Vereine</Label>
+                        <Label htmlFor="clubs">{t('Clubs')}</Label>
 
                         <MultipleSelector
                             value={selectedClubs}
@@ -77,9 +78,9 @@ export default function Dashboard() {
                             defaultOptions={clubOptions}
                             maxSelected={3}
                             groupBy="group"
-                            placeholder="Vereine wählen"
+                            placeholder={t('Select clubs')}
                             hidePlaceholderWhenSelected
-                            emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
+                            emptyIndicator={<p className="text-center text-sm">{t('No club found')}</p>}
                         />
 
                         <InputError
@@ -94,7 +95,7 @@ export default function Dashboard() {
 
                     <div className="flex items-center gap-4">
                         <Button disabled={processing} onClick={submit}>
-                            Speichern
+                            {t('Save')}
                         </Button>
                     </div>
                 </div>
@@ -103,11 +104,11 @@ export default function Dashboard() {
     );
 }
 
-Dashboard.layout = {
+Dashboard.layout = () => ({
     breadcrumbs: [
         {
-            title: 'Dashboardeinstellungen',
+            title: t('Home settings'),
             href: dashboard.index.url()
         },
     ],
-};
+});

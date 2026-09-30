@@ -1,20 +1,21 @@
 import { Head } from '@inertiajs/react';
 import AppearanceTabs from '@/components/appearance-tabs';
 import Heading from '@/components/heading';
+import { t } from '@/locale/translate';
 import { edit as editAppearance } from '@/routes/appearance';
 
 export default function Appearance() {
     return (
         <>
-            <Head title="Erscheinungsbild" />
+            <Head title={t('Appearance')} />
 
-            <h1 className="sr-only">Erscheinungsbild</h1>
+            <h1 className="sr-only">{t('Appearance')}</h1>
 
             <div className="space-y-6">
                 <Heading
                     variant="small"
-                    title="Erscheinungsbild"
-                    description="Passe das Erscheinungsbild deines Kontos an"
+                    title={t('Appearance')}
+                    description={t('Update your account\'s appearance settings')}
                 />
                 <AppearanceTabs />
             </div>
@@ -22,11 +23,11 @@ export default function Appearance() {
     );
 }
 
-Appearance.layout = {
+Appearance.layout = () => ({
     breadcrumbs: [
         {
-            title: 'Erscheinungsbild',
+            title: t('Appearance'),
             href: editAppearance(),
         },
     ],
-};
+});

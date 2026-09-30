@@ -6,13 +6,14 @@ import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { t } from '@/locale/translate';
 import { login } from '@/routes';
 import { email } from '@/routes/password';
 
 export default function ForgotPassword({ status }: { status?: string }) {
     return (
         <>
-            <Head title="Passwort vergessen" />
+            <Head title={t('Forgot password')} />
 
             {status && (
                 <div className="mb-4 text-center text-sm font-medium text-green-600">
@@ -25,7 +26,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                     {({ processing, errors }) => (
                         <>
                             <div className="grid gap-2">
-                                <Label htmlFor="email">E-Mail-Adresse</Label>
+                                <Label htmlFor="email">{t('Email address')}</Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -47,7 +48,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                                     {processing && (
                                         <LoaderCircle className="h-4 w-4 animate-spin" />
                                     )}
-                                    Link zum Zurücksetzen senden
+                                    {t('Email password reset link')}
                                 </Button>
                             </div>
                         </>
@@ -55,15 +56,15 @@ export default function ForgotPassword({ status }: { status?: string }) {
                 </Form>
 
                 <div className="space-x-1 text-center text-sm text-muted-foreground">
-                    <span>Oder zurück zur</span>
-                    <TextLink href={login()}>Anmeldung</TextLink>
+                    <span>{t('Or, return to')}</span>
+                    <TextLink href={login()}>{t('log in')}</TextLink>
                 </div>
             </div>
         </>
     );
 }
 
-ForgotPassword.layout = {
-    title: 'Passwort vergessen',
-    description: 'Gib deine E-Mail-Adresse ein, um einen Link zum Zurücksetzen zu erhalten',
-};
+ForgotPassword.layout = () => ({
+    title: t('Forgot password'),
+    description: t('Enter your email to receive a password reset link'),
+});

@@ -1,6 +1,7 @@
 import { setLayoutProps } from '@inertiajs/react';
 import ClubForm from "@/components/from/club-form";
 import { usePreviousUrl } from '@/hooks/use-previous-url';
+import { t } from '@/locale/translate';
 import club from '@/routes/club';
 
 export default function ClubEdit() {
@@ -10,15 +11,15 @@ export default function ClubEdit() {
     setLayoutProps({
         breadcrumbs: [
             {
-                title: 'Verein',
+                title: t('Clubs'),
                 href: club.index(),
             },
             {
-                title: 'Verein suchen',
+                title: t('Search clubs'),
                 href: usePrevious ? previousUrl : club.search()
             },
             {
-                title: 'Verein bearbeiten'
+                title: t('Edit club')
             },
         ],
     });
