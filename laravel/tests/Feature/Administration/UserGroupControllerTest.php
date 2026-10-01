@@ -1,11 +1,10 @@
 <?php
 
-namespace Feature\Administration;
+namespace Tests\Feature\Administration;
 
 use App\Models\Right;
 use App\Models\RightGroup;
 use App\Models\UserGroup;
-use Tests\Feature\Administration\AdministrationTestCase;
 
 class UserGroupControllerTest extends AdministrationTestCase
 {

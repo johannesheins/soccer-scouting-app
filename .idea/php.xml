@@ -165,6 +165,28 @@
       <path value="$PROJECT_DIR$/laravel/vendor/emargareten/inertia-modal" />
       <path value="$PROJECT_DIR$/laravel/vendor/staudenmeir/eloquent-has-many-deep" />
       <path value="$PROJECT_DIR$/laravel/vendor/staudenmeir/eloquent-has-many-deep-contracts" />
+      <path value="$PROJECT_DIR$/laravel/vendor/dragon-code/pretty-array" />
+      <path value="$PROJECT_DIR$/laravel/vendor/dragon-code/contracts" />
+      <path value="$PROJECT_DIR$/laravel/vendor/dragon-code/support" />
+      <path value="$PROJECT_DIR$/laravel/vendor/archtechx/enums" />
+      <path value="$PROJECT_DIR$/laravel/vendor/codezero/browser-locale" />
+      <path value="$PROJECT_DIR$/laravel/vendor/laravel-lang/locale-list" />
+      <path value="$PROJECT_DIR$/laravel/vendor/laravel-lang/config" />
+      <path value="$PROJECT_DIR$/laravel/vendor/laravel-lang/locales" />
+      <path value="$PROJECT_DIR$/laravel/vendor/laravel-lang/native-locale-names" />
+      <path value="$PROJECT_DIR$/laravel/vendor/laravel-lang/starter-kits" />
+      <path value="$PROJECT_DIR$/laravel/vendor/laravel-lang/actions" />
+      <path value="$PROJECT_DIR$/laravel/vendor/laravel-lang/native-country-names" />
+      <path value="$PROJECT_DIR$/laravel/vendor/laravel-lang/json-fallback" />
+      <path value="$PROJECT_DIR$/laravel/vendor/laravel-lang/routes" />
+      <path value="$PROJECT_DIR$/laravel/vendor/laravel-lang/moonshine" />
+      <path value="$PROJECT_DIR$/laravel/vendor/laravel-lang/models" />
+      <path value="$PROJECT_DIR$/laravel/vendor/laravel-lang/http-statuses" />
+      <path value="$PROJECT_DIR$/laravel/vendor/laravel-lang/publisher" />
+      <path value="$PROJECT_DIR$/laravel/vendor/laravel-lang/common" />
+      <path value="$PROJECT_DIR$/laravel/vendor/laravel-lang/native-currency-names" />
+      <path value="$PROJECT_DIR$/laravel/vendor/laravel-lang/attributes" />
+      <path value="$PROJECT_DIR$/laravel/vendor/laravel-lang/lang" />
     </include_path>
   </component>
   <component name="PhpInterpreters">

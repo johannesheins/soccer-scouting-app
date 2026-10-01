@@ -2,6 +2,7 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/laravel/spec" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/laravel/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/_laravel_idea" />
       <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/bacon/bacon-qr-code" />
@@ -130,6 +131,28 @@
       <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/staudenmeir/eloquent-has-many-deep" />
       <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/staudenmeir/eloquent-has-many-deep-contracts" />
       <excludeFolder url="file://$MODULE_DIR$/laravel/storage/pail" />
+      <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/archtechx/enums" />
+      <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/codezero/browser-locale" />
+      <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/dragon-code/contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/dragon-code/pretty-array" />
+      <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/dragon-code/support" />
+      <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/laravel-lang/actions" />
+      <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/laravel-lang/attributes" />
+      <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/laravel-lang/common" />
+      <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/laravel-lang/config" />
+      <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/laravel-lang/http-statuses" />
+      <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/laravel-lang/json-fallback" />
+      <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/laravel-lang/lang" />
+      <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/laravel-lang/locale-list" />
+      <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/laravel-lang/locales" />
+      <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/laravel-lang/models" />
+      <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/laravel-lang/moonshine" />
+      <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/laravel-lang/native-country-names" />
+      <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/laravel-lang/native-currency-names" />
+      <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/laravel-lang/native-locale-names" />
+      <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/laravel-lang/publisher" />
+      <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/laravel-lang/routes" />
+      <excludeFolder url="file://$MODULE_DIR$/laravel/vendor/laravel-lang/starter-kits" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
