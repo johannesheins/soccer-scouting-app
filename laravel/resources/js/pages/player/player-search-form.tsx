@@ -1,4 +1,5 @@
 import {router, useForm} from "@inertiajs/react";
+import { t } from '@/locale/translate';
 import React from "react";
 import { useState, useEffect } from 'react';
 import ClubInput from "@/components/input/club-input";
@@ -76,7 +77,7 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
                 <FieldSet>
                     <FieldGroup className="grid sm:grid-cols-2 xl:grid-cols-3">
                         <Field>
-                            <FieldLabel htmlFor="firstname">Vorname</FieldLabel>
+                            <FieldLabel htmlFor="firstname">{t('First name')}</FieldLabel>
                             <Input id="firstname"
                                    value={data.firstname}
                                    onChange={e => setData('firstname', e.target.value)}
@@ -84,7 +85,7 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
                             <InputError message={errors.firstname} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor="lastname">Nachname</FieldLabel>
+                            <FieldLabel htmlFor="lastname">{t('Last name')}</FieldLabel>
                             <Input id="lastname" type="text"
                                    value={data.lastname}
                                    onChange={e => setData('lastname', e.target.value)}
@@ -101,7 +102,7 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
                             <HeightRangeInput nameFrom="height_from" nameTo="height_to" valueFrom={data.height_from} valueTo={data.height_to} setData={setData} errorFrom={errors.height_from} errorTo={errors.height_to} />
                         </FieldGroup>
                         <Field>
-                            <FieldLabel htmlFor="strong_foot">Starker Fuß</FieldLabel>
+                            <FieldLabel htmlFor="strong_foot">{t('Strong foot')}</FieldLabel>
                             <MultipleSelector
                                 value={selectedStrongFoots}
                                 onChange={opts => {
@@ -110,14 +111,14 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
                                 }}
                                 defaultOptions={footOptions}
                                 groupBy="group"
-                                placeholder="Starken Fuß wählen"
+                                placeholder={t('Select strong foot')}
                                 hidePlaceholderWhenSelected
-                                emptyIndicator={<p className="text-center text-sm">Kein treffer</p>}
+                                emptyIndicator={<p className="text-center text-sm">{t('No results')}</p>}
                             />
                             <InputError message={errors.strong_foots} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor="position_ids">Position</FieldLabel>
+                            <FieldLabel htmlFor="position_ids">{t('Position')}</FieldLabel>
                             <MultipleSelector
                                 value={selectedPositions}
                                 onChange={opts => {
@@ -126,16 +127,16 @@ export default function PlayerSearchForm({ positions, clubs, returnData, onRespo
                                 }}
                                 defaultOptions={positionOptions}
                                 groupBy="group"
-                                placeholder="Position wählen"
+                                placeholder={t('Select a position')}
                                 hidePlaceholderWhenSelected
-                                emptyIndicator={<p className="text-center text-sm">Keine Positionen gefunden</p>}
+                                emptyIndicator={<p className="text-center text-sm">{t('No positions found')}</p>}
                             />
                             <InputError message={errors.position_ids} />
                         </Field>
                     </FieldGroup>
                     <Field className="w-fit flex flex-row">
-                        <Button type="submit" disabled={processing}>Suchen</Button>
-                        <Button type="button" variant="secondary" onClick={resetForm}>Zurücksetzen</Button>
+                        <Button type="submit" disabled={processing}>{t('Search')}</Button>
+                        <Button type="button" variant="secondary" onClick={resetForm}>{t('Reset')}</Button>
                     </Field>
                 </FieldSet>
             </form>

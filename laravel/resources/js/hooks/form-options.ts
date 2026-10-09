@@ -1,5 +1,6 @@
 import type { Option } from '@/components/ui/multi-select';
 import {FootEnum} from "@/enums";
+import { t } from '@/locale/translate';
 import type {Club} from '@/types/club';
 import type {EvaluationCriteriaGroup} from '@/types/evaluation-criteria';
 import type {PlayerOption, PlayerSmall} from '@/types/player';
@@ -87,9 +88,19 @@ export function toEvaluationCriteriaGroupOptions(groups: EvaluationCriteriaGroup
     }))
 }
 
+const footLabels: Record<FootEnum, string> = {
+    [FootEnum.LEFT]: 'Left',
+    [FootEnum.RIGHT]: 'Right',
+    [FootEnum.BOTH]: 'Both',
+};
+
+export function footLabel(foot: string): string {
+    return foot in footLabels ? t(footLabels[foot as FootEnum]) : foot;
+}
+
 export function getFootOptions(): Option[]{
     return Object.values(FootEnum).map(foot => ({
         value: foot,
-        label: foot
+        label: footLabel(foot)
     }))
 }

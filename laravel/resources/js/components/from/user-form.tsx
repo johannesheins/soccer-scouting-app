@@ -1,4 +1,4 @@
-import {Head, Link, router, useForm, usePage} from '@inertiajs/react';
+import {Head, router, useForm, usePage} from '@inertiajs/react';
 import React from 'react';
 import { useState } from 'react';
 import InputError from "@/components/input-error";
@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import MultipleSelector from "@/components/ui/multi-select";
 import { Separator } from "@/components/ui/separator"
 import {toUserGroupOptions} from '@/hooks/form-options';
+import { t } from '@/locale/translate';
 import user from "@/routes/administration/user";
 import type {User} from "@/types";
 import type {UserGroup} from "@/types/user-group";
@@ -51,11 +52,11 @@ export default function UserForm({ edit = false, backHref = null }: { edit?: boo
     return (
         <>
             <form onSubmit={submit}>
-                <Head title={"Spieler " + (edit ? 'bearbeiten' : 'erstellen')} />
+                <Head title={edit ? t('Edit user') : t('Create user')} />
                 <FieldSet>
                     <FieldGroup className="grid sm:grid-cols-[1fr_1fr_1fr]">
                         <Field>
-                            <FieldLabel htmlFor="firstname">Vorname</FieldLabel>
+                            <FieldLabel htmlFor="firstname">{t('First name')}</FieldLabel>
                             <Input id="firstname"
                                    value={data.firstname}
                                    onChange={e => setData('firstname', e.target.value)}
@@ -63,7 +64,7 @@ export default function UserForm({ edit = false, backHref = null }: { edit?: boo
                             <InputError message={errors.firstname} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor="lastname">Nachname</FieldLabel>
+                            <FieldLabel htmlFor="lastname">{t('Last name')}</FieldLabel>
                             <Input id="lastname" type="text"
                                    value={data.lastname}
                                    onChange={e => setData('lastname', e.target.value)}
@@ -71,7 +72,7 @@ export default function UserForm({ edit = false, backHref = null }: { edit?: boo
                             <InputError message={errors.lastname} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor="email">E-Mail</FieldLabel>
+                            <FieldLabel htmlFor="email">{t('Email')}</FieldLabel>
                             <Input id="email" type="text"
                                    value={data.email}
                                    onChange={e => setData('email', e.target.value)}
@@ -82,14 +83,14 @@ export default function UserForm({ edit = false, backHref = null }: { edit?: boo
 
                     {!edit && <FieldGroup className="grid sm:grid-cols-[2fr_2fr]">
                         <Field>
-                            <FieldLabel htmlFor="password">Password</FieldLabel>
+                            <FieldLabel htmlFor="password">{t('Password')}</FieldLabel>
                             <Input id="password" type="password"
                                    value={data.password}
                                    onChange={e => setData('password', e.target.value)}
                             />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor="password_confirmation">Password wiederholen</FieldLabel>
+                            <FieldLabel htmlFor="password_confirmation">{t('Confirm password')}</FieldLabel>
                             <Input id="password_confirmation" type="password"
                                    value={data.password_confirmation}
                                    onChange={e => setData('password_confirmation', e.target.value)}
@@ -102,7 +103,7 @@ export default function UserForm({ edit = false, backHref = null }: { edit?: boo
 
                     <FieldGroup className="grid sm:grid-cols-[2fr_2fr]">
                         <Field>
-                            <FieldLabel htmlFor="user_groups">Benutzergruppe</FieldLabel>
+                            <FieldLabel htmlFor="user_groups">{t('User group')}</FieldLabel>
                             <MultipleSelector
                                 value={selectedUserGroups}
                                 onChange={opts => {
@@ -110,16 +111,16 @@ export default function UserForm({ edit = false, backHref = null }: { edit?: boo
                                     setData('user_groups', opts.map(o => o.value));
                                 }}
                                 defaultOptions={userGroupOption}
-                                placeholder="Benutzergruppe wählen"
+                                placeholder={t('Select a user group')}
                                 hidePlaceholderWhenSelected
-                                emptyIndicator={<p className="text-center text-sm">Keine Benutzergruppe gefunden</p>}
+                                emptyIndicator={<p className="text-center text-sm">{t('No user group found')}</p>}
                             />
                             <InputError message={errors.user_groups} />
                         </Field>
                     </FieldGroup>
                     <Field className="w-fit flex-row">
-                        <Button type="submit" disabled={processing}>{edit ? 'Aktualisieren' : 'Erstellen'}</Button>
-                        {edit && backHref && <Button variant="secondary" type="button" onClick={() => router.get(backHref)}>Zurück</Button>}
+                        <Button type="submit" disabled={processing}>{edit ? t('Update') : t('Create')}</Button>
+                        {edit && backHref && <Button variant="secondary" type="button" onClick={() => router.get(backHref)}>{t('Back')}</Button>}
                     </Field>
                 </FieldSet>
             </form>

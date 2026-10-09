@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import { t } from '@/locale/translate';
 import {DataTable} from "@/components/table/data-table";
 import {Button} from "@/components/ui/button";
 import {Dialog, DialogContent, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
@@ -34,7 +35,7 @@ export default function PlayerSearchDialog({positions, clubs, selectPlayer, valu
     const dialogTrigger = (
         <div className="grid grid-cols-[1fr_auto] gap-4">
             <DialogTrigger asChild>
-                <Button variant="outline">Spieler {selectedPlayer ? 'ändern' : 'wählen'}</Button>
+                <Button variant="outline">{selectedPlayer ? t('Change player') : t('Select player')}</Button>
             </DialogTrigger>
             <PlayerCreateDialog onCreatedPlayer={handlePlayerSelected}/>
         </div>
@@ -50,13 +51,13 @@ export default function PlayerSearchDialog({positions, clubs, selectPlayer, valu
             {value && <PlayerView player={value} button={dialogTrigger}/>}
 
             <DialogContent variant="large">
-                <DialogTitle>Spielersuche</DialogTitle>
+                <DialogTitle>{t('Player search')}</DialogTitle>
                 <div className="relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                     <PlayerSearchForm positions={positions} clubs={clubs} returnData={true} onResponse={setPlayers}/>
                 </div>
 
                 <div className="relative overflow-hidden rounded-xl md:min-h-min dark:border-sidebar-border">
-                    <DataTable columns={columns} data={players} textOnEmpty={'Kein Spieler gefunden'}/>
+                    <DataTable columns={columns} data={players} textOnEmpty={t('No player found')}/>
                 </div>
             </DialogContent>
         </Dialog>

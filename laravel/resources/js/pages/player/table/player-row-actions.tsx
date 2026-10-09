@@ -1,4 +1,5 @@
 import {router} from "@inertiajs/react";
+import { t } from '@/locale/translate';
 import {MoreHorizontal} from "lucide-react"
 import {useState} from "react";
 import {
@@ -55,14 +56,14 @@ export function PlayerRowActions({player}: { player: Player }) {
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="h-8 w-8 p-0">
-                        <span className="sr-only">Menü öffnen</span>
+                        <span className="sr-only">{t('Open menu')}</span>
                         <MoreHorizontal className="h-4 w-4"/>
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     {canView && (
                         <DropdownMenuItem onClick={() => router.visit(playerRoute.show.url(player.id))}>
-                            Spieler ansehen
+                            {t('View player')}
                         </DropdownMenuItem>
                     )}
 
@@ -70,17 +71,17 @@ export function PlayerRowActions({player}: { player: Player }) {
 
                     {canCreateGameEvaluation && (
                         <DropdownMenuItem onClick={() => router.visit(gameEvaluation.create.url({query: {[Name.playerId]: player.id}}))}>
-                            Spielbewertung erstellen
+                            {t('Create match evaluation')}
                         </DropdownMenuItem>
                     )}
                     {canCreatePlayerEvaluation && (
                         <DropdownMenuItem onClick={() => router.visit(playerEvaluation.create.url({query: {[Name.playerId]: player.id}}))}>
-                            Interne Spielerbewertung erstellen
+                            {t('Create internal player evaluation')}
                         </DropdownMenuItem>
                     )}
                     {canViewEvaluation && (
                         <DropdownMenuItem onClick={() => evaluationSearchRequest({player_ids: [player.id], open_tab: 'player'})}>
-                            Bewertung anzeigen
+                            {t('View evaluations')}
                         </DropdownMenuItem>
                     )}
 
@@ -88,12 +89,12 @@ export function PlayerRowActions({player}: { player: Player }) {
 
                     {canEdit && (
                         <DropdownMenuItem onClick={() => router.visit(playerRoute.edit.url(player.id))}>
-                            Spieler bearbeiten
+                            {t('Edit player')}
                         </DropdownMenuItem>
                     )}
                     {canDelete && (
                         <DropdownMenuItem onSelect={() => setDeleteOpen(true)} className="text-destructive!">
-                            Spieler löschen
+                            {t('Delete player')}
                         </DropdownMenuItem>
                     )}
                 </DropdownMenuContent>
@@ -102,15 +103,15 @@ export function PlayerRowActions({player}: { player: Player }) {
             <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Spieler wirklich löschen?</AlertDialogTitle>
+                        <AlertDialogTitle>{t('Delete this player?')}</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Diese Aktion kann nicht rückgängig gemacht werden.
+                            {t('This action cannot be undone.')}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                        <AlertDialogCancel>{t('Cancel')}</AlertDialogCancel>
                         <AlertDialogAction variant="destructive" onClick={() => router.delete(playerRoute.destroy.url(player.id))}>
-                            Löschen
+                            {t('Delete')}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>

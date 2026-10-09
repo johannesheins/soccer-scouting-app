@@ -1,24 +1,24 @@
-import {administration} from '@/routes';
-import userGroup from "@/routes/administration/user-group";
 import UserForm from "@/components/from/user-form";
+import { t } from '@/locale/translate';
+import {administration} from '@/routes';
 import user from "@/routes/administration/user";
 
 export default function UserCreate() {
     return <UserForm />;
 }
 
-UserCreate.layout = {
+UserCreate.layout = () => ({
     breadcrumbs: [
         {
-            title: 'Verwaltung',
+            title: t('Administration'),
             href: administration(),
         },
         {
-            title: 'Benutzer',
+            title: t('Users'),
             href: user.index(),
         },
         {
-            title: 'Benutzer erstellen'
+            title: t('Create user')
         }
     ],
-};
+});

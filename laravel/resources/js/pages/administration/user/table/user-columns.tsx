@@ -1,24 +1,25 @@
 "use client"
 
-import {ColumnDef} from "@tanstack/react-table"
+import type {ColumnDef} from "@tanstack/react-table"
 import sortHeader from "@/components/table/table-header-sort";
-import {User} from "@/types";
+import { t } from '@/locale/translate';
 import {UserRowActions} from "@/pages/administration/user/table/user-row-actions";
+import type {User} from "@/types";
 
 export const userColumns: ColumnDef<User>[] = [
     {
         accessorKey: "firstname",
-        header: sortHeader("Vorname"),
+        header: sortHeader(() => t('First name')),
         cell: ({row}) => <div className="font-medium">{row.getValue("firstname")}</div>,
     },
     {
         accessorKey: "lastname",
-        header: sortHeader("Nachname"),
+        header: sortHeader(() => t('Last name')),
         cell: ({row}) => <div className="font-medium">{row.getValue("lastname")}</div>,
     },
     {
         accessorKey: "email",
-        header: sortHeader("E-Mail"),
+        header: sortHeader(() => t('Email')),
         cell: ({row}) => <div className="font-medium">{row.getValue("email")}</div>,
     },
     {

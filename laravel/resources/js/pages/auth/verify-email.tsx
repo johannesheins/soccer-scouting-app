@@ -3,18 +3,20 @@ import { Form, Head } from '@inertiajs/react';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
+import { t } from '@/locale/translate';
 import { logout } from '@/routes';
 import { send } from '@/routes/verification';
 
 export default function VerifyEmail({ status }: { status?: string }) {
     return (
         <>
-            <Head title="E-Mail-Verifizierung" />
+            <Head title={t('Email verification')} />
 
             {status === 'verification-link-sent' && (
                 <div className="mb-4 text-center text-sm font-medium text-green-600">
-                    Ein neuer Bestätigungslink wurde an die E-Mail-Adresse
-                    gesendet, die du bei der Registrierung angegeben hast.
+                    {t(
+                        'A new verification link has been sent to the email address you provided during registration.',
+                    )}
                 </div>
             )}
 
@@ -23,14 +25,14 @@ export default function VerifyEmail({ status }: { status?: string }) {
                     <>
                         <Button disabled={processing} variant="secondary">
                             {processing && <Spinner />}
-                            Bestätigungs-E-Mail erneut senden
+                            {t('Resend verification email')}
                         </Button>
 
                         <TextLink
                             href={logout()}
                             className="mx-auto block text-sm"
                         >
-                            Abmelden
+                            {t('Log out')}
                         </TextLink>
                     </>
                 )}
@@ -39,8 +41,8 @@ export default function VerifyEmail({ status }: { status?: string }) {
     );
 }
 
-VerifyEmail.layout = {
-    title: 'E-Mail verifizieren',
+VerifyEmail.layout = () => ({
+    title: t('Verify email'),
     description:
-        'Bitte verifiziere deine E-Mail-Adresse, indem du auf den Link in der soeben gesendeten E-Mail klickst.',
-};
+        t('Please verify your email address by clicking on the link we just emailed to you.'),
+});

@@ -1,4 +1,5 @@
 import {Head, usePage} from "@inertiajs/react";
+import { t } from '@/locale/translate';
 import React from "react";
 import {DataTable} from "@/components/table/data-table";
 import PlayerSearchForm from "@/pages/player/player-search-form";
@@ -15,28 +16,28 @@ export default function PlayerSearch(){
 
     return (
         <>
-            <Head title="Spieler suchen" />
+            <Head title={t('Search players')} />
             <div className="flex h-full flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                     <PlayerSearchForm positions={positions} clubs={clubs} />
                 </div>
 
                 <div className="relative overflow-hidden rounded-xl md:min-h-min dark:border-sidebar-border">
-                    <DataTable columns={playerColumns} data={players} textOnEmpty={'Kein Spieler gefunden'}/>
+                    <DataTable columns={playerColumns} data={players} textOnEmpty={t('No player found')}/>
                 </div>
             </div>
         </>
     )
 }
 
-PlayerSearch.layout = {
+PlayerSearch.layout = () => ({
     breadcrumbs: [
         {
-            title: 'Spieler',
+            title: t('Players'),
             href: player.index(),
         },
         {
-            title: 'Spieler suchen',
+            title: t('Search players'),
         },
     ],
-};
+});

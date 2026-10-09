@@ -4,22 +4,23 @@ import PasswordInput from '@/components/password-input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
+import { t } from '@/locale/translate';
 import { store } from '@/routes/password/confirm';
 
 export default function ConfirmPassword() {
     return (
         <>
-            <Head title="Passwort bestätigen" />
+            <Head title={t('Confirm password')} />
 
             <Form action={store().url} method={store().method} resetOnSuccess={['password']}>
                 {({ processing, errors }) => (
                     <div className="space-y-6">
                         <div className="grid gap-2">
-                            <Label htmlFor="password">Passwort</Label>
+                            <Label htmlFor="password">{t('Password')}</Label>
                             <PasswordInput
                                 id="password"
                                 name="password"
-                                placeholder="Passwort"
+                                placeholder={t('Password')}
                                 autoComplete="current-password"
                                 autoFocus
                             />
@@ -34,7 +35,7 @@ export default function ConfirmPassword() {
                                 data-test="confirm-password-button"
                             >
                                 {processing && <Spinner />}
-                                Passwort bestätigen
+                                {t('Confirm password')}
                             </Button>
                         </div>
                     </div>
@@ -44,8 +45,8 @@ export default function ConfirmPassword() {
     );
 }
 
-ConfirmPassword.layout = {
-    title: 'Passwort bestätigen',
+ConfirmPassword.layout = () => ({
+    title: t('Confirm password'),
     description:
-        'Dies ist ein gesicherter Bereich der Anwendung. Bitte bestätige dein Passwort, bevor du fortfährst.',
-};
+        t('This is a secure area of the application. Please confirm your password before continuing.'),
+});

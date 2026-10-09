@@ -1,4 +1,5 @@
 "use client"
+import { t } from '@/locale/translate';
 
 import type {ColumnDef} from "@tanstack/react-table"
 import sortHeader from "@/components/table/table-header-sort";
@@ -13,7 +14,7 @@ import type {PlayerSmall} from "@/types/player";
 
 const player:ColumnDef<Evaluation> = {
     accessorKey: "player",
-    header: sortHeader("Spieler"),
+    header: sortHeader(() => t('Player')),
     cell: ({row}) => {
         const player: PlayerSmall = row.getValue("player");
         return <div className="font-medium">{player.firstname} {player.lastname}</div>
@@ -22,7 +23,7 @@ const player:ColumnDef<Evaluation> = {
 
 const homeClub:ColumnDef<Evaluation> = {
     accessorKey: "home_club",
-    header: sortHeader("Heimverein"),
+    header: sortHeader(() => t('Home club')),
     sortingFn: (a, b) => {
         const ca: Club = a.getValue("home_club")
         const cb: Club = b.getValue("home_club")
@@ -36,7 +37,7 @@ const homeClub:ColumnDef<Evaluation> = {
 
 const guestClub:ColumnDef<Evaluation> = {
     accessorKey: "guest_club",
-    header: sortHeader("Gastverein"),
+    header: sortHeader(() => t('Away club')),
     sortingFn: (a, b) => {
         const ca: Club = a.getValue("guest_club")
         const cb: Club = b.getValue("guest_club")
@@ -50,7 +51,7 @@ const guestClub:ColumnDef<Evaluation> = {
 
 const kickoffDate:ColumnDef<Evaluation> = {
     accessorKey: "date",
-    header: sortHeader("Datum"),
+    header: sortHeader(() => t('Date')),
     cell: ({ row }) => {
         const d = date(row.getValue('date'))
         return <div className="font-medium">{d}</div>
@@ -59,7 +60,7 @@ const kickoffDate:ColumnDef<Evaluation> = {
 
 const score:ColumnDef<Evaluation> = {
     accessorKey: "total_score",
-    header: sortHeader("Punkte"),
+    header: sortHeader(() => t('Points')),
     cell: ({ row }) => {
         return <div className="font-medium">{row.getValue('total_score')}</div>
     },
@@ -67,7 +68,7 @@ const score:ColumnDef<Evaluation> = {
 
 const creator:ColumnDef<Evaluation> = {
     accessorKey: "creator",
-    header: sortHeader("Autor"),
+    header: sortHeader(() => t('Author')),
     cell: ({ row }) => {
         const creator: User = row.getValue('creator');
         return <div className="font-medium">{creator.firstname} {creator.lastname}</div>

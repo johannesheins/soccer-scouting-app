@@ -20,6 +20,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { t } from '@/locale/translate';
 import evaluationCriteria from "@/routes/evaluation-criteria";
 import type {EvaluationCriteria} from "@/types/evaluation-criteria";
 
@@ -31,17 +32,17 @@ export function EvaluationCriteriaRowActions({criterion}: { criterion: Evaluatio
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="h-8 w-8 p-0">
-                        <span className="sr-only">Menü öffnen</span>
+                        <span className="sr-only">{t('Open menu')}</span>
                         <MoreHorizontal className="h-4 w-4"/>
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuItem asChild>
-                        <Link href={evaluationCriteria.edit.url(criterion.id)}>Bearbeiten</Link>
+                        <Link href={evaluationCriteria.edit.url(criterion.id)}>{t('Edit')}</Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onSelect={() => setDeleteOpen(true)} className="text-destructive!">
-                        Bewertungskriterium löschen
+                        {t('Delete evaluation criterion')}
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
@@ -49,15 +50,15 @@ export function EvaluationCriteriaRowActions({criterion}: { criterion: Evaluatio
             <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Bewertungskriterium wirklich löschen?</AlertDialogTitle>
+                        <AlertDialogTitle>{t('Delete this evaluation criterion?')}</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Diese Aktion kann nicht rückgängig gemacht werden.
+                            {t('This action cannot be undone.')}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+                        <AlertDialogCancel>{t('Cancel')}</AlertDialogCancel>
                         <AlertDialogAction variant="destructive" onClick={() => router.delete(evaluationCriteria.destroy.url(criterion.id))}>
-                            Löschen
+                            {t('Delete')}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>

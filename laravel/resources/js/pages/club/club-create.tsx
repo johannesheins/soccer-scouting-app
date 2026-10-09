@@ -1,18 +1,19 @@
 import ClubForm from "@/components/from/club-form";
+import { t } from '@/locale/translate';
 import club from "@/routes/club";
 
 export default function ClubCreate() {
     return <ClubForm />;
 }
 
-ClubCreate.layout = {
+ClubCreate.layout = () => ({
     breadcrumbs: [
         {
-            title: 'Verein',
+            title: t('Clubs'),
             href: club.index(),
         },
         {
-            title: 'Verein erstellen',
+            title: t('Create club'),
         },
     ],
-};
+});

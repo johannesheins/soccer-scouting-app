@@ -1,9 +1,11 @@
-import {FieldLabel} from "@/components/ui/field";
-import MultipleSelector, {type Option} from "@/components/ui/multi-select";
-import InputError from "@/components/input-error";
 import React, {useState} from "react";
-import {getYearOptions} from "@/hooks/form-options";
+import InputError from "@/components/input-error";
+import {FieldLabel} from "@/components/ui/field";
+import MultipleSelector from "@/components/ui/multi-select";
+import type {Option} from "@/components/ui/multi-select";
 import {SingleSelector} from "@/components/ui/single-select";
+import {getYearOptions} from "@/hooks/form-options";
+import { t } from '@/locale/translate';
 
 type Props = {
     variant: "multiple" | "single",
@@ -22,7 +24,7 @@ export default function YearOfBirthInput({variant = "single", name, selectedValu
 
     return (
         <>
-            <FieldLabel htmlFor={name}>Jahrgang</FieldLabel>
+            <FieldLabel htmlFor={name}>{t('Year of birth')}</FieldLabel>
             {variant === "multiple" ? (
                 <MultipleSelector
                     value={selectedYearOfBirth}
@@ -31,9 +33,9 @@ export default function YearOfBirthInput({variant = "single", name, selectedValu
                         setData(name, opts.map(o => Number(o.value)));
                     }}
                     defaultOptions={yearOfBirthOptions}
-                    placeholder="Jahrgang wählen"
+                    placeholder={t('Select year of birth')}
                     hidePlaceholderWhenSelected
-                    emptyIndicator={<p className="text-center text-sm">Keinen Jahrgang gefunden</p>}
+                    emptyIndicator={<p className="text-center text-sm">{t('No year of birth found')}</p>}
                     maxSelected={maxSelected}
                 />
             ) : (
@@ -44,9 +46,9 @@ export default function YearOfBirthInput({variant = "single", name, selectedValu
                         setData(name, Number(opts[0]?.value) ?? '');
                     }}
                     defaultOptions={yearOfBirthOptions}
-                    placeholder="Jahrgang wählen"
+                    placeholder={t('Select year of birth')}
                     hidePlaceholderWhenSelected
-                    emptyIndicator={<p className="text-center text-sm">Keinen Jahrgang gefunden</p>}
+                    emptyIndicator={<p className="text-center text-sm">{t('No year of birth found')}</p>}
                 />
             )}
             <InputError message={error} />

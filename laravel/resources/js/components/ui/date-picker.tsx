@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import { format } from "date-fns"
-import { de } from "date-fns/locale"
 import { ChevronDownIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -16,6 +15,7 @@ import {
 } from "@/components/ui/popover"
 import InputError from "@/components/input-error";
 import {cn} from "@/lib/utils";
+import { dateFnsLocale, t } from "@/locale/translate";
 
 type Props = {
     dateLabel?: string,
@@ -40,7 +40,7 @@ export function DatePicker({ dateLabel, dateName, dateValue, dateErrorMessage, d
                             id="date-picker-optional"
                             className={cn("w-32 justify-between font-normal", isPlaceholder ? 'text-muted-foreground' : '')}
                         >
-                            {date ? format(date, "dd.MM.yyyy", { locale: de }) : "Datum wählen"}
+                            {date ? format(date, "P", { locale: dateFnsLocale() }) : t("Pick a date")}
                             <ChevronDownIcon />
                         </Button>
                     </PopoverTrigger>
@@ -50,7 +50,7 @@ export function DatePicker({ dateLabel, dateName, dateValue, dateErrorMessage, d
                             selected={date}
                             captionLayout="dropdown"
                             defaultMonth={date}
-                            locale={de}
+                            locale={dateFnsLocale()}
                             onSelect={(date) => {
                                 setDate(date)
                                 setOpen(false)

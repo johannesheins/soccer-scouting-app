@@ -1,40 +1,41 @@
 import {Head, Link} from '@inertiajs/react';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
-import {administration} from '@/routes';
 import {Layers, Star, User, Users} from "lucide-react";
-import userGroup from "@/routes/administration/user-group";
+import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
+import { t } from '@/locale/translate';
+import {administration} from '@/routes';
 import user from "@/routes/administration/user";
+import userGroup from "@/routes/administration/user-group";
 import evaluationCriteria from "@/routes/evaluation-criteria";
 import evaluationCriteriaGroup from "@/routes/evaluation-criteria-group";
 
 export default function Dashboard() {
     return (
         <>
-            <Head title="Startseite" />
+            <Head title={t('Home')} />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3">
                     <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <Link href={userGroup.index()} title="Benutzergruppen" className="flex flex-col gap-2 justify-center items-center h-full">
+                        <Link href={userGroup.index()} title={t('User groups')} className="flex flex-col gap-2 justify-center items-center h-full">
                             <Users className={"size-10 icon-color"}/>
-                            <p className="text-icon-color font-bold">Benutzergruppen</p>
+                            <p className="text-icon-color font-bold">{t('User groups')}</p>
                         </Link>
                     </div>
                     <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <Link href={user.index()} title="Benutzer" className="flex flex-col gap-2 justify-center items-center h-full">
+                        <Link href={user.index()} title={t('Users')} className="flex flex-col gap-2 justify-center items-center h-full">
                             <User className={"size-10 icon-color"}/>
-                            <p className="text-icon-color font-bold">Benutzer</p>
+                            <p className="text-icon-color font-bold">{t('Users')}</p>
                         </Link>
                     </div>
                     <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <Link href={evaluationCriteria.index()} title="Bewertungskriterien" className="flex flex-col gap-2 justify-center items-center h-full">
+                        <Link href={evaluationCriteria.index()} title={t('Evaluation criteria')} className="flex flex-col gap-2 justify-center items-center h-full">
                             <Star className={"size-10 icon-color"}/>
-                            <p className="text-icon-color font-bold">Bewertungskriterien</p>
+                            <p className="text-icon-color font-bold">{t('Evaluation criteria')}</p>
                         </Link>
                     </div>
                     <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <Link href={evaluationCriteriaGroup.index()} title="Kriteriengruppen" className="flex flex-col gap-2 justify-center items-center h-full">
+                        <Link href={evaluationCriteriaGroup.index()} title={t('Criteria groups')} className="flex flex-col gap-2 justify-center items-center h-full">
                             <Layers className={"size-10 icon-color"}/>
-                            <p className="text-icon-color font-bold">Kriteriengruppen</p>
+                            <p className="text-icon-color font-bold">{t('Criteria groups')}</p>
                         </Link>
                     </div>
                 </div>
@@ -46,11 +47,11 @@ export default function Dashboard() {
     );
 }
 
-Dashboard.layout = {
+Dashboard.layout = () => ({
     breadcrumbs: [
         {
-            title: 'Verwaltung',
+            title: t('Administration'),
             href: administration(),
         },
     ],
-};
+});

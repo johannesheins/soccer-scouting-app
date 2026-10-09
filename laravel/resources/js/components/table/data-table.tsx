@@ -1,14 +1,17 @@
 "use client"
 
-import {
+import type {
     ColumnDef,
+    SortingState} from "@tanstack/react-table";
+import {
     flexRender,
     getCoreRowModel,
     useReactTable,
     getPaginationRowModel,
-    getSortedRowModel,
-    SortingState,
+    getSortedRowModel
 } from "@tanstack/react-table"
+import * as React from "react"
+import { Button } from "@/components/ui/button"
 import {
     Table,
     TableBody,
@@ -17,9 +20,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
-import * as React from "react"
 import {cn} from "@/lib/utils";
+import { t } from '@/locale/translate';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -103,7 +105,7 @@ export function DataTable<TData, TValue>({
                     onClick={() => table.previousPage()}
                     disabled={!table.getCanPreviousPage()}
                 >
-                    Vorherige
+                    {t('Previous')}
                 </Button>
                 <Button
                     variant="outline"
@@ -111,7 +113,7 @@ export function DataTable<TData, TValue>({
                     onClick={() => table.nextPage()}
                     disabled={!table.getCanNextPage()}
                 >
-                    Nächste
+                    {t('Next')}
                 </Button>
             </div>
         </div>

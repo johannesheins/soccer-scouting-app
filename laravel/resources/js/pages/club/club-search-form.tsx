@@ -6,6 +6,7 @@ import {Field, FieldGroup, FieldLabel, FieldSet} from "@/components/ui/field";
 import {Input} from "@/components/ui/input";
 import {usePreviousUrl} from "@/hooks/use-previous-url";
 import {useUrlParam} from "@/hooks/useUrlParam";
+import { t } from '@/locale/translate';
 import club from "@/routes/club";
 
 export default function ClubSearchForm(){
@@ -33,7 +34,7 @@ export default function ClubSearchForm(){
                 <FieldSet>
                     <FieldGroup className="grid sm:grid-cols-2 xl:grid-cols-3">
                         <Field>
-                            <FieldLabel htmlFor="clubname">Vereinsname</FieldLabel>
+                            <FieldLabel htmlFor="clubname">{t('Club name')}</FieldLabel>
                             <Input id="clubname"
                                    value={data.clubname}
                                    onChange={e => setData('clubname', e.target.value)}
@@ -41,7 +42,7 @@ export default function ClubSearchForm(){
                             <InputError message={errors.clubname} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor="zip_code">PLZ</FieldLabel>
+                            <FieldLabel htmlFor="zip_code">{t('Postcode')}</FieldLabel>
                             <Input id="zip_code"
                                    value={data.zip_code}
                                    onChange={e => setData('zip_code', e.target.value)}
@@ -49,7 +50,7 @@ export default function ClubSearchForm(){
                             <InputError message={errors.zip_code} />
                         </Field>
                         <Field>
-                            <FieldLabel htmlFor="city">Stadt</FieldLabel>
+                            <FieldLabel htmlFor="city">{t('City')}</FieldLabel>
                             <Input id="city"
                                    value={data.city}
                                    onChange={e => setData('city', e.target.value)}
@@ -58,8 +59,8 @@ export default function ClubSearchForm(){
                         </Field>
                     </FieldGroup>
                     <Field className="w-fit flex flex-row">
-                        <Button type="submit" disabled={processing}>Suchen</Button>
-                        <Button type="button" variant="secondary" onClick={resetForm}>Zurücksetzen</Button>
+                        <Button type="submit" disabled={processing}>{t('Search')}</Button>
+                        <Button type="button" variant="secondary" onClick={resetForm}>{t('Reset')}</Button>
                     </Field>
                 </FieldSet>
             </form>

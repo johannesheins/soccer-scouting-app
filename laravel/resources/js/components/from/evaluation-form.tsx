@@ -17,16 +17,17 @@ import {SingleSelector} from "@/components/ui/single-select";
 import {Textarea} from "@/components/ui/textarea";
 import {PlayerRequestNameEnum as Name} from "@/enums";
 import {toClubOptions, toRecommendationOptions} from "@/hooks/form-options";
+import { t } from '@/locale/translate';
 import PlayerSearchDialog from "@/pages/player/player-search-dialog";
 import {ScoreCalculationService} from "@/services/score-calculation-service";
 import type {Club} from "@/types/club";
-import {EvaluationRoutes, EvaluationSmallType, EvaluationSmallTypeMap} from "@/types/evaluation/evaluation";
+import type {EvaluationRoutes, EvaluationSmallType, EvaluationSmallTypeMap} from "@/types/evaluation/evaluation";
+import type {GameEvaluationSmall} from "@/types/evaluation/game-evaluation";
+import type {PlayerEvaluationSmall} from "@/types/evaluation/player-evaluation";
 import type {EvaluationCriteriaGroups} from "@/types/evaluation-criteria";
 import type {Player} from "@/types/player";
 import type {Position} from "@/types/position";
 import type {Recommendation} from "@/types/recommendation";
-import {GameEvaluationSmall} from "@/types/evaluation/game-evaluation";
-import {PlayerEvaluationSmall} from "@/types/evaluation/player-evaluation";
 
 
 export default function EvaluationForm<T extends  EvaluationSmallType>({ type, route, edit = false, backHref = null }: {
@@ -115,12 +116,12 @@ export default function EvaluationForm<T extends  EvaluationSmallType>({ type, r
     return (
         <>
             <div className="max-w-6xl">
-                <Head title={"Bewertung " + (edit ? 'bearbeiten' : 'erstellen')} />
+                <Head title={edit ? t('Edit evaluation') : t('Create evaluation')} />
 
                 <div className="flex flex-1 flex-col gap-4 p-4">
                     <div className="relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                         <FieldSet>
-                            <FieldLegend>Spieler</FieldLegend>
+                            <FieldLegend>{t('Player')}</FieldLegend>
                             <FieldGroup>
                                 <Field>
                                     <PlayerSearchDialog positions={positions} clubs={clubs} selectPlayer={true} value={player} onSelectedPlayer={setSelectedPlayer}/>
@@ -132,13 +133,13 @@ export default function EvaluationForm<T extends  EvaluationSmallType>({ type, r
 
                     <div className="relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                         <FieldSet>
-                            <FieldLegend>Spieldaten</FieldLegend>
+                            <FieldLegend>{t('Match details')}</FieldLegend>
                             <FieldGroup className="grid grid-cols-2 gap-4">
                                 {isGameEvaluation && (
                                     <>
                                         <FieldGroup className="grid grid-cols-[3fr_1fr] gap-4">
                                             <Field>
-                                                <FieldLabel htmlFor="home_club_id">Heimverein</FieldLabel>
+                                                <FieldLabel htmlFor="home_club_id">{t('Home club')}</FieldLabel>
                                                 <SingleSelector
                                                     value={selectedHomeClub}
                                                     onChange={opts => {
@@ -147,14 +148,14 @@ export default function EvaluationForm<T extends  EvaluationSmallType>({ type, r
                                                     }}
                                                     defaultOptions={clubOptions}
                                                     groupBy="group"
-                                                    placeholder="Heimmverein wählen"
+                                                    placeholder={t('Select home club')}
                                                     hidePlaceholderWhenSelected
-                                                    emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
+                                                    emptyIndicator={<p className="text-center text-sm">{t('No club found')}</p>}
                                                 />
                                                 <InputError message={errors.home_club_id} />
                                             </Field>
                                             <Field>
-                                                <FieldLabel htmlFor="home_team">Mannschaft</FieldLabel>
+                                                <FieldLabel htmlFor="home_team">{t('Team')}</FieldLabel>
                                                 <Input
                                                     type="text"
                                                     name="home_team"
@@ -169,7 +170,7 @@ export default function EvaluationForm<T extends  EvaluationSmallType>({ type, r
                                         </FieldGroup>
                                         <FieldGroup className="grid grid-cols-[3fr_1fr] gap-4">
                                             <Field>
-                                                <FieldLabel htmlFor="guest_club_id">Gastverein</FieldLabel>
+                                                <FieldLabel htmlFor="guest_club_id">{t('Away club')}</FieldLabel>
                                                 <SingleSelector
                                                     value={selectedGuestClub}
                                                     onChange={opts => {
@@ -178,14 +179,14 @@ export default function EvaluationForm<T extends  EvaluationSmallType>({ type, r
                                                     }}
                                                     defaultOptions={clubOptions}
                                                     groupBy="group"
-                                                    placeholder="Gastverein wählen"
+                                                    placeholder={t('Select away club')}
                                                     hidePlaceholderWhenSelected
-                                                    emptyIndicator={<p className="text-center text-sm">Keinen Verein gefunden</p>}
+                                                    emptyIndicator={<p className="text-center text-sm">{t('No club found')}</p>}
                                                 />
                                                 <InputError message={errors.guest_club_id} />
                                             </Field>
                                             <Field>
-                                                <FieldLabel htmlFor="guest_team">Mannschaft</FieldLabel>
+                                                <FieldLabel htmlFor="guest_team">{t('Team')}</FieldLabel>
                                                 <Input
                                                     type="text"
                                                     name="guest_team"
@@ -203,7 +204,7 @@ export default function EvaluationForm<T extends  EvaluationSmallType>({ type, r
 
                                 <Field>
                                     <DatePicker
-                                        dateLabel="Datum"
+                                        dateLabel={t('Date')}
                                         dateName="date"
                                         dateValue={evaluation?.date}
                                         dateErrorMessage={errors.date}
@@ -215,7 +216,7 @@ export default function EvaluationForm<T extends  EvaluationSmallType>({ type, r
                     </div>
 
                     <form onSubmit={submit} id="evaluation-from" className="flex flex-1 flex-col gap-4">
-                        {evaluationCriteriaGroups.length <= 0 && <p className="p-5">Keine Bewertungskriterien gefunden</p>}
+                        {evaluationCriteriaGroups.length <= 0 && <p className="p-5">{t('No evaluation criteria found')}</p>}
                         {evaluationCriteriaGroups.map(group => (
                             <div key={group.id} className="grid gap-y-4 relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                                 <FieldSet>
@@ -241,28 +242,28 @@ export default function EvaluationForm<T extends  EvaluationSmallType>({ type, r
 
                         <div className="grid gap-y-4 relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                             <FieldSet>
-                                <FieldLegend>Sonstiges</FieldLegend>
+                                <FieldLegend>{t('Other')}</FieldLegend>
                                 <FieldGroup>
                                     <Field>
-                                        <FieldLabel htmlFor="strengths">Stärken</FieldLabel>
+                                        <FieldLabel htmlFor="strengths">{t('Strengths')}</FieldLabel>
                                         <Textarea id="strengths"
                                             onChange={e => setData('strengths', e.target.value)}
-                                            placeholder="Stärken eintragen"
+                                            placeholder={t('Enter strengths')}
                                             value={data.strengths}
                                         />
                                         <InputError message={errors.strengths} />
                                     </Field>
                                     <Field>
-                                        <FieldLabel htmlFor="weaknesses">Schwächen</FieldLabel>
+                                        <FieldLabel htmlFor="weaknesses">{t('Weaknesses')}</FieldLabel>
                                         <Textarea id="weaknesses"
                                             onChange={e => setData('weaknesses', e.target.value)}
-                                            placeholder="Schwächen eintragen"
+                                            placeholder={t('Enter weaknesses')}
                                             value={data.weaknesses}
                                         />
                                         <InputError message={errors.weaknesses}/>
                                     </Field>
                                     <Field>
-                                        <FieldLabel>Empfehlung</FieldLabel>
+                                        <FieldLabel>{t('Recommendation')}</FieldLabel>
                                         <SingleSelector
                                             value={selectedRecommendation}
                                             onChange={opts => {
@@ -271,17 +272,17 @@ export default function EvaluationForm<T extends  EvaluationSmallType>({ type, r
                                             }}
                                             defaultOptions={recommendationOptions}
                                             groupBy="group"
-                                            placeholder="Empfehlung wählen"
+                                            placeholder={t('Select a recommendation')}
                                             hidePlaceholderWhenSelected
-                                            emptyIndicator={<p className="text-center text-sm">Keine Empfehlung gefunden</p>}
+                                            emptyIndicator={<p className="text-center text-sm">{t('No recommendation found')}</p>}
                                         />
                                         <InputError message={errors.recommendation_id}/>
                                     </Field>
                                     <Field>
-                                        <FieldLabel htmlFor="comment">Bemerkung</FieldLabel>
+                                        <FieldLabel htmlFor="comment">{t('Comment')}</FieldLabel>
                                         <Textarea id="comment"
                                             onChange={e => setData('comment', e.target.value)}
-                                            placeholder="Bemerkung eintragen"
+                                            placeholder={t('Enter a comment')}
                                             value={data.comment}
                                         />
                                         <InputError message={errors.comment}/>
@@ -295,15 +296,15 @@ export default function EvaluationForm<T extends  EvaluationSmallType>({ type, r
 
                     <FieldGroup className="grid grid-cols-2">
                         <Field className="w-fit flex-row">
-                            <Button type="submit" form="evaluation-from" disabled={processing}>{edit ? 'Aktualisieren' : 'Erstellen'}</Button>
+                            <Button type="submit" form="evaluation-from" disabled={processing}>{edit ? t('Update') : t('Create')}</Button>
                             {edit && backHref && (
                                 <Button variant="secondary" type="button" onClick={() => router.get(backHref)}>
-                                    Zurück
+                                    {t('Back')}
                                 </Button>
                             )}
                         </Field>
                         <Field>
-                            <span className="text-end font-medium">Gesamt: {calculateScores.getTotalScore()}</span>
+                            <span className="text-end font-medium">{t('Total: :score', { score: calculateScores.getTotalScore() })}</span>
                         </Field>
                     </FieldGroup>
                 </div>

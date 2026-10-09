@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\Settings\AppearanceController;
 use App\Http\Controllers\Settings\DashboardSettingsController;
 use App\Http\Controllers\Settings\ExpiredPasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\SecurityController;
 use Illuminate\Support\Facades\Route;
+
+Route::patch('settings/locale', [AppearanceController::class, 'updateLocale'])->name('locale.update');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('password/expired', [ExpiredPasswordController::class, 'edit'])->name('password.expired');
@@ -29,7 +32,7 @@ Route::middleware(['auth', 'verified', 'password.renewed'])->group(function () {
         ->middleware('throttle:6,1')
         ->name('user-password.update');
 
-    Route::inertia('settings/appearance', 'settings/appearance')->name('appearance.edit');
+    Route::get('settings/appearance', [AppearanceController::class, 'edit'])->name('appearance.edit');
 
     Route::get('settings/dashboard', [DashboardSettingsController::class, 'index'])->name('settings.dashboard.index');
     Route::post('settings/dashboard/update-pinned-clubs', [DashboardSettingsController::class, 'updatePlayerQuickSearchSettings'])->name('settings.dashboard.update-pinned-clubs');

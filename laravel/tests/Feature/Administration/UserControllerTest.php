@@ -1,10 +1,9 @@
 <?php
 
-namespace Feature\Administration;
+namespace Tests\Feature\Administration;
 
 use App\Models\User;
 use App\Models\UserGroup;
-use Tests\Feature\Administration\AdministrationTestCase;
 
 class UserControllerTest extends AdministrationTestCase
 {
@@ -169,12 +168,35 @@ class UserControllerTest extends AdministrationTestCase
             ->delete(route('administration.user.destroy', $user->id));
 
         $this->assertAdministrationRoute(['administration.user.destroy', $user->id]);
-        $this->assertDatabaseMissing('users', [
-            'id' => $user->id,
-        ]);
-        $this->assertDatabaseMissing('user_group_members', [
+        $this->assertSoftDeleted($user);
+        $this->assertDatabaseHas('user_group_members', [
             'user_id' => $user->id,
         ]);
         $response->assertRedirect(route('administration.user.index'));
+    }
+
+    public function test_index_excludes_soft_deleted_users()
+    {
+        $users = User::factory(3)->create();
+        $users->first()->delete();
+
+        $response = $this->actingAs($this->administratorUser)
+            ->get(route('administration.user.index'));
+
+        $response->assertOk();
+        $response->assertInertia(fn ($page) => $page
+            ->has('users', 2)
+        );
+    }
+
+    public function test_edit_soft_deleted_user_returns_not_found()
+    {
+        $user = User::factory()->create();
+        $user->delete();
+
+        $response = $this->actingAs($this->administratorUser)
+            ->get(route('administration.user.edit', $user->id));
+
+        $response->assertNotFound();
     }
 }

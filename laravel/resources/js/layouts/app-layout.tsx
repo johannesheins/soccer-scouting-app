@@ -1,3 +1,4 @@
+import LocaleConflictDialog from '@/components/locale-conflict-dialog';
 import AppLayoutTemplate from '@/layouts/app/app-sidebar-layout';
 import { Modal } from '@/lib/inertia-modal';
 import type { BreadcrumbItem } from '@/types';
@@ -21,6 +22,7 @@ export default function AppLayout({
                 </div>
             </div>
             <Modal />
+            <LocaleConflictDialog />
         </AppLayoutTemplate>
     );
 }

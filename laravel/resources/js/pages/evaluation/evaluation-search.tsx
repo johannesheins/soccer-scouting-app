@@ -1,14 +1,15 @@
 import {Head, usePage} from "@inertiajs/react";
 import React from "react";
 import {DataTable} from "@/components/table/data-table";
+import { t } from '@/locale/translate';
 import EvaluationSearchForm from "@/pages/evaluation/evaluation-search-form";
 import {useEvaluationColumns} from "@/pages/evaluation/table/evaluation-columns";
 import {ScoreCalculationService} from "@/services/score-calculation-service";
 import type {Club} from "@/types/club";
 import type {EvaluationSearchQuery} from "@/types/evaluation/evaluation-search-query";
+import type {EvaluationSearchResult} from "@/types/evaluation/search";
 import type {EvaluationCriteriaGroups} from "@/types/evaluation-criteria";
 import type {PlayerOption} from "@/types/player";
-import {EvaluationSearchResult} from "@/types/evaluation/search";
 
 type Props = {
     evaluationCriteriaGroups: EvaluationCriteriaGroups[],
@@ -31,7 +32,7 @@ export default function EvaluationSearch() {
 
     return (
         <>
-            <Head title="Spieler suchen" />
+            <Head title={t('Search evaluations')} />
             <div className="flex h-full flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                     <EvaluationSearchForm
@@ -43,7 +44,7 @@ export default function EvaluationSearch() {
                 </div>
 
                 <div className="relative overflow-hidden rounded-xl md:min-h-min dark:border-sidebar-border">
-                    <DataTable columns={evaluationColumns} data={evaluations} textOnEmpty={'Kein Bewertung gefunden'}/>
+                    <DataTable columns={evaluationColumns} data={evaluations} textOnEmpty={t('No evaluation found')}/>
                 </div>
             </div>
         </>

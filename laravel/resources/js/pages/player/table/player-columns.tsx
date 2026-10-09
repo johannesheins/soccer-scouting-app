@@ -1,4 +1,5 @@
 "use client"
+import { t } from '@/locale/translate';
 
 import type {ColumnDef} from "@tanstack/react-table"
 import sortHeader from "@/components/table/table-header-sort";
@@ -10,25 +11,25 @@ import {PlayerRowActions} from "./player-row-actions";
 
 const firstname:ColumnDef<Player> = {
     accessorKey: "firstname",
-    header: sortHeader("Vorname"),
+    header: sortHeader(() => t('First name')),
     cell: ({row}) => <div className="font-medium">{row.getValue("firstname")}</div>,
 };
 
 const lastname:ColumnDef<Player> = {
         accessorKey: "lastname",
-        header: sortHeader("Nachname"),
+        header: sortHeader(() => t('Last name')),
         cell: ({row}) => <div className="font-medium">{row.getValue("lastname")}</div>,
 };
 
 const yearOfBirth:ColumnDef<Player> = {
     accessorKey: "year_of_birth",
-    header: sortHeader("Jahrgang"),
+    header: sortHeader(() => t('Year of birth')),
     cell: ({row}) => <div className="font-medium">{row.getValue("year_of_birth")}</div>,
 };
 
 const club:ColumnDef<Player> = {
     accessorKey: "club",
-    header: sortHeader("Verein"),
+    header: sortHeader(() => t('Club')),
     sortingFn: (a, b) => {
         const ca: Club = a.getValue("club")
         const cb: Club = b.getValue("club")
@@ -42,7 +43,7 @@ const club:ColumnDef<Player> = {
 
 const positions:ColumnDef<Player> = {
     accessorKey: "positions",
-    header: "Positionen",
+    header: () => t('Positions'),
     cell: ({ row }) => {
         const positions: Position[] = row.getValue('positions') ?? []
         return <div className="font-medium">{positions.map(p => p.position_code).join(', ')}</div>

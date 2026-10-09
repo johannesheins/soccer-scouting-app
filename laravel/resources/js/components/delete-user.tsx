@@ -15,6 +15,7 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
+import { t } from '@/locale/translate';
 
 export default function DeleteUser() {
     const passwordInput = useRef<HTMLInputElement>(null);
@@ -23,14 +24,14 @@ export default function DeleteUser() {
         <div className="space-y-6">
             <Heading
                 variant="small"
-                title="Konto löschen"
-                description="Lösche dein Konto und alle zugehörigen Daten"
+                title={t('Delete account')}
+                description={t('Delete your account and all of its data')}
             />
             <div className="space-y-4 rounded-lg border border-red-100 bg-red-50 p-4 dark:border-red-200/10 dark:bg-red-700/10">
                 <div className="relative space-y-0.5 text-red-600 dark:text-red-100">
-                    <p className="font-medium">Warnung</p>
+                    <p className="font-medium">{t('Warning')}</p>
                     <p className="text-sm">
-                        Bitte gehe vorsichtig vor – diese Aktion kann nicht rückgängig gemacht werden.
+                        {t('Please proceed with caution, this cannot be undone.')}
                     </p>
                 </div>
 
@@ -40,17 +41,15 @@ export default function DeleteUser() {
                             variant="destructive"
                             data-test="delete-user-button"
                         >
-                            Konto löschen
+                            {t('Delete account')}
                         </Button>
                     </DialogTrigger>
                     <DialogContent>
                         <DialogTitle>
-                            Möchtest du dein Konto wirklich löschen?
+                            {t('Are you sure you want to delete your account?')}
                         </DialogTitle>
                         <DialogDescription>
-                            Sobald dein Konto gelöscht wird, werden alle zugehörigen
-                            Daten dauerhaft entfernt. Bitte gib dein Passwort ein,
-                            um die Löschung deines Kontos zu bestätigen.
+                            {t('Once your account is deleted, all of its data will be permanently removed. Please enter your password to confirm you want to permanently delete your account.')}
                         </DialogDescription>
 
                         <Form
@@ -70,14 +69,14 @@ export default function DeleteUser() {
                                             htmlFor="password"
                                             className="sr-only"
                                         >
-                                            Passwort
+                                            {t('Password')}
                                         </Label>
 
                                         <PasswordInput
                                             id="password"
                                             name="password"
                                             ref={passwordInput}
-                                            placeholder="Passwort"
+                                            placeholder={t('Password')}
                                             autoComplete="current-password"
                                         />
 
@@ -92,7 +91,7 @@ export default function DeleteUser() {
                                                     resetAndClearErrors()
                                                 }
                                             >
-                                                Abbrechen
+                                                {t('Cancel')}
                                             </Button>
                                         </DialogClose>
 
@@ -105,7 +104,7 @@ export default function DeleteUser() {
                                                 type="submit"
                                                 data-test="confirm-delete-user-button"
                                             >
-                                                Konto löschen
+                                                {t('Delete account')}
                                             </button>
                                         </Button>
                                     </DialogFooter>

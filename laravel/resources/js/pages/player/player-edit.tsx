@@ -1,4 +1,5 @@
 import { setLayoutProps } from '@inertiajs/react';
+import { t } from '@/locale/translate';
 import player from '@/routes/player';
 import { usePreviousUrl } from '@/hooks/use-previous-url';
 import PlayerForm from "@/components/from/player-form";
@@ -10,15 +11,15 @@ export default function PlayerEdit() {
     setLayoutProps({
         breadcrumbs: [
             {
-                title: 'Spieler',
+                title: t('Players'),
                 href: player.index(),
             },
             {
-                title: 'Spieler suchen',
+                title: t('Search players'),
                 href: usePrevious ? previousUrl : player.search()
             },
             {
-                title: 'Spieler bearbeiten'
+                title: t('Edit player')
             },
         ],
     });
