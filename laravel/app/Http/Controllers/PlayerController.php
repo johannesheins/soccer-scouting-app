@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\DTOs\PlayerSearchDTO;
 use App\Enums\Request\PlayerRequestNameEnum as Name;
 use App\Http\Requests\Player\PlayerRequest;
-use App\Http\Requests\Player\PlayerSearchRequest;
 use App\Models\Club;
 use App\Models\Player;
 use App\Models\Position;
-use App\Services\PlayerSearchService;
 use Emargareten\InertiaModal\Modal;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\DB;
 
 class PlayerController extends Controller implements HasMiddleware
 {
@@ -20,7 +18,6 @@ class PlayerController extends Controller implements HasMiddleware
     {
         return [
             new Middleware('can:index,App\Models\Player', only: ['index']),
-            new Middleware('can:search,App\Models\Player', only: ['search']),
             new Middleware('can:create,App\Models\Player', only: ['create', 'store']),
             new Middleware('can:view,player', only: ['show']),
             new Middleware('can:update,player', only: ['edit', 'update']),
@@ -54,8 +51,12 @@ class PlayerController extends Controller implements HasMiddleware
     {
         $validated = $request->validated();
 
-        $player = Player::create($validated);
-        $player->positions()->attach($validated[reqN(Name::positionIds)] ?? []);
+        $player = DB::transaction(function () use ($validated) {
+            $player = Player::create($validated);
+            $player->syncAudited('positions', $validated[reqN(Name::positionIds)] ?? []);
+
+            return $player;
+        });
 
         return response()->json($player->load('positions', 'club'));
     }
@@ -80,15 +81,17 @@ class PlayerController extends Controller implements HasMiddleware
     {
         $validated = $request->validated();
 
-        $player->update($validated);
-        $player->positions()->sync($validated[reqN(Name::positionIds)] ?? []);
+        DB::transaction(function () use ($player, $validated) {
+            $player->update($validated);
+            $player->syncAudited('positions', $validated[reqN(Name::positionIds)] ?? []);
+        });
 
         return redirect()->route('player.index');
     }
 
     public function destroy(Player $player)
     {
-        $player->delete();
+        DB::transaction(fn () => $player->delete());
 
         return redirect()->route('player.index');
     }

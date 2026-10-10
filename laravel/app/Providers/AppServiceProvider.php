@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Player;
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
@@ -33,6 +35,10 @@ class AppServiceProvider extends ServiceProvider
     protected function configureDefaults(): void
     {
         Date::use(CarbonImmutable::class);
+
+        Relation::enforceMorphMap([
+            'player' => Player::class,
+        ]);
 
         DB::prohibitDestructiveCommands(
             app()->isProduction(),
