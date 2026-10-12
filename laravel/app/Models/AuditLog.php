@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\AuditLogEventEnum;
+use App\Enums\AuditEvent;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -26,7 +26,7 @@ class AuditLog extends Model
     protected function casts(): array
     {
         return [
-            'event' => AuditLogEventEnum::class,
+            'event' => AuditEvent::class,
             'old_values' => 'array',
             'new_values' => 'array',
         ];

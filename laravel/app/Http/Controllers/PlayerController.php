@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\AuditEvent;
 use App\Enums\Request\PlayerRequestNameEnum as Name;
 use App\Http\Requests\Player\PlayerRequest;
 use App\Models\Club;
@@ -10,7 +11,6 @@ use App\Models\Position;
 use Emargareten\InertiaModal\Modal;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\DB;
 
 class PlayerController extends Controller implements HasMiddleware
 {
@@ -51,12 +51,10 @@ class PlayerController extends Controller implements HasMiddleware
     {
         $validated = $request->validated();
 
-        $player = DB::transaction(function () use ($validated) {
-            $player = Player::create($validated);
-            $player->syncAudited('positions', $validated[reqN(Name::positionIds)] ?? []);
+        $player = Player::create($validated);
+        $player->positions()->attach($validated[reqN(Name::positionIds)] ?? []);
 
-            return $player;
-        });
+        $player->saveLog(AuditEvent::CREATED, null, $player->createSnapshot());
 
         return response()->json($player->load('positions', 'club'));
     }
@@ -81,17 +79,22 @@ class PlayerController extends Controller implements HasMiddleware
     {
         $validated = $request->validated();
 
-        DB::transaction(function () use ($player, $validated) {
-            $player->update($validated);
-            $player->syncAudited('positions', $validated[reqN(Name::positionIds)] ?? []);
-        });
+        $old = $player->createSnapshot();
+
+        $player->update($validated);
+        $player->positions()->sync($validated[reqN(Name::positionIds)] ?? []);
+
+        $player->saveLog(AuditEvent::UPDATED, $old, $player->createSnapshot());
 
         return redirect()->route('player.index');
     }
 
     public function destroy(Player $player)
     {
-        DB::transaction(fn () => $player->delete());
+        $old = $player->createSnapshot();
+        $player->delete();
+
+        $player->saveLog(AuditEvent::DELETED, $old, null);
 
         return redirect()->route('player.index');
     }

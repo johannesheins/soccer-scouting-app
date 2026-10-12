@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum AuditLogEventEnum: string
+enum AuditEvent: string
 {
     case CREATED = 'created';
     case UPDATED = 'updated';

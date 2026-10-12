@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Player;
 
-use App\Enums\AuditLogEventEnum;
+use App\Enums\AuditEvent;
 use App\Enums\FootEnum;
 use App\Enums\Permission\PlayerPermissions;
 use App\Models\AuditLog;
@@ -145,10 +145,12 @@ class PlayerControllerTest extends TestCase
             ]);
 
         $player = Player::where('firstname', 'John')->sole();
-        $this->assertSame(1, $player->auditLogs()->where('event', AuditLogEventEnum::CREATED)->count());
-        $log = $player->auditLogs()->where('event', AuditLogEventEnum::UPDATED)->sole();
-        $this->assertSame(['positions' => []], $log->old_values);
-        $this->assertSame(['positions' => $positions->pluck('id')->sort()->values()->all()], $log->new_values);
+        $log = $player->auditLogs()->sole();
+        $this->assertSame(AuditEvent::CREATED, $log->event);
+        $this->assertSame(Player::class, $log->auditable_type);
+        $this->assertNull($log->old_values);
+        $this->assertSame('John', $log->new_values['firstname']);
+        $this->assertSame($positions->pluck('id')->sort()->values()->all(), $log->new_values['positions']);
         $this->assertSame($this->user->id, $log->user_id);
     }
 
@@ -469,12 +471,9 @@ class PlayerControllerTest extends TestCase
                 'position_ids' => [$newPosition->id],
             ]);
 
-        $log = $player->auditLogs()
-            ->where('event', AuditLogEventEnum::UPDATED)
-            ->whereNotNull('new_values->positions')
-            ->sole();
-        $this->assertSame(['positions' => [$oldPosition->id]], $log->old_values);
-        $this->assertSame(['positions' => [$newPosition->id]], $log->new_values);
+        $log = $player->auditLogs()->where('event', AuditEvent::UPDATED)->sole();
+        $this->assertSame([$oldPosition->id], $log->old_values['positions']);
+        $this->assertSame([$newPosition->id], $log->new_values['positions']);
         $this->assertSame($this->user->id, $log->user_id);
     }
 
@@ -673,7 +672,7 @@ class PlayerControllerTest extends TestCase
 
         $log = AuditLog::query()
             ->where('auditable_id', $player->id)
-            ->where('event', AuditLogEventEnum::DELETED)
+            ->where('event', AuditEvent::DELETED)
             ->sole();
         $this->assertSame('John', $log->old_values['firstname']);
         $this->assertSame($positions->pluck('id')->sort()->values()->all(), $log->old_values['positions']);

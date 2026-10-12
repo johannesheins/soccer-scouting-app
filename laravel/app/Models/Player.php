@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Contracts\AuditLogInterface;
 use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,17 +11,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
 
 #[Fillable(['firstname', 'lastname', 'year_of_birth', 'height', 'strong_foot', 'club_id'])]
-class Player extends Model implements AuditLogInterface
+class Player extends Model
 {
     use HasFactory;
     use Auditable;
 
-    public $timestamps = false;
+    private array $auditedRelations = ['positions'];
 
-    public function auditedRelations(): array
-    {
-        return ['positions'];
-    }
+    public $timestamps = false;
 
     public function club(): BelongsTo
     {

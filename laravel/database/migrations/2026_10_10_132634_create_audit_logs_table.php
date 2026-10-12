@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\AuditLogEventEnum;
+use App\Enums\AuditEvent;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,7 +13,7 @@ return new class () extends Migration {
             $table->id();
             $table->morphs('auditable');
             $table->foreignIdFor(User::class)->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
-            $table->enum('event', AuditLogEventEnum::cases());
+            $table->enum('event', AuditEvent::cases());
             $table->json('old_values')->nullable();
             $table->json('new_values')->nullable();
             $table->timestamp('created_at')->useCurrent();
