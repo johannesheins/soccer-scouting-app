@@ -35,6 +35,16 @@ export type Evaluation = EvaluationSmall & {
     group_scores?: number[]
 }
 
+export type EvaluationVersion = {
+    id: number,
+    event: 'created' | 'updated' | 'deleted',
+    created_at: string,
+    user: User | null,
+    changes: string[],
+    new_values : EvaluationSmall,
+    evaluation: Evaluation,
+}
+
 export type EvaluationTypeMap = {
     game: GameEvaluation,
     player: PlayerEvaluation,

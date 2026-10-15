@@ -17,6 +17,11 @@ class PlayerEvaluationPolicy extends EvaluationPolicy
         return $user->hasRight(PlayerEvaluationPermissions::View) && $evaluation->creator()->is($user);
     }
 
+    public function viewHistory(User $user, Evaluation $evaluation): bool
+    {
+        return $user->hasRight(PlayerEvaluationPermissions::ViewHistory) && $this->view($user, $evaluation);
+    }
+
     public function create(User $user): bool
     {
         return $user->hasRight(PlayerEvaluationPermissions::Create);

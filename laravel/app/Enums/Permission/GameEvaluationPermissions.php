@@ -14,4 +14,5 @@ enum GameEvaluationPermissions: int implements PermissionsInterface
     case Destroy = 14;
     case DestroyAll = 15;
     case ViewCreator = 16;
+    case ViewHistory = 31;
 }

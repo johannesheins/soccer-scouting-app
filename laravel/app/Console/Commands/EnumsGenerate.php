@@ -18,7 +18,7 @@ class EnumsGenerate extends Command
     public function handle(): void
     {
         try {
-            $enums = $this->getEnumNames(app_path(self::BASE_DIR));
+            $enums = $this->getEnumNames(app_path(self::BASE_DIR), $this->getIgnoredFiles());
             $basePath = resource_path(self::RESOURCE_DIR);
 
             if(! is_dir($basePath)){
@@ -59,17 +59,29 @@ class EnumsGenerate extends Command
         return "export { {$className} } from '{$importPath}';";
     }
 
-    private function getEnumNames(string $dirName, array &$enums = []): array
+    private function getIgnoredFiles(): array
+    {
+        $ignoreFilePath = app_path(self::BASE_DIR).'/enums.ignore';
+        $ignore = [];
+
+        if (file_exists($ignoreFilePath)) {
+            $ignore = file($ignoreFilePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [];
+        }
+
+        return array_merge(array_map('trim', $ignore), ['.', '..']);
+    }
+
+    private function getEnumNames(string $dirName, array $ignore, array &$enums = []): array
     {
         foreach(scandir($dirName) as $file){
-            if($file === '.' || $file === '..'){
+            if(in_array($file, $ignore, true)){
                 continue;
             }
 
             $path = "{$dirName}/{$file}";
 
             if(is_dir($path)){
-                $this->getEnumNames($path, $enums);
+                $this->getEnumNames($path, $ignore, $enums);
 
                 continue;
             }
@@ -96,7 +108,7 @@ class EnumsGenerate extends Command
     {
         $class = 'App\\Enums'.str_replace('/', '\\', $enumName);
 
-        if(! enum_exists($class)){
+        if(!enum_exists($class)){
             throw new Exception("Enum {$class} not found.");
         }
 

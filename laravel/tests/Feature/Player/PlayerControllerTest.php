@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\Player;
 
+use App\Enums\AuditEvent;
 use App\Enums\FootEnum;
 use App\Enums\Permission\PlayerPermissions;
+use App\Models\AuditLog;
 use App\Models\Club;
 use App\Models\Player;
 use App\Models\Position;
@@ -130,6 +132,26 @@ class PlayerControllerTest extends TestCase
         $positions->each(fn ($pos) => $this->assertDatabaseHas('player_positions', ['player_id' => $player->id, 'position_id' => $pos->id]));
 
         $this->assertRights(PlayerPermissions::Create, 'player.create');
+    }
+
+    public function test_store_logs_positions(): void
+    {
+        $positions = Position::factory(2)->create();
+
+        $this->actingAs($this->user)
+            ->post(route('player.store'), [
+                'firstname' => 'John',
+                'position_ids' => $positions->pluck('id')->toArray(),
+            ]);
+
+        $player = Player::where('firstname', 'John')->sole();
+        $log = $player->auditLogs()->sole();
+        $this->assertSame(AuditEvent::CREATED, $log->event);
+        $this->assertSame(Player::class, $log->auditable_type);
+        $this->assertNull($log->old_values);
+        $this->assertSame('John', $log->new_values['firstname']);
+        $this->assertSame($positions->pluck('id')->sort()->values()->all(), $log->new_values['positions']);
+        $this->assertSame($this->user->id, $log->user_id);
     }
 
     public function test_store_guest_redirect_login(): void
@@ -437,6 +459,24 @@ class PlayerControllerTest extends TestCase
         $this->assertRights(PlayerPermissions::Edit, ['player.update', $player]);
     }
 
+    public function test_update_logs_positions(): void
+    {
+        $oldPosition = Position::factory()->create();
+        $newPosition = Position::factory()->create();
+        $player = Player::factory()->create();
+        $player->positions()->attach($oldPosition->id);
+
+        $this->actingAs($this->user)
+            ->put(route('player.update', $player), [
+                'position_ids' => [$newPosition->id],
+            ]);
+
+        $log = $player->auditLogs()->where('event', AuditEvent::UPDATED)->sole();
+        $this->assertSame([$oldPosition->id], $log->old_values['positions']);
+        $this->assertSame([$newPosition->id], $log->new_values['positions']);
+        $this->assertSame($this->user->id, $log->user_id);
+    }
+
     public function test_update_guest_redirect_login(): void
     {
         $player = Player::factory()->create();
@@ -619,6 +659,25 @@ class PlayerControllerTest extends TestCase
         $response->assertRedirect(route('player.index'));
         $this->assertDatabaseMissing('players', ['id' => $player->id]);
         $this->assertDatabaseMissing('player_positions', ['player_id' => $player->id]);
+    }
+
+    public function test_destroy_logs_positions(): void
+    {
+        $positions = Position::factory(2)->create();
+        $player = Player::factory()->create(['firstname' => 'John']);
+        $player->positions()->attach($positions->pluck('id'));
+
+        $this->actingAs($this->user)
+            ->delete(route('player.destroy', $player));
+
+        $log = AuditLog::query()
+            ->where('auditable_id', $player->id)
+            ->where('event', AuditEvent::DELETED)
+            ->sole();
+        $this->assertSame('John', $log->old_values['firstname']);
+        $this->assertSame($positions->pluck('id')->sort()->values()->all(), $log->old_values['positions']);
+        $this->assertNull($log->new_values);
+        $this->assertSame($this->user->id, $log->user_id);
     }
 
     public function test_destroy_guest_redirect_login(): void

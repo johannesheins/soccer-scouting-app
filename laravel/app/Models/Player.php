@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,9 @@ use Illuminate\Support\Collection;
 class Player extends Model
 {
     use HasFactory;
+    use Auditable;
+
+    private array $auditedRelations = ['positions'];
 
     public $timestamps = false;
 

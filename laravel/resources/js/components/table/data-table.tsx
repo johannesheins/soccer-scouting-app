@@ -28,7 +28,6 @@ interface DataTableProps<TData, TValue> {
     data: TData[],
     textOnEmpty: string,
     className?: string,
-    isInDialog?: boolean,
 }
 
 export function DataTable<TData, TValue>({
@@ -36,7 +35,6 @@ export function DataTable<TData, TValue>({
     data,
     textOnEmpty,
     className,
-    isInDialog,
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const table = useReactTable({
@@ -49,12 +47,9 @@ export function DataTable<TData, TValue>({
         state: { sorting },
     })
 
-    const rem = isInDialog ? '6rem' : '2rem'
-    className = cn(className, `max-w-[calc(100vw-var(--sidebar-active-width)-${rem})]`)
-
     return (
-        <div className={className}>
-            <div className={cn("overflow-x-scroll rounded-md border")}>
+        <div className={cn("min-w-0", className)}>
+            <div className="overflow-x-auto rounded-md border">
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (

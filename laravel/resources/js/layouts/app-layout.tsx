@@ -13,7 +13,7 @@ export default function AppLayout({
 }) {
     return (
         <AppLayoutTemplate breadcrumbs={breadcrumbs}>
-            <div className="w-full h-full grid justify-items-center">
+            <div className="w-full h-full grid grid-cols-1 justify-items-center">
                 <div className="col-start-1 row-start-1 max-w-400 w-full z-10">
                     {children}
                 </div>

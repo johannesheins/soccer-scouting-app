@@ -6,11 +6,9 @@ use App\Enums\EvaluationTypes;
 use App\Enums\Request\PlayerRequestNameEnum as Name;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Evaluation\EvaluationCreateRequest;
-use App\Http\Requests\Evaluation\GameEvaluationStoreRequest;
 use App\Http\Requests\Evaluation\PlayerEvaluationStoreRequest;
 use App\Models\Club;
 use App\Models\EvaluationCriteriaGroup;
-use App\Models\GameEvaluation;
 use App\Models\Player;
 use App\Models\PlayerEvaluation;
 use App\Models\Position;
@@ -29,6 +27,7 @@ class PlayerEvaluationController extends Controller implements HasMiddleware
             new Middleware('can:view,player_evaluation', only: ['show']),
             new Middleware('can:update,player_evaluation', only: ['edit', 'update']),
             new Middleware('can:delete,player_evaluation', only: ['destroy']),
+            new Middleware('can:viewHistory,player_evaluation', only: ['history']),
         ];
     }
 
@@ -90,8 +89,17 @@ class PlayerEvaluationController extends Controller implements HasMiddleware
 
     public function destroy(PlayerEvaluation $playerEvaluation)
     {
-        $playerEvaluation->delete();
+        EvaluationService::delete($playerEvaluation);
 
         return redirect()->route('evaluation.index');
+    }
+
+    public function history(PlayerEvaluation $playerEvaluation)
+    {
+        return new Modal('evaluation/evaluation-view-history', [
+            'evaluation' => $playerEvaluation->loadForView(),
+            'evaluationCriteriaGroups' => EvaluationCriteriaGroup::with('evaluationCriteria')->get(),
+            'versions' => EvaluationService::versions($playerEvaluation),
+        ])->baseRoute('evaluation.index');
     }
 }

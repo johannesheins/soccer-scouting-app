@@ -28,6 +28,6 @@ class PlayerEvaluation extends Evaluation implements EvaluationInterface
 
     public function loadForView(): Evaluation
     {
-        return parent::loadForView()->load('player');
+        return parent::loadForView()->loadMissing('player');
     }
 }

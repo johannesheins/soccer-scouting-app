@@ -10,6 +10,7 @@ use App\Enums\Permission\PlayerPermissions;
 use App\Interfaces\PermissionsInterface;
 use App\Models\Right;
 use App\Models\RightGroup;
+use Illuminate\Database\Eloquent\MissingAttributeException;
 use Illuminate\Database\Seeder;
 
 class RightSeeder extends Seeder
@@ -41,6 +42,7 @@ class RightSeeder extends Seeder
                 $this->createRight(GameEvaluationPermissions::Destroy, 'Spielbewertung löschen', 'Der Benutzer darf die von ihm erstellten Spielbewertung löschen'),
                 $this->createRight(GameEvaluationPermissions::DestroyAll, 'Alle Spielbewertung löschen', 'Der Benutzer darf alle Spielbewertung löschen'),
                 $this->createRight(GameEvaluationPermissions::ViewCreator, 'Autor der Spielbewertung sehen', 'Der Benutzer darf den Autor sehen'),
+                $this->createRight(GameEvaluationPermissions::ViewHistory, 'Änderungen der Spielbewertung ansehen', 'Der Benutzer darf den Änderungsverlauf von Spielbewertungen ansehen'),
             ],
             'Interne Spielerbewertung' => [
                 $this->createRight(PlayerEvaluationPermissions::Create, 'Interne Spielerbewertung erstellen', 'Der Benutzer darf interne Spielerbewertungen erstellen'),
@@ -51,6 +53,7 @@ class RightSeeder extends Seeder
                 $this->createRight(PlayerEvaluationPermissions::Destroy, 'Interne Spielerbewertung löschen', 'Der Benutzer darf die von ihm erstellten internen Spielerbewertungen löschen'),
                 $this->createRight(PlayerEvaluationPermissions::DestroyAll, 'Alle internen Spielerbewertungen löschen', 'Der Benutzer darf alle internen Spielerbewertungen löschen'),
                 $this->createRight(PlayerEvaluationPermissions::ViewCreator, 'Autor der internen Spielerbewertung sehen', 'Der Benutzer darf den Autor einer internen Spielerbewertung sehen'),
+                $this->createRight(PlayerEvaluationPermissions::ViewHistory, 'Änderungen der internen Spielerbewertung ansehen', 'Der Benutzer darf den Änderungsverlauf von internen Spielerbewertungen ansehen'),
             ],
             'Verein' => [
                 $this->createRight(ClubPermissions::Index, 'Verein Übersicht', 'Der Benutzer darf die Übersicht für die Vereine sehen'),

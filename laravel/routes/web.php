@@ -20,10 +20,14 @@ Route::middleware(['auth', 'verified', 'password.renewed'])->group(function () {
         Route::get('search/{query?}', [EvaluationController::class, 'search'])->name('search');
         Route::get('', [EvaluationController::class, 'index'])->name('index');
 
+        Route::get('game/{game_evaluation}/history', [GameEvaluationController::class, 'history'])
+            ->name('game.history');
         Route::resource('game', GameEvaluationController::class)
             ->parameters(['game' => 'game_evaluation'])->except('index')
         ->names('game');
 
+        Route::get('player/{player_evaluation}/history', [PlayerEvaluationController::class, 'history'])
+            ->name('player.history');
         Route::resource('player', PlayerEvaluationController::class)
             ->parameters(['player' => 'player_evaluation'])
             ->except('index'

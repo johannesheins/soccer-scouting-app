@@ -38,6 +38,7 @@ export default function EvaluationRowActions({evaluation}: { evaluation: Evaluat
 
     const gameEvaluation = isGameEvaluation ? evaluation as GameEvaluation : undefined;
     const playerEvaluation = isPlayerEvaluation ? evaluation as PlayerEvaluation : undefined;
+    const evaluationPlayer = gameEvaluation?.player ?? playerEvaluation?.player;
 
 
     let evaluationPermissions = null;
@@ -58,13 +59,14 @@ export default function EvaluationRowActions({evaluation}: { evaluation: Evaluat
     const currentUserIsCreator = evaluation.creator.id ?? null === useUser().id;
 
     const canView = useHasRight(evaluationPermissions.ViewAll) || (useHasRight(evaluationPermissions.View) && currentUserIsCreator)
-    const canViewPlayer = useHasRight(PlayerPermissions.View) && (isGameEvaluation || isPlayerEvaluation);
+    const canViewPlayer = useHasRight(PlayerPermissions.View) && !!evaluationPlayer;
 
     const canEdit = useHasRight(evaluationPermissions.EditAll) || (useHasRight(evaluationPermissions.Edit) && currentUserIsCreator);
     const canDelete = useHasRight(evaluationPermissions.DestroyAll) || (useHasRight(evaluationPermissions.Destroy) && currentUserIsCreator);
+    const canViewHistory = useHasRight(evaluationPermissions.ViewHistory) && canView;
 
     const showPlayerSeparator = canView && canViewPlayer;
-    const showEditDeleteSeparator = (canView || canViewPlayer) && (canDelete || canEdit);
+    const showEditDeleteSeparator = (canView || canViewPlayer) && (canViewHistory || canEdit || canDelete);
 
     return (
         <>
@@ -84,13 +86,19 @@ export default function EvaluationRowActions({evaluation}: { evaluation: Evaluat
 
                     {showPlayerSeparator && <DropdownMenuSeparator/>}
 
-                    {canViewPlayer && (
-                        <DropdownMenuItem onClick={() => router.visit(player.show.url(gameEvaluation?.player.id ?? playerEvaluation?.player.id ?? ''))}>
+                    {canViewPlayer && evaluationPlayer && (
+                        <DropdownMenuItem onClick={() => router.visit(player.show.url(evaluationPlayer))}>
                             {t('View player')}
                         </DropdownMenuItem>
                     )}
 
                     {showEditDeleteSeparator && <DropdownMenuSeparator/>}
+
+                    {canViewHistory && (
+                        <DropdownMenuItem onClick={() => router.visit(evaluationRoute.history.url(evaluation))}>
+                            {t('View history')}
+                        </DropdownMenuItem>
+                    )}
 
                     {canEdit && (
                         <DropdownMenuItem onClick={() => router.visit(evaluationRoute.edit.url(evaluation.id))}>

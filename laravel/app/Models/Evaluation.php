@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\EvaluationTypes;
 use App\Interfaces\EvaluationInterface;
+use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,7 +20,9 @@ use LogicException;
 class Evaluation extends Model implements EvaluationInterface
 {
     use HasFactory;
+    use Auditable;
 
+    protected array $auditedRelations = ['criteriaScores'];
     protected ?EvaluationTypes $evaluationType = null;
     protected $appends = ['evaluation_type'];
 
@@ -49,7 +52,7 @@ class Evaluation extends Model implements EvaluationInterface
 
     public function loadForView(): Evaluation
     {
-        return $this->load('criteriaScores', 'recommendation', 'creator');
+        return $this->loadMissing('criteriaScores', 'recommendation', 'creator');
     }
 
     protected function casts(): array
