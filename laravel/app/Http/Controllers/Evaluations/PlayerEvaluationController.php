@@ -6,11 +6,9 @@ use App\Enums\EvaluationTypes;
 use App\Enums\Request\PlayerRequestNameEnum as Name;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Evaluation\EvaluationCreateRequest;
-use App\Http\Requests\Evaluation\GameEvaluationStoreRequest;
 use App\Http\Requests\Evaluation\PlayerEvaluationStoreRequest;
 use App\Models\Club;
 use App\Models\EvaluationCriteriaGroup;
-use App\Models\GameEvaluation;
 use App\Models\Player;
 use App\Models\PlayerEvaluation;
 use App\Models\Position;
@@ -90,7 +88,7 @@ class PlayerEvaluationController extends Controller implements HasMiddleware
 
     public function destroy(PlayerEvaluation $playerEvaluation)
     {
-        $playerEvaluation->delete();
+        EvaluationService::delete($playerEvaluation);
 
         return redirect()->route('evaluation.index');
     }

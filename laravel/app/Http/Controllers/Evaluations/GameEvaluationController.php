@@ -88,7 +88,7 @@ class GameEvaluationController extends Controller implements HasMiddleware
 
     public function destroy(GameEvaluation $gameEvaluation)
     {
-        $gameEvaluation->delete();
+        EvaluationService::delete($gameEvaluation);
 
         return redirect()->route('evaluation.index');
     }

@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\Evaluation;
 
+use App\Enums\AuditEvent;
 use App\Enums\Permission\EvaluationPermissions;
 use App\Interfaces\PermissionsInterface;
+use App\Models\AuditLog;
 use App\Models\Club;
 use App\Models\Evaluation;
 use App\Models\EvaluationCriteria;
@@ -123,6 +125,14 @@ abstract class EvaluationControllerTest extends TestCase
         $this->assertRights($this->right('Create'), $this->typeRoute('create'));
     }
 
+    protected function loggedScores(array $values): array
+    {
+        return array_map(
+            fn (array $score) => Arr::only($score, ['evaluation_criteria_id', 'score']),
+            $values['criteriaScores'],
+        );
+    }
+
     public function test_store_creates_evaluation(): void
     {
         $payload = $this->payload([
@@ -165,6 +175,23 @@ abstract class EvaluationControllerTest extends TestCase
 
         $this->assertSame(3, $evaluation->criteriaScores()->count());
         $criteria->each(fn ($criterion, $index) => $this->assertScoreStored($evaluation, $criterion->id, $index + 1));
+    }
+
+    public function test_store_writes_an_audit_log(): void
+    {
+        $payload = $this->payload();
+
+        $this->actingAs($this->user)
+            ->post(route($this->typeRoute('store')), $payload);
+
+        $evaluation = $this->modelClass()::sole();
+        $log = $evaluation->auditLogs()->sole();
+        $this->assertSame(AuditEvent::CREATED, $log->event);
+        $this->assertSame($this->modelClass(), $log->auditable_type);
+        $this->assertNull($log->old_values);
+        $this->assertEquals($payload['recommendation_id'], $log->new_values['recommendation_id']);
+        $this->assertSame($payload['criteriaScores'], $this->loggedScores($log->new_values));
+        $this->assertSame($this->user->id, $log->user_id);
     }
 
     public function test_store_guest_redirect_login(): void
@@ -356,6 +383,28 @@ abstract class EvaluationControllerTest extends TestCase
         $this->assertScoreStored($evaluation, $newCriteria->id, 5);
     }
 
+    public function test_update_writes_an_audit_log(): void
+    {
+        $evaluation = $this->modelClass()::factory()->create(['created_by' => $this->user->id]);
+        $oldCriteria = EvaluationCriteria::factory()->create();
+        $evaluation->criteriaScores()->create(['evaluation_criteria_id' => $oldCriteria->id, 'score' => 3]);
+        $payload = $this->payload(['strengths' => 'Good positioning']);
+
+        $this->actingAs($this->user)
+            ->put(route($this->typeRoute('update'), $evaluation), $payload);
+
+        $log = $evaluation->auditLogs()->sole();
+        $this->assertSame(AuditEvent::UPDATED, $log->event);
+        $this->assertSame($evaluation->getOriginal('strengths'), $log->old_values['strengths']);
+        $this->assertSame('Good positioning', $log->new_values['strengths']);
+        $this->assertSame(
+            [['evaluation_criteria_id' => $oldCriteria->id, 'score' => 3]],
+            $this->loggedScores($log->old_values),
+        );
+        $this->assertSame($payload['criteriaScores'], $this->loggedScores($log->new_values));
+        $this->assertSame($this->user->id, $log->user_id);
+    }
+
     public function test_update_guest_redirect_login(): void
     {
         $evaluation = $this->modelClass()::factory()->create();
@@ -439,6 +488,28 @@ abstract class EvaluationControllerTest extends TestCase
         $this->assertDatabaseMissing('evaluation_criteria_scores', [
             $evaluation->criteriaScores()->getForeignKeyName() => $evaluation->id,
         ]);
+    }
+
+    public function test_destroy_writes_an_audit_log(): void
+    {
+        $evaluation = $this->modelClass()::factory()->create(['created_by' => $this->user->id]);
+        $criteria = EvaluationCriteria::factory()->create();
+        $evaluation->criteriaScores()->create(['evaluation_criteria_id' => $criteria->id, 'score' => 6]);
+
+        $this->actingAs($this->user)
+            ->delete(route($this->typeRoute('destroy'), $evaluation));
+
+        $log = AuditLog::where('auditable_type', $this->modelClass())
+            ->where('auditable_id', $evaluation->id)
+            ->sole();
+        $this->assertSame(AuditEvent::DELETED, $log->event);
+        $this->assertSame($evaluation->id, $log->old_values['id']);
+        $this->assertSame(
+            [['evaluation_criteria_id' => $criteria->id, 'score' => 6]],
+            $this->loggedScores($log->old_values),
+        );
+        $this->assertNull($log->new_values);
+        $this->assertSame($this->user->id, $log->user_id);
     }
 
     public function test_destroy_guest_redirect_login(): void

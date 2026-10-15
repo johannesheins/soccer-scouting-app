@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Evaluation;
 
+use App\Enums\AuditEvent;
 use App\Models\Club;
 use App\Models\EvaluationCriteria;
 use App\Models\GameEvaluation;
@@ -270,5 +271,68 @@ class EvaluationServiceTest extends TestCase
             $this->assertSame(1, $evaluation->criteriaScores()->count());
             $this->assertScoreStored($evaluation, $criteria->id, 3);
         }
+    }
+
+    // audit log
+    public function test_create_logs_the_criteria_scores(): void
+    {
+        $this->actingAs($this->user);
+        $data = $this->evaluationData();
+        $criteriaId = $data['criteriaScores'][0]['evaluation_criteria_id'];
+
+        $evaluation = EvaluationService::create(new GameEvaluation(), $data);
+
+        $log = $evaluation->auditLogs()->sole();
+        $this->assertSame(AuditEvent::CREATED, $log->event);
+        $this->assertNull($log->old_values);
+        $this->assertSame(
+            [['player_evaluation_id' => null, 'evaluation_criteria_id' => $criteriaId, 'score' => 8]],
+            $log->new_values['criteriaScores']
+        );
+        $this->assertSame($this->user->id, $log->user_id);
+    }
+
+    public function test_update_logs_the_old_and_new_criteria_scores(): void
+    {
+        $this->actingAs($this->user);
+        $evaluation = GameEvaluation::factory()->create();
+        $oldCriteria = EvaluationCriteria::factory()->create();
+        $newCriteria = EvaluationCriteria::factory()->create();
+        $evaluation->criteriaScores()->create(['evaluation_criteria_id' => $oldCriteria->id, 'score' => 3]);
+
+        EvaluationService::update($evaluation, $this->evaluationData([
+            'criteriaScores' => [['evaluation_criteria_id' => $newCriteria->id, 'score' => 5]],
+        ]));
+
+        $log = $evaluation->auditLogs()->where('event', AuditEvent::UPDATED)->sole();
+        $this->assertSame(
+            [['player_evaluation_id' => null, 'evaluation_criteria_id' => $oldCriteria->id, 'score' => 3]],
+            $log->old_values['criteriaScores']
+        );
+        $this->assertSame(
+            [['player_evaluation_id' => null, 'evaluation_criteria_id' => $newCriteria->id, 'score' => 5]],
+            $log->new_values['criteriaScores']
+        );
+    }
+
+    public function test_delete_logs_the_deleted_evaluation_with_its_scores(): void
+    {
+        $this->actingAs($this->user);
+        $evaluation = GameEvaluation::factory()->create();
+        $criteria = EvaluationCriteria::factory()->create();
+        $evaluation->criteriaScores()->create(['evaluation_criteria_id' => $criteria->id, 'score' => 6]);
+
+        $this->assertTrue(EvaluationService::delete($evaluation));
+
+        $this->assertModelMissing($evaluation);
+        $log = $evaluation->auditLogs()->sole();
+        $this->assertSame(AuditEvent::DELETED, $log->event);
+        $this->assertSame($evaluation->id, $log->old_values['id']);
+        $this->assertSame(
+            [['player_evaluation_id' => null, 'evaluation_criteria_id' => $criteria->id, 'score' => 6]],
+            $log->old_values['criteriaScores']
+        );
+        $this->assertNull($log->new_values);
+        $this->assertSame($this->user->id, $log->user_id);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Enums\AuditEvent;
 use App\Models\AuditLog;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Arr;
 
@@ -22,9 +23,28 @@ trait Auditable
             $this->load($this->auditedRelations);
 
             foreach($this->auditedRelations as $relation){
-                $snapshot[$relation] = $this->{$relation}()->allRelatedIds()->sort()->values()->all();
+                $snapshot[$relation] = $this->snapshotRelation($relation);
             }
         }
+
+        return $snapshot;
+    }
+
+    private function snapshotRelation(string $relation): array
+    {
+        $query = $this->{$relation}();
+
+        if($query instanceof BelongsToMany){
+            return $query->allRelatedIds()->sort()->values()->all();
+        }
+
+        $except = [$query->getForeignKeyName(), 'created_at', 'updated_at'];
+        $snapshot = [];
+        foreach($this->{$relation} as $related){
+            $snapshot[] = Arr::except($related->getAttributes(), [$related->getKeyName(), ...$except]);
+        }
+
+        usort($snapshot, fn(array $a, array $b) => json_encode($a) <=> json_encode($b));
 
         return $snapshot;
     }
