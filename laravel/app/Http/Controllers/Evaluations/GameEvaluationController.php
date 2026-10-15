@@ -27,6 +27,7 @@ class GameEvaluationController extends Controller implements HasMiddleware
             new Middleware('can:view,game_evaluation', only: ['show']),
             new Middleware('can:update,game_evaluation', only: ['edit', 'update']),
             new Middleware('can:delete,game_evaluation', only: ['destroy']),
+            new Middleware('can:viewHistory,game_evaluation', only: ['history']),
         ];
     }
 
@@ -91,5 +92,14 @@ class GameEvaluationController extends Controller implements HasMiddleware
         EvaluationService::delete($gameEvaluation);
 
         return redirect()->route('evaluation.index');
+    }
+
+    public function history(GameEvaluation $gameEvaluation)
+    {
+        return new Modal('evaluation/evaluation-view-history', [
+            'evaluation' => $gameEvaluation->loadForView(),
+            'evaluationCriteriaGroups' => EvaluationCriteriaGroup::with('evaluationCriteria')->get(),
+            'versions' => EvaluationService::versions($gameEvaluation),
+        ])->baseRoute('evaluation.index');
     }
 }

@@ -47,9 +47,9 @@ export default function EvaluationView({evaluation, evaluationCriteriaGroups}: P
                     {isGameEvaluation && (
                         <p>{gameEvaluation?.home_club.clubname} {gameEvaluation?.home_team} - {gameEvaluation?.guest_club.clubname} {gameEvaluation?.guest_team}</p>
                     )}
-                    {isPlayerEvaluation && (
-                        <a href={playerRoute.show.url(gameEvaluation?.player.id ?? playerEvaluation?.player.id ?? '')} className="text-2xl">
-                            {player?.firstname} {player?.lastname}
+                    {isPlayerEvaluation && player && (
+                        <a href={playerRoute.show.url(player)} className="text-2xl">
+                            {player.firstname} {player.lastname}
                         </a>
                     )}
                     <p className="text-2xl text-end col-start-2">{t(':score points', { score: calculateScores.getTotalScore() })}</p>
@@ -58,9 +58,9 @@ export default function EvaluationView({evaluation, evaluationCriteriaGroups}: P
                     <p>
                         {date(evaluation?.date)}
                     </p>
-                    {isGameEvaluation && (
-                        <a href={playerRoute.show.url(gameEvaluation?.player.id ?? playerEvaluation?.player.id ?? '')} className="text-end">
-                            {player?.firstname} {player?.lastname}
+                    {isGameEvaluation && player && (
+                        <a href={playerRoute.show.url(player)} className="text-end">
+                            {player.firstname} {player.lastname}
                         </a>
                     )}
                 </div>

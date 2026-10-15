@@ -38,6 +38,6 @@ class GameEvaluation extends Evaluation
 
     public function loadForView(): Evaluation
     {
-        return parent::loadForView()->load('player', 'homeClub', 'guestClub');
+        return parent::loadForView()->loadMissing('player', 'homeClub', 'guestClub');
     }
 }

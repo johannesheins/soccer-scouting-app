@@ -526,4 +526,112 @@ abstract class EvaluationControllerTest extends TestCase
             ->delete(route($this->typeRoute('destroy'), 999))
             ->assertNotFound();
     }
+
+    public function test_history_requires_the_view_history_right(): void
+    {
+        $evaluation = $this->modelClass()::factory()->create();
+        $user = $this->createUserWithRight([$this->right('ViewHistory'), $this->right('ViewAll')]);
+
+        $this->actingAs($user)
+            ->get(route($this->typeRoute('history'), $evaluation))
+            ->assertOk();
+
+        $this->actingAs(User::factory()->administrator()->create())
+            ->get(route($this->typeRoute('history'), $evaluation))
+            ->assertOk();
+    }
+
+    public function test_history_is_forbidden_with_view_history_but_without_view(): void
+    {
+        $evaluation = $this->modelClass()::factory()->create();
+        $user = $this->createUserWithRight([$this->right('ViewHistory')]);
+
+        $this->actingAs($user)
+            ->get(route($this->typeRoute('history'), $evaluation))
+            ->assertForbidden();
+    }
+
+    public function test_history_with_view_only_allows_own_evaluations(): void
+    {
+        $user = $this->createUserWithRight([$this->right('ViewHistory'), $this->right('View')]);
+        $own = $this->modelClass()::factory()->create(['created_by' => $user->id]);
+        $foreign = $this->modelClass()::factory()->create();
+
+        $this->actingAs($user)
+            ->get(route($this->typeRoute('history'), $own))
+            ->assertOk();
+
+        $this->actingAs($user)
+            ->get(route($this->typeRoute('history'), $foreign))
+            ->assertForbidden();
+    }
+
+    public function test_history_is_forbidden_with_view_all_but_without_view_history(): void
+    {
+        $evaluation = $this->modelClass()::factory()->create(['created_by' => $this->user->id]);
+
+        $this->actingAs($this->user)
+            ->get(route($this->typeRoute('history'), $evaluation))
+            ->assertForbidden();
+    }
+
+    public function test_history_renders_modal_with_versions(): void
+    {
+        $user = $this->createUserWithRight([$this->right('ViewHistory'), $this->right('ViewAll')]);
+        $evaluation = $this->modelClass()::factory()->create();
+        $evaluation->saveLog(AuditEvent::CREATED, null, $evaluation->createSnapshot());
+
+        $response = $this->actingAs($user)
+            ->get(route($this->typeRoute('history'), $evaluation));
+
+        $response->assertInertia(
+            fn ($page) => $page
+            ->component('evaluation/evaluation-index')
+            ->where('modal.component', 'evaluation/evaluation-view-history')
+            ->has('modal.props.evaluationCriteriaGroups')
+            ->has('modal.props.versions', 1)
+            ->where('modal.props.versions.0.event', AuditEvent::CREATED->value)
+            ->where('modal.props.versions.0.evaluation.id', $evaluation->id)
+            ->has('modal.props.versions.0.evaluation.recommendation')
+            ->has('modal.props.versions.0.evaluation.creator')
+            ->has('modal.props.versions.0.evaluation.player')
+        );
+    }
+
+    public function test_history_guest_redirect_login(): void
+    {
+        $evaluation = $this->modelClass()::factory()->create();
+
+        $this->get(route($this->typeRoute('history'), $evaluation))
+            ->assertRedirect(route('login'));
+    }
+
+    public function test_history_returns_404_for_nonexistent_evaluation(): void
+    {
+        $this->actingAs(User::factory()->administrator()->create())
+            ->get(route($this->typeRoute('history'), 999))
+            ->assertNotFound();
+    }
+
+    public function test_history_renders_every_version_in_chronological_order(): void
+    {
+        $evaluation = $this->modelClass()::factory()->create();
+        $evaluation->saveLog(AuditEvent::CREATED, null, $evaluation->createSnapshot());
+        $old = $evaluation->createSnapshot();
+        $evaluation->update(['comment' => 'Changed comment']);
+        $evaluation->saveLog(AuditEvent::UPDATED, $old, $evaluation->createSnapshot());
+
+        $response = $this->actingAs(User::factory()->administrator()->create())
+            ->get(route($this->typeRoute('history'), $evaluation));
+
+        $response->assertInertia(
+            fn ($page) => $page
+            ->has('modal.props.versions', 2)
+            ->where('modal.props.versions.0.event', AuditEvent::CREATED->value)
+            ->where('modal.props.versions.0.changes', [])
+            ->where('modal.props.versions.1.event', AuditEvent::UPDATED->value)
+            ->where('modal.props.versions.1.changes', ['comment'])
+            ->where('modal.props.versions.1.evaluation.comment', 'Changed comment')
+        );
+    }
 }

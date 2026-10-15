@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\AuditEvent;
 use App\Interfaces\EvaluationInterface;
+use App\Models\AuditLog;
 use App\Models\Evaluation;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -53,5 +54,44 @@ class EvaluationService
         $evaluation->saveLog(AuditEvent::DELETED, $old, null);
 
         return $result;
+    }
+
+    public static function versions(Evaluation $evaluation): array
+    {
+        $logs = $evaluation->auditLogs()->with('user')->orderBy('id')->get();
+
+        return $logs->map(function (AuditLog $log) use ($evaluation): array {
+            $values = $log->new_values ?? $log->old_values;
+
+            $version = $evaluation->newInstance([], true);
+            $version->setRawAttributes(Arr::except($values, 'criteriaScores'), true);
+            $version->setRelation('criteriaScores', $version->criteriaScores()->makeMany($values['criteriaScores'] ?? []));
+
+            return [
+                'id' => $log->id,
+                'event' => $log->event,
+                'created_at' => $log->created_at,
+                'user' => $log->user,
+                'changes' => self::changedFields($log->old_values, $log->new_values),
+                'new_values' => $log->new_values,
+                'evaluation' => $version->loadForView(),
+            ];
+        })->all();
+    }
+
+    private static function changedFields(?array $old, ?array $new): array
+    {
+        if ($old === null || $new === null) {
+            return [];
+        }
+
+        $changes = [];
+        foreach (Arr::except($new, ['updated_at']) as $field => $value) {
+            if (($old[$field] ?? null) != $value) {
+                $changes[] = $field;
+            }
+        }
+
+        return $changes;
     }
 }

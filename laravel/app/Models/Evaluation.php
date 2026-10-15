@@ -52,7 +52,7 @@ class Evaluation extends Model implements EvaluationInterface
 
     public function loadForView(): Evaluation
     {
-        return $this->load('criteriaScores', 'recommendation', 'creator');
+        return $this->loadMissing('criteriaScores', 'recommendation', 'creator');
     }
 
     protected function casts(): array
