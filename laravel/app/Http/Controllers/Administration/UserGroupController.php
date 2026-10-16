@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Administration;
 
+use App\Enums\AuditEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Administration\UserGroupRequest;
+use App\Models\AuditLog;
 use App\Models\Right;
 use App\Models\RightGroup;
 use App\Models\UserGroup;
+use Emargareten\InertiaModal\Modal;
+use Illuminate\Support\Arr;
 
 class UserGroupController extends Controller
 {
@@ -33,6 +37,8 @@ class UserGroupController extends Controller
         $userGroup = UserGroup::create(['name' => $validated['name']]);
         $userGroup->rights()->attach($validated['rights']);
 
+        $userGroup->saveLog(AuditEvent::CREATED, null, $userGroup->createSnapshot());
+
         return redirect()->route('administration.user-group.index');
     }
 
@@ -55,16 +61,54 @@ class UserGroupController extends Controller
     public function update(UserGroupRequest $request, UserGroup $userGroup)
     {
         $validated = $request->validated();
+
+        $old = $userGroup->createSnapshot();
+
         $userGroup->update(['name' => $validated['name']]);
         $userGroup->rights()->sync($validated['rights']);
+
+        $userGroup->saveLog(AuditEvent::UPDATED, $old, $userGroup->createSnapshot());
 
         return redirect()->route('administration.user-group.index');
     }
 
     public function destroy(UserGroup $userGroup)
     {
+        $old = $userGroup->createSnapshot();
         $userGroup->delete();
 
+        $userGroup->saveLog(AuditEvent::DELETED, $old, null);
+
         return redirect()->route('administration.user-group.index');
+    }
+
+    public function history(UserGroup $userGroup)
+    {
+        $rights = Right::all()->keyBy('id');
+
+        $versions = $userGroup->auditLogs()->with('user')->orderBy('id')->get()
+            ->map(function (AuditLog $log) use ($userGroup, $rights): array {
+                $values = $log->new_values ?? $log->old_values;
+
+                $version = $userGroup->newInstance([], true);
+                $version->setRawAttributes(Arr::except($values, 'rights'), true);
+                $version->setRelation('rights', $rights->only($values['rights'] ?? [])->values());
+
+                return [
+                    'id' => $log->id,
+                    'event' => $log->event,
+                    'created_at' => $log->created_at,
+                    'user' => $log->user,
+                    'changes' => $log->changedFields(),
+                    'new_values' => $log->new_values,
+                    'userGroup' => $version,
+                ];
+            })->all();
+
+        return new Modal('administration/user-group/user-group-view-history', [
+            'userGroup' => $userGroup,
+            'versions' => $versions,
+            'rightGroups' => RightGroup::with('rights:id,right_group_id,name,description')->get(),
+        ])->baseRoute('administration.user-group.index');
     }
 }

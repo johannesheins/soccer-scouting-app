@@ -14,6 +14,7 @@ Route::middleware(['auth', 'verified', 'password.renewed'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('player/search', [PlayerSearchController::class, 'index'])->name('player.search');
+    Route::get('player/{player}/history', [PlayerController::class, 'history'])->name('player.history');
     Route::resource('player', PlayerController::class)->names('player');
 
     Route::group(['prefix' => 'evaluation', 'as' => 'evaluation.'], function () {
@@ -35,6 +36,7 @@ Route::middleware(['auth', 'verified', 'password.renewed'])->group(function () {
     });
 
     Route::get('club/search', [ClubSearchController::class, 'index'])->name('club.search');
+    Route::get('club/{club}/history', [ClubController::class, 'history'])->name('club.history');
     Route::resource('club', ClubController::class)->names('club');
 
 

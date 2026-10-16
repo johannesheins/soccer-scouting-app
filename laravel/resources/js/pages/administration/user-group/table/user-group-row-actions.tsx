@@ -35,6 +35,9 @@ export function UserGroupRowActions({userGroup: ug}: { userGroup: UserGroup }) {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => router.visit(userGroup.history.url(ug.id))}>
+                        {t('View history')}
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => router.visit(userGroup.edit.url(ug.id))}>
                         {t('Edit user group')}
                     </DropdownMenuItem>

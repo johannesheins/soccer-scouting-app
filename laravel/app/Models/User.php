@@ -17,6 +17,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use App\Interfaces\PermissionsInterface;
+use App\Traits\Auditable;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
@@ -31,6 +32,9 @@ class User extends Authenticatable implements HasLocalePreference, MustRenewPass
     use Notifiable;
     use TwoFactorAuthenticatable;
     use SoftDeletes;
+    use Auditable;
+
+    private array $auditedRelations = ['userGroups'];
 
     public function preferredLocale(): ?string
     {

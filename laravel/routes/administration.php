@@ -9,6 +9,7 @@ use App\Http\Middleware\RequireAdministrator;
 Route::middleware(['auth', 'verified', 'password.renewed', RequireAdministrator::class])->prefix('administration')->group(function () {
     Route::inertia('/', 'administration/dashboard')->name('administration');
 
+    Route::get('user-group/{user_group}/history', [UserGroupController::class, 'history'])->name('administration.user-group.history');
     Route::resource('user-group', UserGroupController::class)->names('administration.user-group');
     Route::resource('user', UserController::class)->names('administration.user');
     Route::resource('evaluation-criteria', EvaluationCriteriaController::class);

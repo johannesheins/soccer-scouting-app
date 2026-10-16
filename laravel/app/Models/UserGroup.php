@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +13,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class UserGroup extends Model
 {
     use HasFactory;
+    use Auditable;
+
+    private array $auditedRelations = ['rights'];
 
     protected $fillable = [
         'name',

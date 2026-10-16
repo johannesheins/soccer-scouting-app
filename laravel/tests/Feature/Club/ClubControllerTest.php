@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Club;
 
+use App\Enums\AuditEvent;
 use App\Enums\Permission\ClubPermissions;
 use App\Models\Club;
 use App\Models\User;
@@ -24,6 +25,7 @@ class ClubControllerTest extends TestCase
             ClubPermissions::View,
             ClubPermissions::Edit,
             ClubPermissions::Destroy,
+            ClubPermissions::ViewHistory,
         ]);
     }
 
@@ -61,6 +63,24 @@ class ClubControllerTest extends TestCase
             ->component('club/club-create')
         );
         $this->assertRights(ClubPermissions::Create, 'club.create');
+    }
+
+    public function test_store_writes_created_audit_log(): void
+    {
+        $this->actingAs($this->user)
+            ->post(route('club.store'), [
+                'clubname' => 'FC Testhausen',
+                'zip_code' => '12345',
+                'city' => 'Testhausen',
+            ]);
+
+        $club = Club::where('clubname', 'FC Testhausen')->sole();
+        $log = $club->auditLogs()->sole();
+        $this->assertSame(AuditEvent::CREATED, $log->event);
+        $this->assertSame(Club::class, $log->auditable_type);
+        $this->assertNull($log->old_values);
+        $this->assertSame('FC Testhausen', $log->new_values['clubname']);
+        $this->assertSame($this->user->id, $log->user_id);
     }
 
     public function test_create_guest_redirect_login(): void
@@ -194,6 +214,87 @@ class ClubControllerTest extends TestCase
     }
     #endregion
 
+    #region history
+    public function test_history_guest_redirect_login(): void
+    {
+        $club = Club::factory()->create();
+
+        $this->get(route('club.history', $club))
+            ->assertRedirect(route('login'));
+    }
+
+    public function test_history_renders_modal_with_versions(): void
+    {
+        $club = Club::factory()->create(['clubname' => 'FC Alt']);
+        $club->saveLog(AuditEvent::CREATED, null, $club->createSnapshot());
+
+        $old = $club->createSnapshot();
+        $club->update(['clubname' => 'FC Neu']);
+        $club->saveLog(AuditEvent::UPDATED, $old, $club->createSnapshot());
+
+        $response = $this->actingAs($this->user)
+            ->get(route('club.history', $club));
+
+        $response->assertInertia(
+            fn ($page) => $page
+            ->component('club/club-index')
+            ->where('modal.component', 'club/club-view-history')
+            ->where('modal.props.club.id', $club->id)
+            ->has('modal.props.versions', 2)
+            ->where('modal.props.versions.0.event', AuditEvent::CREATED->value)
+            ->where('modal.props.versions.0.club.clubname', 'FC Alt')
+            ->where('modal.props.versions.0.changes', [])
+            ->where('modal.props.versions.1.event', AuditEvent::UPDATED->value)
+            ->where('modal.props.versions.1.club.id', $club->id)
+            ->where('modal.props.versions.1.club.clubname', 'FC Neu')
+            ->where('modal.props.versions.1.changes', ['clubname'])
+            ->where('modal.props.versions.1.new_values.clubname', 'FC Neu')
+        );
+    }
+
+    public function test_history_requires_the_view_history_and_view_right(): void
+    {
+        $club = Club::factory()->create();
+
+        $this->actingAs($this->createUserWithRight([ClubPermissions::ViewHistory, ClubPermissions::View]))
+            ->get(route('club.history', $club))
+            ->assertOk();
+
+        $this->actingAs(User::factory()->administrator()->create())
+            ->get(route('club.history', $club))
+            ->assertOk();
+
+        $this->actingAs(User::factory()->create())
+            ->get(route('club.history', $club))
+            ->assertForbidden();
+    }
+
+    public function test_history_is_forbidden_with_view_history_but_without_view(): void
+    {
+        $club = Club::factory()->create();
+
+        $this->actingAs($this->createUserWithRight([ClubPermissions::ViewHistory]))
+            ->get(route('club.history', $club))
+            ->assertForbidden();
+    }
+
+    public function test_history_is_forbidden_with_view_but_without_view_history(): void
+    {
+        $club = Club::factory()->create();
+
+        $this->actingAs($this->createUserWithRight([ClubPermissions::View]))
+            ->get(route('club.history', $club))
+            ->assertForbidden();
+    }
+
+    public function test_history_returns_404_for_nonexistent_club(): void
+    {
+        $this->actingAs($this->user)
+            ->get(route('club.history', 999))
+            ->assertNotFound();
+    }
+    #endregion
+
     #region edit
     public function test_edit_shows_club_edit_view(): void
     {
@@ -257,6 +358,22 @@ class ClubControllerTest extends TestCase
         $this->assertRights(ClubPermissions::Edit, ['club.update', $club]);
     }
 
+    public function test_update_writes_updated_audit_log(): void
+    {
+        $club = Club::factory()->create(['clubname' => 'FC Alt']);
+
+        $this->actingAs($this->user)
+            ->put(route('club.update', $club), [
+                'clubname' => 'FC Neu',
+            ]);
+
+        $log = $club->auditLogs()->sole();
+        $this->assertSame(AuditEvent::UPDATED, $log->event);
+        $this->assertSame('FC Alt', $log->old_values['clubname']);
+        $this->assertSame('FC Neu', $log->new_values['clubname']);
+        $this->assertSame($this->user->id, $log->user_id);
+    }
+
     public function test_update_guest_redirect_login(): void
     {
         $club = Club::factory()->create();
@@ -309,6 +426,20 @@ class ClubControllerTest extends TestCase
 
         $response->assertRedirect(route('club.index'));
         $this->assertDatabaseMissing('clubs', ['id' => $club->id]);
+    }
+
+    public function test_destroy_writes_deleted_audit_log(): void
+    {
+        $club = Club::factory()->create(['clubname' => 'FC Weg']);
+
+        $this->actingAs($this->user)
+            ->delete(route('club.destroy', $club));
+
+        $log = $club->auditLogs()->sole();
+        $this->assertSame(AuditEvent::DELETED, $log->event);
+        $this->assertSame('FC Weg', $log->old_values['clubname']);
+        $this->assertNull($log->new_values);
+        $this->assertSame($this->user->id, $log->user_id);
     }
 
     public function test_destroy_guest_redirect_login(): void

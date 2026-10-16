@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Administration;
 
+use App\Enums\AuditEvent;
 use App\Models\Right;
 use App\Models\RightGroup;
 use App\Models\UserGroup;
@@ -59,6 +60,26 @@ class UserGroupControllerTest extends AdministrationTestCase
         $this->assertDatabaseHas('user_group_rights', ['right_id' => $rights->first()->id]);
 
         $response->assertRedirect(route('administration.user-group.index'));
+    }
+
+    public function test_store_writes_created_audit_log()
+    {
+        $rights = Right::factory(3)->create();
+
+        $this->actingAs($this->administratorUser)
+            ->post(route('administration.user-group.store'), [
+                'name' => 'Scouts',
+                'rights' => $rights->pluck('id')->toArray(),
+            ]);
+
+        $userGroup = UserGroup::where('name', 'Scouts')->sole();
+        $log = $userGroup->auditLogs()->sole();
+        $this->assertSame(AuditEvent::CREATED, $log->event);
+        $this->assertSame(UserGroup::class, $log->auditable_type);
+        $this->assertNull($log->old_values);
+        $this->assertSame('Scouts', $log->new_values['name']);
+        $this->assertSame($rights->pluck('id')->sort()->values()->all(), $log->new_values['rights']);
+        $this->assertSame($this->administratorUser->id, $log->user_id);
     }
 
     public function test_store_empty_request()
@@ -142,6 +163,28 @@ class UserGroupControllerTest extends AdministrationTestCase
         $response->assertRedirect(route('administration.user-group.index'));
     }
 
+    public function test_update_writes_updated_audit_log()
+    {
+        $oldRight = Right::factory()->create();
+        $newRight = Right::factory()->create();
+        $userGroup = UserGroup::factory()->create(['name' => 'Old Group']);
+        $userGroup->rights()->attach($oldRight);
+
+        $this->actingAs($this->administratorUser)
+            ->put(route('administration.user-group.update', $userGroup->id), [
+                'name' => 'New Group',
+                'rights' => [$newRight->id],
+            ]);
+
+        $log = $userGroup->auditLogs()->sole();
+        $this->assertSame(AuditEvent::UPDATED, $log->event);
+        $this->assertSame('Old Group', $log->old_values['name']);
+        $this->assertSame([$oldRight->id], $log->old_values['rights']);
+        $this->assertSame('New Group', $log->new_values['name']);
+        $this->assertSame([$newRight->id], $log->new_values['rights']);
+        $this->assertSame($this->administratorUser->id, $log->user_id);
+    }
+
     public function test_update_empty_request()
     {
         $userGroup = UserGroup::factory()->create();
@@ -182,5 +225,80 @@ class UserGroupControllerTest extends AdministrationTestCase
 
         $response->assertRedirect(route('administration.user-group.index'));
 
+    }
+
+    public function test_destroy_writes_deleted_audit_log()
+    {
+        $right = Right::factory()->create();
+        $userGroup = UserGroup::factory()->create(['name' => 'Gone Group']);
+        $userGroup->rights()->attach($right);
+
+        $this->actingAs($this->administratorUser)
+            ->delete(route('administration.user-group.destroy', $userGroup->id));
+
+        $log = $userGroup->auditLogs()->sole();
+        $this->assertSame(AuditEvent::DELETED, $log->event);
+        $this->assertSame('Gone Group', $log->old_values['name']);
+        $this->assertSame([$right->id], $log->old_values['rights']);
+        $this->assertNull($log->new_values);
+        $this->assertSame($this->administratorUser->id, $log->user_id);
+    }
+
+    public function test_history()
+    {
+        $rightGroup = RightGroup::factory()->create();
+        [$oldRight, $newRight] = Right::factory(2)->for($rightGroup)->create()->all();
+        $userGroup = UserGroup::factory()->create(['name' => 'Old Group']);
+        $userGroup->rights()->attach($oldRight);
+        $userGroup->saveLog(AuditEvent::CREATED, null, $userGroup->createSnapshot());
+
+        $old = $userGroup->createSnapshot();
+        $userGroup->update(['name' => 'New Group']);
+        $userGroup->rights()->sync([$newRight->id]);
+        $userGroup->saveLog(AuditEvent::UPDATED, $old, $userGroup->createSnapshot());
+
+        $response = $this->actingAs($this->administratorUser)
+            ->get(route('administration.user-group.history', $userGroup->id));
+
+        $this->assertAdministrationRoute(['administration.user-group.history', $userGroup->id], 'administration/user-group/user-group-index');
+        $response->assertOk();
+        $response->assertInertia(
+            fn ($page) => $page
+            ->component('administration/user-group/user-group-index')
+            ->where('modal.component', 'administration/user-group/user-group-view-history')
+            ->where('modal.props.userGroup.id', $userGroup->id)
+            ->has('modal.props.rightGroups', 1)
+            ->has('modal.props.versions', 2)
+            ->where('modal.props.versions.0.event', AuditEvent::CREATED->value)
+            ->where('modal.props.versions.0.userGroup.name', 'Old Group')
+            ->has('modal.props.versions.0.userGroup.rights', 1)
+            ->where('modal.props.versions.0.userGroup.rights.0.id', $oldRight->id)
+            ->where('modal.props.versions.1.event', AuditEvent::UPDATED->value)
+            ->where('modal.props.versions.1.userGroup.name', 'New Group')
+            ->has('modal.props.versions.1.userGroup.rights', 1)
+            ->where('modal.props.versions.1.userGroup.rights.0.id', $newRight->id)
+            ->where('modal.props.versions.1.changes', ['name', 'rights'])
+        );
+    }
+
+    public function test_history_does_not_write_to_the_database()
+    {
+        $userGroup = UserGroup::factory()->create();
+        $userGroup->rights()->attach(Right::factory(2)->create());
+        $userGroup->saveLog(AuditEvent::CREATED, null, $userGroup->createSnapshot());
+
+        $this->actingAs($this->administratorUser)
+            ->get(route('administration.user-group.history', $userGroup->id))
+            ->assertOk();
+
+        $this->assertDatabaseCount('user_group_rights', 2);
+        $this->assertDatabaseCount('audit_logs', 1);
+    }
+
+    public function test_history_returns_404_for_nonexistent_user_group()
+    {
+        $this->actingAs($this->administratorUser)
+            ->get(route('administration.user-group.history', 999))
+            ->assertNotFound();
     }
 }

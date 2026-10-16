@@ -1,3 +1,4 @@
+import type {AuditVersion} from "@/types/audit-version";
 import type {Club} from "@/types/club";
 import type {Position} from "@/types/position";
 
@@ -10,6 +11,10 @@ export type PlayerSmall = {
     strong_foot: string,
     club_id: number,
     positions: { id: number }[],
+};
+
+export type PlayerSnapshot = Omit<PlayerSmall, 'positions'> & {
+    positions: number[],
 };
 
 export type PlayerOption = {
@@ -35,3 +40,8 @@ export type playerQuickSearchUserClubs = Club[]
 export type PlayerQuickSearchUserYears = {
     year_of_birth: number
 }[]
+
+export type PlayerVersion = AuditVersion & {
+    new_values: PlayerSnapshot,
+    player: Player,
+}

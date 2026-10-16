@@ -32,6 +32,7 @@ class PlayerControllerTest extends TestCase
             PlayerPermissions::View,
             PlayerPermissions::Edit,
             PlayerPermissions::Destroy,
+            PlayerPermissions::ViewHistory,
         ]);
     }
 
@@ -373,6 +374,127 @@ class PlayerControllerTest extends TestCase
     {
         $this->actingAs($this->user)
             ->get(route('player.show', 999))
+            ->assertNotFound();
+    }
+    #endregion
+
+    #region history
+    public function test_history_guest_redirect_login(): void
+    {
+        $player = Player::factory()->create();
+
+        $this->get(route('player.history', $player))
+            ->assertRedirect(route('login'));
+    }
+
+    public function test_history_renders_modal_with_versions(): void
+    {
+        $player = Player::factory()->create();
+        $player->saveLog(AuditEvent::CREATED, null, $player->createSnapshot());
+
+        $response = $this->actingAs($this->user)
+            ->get(route('player.history', $player));
+
+        $response->assertInertia(
+            fn ($page) => $page
+            ->component('player/player-index')
+            ->where('modal.component', 'player/player-view-history')
+            ->where('modal.props.player.id', $player->id)
+            ->has('modal.props.versions', 1)
+            ->where('modal.props.versions.0.event', AuditEvent::CREATED->value)
+            ->where('modal.props.versions.0.player.id', $player->id)
+            ->has('modal.props.versions.0.player.club')
+            ->has('modal.props.versions.0.player.positions')
+        );
+    }
+
+    public function test_history_requires_the_view_history_and_view_right(): void
+    {
+        $player = Player::factory()->create();
+
+        $this->actingAs($this->createUserWithRight([PlayerPermissions::ViewHistory, PlayerPermissions::View]))
+            ->get(route('player.history', $player))
+            ->assertOk();
+
+        $this->actingAs(User::factory()->administrator()->create())
+            ->get(route('player.history', $player))
+            ->assertOk();
+
+        $this->actingAs(User::factory()->create())
+            ->get(route('player.history', $player))
+            ->assertForbidden();
+    }
+
+    public function test_history_is_forbidden_with_view_history_but_without_view(): void
+    {
+        $player = Player::factory()->create();
+
+        $this->actingAs($this->createUserWithRight([PlayerPermissions::ViewHistory]))
+            ->get(route('player.history', $player))
+            ->assertForbidden();
+    }
+
+    public function test_history_is_forbidden_with_view_but_without_view_history(): void
+    {
+        $player = Player::factory()->create();
+
+        $this->actingAs($this->createUserWithRight([PlayerPermissions::View]))
+            ->get(route('player.history', $player))
+            ->assertForbidden();
+    }
+
+    public function test_history_renders_historical_club_and_positions(): void
+    {
+        $oldClub = Club::factory()->create();
+        $newClub = Club::factory()->create();
+        [$oldPosition, $newPosition] = Position::factory(2)->create()->all();
+        $player = Player::factory()->create(['club_id' => $oldClub->id, 'height' => 170]);
+        $player->positions()->attach($oldPosition);
+        $player->saveLog(AuditEvent::CREATED, null, $player->createSnapshot());
+
+        $old = $player->createSnapshot();
+        $player->update(['club_id' => $newClub->id, 'height' => 180]);
+        $player->positions()->sync([$newPosition->id]);
+        $player->saveLog(AuditEvent::UPDATED, $old, $player->createSnapshot());
+
+        $response = $this->actingAs($this->user)
+            ->get(route('player.history', $player));
+
+        $response->assertInertia(
+            fn ($page) => $page
+            ->has('modal.props.versions', 2)
+            ->where('modal.props.versions.0.event', AuditEvent::CREATED->value)
+            ->where('modal.props.versions.0.player.height', 170)
+            ->where('modal.props.versions.0.player.club.id', $oldClub->id)
+            ->has('modal.props.versions.0.player.positions', 1)
+            ->where('modal.props.versions.0.player.positions.0.id', $oldPosition->id)
+            ->where('modal.props.versions.1.event', AuditEvent::UPDATED->value)
+            ->where('modal.props.versions.1.player.height', 180)
+            ->where('modal.props.versions.1.player.club.id', $newClub->id)
+            ->has('modal.props.versions.1.player.positions', 1)
+            ->where('modal.props.versions.1.player.positions.0.id', $newPosition->id)
+        );
+    }
+
+    public function test_history_does_not_write_to_the_database(): void
+    {
+        $player = Player::factory()->create();
+        $player->positions()->attach(Position::factory(2)->create());
+        $player->saveLog(AuditEvent::CREATED, null, $player->createSnapshot());
+
+        $this->actingAs($this->user)
+            ->get(route('player.history', $player))
+            ->assertOk();
+
+        $this->assertDatabaseCount('positions', 2);
+        $this->assertDatabaseCount('player_positions', 2);
+        $this->assertDatabaseCount('audit_logs', 1);
+    }
+
+    public function test_history_returns_404_for_nonexistent_player(): void
+    {
+        $this->actingAs($this->user)
+            ->get(route('player.history', 999))
             ->assertNotFound();
     }
     #endregion

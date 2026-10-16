@@ -56,7 +56,7 @@ export default function EvaluationRowActions({evaluation}: { evaluation: Evaluat
             throw new Error(`Unknown evaluation type: ${evaluation.evaluation_type}`);
     }
 
-    const currentUserIsCreator = evaluation.creator.id ?? null === useUser().id;
+    const currentUserIsCreator = (evaluation.creator.id ?? null) === useUser().id;
 
     const canView = useHasRight(evaluationPermissions.ViewAll) || (useHasRight(evaluationPermissions.View) && currentUserIsCreator)
     const canViewPlayer = useHasRight(PlayerPermissions.View) && !!evaluationPlayer;

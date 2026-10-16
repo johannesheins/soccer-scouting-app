@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Enums\AuditEvent;
 use App\Enums\Request\PlayerRequestNameEnum as Name;
 use App\Http\Requests\Player\PlayerRequest;
+use App\Models\AuditLog;
 use App\Models\Club;
 use App\Models\Player;
 use App\Models\Position;
 use Emargareten\InertiaModal\Modal;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Arr;
 
 class PlayerController extends Controller implements HasMiddleware
 {
@@ -20,6 +22,7 @@ class PlayerController extends Controller implements HasMiddleware
             new Middleware('can:index,App\Models\Player', only: ['index']),
             new Middleware('can:create,App\Models\Player', only: ['create', 'store']),
             new Middleware('can:view,player', only: ['show']),
+            new Middleware('can:viewHistory,player', only: ['history']),
             new Middleware('can:update,player', only: ['edit', 'update']),
             new Middleware('can:delete,player', only: ['destroy']),
         ];
@@ -62,7 +65,7 @@ class PlayerController extends Controller implements HasMiddleware
     public function show(Player $player)
     {
         return new Modal('player/player-show', [
-            'player' => $player->loadForPlayerView(),
+            'player' => $player->loadForView(),
         ])->baseRoute('player.index');
     }
 
@@ -97,5 +100,36 @@ class PlayerController extends Controller implements HasMiddleware
         $player->saveLog(AuditEvent::DELETED, $old, null);
 
         return redirect()->route('player.index');
+    }
+
+    public function history(Player $player)
+    {
+        $positions = Position::all()->keyBy('id');
+        $clubs = Club::all()->keyBy('id');
+
+        $versions = $player->auditLogs()->with('user')->orderBy('id')->get()
+            ->map(function (AuditLog $log) use ($player, $positions, $clubs): array {
+                $values = $log->new_values ?? $log->old_values;
+
+                $version = $player->newInstance([], true);
+                $version->setRawAttributes(Arr::except($values, 'positions'), true);
+                $version->setRelation('positions', $positions->only($values['positions'] ?? [])->values());
+                $version->setRelation('club', $clubs->get($version->club_id));
+
+                return [
+                    'id' => $log->id,
+                    'event' => $log->event,
+                    'created_at' => $log->created_at,
+                    'user' => $log->user,
+                    'changes' => $log->changedFields(),
+                    'new_values' => $log->new_values,
+                    'player' => $version,
+                ];
+            })->all();
+
+        return new Modal('player/player-view-history', [
+            'player' => $player->loadForView(),
+            'versions' => $versions,
+        ])->baseRoute('player.index');
     }
 }

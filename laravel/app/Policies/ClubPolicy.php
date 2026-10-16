@@ -23,6 +23,11 @@ class ClubPolicy
         return $user->hasRight(ClubPermissions::View);
     }
 
+    public function viewHistory(User $user, Club $club): bool
+    {
+        return $user->hasRight(ClubPermissions::ViewHistory) && $this->view($user);
+    }
+
     public function create(User $user): bool
     {
         return $user->hasRight(ClubPermissions::Create);

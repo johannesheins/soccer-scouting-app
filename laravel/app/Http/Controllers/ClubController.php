@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\AuditEvent;
 use App\Http\Requests\Club\ClubRequest;
+use App\Models\AuditLog;
 use App\Models\Club;
 use Emargareten\InertiaModal\Modal;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -17,6 +19,7 @@ class ClubController extends Controller implements HasMiddleware
             new Middleware('can:search,App\Models\Club', only: ['search']),
             new Middleware('can:create,App\Models\Club', only: ['create', 'store']),
             new Middleware('can:view,club', only: ['show']),
+            new Middleware('can:viewHistory,club', only: ['history']),
             new Middleware('can:update,club', only: ['edit', 'update']),
             new Middleware('can:delete,club', only: ['destroy']),
         ];
@@ -34,7 +37,9 @@ class ClubController extends Controller implements HasMiddleware
 
     public function store(ClubRequest $request)
     {
-        Club::create($request->validated());
+        $club = Club::create($request->validated());
+
+        $club->saveLog(AuditEvent::CREATED, null, $club->createSnapshot());
 
         return redirect()->route('club.index');
     }
@@ -55,15 +60,46 @@ class ClubController extends Controller implements HasMiddleware
 
     public function update(ClubRequest $request, Club $club)
     {
+        $old = $club->createSnapshot();
+
         $club->update($request->validated());
+
+        $club->saveLog(AuditEvent::UPDATED, $old, $club->createSnapshot());
 
         return redirect()->route('club.index');
     }
 
     public function destroy(Club $club)
     {
+        $old = $club->createSnapshot();
         $club->delete();
 
+        $club->saveLog(AuditEvent::DELETED, $old, null);
+
         return redirect()->route('club.index');
+    }
+
+    public function history(Club $club)
+    {
+        $versions = $club->auditLogs()->with('user')->orderBy('id')->get()
+            ->map(function (AuditLog $log) use ($club): array {
+                $version = $club->newInstance([], true);
+                $version->setRawAttributes($log->new_values ?? $log->old_values, true);
+
+                return [
+                    'id' => $log->id,
+                    'event' => $log->event,
+                    'created_at' => $log->created_at,
+                    'user' => $log->user,
+                    'changes' => $log->changedFields(),
+                    'new_values' => $log->new_values,
+                    'club' => $version,
+                ];
+            })->all();
+
+        return new Modal('club/club-view-history', [
+            'club' => $club,
+            'versions' => $versions,
+        ])->baseRoute('club.index');
     }
 }

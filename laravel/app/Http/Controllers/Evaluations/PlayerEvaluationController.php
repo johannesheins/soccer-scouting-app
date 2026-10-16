@@ -40,7 +40,7 @@ class PlayerEvaluationController extends Controller implements HasMiddleware
     {
         $playerId = $request->input(reqN(Name::playerId));
         if ($playerId !== null) {
-            $player = Player::find($playerId)->loadForPlayerView();
+            $player = Player::find($playerId)->loadForView();
         }
 
         return inertia('evaluation/player/player-evaluation-create', [
@@ -76,7 +76,7 @@ class PlayerEvaluationController extends Controller implements HasMiddleware
             'positions' => Position::with('positionGroup:id,name')->orderBy('id')->get(['id', 'position_code', 'position_group_id']),
             'clubs' => Club::orderBy('clubname')->get(['id', 'clubname']),
             'recommendations' => Recommendation::all(),
-            'player' => $playerEvaluation->player->loadForPlayerView(),
+            'player' => $playerEvaluation->player->loadForView(),
         ]);
     }
 

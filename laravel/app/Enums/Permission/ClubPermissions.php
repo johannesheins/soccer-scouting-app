@@ -12,4 +12,5 @@ enum ClubPermissions: int implements PermissionsInterface
     case View = 20;
     case Edit = 21;
     case Destroy = 22;
+    case ViewHistory = 34;
 }

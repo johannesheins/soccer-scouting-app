@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Administration;
 
+use App\Enums\AuditEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Administration\UserCreateRequest;
 use App\Http\Requests\Administration\UserUpdateRequest;
@@ -39,6 +40,8 @@ class UserController extends Controller
         $user->markPasswordAsExpired();
         $user->userGroups()->attach($validated['user_groups'] ?? []);
 
+        $user->saveLog(AuditEvent::CREATED, null, $user->createSnapshot());
+
         return redirect(route('administration.user.index'));
     }
 
@@ -61,15 +64,22 @@ class UserController extends Controller
     {
         $validated = $request->validated();
 
+        $old = $user->createSnapshot();
+
         $user->update($validated);
         $user->userGroups()->sync($validated['user_groups'] ?? []);
+
+        $user->saveLog(AuditEvent::UPDATED, $old, $user->createSnapshot());
 
         return redirect(route('administration.user.index'));
     }
 
     public function destroy(User $user)
     {
+        $old = $user->createSnapshot();
         $user->delete();
+
+        $user->saveLog(AuditEvent::DELETED, $old, null);
 
         return redirect(route('administration.user.index'));
     }

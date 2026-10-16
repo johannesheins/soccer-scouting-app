@@ -31,12 +31,13 @@ export function ClubRowActions({club}: { club: Club }) {
     const canView = useHasRight(ClubPermissions.View);
     const canEdit = useHasRight(ClubPermissions.Edit);
     const canDelete = useHasRight(ClubPermissions.Destroy);
+    const canViewHistory = useHasRight(ClubPermissions.ViewHistory) && canView;
 
     if (!canView && !canEdit && !canDelete) {
 return null;
 }
 
-    const showEditDeleteSeparator = canView && (canEdit || canDelete);
+    const showEditDeleteSeparator = canView && (canViewHistory || canEdit || canDelete);
 
     return (
         <>
@@ -56,6 +57,11 @@ return null;
 
                     {showEditDeleteSeparator && <DropdownMenuSeparator/>}
 
+                    {canViewHistory && (
+                        <DropdownMenuItem onClick={() => router.visit(clubRoute.history.url(club))}>
+                            {t('View history')}
+                        </DropdownMenuItem>
+                    )}
                     {canEdit && (
                         <DropdownMenuItem onClick={() => router.visit(clubRoute.edit.url(club.id))}>
                             {t('Edit club')}

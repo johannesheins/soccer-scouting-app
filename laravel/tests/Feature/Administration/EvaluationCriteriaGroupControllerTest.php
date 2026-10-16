@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Administration;
 
+use App\Enums\AuditEvent;
 use App\Models\EvaluationCriteriaGroup;
 
 class EvaluationCriteriaGroupControllerTest extends AdministrationTestCase
@@ -115,5 +116,51 @@ class EvaluationCriteriaGroupControllerTest extends AdministrationTestCase
 
         $this->assertDatabaseMissing('evaluation_criteria_groups', ['id' => $group->id]);
         $response->assertRedirect(route('evaluation-criteria-group.index'));
+    }
+
+    public function test_store_writes_created_audit_log()
+    {
+        $this->actingAs($this->administratorUser)
+            ->post(route('evaluation-criteria-group.store'), [
+                'name' => 'Technique',
+            ]);
+
+        $group = EvaluationCriteriaGroup::where('name', 'Technique')->sole();
+        $log = $group->auditLogs()->sole();
+        $this->assertSame(AuditEvent::CREATED, $log->event);
+        $this->assertSame(EvaluationCriteriaGroup::class, $log->auditable_type);
+        $this->assertNull($log->old_values);
+        $this->assertSame('Technique', $log->new_values['name']);
+        $this->assertSame($this->administratorUser->id, $log->user_id);
+    }
+
+    public function test_update_writes_updated_audit_log()
+    {
+        $group = EvaluationCriteriaGroup::factory()->create(['name' => 'Old Group']);
+
+        $this->actingAs($this->administratorUser)
+            ->put(route('evaluation-criteria-group.update', $group->id), [
+                'name' => 'New Group',
+            ]);
+
+        $log = $group->auditLogs()->sole();
+        $this->assertSame(AuditEvent::UPDATED, $log->event);
+        $this->assertSame('Old Group', $log->old_values['name']);
+        $this->assertSame('New Group', $log->new_values['name']);
+        $this->assertSame($this->administratorUser->id, $log->user_id);
+    }
+
+    public function test_destroy_writes_deleted_audit_log()
+    {
+        $group = EvaluationCriteriaGroup::factory()->create(['name' => 'Gone Group']);
+
+        $this->actingAs($this->administratorUser)
+            ->delete(route('evaluation-criteria-group.destroy', $group->id));
+
+        $log = $group->auditLogs()->sole();
+        $this->assertSame(AuditEvent::DELETED, $log->event);
+        $this->assertSame('Gone Group', $log->old_values['name']);
+        $this->assertNull($log->new_values);
+        $this->assertSame($this->administratorUser->id, $log->user_id);
     }
 }
