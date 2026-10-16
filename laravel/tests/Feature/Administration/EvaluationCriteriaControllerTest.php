@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Administration;
 
+use App\Enums\AuditEvent;
 use App\Models\EvaluationCriteria;
 
 class EvaluationCriteriaControllerTest extends AdministrationTestCase
@@ -124,5 +125,53 @@ class EvaluationCriteriaControllerTest extends AdministrationTestCase
 
         $this->assertDatabaseMissing('evaluation_criteria', ['id' => $criterion->id]);
         $response->assertRedirect(route('evaluation-criteria.index'));
+    }
+
+    public function test_store_writes_created_audit_log()
+    {
+        $this->actingAs($this->administratorUser)
+            ->post(route('evaluation-criteria.store'), [
+                'name' => 'Passing',
+                'minimum_player_age' => 12,
+            ]);
+
+        $criterion = EvaluationCriteria::where('name', 'Passing')->sole();
+        $log = $criterion->auditLogs()->sole();
+        $this->assertSame(AuditEvent::CREATED, $log->event);
+        $this->assertSame(EvaluationCriteria::class, $log->auditable_type);
+        $this->assertNull($log->old_values);
+        $this->assertSame('Passing', $log->new_values['name']);
+        $this->assertSame($this->administratorUser->id, $log->user_id);
+    }
+
+    public function test_update_writes_updated_audit_log()
+    {
+        $criterion = EvaluationCriteria::factory()->create(['name' => 'Old Criterion']);
+
+        $this->actingAs($this->administratorUser)
+            ->put(route('evaluation-criteria.update', $criterion->id), [
+                'name' => 'New Criterion',
+                'minimum_player_age' => $criterion->minimum_player_age,
+            ]);
+
+        $log = $criterion->auditLogs()->sole();
+        $this->assertSame(AuditEvent::UPDATED, $log->event);
+        $this->assertSame('Old Criterion', $log->old_values['name']);
+        $this->assertSame('New Criterion', $log->new_values['name']);
+        $this->assertSame($this->administratorUser->id, $log->user_id);
+    }
+
+    public function test_destroy_writes_deleted_audit_log()
+    {
+        $criterion = EvaluationCriteria::factory()->create(['name' => 'Gone Criterion']);
+
+        $this->actingAs($this->administratorUser)
+            ->delete(route('evaluation-criteria.destroy', $criterion->id));
+
+        $log = $criterion->auditLogs()->sole();
+        $this->assertSame(AuditEvent::DELETED, $log->event);
+        $this->assertSame('Gone Criterion', $log->old_values['name']);
+        $this->assertNull($log->new_values);
+        $this->assertSame($this->administratorUser->id, $log->user_id);
     }
 }

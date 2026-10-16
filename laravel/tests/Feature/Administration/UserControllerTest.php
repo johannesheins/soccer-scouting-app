@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Administration;
 
+use App\Enums\AuditEvent;
 use App\Models\User;
 use App\Models\UserGroup;
 
@@ -198,5 +199,69 @@ class UserControllerTest extends AdministrationTestCase
             ->get(route('administration.user.edit', $user->id));
 
         $response->assertNotFound();
+    }
+
+    public function test_store_writes_created_audit_log()
+    {
+        $userGroups = UserGroup::factory(2)->create();
+
+        $this->actingAs($this->administratorUser)
+            ->post(route('administration.user.store'), [
+                'firstname' => 'Test',
+                'lastname' => 'User',
+                'email' => 'test@example.com',
+                'password' => 'password',
+                'password_confirmation' => 'password',
+                'user_groups' => $userGroups->pluck('id')->toArray(),
+            ]);
+
+        $user = User::where('email', 'test@example.com')->sole();
+        $log = $user->auditLogs()->sole();
+        $this->assertSame(AuditEvent::CREATED, $log->event);
+        $this->assertSame(User::class, $log->auditable_type);
+        $this->assertNull($log->old_values);
+        $this->assertSame('test@example.com', $log->new_values['email']);
+        $this->assertSame($userGroups->pluck('id')->sort()->values()->all(), $log->new_values['userGroups']);
+        $this->assertArrayNotHasKey('password', $log->new_values);
+        $this->assertSame($this->administratorUser->id, $log->user_id);
+    }
+
+    public function test_update_writes_updated_audit_log()
+    {
+        [$oldGroup, $newGroup] = UserGroup::factory(2)->create()->all();
+        $user = User::factory()->create(['firstname' => 'Old']);
+        $user->userGroups()->attach($oldGroup);
+
+        $this->actingAs($this->administratorUser)
+            ->put(route('administration.user.update', $user->id), [
+                'firstname' => 'New',
+                'lastname' => $user->lastname,
+                'email' => $user->email,
+                'user_groups' => [$newGroup->id],
+            ]);
+
+        $log = $user->auditLogs()->sole();
+        $this->assertSame(AuditEvent::UPDATED, $log->event);
+        $this->assertSame('Old', $log->old_values['firstname']);
+        $this->assertSame([$oldGroup->id], $log->old_values['userGroups']);
+        $this->assertSame('New', $log->new_values['firstname']);
+        $this->assertSame([$newGroup->id], $log->new_values['userGroups']);
+        $this->assertArrayNotHasKey('password', $log->old_values);
+        $this->assertArrayNotHasKey('password', $log->new_values);
+        $this->assertSame($this->administratorUser->id, $log->user_id);
+    }
+
+    public function test_destroy_writes_deleted_audit_log()
+    {
+        $user = User::factory()->create(['firstname' => 'Gone']);
+
+        $this->actingAs($this->administratorUser)
+            ->delete(route('administration.user.destroy', $user->id));
+
+        $log = $user->auditLogs()->sole();
+        $this->assertSame(AuditEvent::DELETED, $log->event);
+        $this->assertSame('Gone', $log->old_values['firstname']);
+        $this->assertNull($log->new_values);
+        $this->assertSame($this->administratorUser->id, $log->user_id);
     }
 }

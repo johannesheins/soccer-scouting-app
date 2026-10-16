@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Administration;
 
+use App\Enums\AuditEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EvaluationCriteriaRequest;
 use App\Models\EvaluationCriteria;
@@ -25,7 +26,9 @@ class EvaluationCriteriaController extends Controller
 
     public function store(EvaluationCriteriaRequest $request)
     {
-        EvaluationCriteria::create($request->validated());
+        $evaluationCriterion = EvaluationCriteria::create($request->validated());
+
+        $evaluationCriterion->saveLog(AuditEvent::CREATED, null, $evaluationCriterion->createSnapshot());
 
         return redirect()->route('evaluation-criteria.index');
     }
@@ -45,14 +48,21 @@ class EvaluationCriteriaController extends Controller
 
     public function update(EvaluationCriteriaRequest $request, EvaluationCriteria $evaluationCriterion)
     {
+        $old = $evaluationCriterion->createSnapshot();
+
         $evaluationCriterion->update($request->validated());
+
+        $evaluationCriterion->saveLog(AuditEvent::UPDATED, $old, $evaluationCriterion->createSnapshot());
 
         return redirect()->route('evaluation-criteria.index');
     }
 
     public function destroy(EvaluationCriteria $evaluationCriterion)
     {
+        $old = $evaluationCriterion->createSnapshot();
         $evaluationCriterion->delete();
+
+        $evaluationCriterion->saveLog(AuditEvent::DELETED, $old, null);
 
         return redirect()->route('evaluation-criteria.index');
     }
