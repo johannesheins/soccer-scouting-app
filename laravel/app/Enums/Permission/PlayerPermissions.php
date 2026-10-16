@@ -12,4 +12,5 @@ enum PlayerPermissions: int implements PermissionsInterface
     case View    = 4;
     case Edit    = 5;
     case Destroy = 6;
+    case ViewHistory = 33;
 }

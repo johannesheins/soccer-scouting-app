@@ -39,6 +39,7 @@ export function PlayerRowActions({player}: { player: Player }) {
     const canView = useHasRight(PlayerPermissions.View);
     const canEdit = useHasRight(PlayerPermissions.Edit);
     const canDelete = useHasRight(PlayerPermissions.Destroy);
+    const canViewHistory = useHasRight(PlayerPermissions.ViewHistory) && canView;
 
     const canCreateGameEvaluation = useHasRight(GameEvaluationPermissions.Create);
     const canCreatePlayerEvaluation = useHasRight(GameEvaluationPermissions.Create);
@@ -49,7 +50,7 @@ export function PlayerRowActions({player}: { player: Player }) {
     }
 
     const showEvaluationSeparator = canView && (canCreateGameEvaluation || canCreatePlayerEvaluation || canViewEvaluation);
-    const showEditDeleteSeparator = (canView || canCreateGameEvaluation || canCreatePlayerEvaluation || canViewEvaluation) && (canEdit || canDelete);
+    const showEditDeleteSeparator = (canView || canCreateGameEvaluation || canCreatePlayerEvaluation || canViewEvaluation) && (canViewHistory || canEdit || canDelete);
 
     return (
         <>
@@ -87,6 +88,11 @@ export function PlayerRowActions({player}: { player: Player }) {
 
                     {showEditDeleteSeparator && <DropdownMenuSeparator/>}
 
+                    {canViewHistory && (
+                        <DropdownMenuItem onClick={() => router.visit(playerRoute.history.url(player))}>
+                            {t('View history')}
+                        </DropdownMenuItem>
+                    )}
                     {canEdit && (
                         <DropdownMenuItem onClick={() => router.visit(playerRoute.edit.url(player.id))}>
                             {t('Edit player')}

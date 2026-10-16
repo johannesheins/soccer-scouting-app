@@ -28,6 +28,7 @@ class RightSeeder extends Seeder
                 $this->createRight(PlayerPermissions::View, 'Spieler ansehen', 'Der Benutzer darf Spieler ansehen'),
                 $this->createRight(PlayerPermissions::Edit, 'Spieler bearbeiten', 'Der Benutzer darf Spieler bearbeiten'),
                 $this->createRight(PlayerPermissions::Destroy, 'Spieler löschen', 'Der Benutzer darf Spieler löschen'),
+                $this->createRight(PlayerPermissions::ViewHistory, 'Änderungen der Spieler ansehen', 'Der Benutzer darf den Änderungsverlauf von Spielern ansehen'),
             ],
             'Bewertung' => [
                 $this->createRight(EvaluationPermissions::Index, 'Bewertungsübersicht', 'Der Benutzer darf die Übersicht für die Bewertung sehen'),

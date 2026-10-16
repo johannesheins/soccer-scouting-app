@@ -23,6 +23,11 @@ class PlayerPolicy
         return $user->hasRight(PlayerPermissions::View);
     }
 
+    public function viewHistory(User $user, Player $player): bool
+    {
+        return $user->hasRight(PlayerPermissions::ViewHistory) && $this->view($user);
+    }
+
     public function create(User $user): bool
     {
         return $user->hasRight(PlayerPermissions::Create);

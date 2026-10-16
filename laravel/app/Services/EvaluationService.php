@@ -72,26 +72,10 @@ class EvaluationService
                 'event' => $log->event,
                 'created_at' => $log->created_at,
                 'user' => $log->user,
-                'changes' => self::changedFields($log->old_values, $log->new_values),
+                'changes' => $log->changedFields(),
                 'new_values' => $log->new_values,
                 'evaluation' => $version->loadForView(),
             ];
         })->all();
-    }
-
-    private static function changedFields(?array $old, ?array $new): array
-    {
-        if ($old === null || $new === null) {
-            return [];
-        }
-
-        $changes = [];
-        foreach (Arr::except($new, ['updated_at']) as $field => $value) {
-            if (($old[$field] ?? null) != $value) {
-                $changes[] = $field;
-            }
-        }
-
-        return $changes;
     }
 }

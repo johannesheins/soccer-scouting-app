@@ -1,4 +1,5 @@
 import type {User} from "@/types";
+import type {AuditVersion} from "@/types/audit-version";
 import type {EvaluationCriteriaScore} from "@/types/evaluation-criteria";
 import type {Recommendation} from "@/types/recommendation";
 import {GameEvaluation, GameEvaluationSmall} from "@/types/evaluation/game-evaluation";
@@ -35,12 +36,7 @@ export type Evaluation = EvaluationSmall & {
     group_scores?: number[]
 }
 
-export type EvaluationVersion = {
-    id: number,
-    event: 'created' | 'updated' | 'deleted',
-    created_at: string,
-    user: User | null,
-    changes: string[],
+export type EvaluationVersion = AuditVersion & {
     new_values : EvaluationSmall,
     evaluation: Evaluation,
 }
