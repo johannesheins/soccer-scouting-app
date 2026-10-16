@@ -1,5 +1,5 @@
 import {ListClock} from "lucide-react";
-import type {ReactNode} from "react";
+import type {ComponentProps, ReactNode} from "react";
 import {useState} from "react";
 import {Button} from "@/components/ui/button";
 import {Dialog, DialogContent, DialogTitle} from "@/components/ui/dialog";
@@ -17,8 +17,9 @@ type Props<T extends AuditVersion> = {
     canRestore?: boolean,
     onRestore: (version: T) => void,
     children: (version: T) => ReactNode,
+    variant?: ComponentProps<typeof DialogContent>['variant'],
 }
-export function HistoryDialog<T extends AuditVersion>({versions, fields, showUser, canRestore, onRestore, children}: Props<T>) {
+export function HistoryDialog<T extends AuditVersion>({versions, fields, showUser, canRestore, onRestore, children, variant = 'extra-large'}: Props<T>) {
     const { close } = useModal();
     const newestFirst = [...versions].reverse();
     const [selectedId, setSelectedId] = useState(newestFirst[0]?.id);
@@ -44,7 +45,7 @@ export function HistoryDialog<T extends AuditVersion>({versions, fields, showUse
 
     return (
         <Dialog open onOpenChange={(open) => !open && close()}>
-            <DialogContent variant="extra-large" className="overflow-hidden" aria-describedby={undefined}>
+            <DialogContent variant={variant} className="overflow-hidden" aria-describedby={undefined}>
                 <DialogTitle className="sr-only">{t('Change history')}</DialogTitle>
                 {versions.length <= 0 && <p className="p-5">{t('No changes recorded')}</p>}
                 {versions.length > 0 && (

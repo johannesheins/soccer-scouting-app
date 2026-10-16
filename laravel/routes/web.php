@@ -36,6 +36,7 @@ Route::middleware(['auth', 'verified', 'password.renewed'])->group(function () {
     });
 
     Route::get('club/search', [ClubSearchController::class, 'index'])->name('club.search');
+    Route::get('club/{club}/history', [ClubController::class, 'history'])->name('club.history');
     Route::resource('club', ClubController::class)->names('club');
 
 

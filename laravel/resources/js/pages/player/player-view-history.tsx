@@ -29,7 +29,7 @@ export default function PlayerViewHistory({player, versions}: Props) {
     };
 
     return (
-        <HistoryDialog versions={versions} fields={fields} canRestore={canEdit} onRestore={restoreVersion}>
+        <HistoryDialog variant="large" versions={versions} fields={fields} canRestore={canEdit} onRestore={restoreVersion}>
             {version => <PlayerView player={version.player}/>}
         </HistoryDialog>
     );

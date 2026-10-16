@@ -63,6 +63,7 @@ class RightSeeder extends Seeder
                 $this->createRight(ClubPermissions::View, 'Verein ansehen', 'Der Benutzer darf Vereine ansehen'),
                 $this->createRight(ClubPermissions::Edit, 'Verein bearbeiten', 'Der Benutzer darf Vereine bearbeiten'),
                 $this->createRight(ClubPermissions::Destroy, 'Verein löschen', 'Der Benutzer darf Vereine löschen'),
+                $this->createRight(ClubPermissions::ViewHistory, 'Änderungen der Vereine ansehen', 'Der Benutzer darf den Änderungsverlauf von Vereinen ansehen'),
             ],
         ];
 
