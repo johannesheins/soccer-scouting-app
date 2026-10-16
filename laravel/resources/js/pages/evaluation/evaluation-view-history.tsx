@@ -101,6 +101,7 @@ export default function EvaluationViewHistory({evaluation, versions, evaluationC
                         title={t('Restore version')}
                         variant="ghost"
                         onClick={() => restoreVersion(version)}
+                        hidden={newestFirst[0].id === version.id}
                     >
                         <History />
                     </Button>
