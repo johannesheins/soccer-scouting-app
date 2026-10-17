@@ -94,6 +94,7 @@ class EvaluationCriteriaControllerTest extends AdministrationTestCase
         $newName = 'Updated Criterion';
 
         $response = $this->actingAs($this->administratorUser)
+            ->from(route('evaluation-criteria.index'))
             ->put(route('evaluation-criteria.update', $criterion->id), [
                 'name' => $newName,
                 'minimum_player_age' => $criterion->minimum_player_age,
@@ -121,6 +122,7 @@ class EvaluationCriteriaControllerTest extends AdministrationTestCase
         $criterion = EvaluationCriteria::factory()->create();
 
         $response = $this->actingAs($this->administratorUser)
+            ->from(route('evaluation-criteria.index'))
             ->delete(route('evaluation-criteria.destroy', $criterion->id));
 
         $this->assertDatabaseMissing('evaluation_criteria', ['id' => $criterion->id]);

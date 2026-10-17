@@ -134,6 +134,7 @@ class UserControllerTest extends AdministrationTestCase
         $user->userGroups()->attach($userGroups->pluck('id'));
 
         $response = $this->actingAs($this->administratorUser)
+            ->from(route('administration.user.index'))
             ->put(route('administration.user.update', $user->id), [
                 'firstname' => 'Karlo',
                 'lastname' => 'User',
@@ -166,6 +167,7 @@ class UserControllerTest extends AdministrationTestCase
         $user->userGroups()->attach($userGroups);
 
         $response = $this->actingAs($this->administratorUser)
+            ->from(route('administration.user.index'))
             ->delete(route('administration.user.destroy', $user->id));
 
         $this->assertAdministrationRoute(['administration.user.destroy', $user->id]);

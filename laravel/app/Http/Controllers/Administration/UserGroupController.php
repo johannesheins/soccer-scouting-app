@@ -11,6 +11,7 @@ use App\Models\RightGroup;
 use App\Models\UserGroup;
 use App\Http\Responses\Modal;
 use Illuminate\Support\Arr;
+use Inertia\Inertia;
 
 class UserGroupController extends Controller
 {
@@ -39,6 +40,7 @@ class UserGroupController extends Controller
 
         $userGroup->saveLog(AuditEvent::CREATED, null, $userGroup->createSnapshot());
 
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('User group was created.')]);
         return redirect()->route('administration.user-group.index');
     }
 
@@ -69,7 +71,7 @@ class UserGroupController extends Controller
 
         $userGroup->saveLog(AuditEvent::UPDATED, $old, $userGroup->createSnapshot());
 
-        return redirect()->route('administration.user-group.index');
+        return Inertia::flash('toast', ['type' => 'success', 'message' => __('User group was updated.')])->back();
     }
 
     public function destroy(UserGroup $userGroup)
@@ -79,7 +81,7 @@ class UserGroupController extends Controller
 
         $userGroup->saveLog(AuditEvent::DELETED, $old, null);
 
-        return redirect()->route('administration.user-group.index');
+        return Inertia::flash('toast', ['type' => 'success', 'message' => __('User group was deleted.')])->back();
     }
 
     public function history(UserGroup $userGroup)

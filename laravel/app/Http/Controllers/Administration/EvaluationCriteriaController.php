@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\EvaluationCriteriaRequest;
 use App\Models\EvaluationCriteria;
 use App\Models\EvaluationCriteriaGroup;
+use Inertia\Inertia;
 
 class EvaluationCriteriaController extends Controller
 {
@@ -30,6 +31,7 @@ class EvaluationCriteriaController extends Controller
 
         $evaluationCriterion->saveLog(AuditEvent::CREATED, null, $evaluationCriterion->createSnapshot());
 
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Evaluation criterion was created.')]);
         return redirect()->route('evaluation-criteria.index');
     }
 
@@ -54,7 +56,7 @@ class EvaluationCriteriaController extends Controller
 
         $evaluationCriterion->saveLog(AuditEvent::UPDATED, $old, $evaluationCriterion->createSnapshot());
 
-        return redirect()->route('evaluation-criteria.index');
+        return Inertia::flash('toast', ['type' => 'success', 'message' => __('Evaluation criterion was updated.')])->back();
     }
 
     public function destroy(EvaluationCriteria $evaluationCriterion)
@@ -64,6 +66,6 @@ class EvaluationCriteriaController extends Controller
 
         $evaluationCriterion->saveLog(AuditEvent::DELETED, $old, null);
 
-        return redirect()->route('evaluation-criteria.index');
+        return Inertia::flash('toast', ['type' => 'success', 'message' => __('Evaluation criterion was deleted.')])->back();
     }
 }

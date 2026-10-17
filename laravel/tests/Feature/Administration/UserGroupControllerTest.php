@@ -150,6 +150,7 @@ class UserGroupControllerTest extends AdministrationTestCase
         $newRights = Right::factory(3)->create();
 
         $response = $this->actingAs($this->administratorUser)
+            ->from(route('administration.user-group.index'))
             ->put(route('administration.user-group.update', $userGroup->id), [
                 'name' => $newName,
                 'rights' => $newRights->pluck('id')->toArray(),
@@ -217,6 +218,7 @@ class UserGroupControllerTest extends AdministrationTestCase
         $userGroup->rights()->attach(Right::factory(3)->create());
 
         $response = $this->actingAs($this->administratorUser)
+            ->from(route('administration.user-group.index'))
             ->delete(route('administration.user-group.destroy', $userGroup->id));
 
         $this->assertAdministrationRoute(['administration.user-group.destroy', $userGroup->id]);

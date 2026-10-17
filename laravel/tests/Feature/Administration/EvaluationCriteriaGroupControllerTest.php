@@ -89,6 +89,7 @@ class EvaluationCriteriaGroupControllerTest extends AdministrationTestCase
         $newName = 'Updated Group';
 
         $response = $this->actingAs($this->administratorUser)
+            ->from(route('evaluation-criteria-group.index'))
             ->put(route('evaluation-criteria-group.update', $group->id), [
                 'name' => $newName,
             ]);
@@ -112,6 +113,7 @@ class EvaluationCriteriaGroupControllerTest extends AdministrationTestCase
         $group = EvaluationCriteriaGroup::factory()->create();
 
         $response = $this->actingAs($this->administratorUser)
+            ->from(route('evaluation-criteria-group.index'))
             ->delete(route('evaluation-criteria-group.destroy', $group->id));
 
         $this->assertDatabaseMissing('evaluation_criteria_groups', ['id' => $group->id]);
