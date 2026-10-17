@@ -1,6 +1,5 @@
 import {Head, Link} from '@inertiajs/react';
 import {Layers, Star, User, Users} from "lucide-react";
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import { t } from '@/locale/translate';
 import {administration} from '@/routes';
 import user from "@/routes/administration/user";
@@ -13,7 +12,7 @@ export default function Dashboard() {
         <>
             <Head title={t('Home')} />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+                <div className="grid auto-rows-min gap-4 md:grid-cols-2">
                     <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
                         <Link href={userGroup.index()} title={t('User groups')} className="flex flex-col gap-2 justify-center items-center h-full">
                             <Users className={"size-10 icon-color"}/>
@@ -38,9 +37,6 @@ export default function Dashboard() {
                             <p className="text-icon-color font-bold">{t('Criteria groups')}</p>
                         </Link>
                     </div>
-                </div>
-                <div className="relative min-h-screen flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                    <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
                 </div>
             </div>
         </>
