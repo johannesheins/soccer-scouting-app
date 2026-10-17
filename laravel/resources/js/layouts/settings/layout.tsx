@@ -10,9 +10,9 @@ import { edit as editAppearance } from '@/routes/appearance';
 import { edit } from '@/routes/profile';
 import { edit as editSecurity } from '@/routes/security';
 import dashboard from '@/routes/settings/dashboard';
-import type { NavItem } from '@/types';
+import type { NavLink } from '@/types';
 
-const sidebarNavItems = (): NavItem[] => [
+const sidebarNavItems = (): NavLink[] => [
     {
         title: t('Profile'),
         href: edit(),

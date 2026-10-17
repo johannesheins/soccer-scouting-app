@@ -1,20 +1,35 @@
 import type { InertiaLinkProps } from '@inertiajs/react';
 import type { LucideIcon } from 'lucide-react';
-import type { ClubPermissions, EvaluationPermissions, GameEvaluationPermissions, PlayerPermissions } from '@/enums';
+import type { HTMLAttributeAnchorTarget } from 'react';
+import type { ClubPermissions, EvaluationPermissions, GameEvaluationPermissions, PlayerEvaluationPermissions, PlayerPermissions } from '@/enums';
+
+export type Href = NonNullable<InertiaLinkProps['href']>;
 
 export type BreadcrumbItem = {
     title: string;
-    href: NonNullable<InertiaLinkProps['href']>;
+    href: Href;
 };
 
-export type PermissionEnum = PlayerPermissions | EvaluationPermissions | GameEvaluationPermissions | ClubPermissions;
+export type PermissionEnum = PlayerPermissions | EvaluationPermissions | GameEvaluationPermissions | PlayerEvaluationPermissions | ClubPermissions;
 
-export type NavItem = {
+type NavItemBase = {
     title: string;
-    href: NonNullable<InertiaLinkProps['href']>;
-    icon?: LucideIcon | null;
-    target?: '_self' | '_blank' | '_parent' | '_top',
+    icon: LucideIcon | null;
     isAdministrationOnly?: boolean;
     isActive?: boolean;
     right?: PermissionEnum;
 };
+
+export type NavLink = NavItemBase & {
+    href: Href;
+    target?: HTMLAttributeAnchorTarget;
+    subItems?: never;
+};
+
+export type NavGroup = NavItemBase & {
+    href?: Href;
+    target?: never;
+    subItems: NavLink[];
+};
+
+export type NavItem = NavLink | NavGroup;

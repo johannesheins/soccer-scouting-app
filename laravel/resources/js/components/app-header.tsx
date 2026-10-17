@@ -35,13 +35,13 @@ import { useInitials } from '@/hooks/use-initials';
 import { cn, toUrl } from '@/lib/utils';
 import { t } from '@/locale/translate';
 import { dashboard } from '@/routes';
-import type { BreadcrumbItem, NavItem } from '@/types';
+import type { BreadcrumbItem, NavLink } from '@/types';
 
 type Props = {
     breadcrumbs?: BreadcrumbItem[];
 };
 
-const mainNavItems = (): NavItem[] => [
+const mainNavItems = (): NavLink[] => [
     {
         title: t('Home'),
         href: dashboard(),
@@ -49,7 +49,7 @@ const mainNavItems = (): NavItem[] => [
     },
 ];
 
-const rightNavItems = (): NavItem[] => [
+const rightNavItems = (): NavLink[] => [
     {
         title: t('Repository'),
         href: 'https://github.com/laravel/react-starter-kit',

@@ -1,5 +1,5 @@
 import {Link} from '@inertiajs/react';
-import {FileUserIcon, LayoutGrid, Settings, Shield, User} from 'lucide-react';
+import { ClipboardPlus, FilePlus, FileSearch, FileUserIcon, LayoutGrid, Search, Settings, Shield, ShieldPlus, User, UserRoundPlus, UserSearch } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -13,13 +13,13 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import {ClubPermissions, EvaluationPermissions, PlayerPermissions} from "@/enums";
+import { ClubPermissions, EvaluationPermissions, GameEvaluationPermissions, PlayerEvaluationPermissions, PlayerPermissions } from '@/enums';
 import { t } from '@/locale/translate';
 import {administration, dashboard} from "@/routes";
 import club from "@/routes/club";
 import evaluation from "@/routes/evaluation";
 import player from "@/routes/player";
-import type { NavItem } from '@/types';
+import type { NavItem, NavLink } from '@/types';
 
 const mainNavItems = (): NavItem[] => [
     {
@@ -29,25 +29,67 @@ const mainNavItems = (): NavItem[] => [
     },
     {
         title: t('Players'),
-        href: player.index(),
         icon: User,
-        right: PlayerPermissions.Index,
+        subItems: [
+            {
+                title: t('Create player'),
+                href: player.create(),
+                icon: UserRoundPlus,
+                right: PlayerPermissions.Create,
+            },
+            {
+                title: t('Search players'),
+                href: player.search(),
+                icon: UserSearch,
+                right: PlayerPermissions.Search,
+            },
+        ]
     },
     {
         title: t('Evaluations'),
-        href: evaluation.index(),
         icon: FileUserIcon,
-        right: EvaluationPermissions.Index,
+        subItems: [
+            {
+                title: t('Create match evaluation'),
+                href: evaluation.game.create(),
+                icon: FilePlus,
+                right: GameEvaluationPermissions.Create,
+            },
+            {
+                title: t('Create internal player evaluation'),
+                href: evaluation.player.create(),
+                icon: ClipboardPlus,
+                right: PlayerEvaluationPermissions.Create,
+            },
+            {
+                title: t('Search evaluations'),
+                href: evaluation.search(),
+                icon: FileSearch,
+                right: EvaluationPermissions.Search,
+            },
+        ]
     },
     {
         title: t('Clubs'),
-        href: club.index(),
         icon: Shield,
-        right: ClubPermissions.Index,
+        subItems: [
+            {
+                title: t('Create club'),
+                href: club.create(),
+                icon: ShieldPlus,
+                right: ClubPermissions.Create,
+            },
+            {
+                title: t('Search clubs'),
+                href: club.search(),
+                icon: Search,
+                right: ClubPermissions.Search,
+            },
+        ]
     },
 ];
 
-const footerNavItems = (): NavItem[] => [
+const footerNavItems = (): NavLink[] => [
     {
         title: t('Administration'),
         href: administration(),
