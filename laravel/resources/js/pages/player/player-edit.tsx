@@ -1,22 +1,17 @@
 import { setLayoutProps } from '@inertiajs/react';
+import PlayerForm from "@/components/from/player-form";
+import { useLastVisitedUrl } from '@/hooks/use-previous-url';
 import { t } from '@/locale/translate';
 import player from '@/routes/player';
-import { usePreviousUrl } from '@/hooks/use-previous-url';
-import PlayerForm from "@/components/from/player-form";
 
 export default function PlayerEdit() {
-    const previousUrl = usePreviousUrl();
-    const usePrevious: boolean = previousUrl?.startsWith(player.search.url()) ?? false
+    const searchUrl = useLastVisitedUrl(player.search.url());
 
     setLayoutProps({
         breadcrumbs: [
             {
-                title: t('Players'),
-                href: player.search(),
-            },
-            {
-                title: t('Search players'),
-                href: usePrevious ? previousUrl : player.search()
+                title: t('Player search'),
+                href: searchUrl
             },
             {
                 title: t('Edit player')
@@ -24,5 +19,5 @@ export default function PlayerEdit() {
         ],
     });
 
-    return <PlayerForm edit backHref={usePrevious ? previousUrl : player.search.url()}/>;
+    return <PlayerForm edit backHref={searchUrl}/>;
 }

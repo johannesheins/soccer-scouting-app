@@ -4,7 +4,6 @@ import React from "react";
 import {DataTable} from "@/components/table/data-table";
 import PlayerSearchForm from "@/pages/player/player-search-form";
 import {playerColumns} from "@/pages/player/table/player-columns";
-import player from "@/routes/player";
 import type {Club} from "@/types/club";
 import type {Player} from "@/types/player";
 import type {Position} from "@/types/position";
@@ -16,7 +15,7 @@ export default function PlayerSearch(){
 
     return (
         <>
-            <Head title={t('Search players')} />
+            <Head title={t('Player search')} />
             <div className="flex h-full flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                     <PlayerSearchForm positions={positions} clubs={clubs} />
@@ -33,11 +32,7 @@ export default function PlayerSearch(){
 PlayerSearch.layout = () => ({
     breadcrumbs: [
         {
-            title: t('Players'),
-            href: player.search(),
-        },
-        {
-            title: t('Search players'),
+            title: t('Player search'),
         },
     ],
 });

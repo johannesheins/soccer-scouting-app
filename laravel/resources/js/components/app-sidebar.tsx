@@ -38,7 +38,7 @@ const mainNavItems = (): NavItem[] => [
                 right: PlayerPermissions.Create,
             },
             {
-                title: t('Search players'),
+                title: t('Player search'),
                 href: player.search(),
                 icon: UserSearch,
                 right: PlayerPermissions.Search,
@@ -62,7 +62,7 @@ const mainNavItems = (): NavItem[] => [
                 right: PlayerEvaluationPermissions.Create,
             },
             {
-                title: t('Search evaluations'),
+                title: t('Evaluation search'),
                 href: evaluation.search(),
                 icon: FileSearch,
                 right: EvaluationPermissions.Search,
@@ -80,7 +80,7 @@ const mainNavItems = (): NavItem[] => [
                 right: ClubPermissions.Create,
             },
             {
-                title: t('Search clubs'),
+                title: t('Club search'),
                 href: club.search(),
                 icon: Search,
                 right: ClubPermissions.Search,

@@ -1,19 +1,23 @@
-import player from "@/routes/player";
-import { t } from '@/locale/translate';
+import { setLayoutProps } from '@inertiajs/react';
 import PlayerForm from "@/components/from/player-form";
+import { useLastVisitedUrl } from '@/hooks/use-previous-url';
+import { t } from '@/locale/translate';
+import player from "@/routes/player";
 
 export default function PlayerCreate() {
+    const searchUrl = useLastVisitedUrl(player.search.url());
+
+    setLayoutProps({
+        breadcrumbs: [
+            {
+                title: t('Player search'),
+                href: searchUrl,
+            },
+            {
+                title: t('Create player'),
+            },
+        ],
+    });
+
     return <PlayerForm />;
 }
-
-PlayerCreate.layout = () => ({
-    breadcrumbs: [
-        {
-            title: t('Players'),
-            href: player.search(),
-        },
-        {
-            title: t('Create player'),
-        },
-    ],
-});

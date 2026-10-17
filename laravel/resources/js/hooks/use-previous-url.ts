@@ -3,10 +3,16 @@ import {useEffect, useState} from "react";
 
 let _previousUrl: string | null = null;
 let _currentUrl: string | null = null;
+const _visitedUrls: string[] = [];
 
 router.on('navigate', (event) => {
     _previousUrl = _currentUrl;
     _currentUrl = event.detail.page.url;
+    _visitedUrls.push(_currentUrl);
+
+    if (_visitedUrls.length > 50) {
+        _visitedUrls.shift();
+    }
 });
 
 export function usePreviousUrl(){
@@ -17,4 +23,10 @@ export function usePreviousUrl(){
     }, []);
 
     return url;
+}
+
+export function useLastVisitedUrl(url: string){
+    usePreviousUrl();
+
+    return _visitedUrls.findLast((visited) => visited.startsWith(url)) ?? url;
 }
