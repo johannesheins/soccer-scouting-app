@@ -12,7 +12,7 @@ export default function PlayerEdit() {
         breadcrumbs: [
             {
                 title: t('Players'),
-                href: player.index(),
+                href: player.search(),
             },
             {
                 title: t('Search players'),

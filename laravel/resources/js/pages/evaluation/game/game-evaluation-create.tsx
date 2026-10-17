@@ -11,7 +11,7 @@ GameEvaluationCreate.layout = () => ({
     breadcrumbs: [
         {
             title: t('Evaluations'),
-            href: evaluation.index(),
+            href: evaluation.search(),
         },
         {
             title: t('Create match evaluation'),

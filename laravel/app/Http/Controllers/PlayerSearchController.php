@@ -7,7 +7,7 @@ use App\Http\Requests\Player\PlayerSearchRequest;
 use App\Models\Club;
 use App\Models\Position;
 use App\Services\PlayerSearchService;
-use Emargareten\InertiaModal\Modal;
+use App\Http\Responses\Modal;
 
 class PlayerSearchController extends Controller
 {

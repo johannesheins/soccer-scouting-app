@@ -9,7 +9,7 @@ use App\Models\AuditLog;
 use App\Models\Right;
 use App\Models\RightGroup;
 use App\Models\UserGroup;
-use Emargareten\InertiaModal\Modal;
+use App\Http\Responses\Modal;
 use Illuminate\Support\Arr;
 
 class UserGroupController extends Controller

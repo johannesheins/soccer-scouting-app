@@ -34,7 +34,6 @@ abstract class EvaluationControllerTest extends TestCase
     {
         parent::setUp();
         $this->user = $this->createUserWithRight([
-            EvaluationPermissions::Index,
             EvaluationPermissions::Search,
             ...array_map($this->right(...), [
                 'Create', 'View', 'ViewAll', 'Edit', 'EditAll', 'Destroy', 'DestroyAll',
@@ -79,23 +78,6 @@ abstract class EvaluationControllerTest extends TestCase
             'evaluation_criteria_id' => $criteriaId,
             'score' => $score,
         ]);
-    }
-
-    public function test_index()
-    {
-        $response = $this->actingAs($this->user)
-            ->get(route('evaluation.index'));
-
-        $response->assertOk();
-        $this->assertRights(EvaluationPermissions::Index, 'evaluation.index');
-    }
-
-    public function test_index_guest_redirect_login(): void
-    {
-        $response = $this->actingAsGuest()
-            ->get(route('evaluation.index'));
-
-        $response->assertRedirect(route('login'));
     }
 
     public function test_create()
@@ -144,7 +126,7 @@ abstract class EvaluationControllerTest extends TestCase
         $response = $this->actingAs($this->user)
             ->post(route($this->typeRoute('store')), $payload);
 
-        $response->assertRedirect(route('evaluation.index'));
+        $response->assertRedirect(route('evaluation.search'));
 
         $evaluation = $this->modelClass()::sole();
         $this->assertEvaluationMatchesPayload($evaluation, $payload);
@@ -170,7 +152,7 @@ abstract class EvaluationControllerTest extends TestCase
                 ])->all(),
             ]));
 
-        $response->assertRedirect(route('evaluation.index'));
+        $response->assertRedirect(route('evaluation.search'));
         $evaluation = $this->modelClass()::sole();
 
         $this->assertSame(3, $evaluation->criteriaScores()->count());
@@ -347,9 +329,10 @@ abstract class EvaluationControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->user)
+            ->from(route('evaluation.search'))
             ->put(route($this->typeRoute('update'), $evaluation), $payload);
 
-        $response->assertRedirect(route('evaluation.index'));
+        $response->assertRedirect(route('evaluation.search'));
 
         $evaluation->refresh();
         $this->assertEvaluationMatchesPayload($evaluation, $payload);
@@ -370,11 +353,12 @@ abstract class EvaluationControllerTest extends TestCase
         $evaluation->criteriaScores()->create(['evaluation_criteria_id' => $oldCriteria->id, 'score' => 3]);
 
         $response = $this->actingAs($this->user)
+            ->from(route('evaluation.search'))
             ->put(route($this->typeRoute('update'), $evaluation), $this->payload([
                 'criteriaScores' => [['evaluation_criteria_id' => $newCriteria->id, 'score' => 5]],
             ]));
 
-        $response->assertRedirect(route('evaluation.index'));
+        $response->assertRedirect(route('evaluation.search'));
         $this->assertSame(1, $evaluation->criteriaScores()->count());
         $this->assertDatabaseMissing('evaluation_criteria_scores', [
             $evaluation->criteriaScores()->getForeignKeyName() => $evaluation->id,
@@ -450,7 +434,7 @@ abstract class EvaluationControllerTest extends TestCase
 
         $response->assertInertia(
             fn ($page) => $page
-            ->component('evaluation/evaluation-index')
+            ->component('evaluation/evaluation-search')
             ->where('modal.component', 'evaluation/evaluation-show')
             ->where('modal.props.evaluation.id', $evaluation->id)
             ->where('modal.props.evaluation.evaluation_type', $evaluation->evaluation_type)
@@ -481,9 +465,10 @@ abstract class EvaluationControllerTest extends TestCase
         $this->assertRights($this->right('DestroyAll'), [$this->typeRoute('destroy'), $evaluation]);
 
         $response = $this->actingAs($this->user)
+            ->from(route('evaluation.search'))
             ->delete(route($this->typeRoute('destroy'), $evaluation));
 
-        $response->assertRedirect(route('evaluation.index'));
+        $response->assertRedirect(route('evaluation.search'));
         $this->assertModelMissing($evaluation);
         $this->assertDatabaseMissing('evaluation_criteria_scores', [
             $evaluation->criteriaScores()->getForeignKeyName() => $evaluation->id,
@@ -586,7 +571,7 @@ abstract class EvaluationControllerTest extends TestCase
 
         $response->assertInertia(
             fn ($page) => $page
-            ->component('evaluation/evaluation-index')
+            ->component('evaluation/evaluation-search')
             ->where('modal.component', 'evaluation/evaluation-view-history')
             ->has('modal.props.evaluationCriteriaGroups')
             ->has('modal.props.versions', 1)

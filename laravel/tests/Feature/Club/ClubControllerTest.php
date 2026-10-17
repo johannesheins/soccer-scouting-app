@@ -19,7 +19,6 @@ class ClubControllerTest extends TestCase
     {
         parent::setUp();
         $this->user = $this->createUserWithRight([
-            ClubPermissions::Index,
             ClubPermissions::Search,
             ClubPermissions::Create,
             ClubPermissions::View,
@@ -28,29 +27,6 @@ class ClubControllerTest extends TestCase
             ClubPermissions::ViewHistory,
         ]);
     }
-
-    #region index
-    public function test_index(): void
-    {
-        $response = $this->actingAs($this->user)
-            ->get(route('club.index'));
-
-        $response->assertOk();
-        $response->assertInertia(
-            fn ($page) => $page
-            ->component('club/club-index')
-        );
-        $this->assertRights(ClubPermissions::Index, 'club.index');
-    }
-
-    public function test_index_guest_redirect_login(): void
-    {
-        $response = $this->actingAsGuest()
-            ->get(route('club.index'));
-
-        $response->assertRedirect(route('login'));
-    }
-    #endregion
 
     #region create
     public function test_create_shows_club_create_view(): void
@@ -101,7 +77,7 @@ class ClubControllerTest extends TestCase
                 'city' => 'Testhausen',
             ]);
 
-        $response->assertRedirect(route('club.index'));
+        $response->assertRedirect(route('club.search'));
         $this->assertDatabaseHas('clubs', [
             'clubname' => 'FC Testhausen',
             'zip_code' => '12345',
@@ -128,7 +104,7 @@ class ClubControllerTest extends TestCase
             ]);
 
         $response->assertValid();
-        $response->assertRedirect(route('club.index'));
+        $response->assertRedirect(route('club.search'));
         $this->assertDatabaseHas('clubs', ['clubname' => 'FC Testhausen', 'zip_code' => null, 'city' => null]);
     }
 
@@ -195,7 +171,7 @@ class ClubControllerTest extends TestCase
 
         $response->assertInertia(
             fn ($page) => $page
-            ->component('club/club-index')
+            ->component('club/club-search')
             ->where('modal.component', 'club/club-show')
             ->where('modal.props.club.id', $club->id)
             ->where('modal.props.club.clubname', 'FC Testhausen')
@@ -237,7 +213,7 @@ class ClubControllerTest extends TestCase
 
         $response->assertInertia(
             fn ($page) => $page
-            ->component('club/club-index')
+            ->component('club/club-search')
             ->where('modal.component', 'club/club-view-history')
             ->where('modal.props.club.id', $club->id)
             ->has('modal.props.versions', 2)
@@ -341,13 +317,14 @@ class ClubControllerTest extends TestCase
         $club = Club::factory()->create(['clubname' => 'FC Alt']);
 
         $response = $this->actingAs($this->user)
+            ->from(route('club.search'))
             ->put(route('club.update', $club), [
                 'clubname' => 'FC Neu',
                 'zip_code' => '54321',
                 'city' => 'Neustadt',
             ]);
 
-        $response->assertRedirect(route('club.index'));
+        $response->assertRedirect(route('club.search'));
         $this->assertDatabaseHas('clubs', [
             'id' => $club->id,
             'clubname' => 'FC Neu',
@@ -422,9 +399,10 @@ class ClubControllerTest extends TestCase
         $this->assertRights(ClubPermissions::Destroy, ['club.destroy', $club->id]);
 
         $response = $this->actingAs($this->user)
+            ->from(route('club.search'))
             ->delete(route('club.destroy', $club));
 
-        $response->assertRedirect(route('club.index'));
+        $response->assertRedirect(route('club.search'));
         $this->assertDatabaseMissing('clubs', ['id' => $club->id]);
     }
 

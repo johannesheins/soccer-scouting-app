@@ -9,31 +9,23 @@ use App\Models\AuditLog;
 use App\Models\Club;
 use App\Models\Player;
 use App\Models\Position;
-use Emargareten\InertiaModal\Modal;
+use App\Http\Responses\Modal;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Arr;
+use Inertia\Inertia;
 
 class PlayerController extends Controller implements HasMiddleware
 {
     public static function middleware(): array
     {
         return [
-            new Middleware('can:index,App\Models\Player', only: ['index']),
             new Middleware('can:create,App\Models\Player', only: ['create', 'store']),
             new Middleware('can:view,player', only: ['show']),
             new Middleware('can:viewHistory,player', only: ['history']),
             new Middleware('can:update,player', only: ['edit', 'update']),
             new Middleware('can:delete,player', only: ['destroy']),
         ];
-    }
-
-    public function index()
-    {
-        return inertia('player/player-index', [
-            'positions' => Position::with('positionGroup:id,name')->orderBy('id')->get(['id', 'position_code', 'position_group_id']),
-            'clubs' => Club::orderBy('clubname')->get(['id', 'clubname']),
-        ]);
     }
 
     public function create()
@@ -47,7 +39,9 @@ class PlayerController extends Controller implements HasMiddleware
     public function store(PlayerRequest $request)
     {
         self::storeApi($request);
-        return redirect()->route('player.index');
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Player was created.')]);
+        return to_route('player.search');
     }
 
     public function storeApi(PlayerRequest $request)
@@ -66,7 +60,7 @@ class PlayerController extends Controller implements HasMiddleware
     {
         return new Modal('player/player-show', [
             'player' => $player->loadForView(),
-        ])->baseRoute('player.index');
+        ])->baseRoute('player.search');
     }
 
     public function edit(Player $player)
@@ -89,7 +83,7 @@ class PlayerController extends Controller implements HasMiddleware
 
         $player->saveLog(AuditEvent::UPDATED, $old, $player->createSnapshot());
 
-        return redirect()->route('player.index');
+        return Inertia::flash('toast', ['type' => 'success', 'message' => __('Player was updated.')])->back();
     }
 
     public function destroy(Player $player)
@@ -99,7 +93,7 @@ class PlayerController extends Controller implements HasMiddleware
 
         $player->saveLog(AuditEvent::DELETED, $old, null);
 
-        return redirect()->route('player.index');
+        return Inertia::flash('toast', ['type' => 'success', 'message' => __('Player was deleted.')])->back();
     }
 
     public function history(Player $player)
@@ -130,6 +124,6 @@ class PlayerController extends Controller implements HasMiddleware
         return new Modal('player/player-view-history', [
             'player' => $player->loadForView(),
             'versions' => $versions,
-        ])->baseRoute('player.index');
+        ])->baseRoute('player.search');
     }
 }

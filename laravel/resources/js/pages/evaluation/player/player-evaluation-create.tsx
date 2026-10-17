@@ -11,7 +11,7 @@ PlayerEvaluationCreate.layout = () => ({
     breadcrumbs: [
         {
             title: t('Evaluations'),
-            href: evaluation.index(),
+            href: evaluation.search(),
         },
         {
             title: t('Create internal player evaluation'),

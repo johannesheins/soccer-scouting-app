@@ -6,11 +6,9 @@ use App\DTOs\EvaluationSearchDTO;
 use App\Enums\EvaluationTypes;
 use App\Http\Requests\Evaluation\EvaluationSearchRequest;
 use App\Models\Club;
-use App\Models\Evaluation;
 use App\Models\EvaluationCriteriaGroup;
 use App\Models\Player;
 use App\Services\EvaluationSearchService;
-use Emargareten\InertiaModal\Modal;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 
@@ -19,14 +17,8 @@ class EvaluationController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('can:index,App\Models\Evaluation', only: ['index']),
             new Middleware('can:search,App\Models\Evaluation', only: ['search']),
         ];
-    }
-
-    public function index()
-    {
-        return inertia('evaluation/evaluation-index');
     }
 
     public function search(EvaluationSearchRequest $request)

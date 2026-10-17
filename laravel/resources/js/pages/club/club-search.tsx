@@ -33,7 +33,7 @@ ClubSearch.layout = () => ({
     breadcrumbs: [
         {
             title: t('Clubs'),
-            href: club.index(),
+            href: club.search(),
         },
         {
             title: t('Search clubs'),

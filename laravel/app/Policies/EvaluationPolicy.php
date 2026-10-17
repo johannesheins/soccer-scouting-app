@@ -10,11 +10,6 @@ class EvaluationPolicy
 {
     use HandlesAuthorization;
 
-    public function index(User $user): bool
-    {
-        return $user->hasRight(EvaluationPermissions::Index);
-    }
-
     public function search(User $user): bool
     {
         return $user->hasRight(EvaluationPermissions::Search);
