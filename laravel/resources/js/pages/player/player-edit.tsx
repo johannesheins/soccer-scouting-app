@@ -10,7 +10,7 @@ export default function PlayerEdit() {
     setLayoutProps({
         breadcrumbs: [
             {
-                title: t('Player search'),
+                title: t('Player'),
                 href: searchUrl
             },
             {

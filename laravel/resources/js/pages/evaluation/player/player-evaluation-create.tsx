@@ -1,18 +1,15 @@
 import { setLayoutProps } from '@inertiajs/react';
 import EvaluationForm from "@/components/from/evaluation-form";
-import { useLastVisitedUrl } from '@/hooks/use-previous-url';
 import { t } from '@/locale/translate';
 import evaluation from "@/routes/evaluation";
 import playerEvaluation from "@/routes/evaluation/player";
 
 export default function PlayerEvaluationCreate() {
-    const searchUrl = useLastVisitedUrl(evaluation.search.url());
-
     setLayoutProps({
         breadcrumbs: [
             {
-                title: t('Evaluation search'),
-                href: searchUrl,
+                title: t('Evaluations'),
+                href: evaluation.search.url(),
             },
             {
                 title: t('Create internal player evaluation'),

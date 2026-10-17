@@ -11,7 +11,7 @@ export default function GameEvaluationEdit() {
     setLayoutProps({
         breadcrumbs: [
             {
-                title: t('Evaluation search'),
+                title: t('Evaluations'),
                 href: searchUrl,
             },
             {
