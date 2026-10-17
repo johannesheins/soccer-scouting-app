@@ -27,10 +27,10 @@ export function UserGroupView({userGroup, rightGroups}: Props) {
                 {grantedGroups.length <= 0 && <p className="text-muted-foreground">{t('No rights assigned')}</p>}
                 {grantedGroups.map(group => (
                     <div key={group.id}>
-                        <p className="text-muted-foreground text-xs uppercase tracking-wide mb-2">{group.name}</p>
+                        <p className="text-muted-foreground text-xs uppercase tracking-wide mb-2">{t(group.name)}</p>
                         <div className="flex flex-wrap gap-1">
                             {group.rights.map(right => (
-                                <Badge key={right.id} variant="secondary" title={right.description}>{right.name}</Badge>
+                                <Badge key={right.id} variant="secondary" title={t(right.description)}>{t(right.name)}</Badge>
                             ))}
                         </div>
                     </div>

@@ -10,13 +10,29 @@ use Illuminate\Support\Facades\DB;
 
 return new class () extends Migration {
     /**
+     * German group names written by the former RightSeeder, renamed to their English keys.
+     */
+    private array $legacyGroupNames = [
+        'Spieler' => 'Players',
+        'Bewertung' => 'Evaluations',
+        'Spielbewertung' => 'Match evaluations',
+        'Interne Spielerbewertung' => 'Internal player evaluations',
+        'Verein' => 'Clubs',
+    ];
+
+    /**
      * Replaces the RightSeeder. Existing rows are updated in place,
      * so the user group assignments are kept.
+     * Names and descriptions are English keys translated in the frontend via t() (lang/de.json).
      */
     public function up(): void
     {
         // Index rights of the removed index pages (Player, Evaluation, Club)
         DB::table('rights')->whereIn('id', [1, 7, 17])->delete();
+
+        foreach ($this->legacyGroupNames as $legacyName => $name) {
+            DB::table('right_groups')->where('name', $legacyName)->update(['name' => $name]);
+        }
 
         foreach ($this->rightGroups() as $groupName => $rights) {
             DB::table('right_groups')->updateOrInsert(['name' => $groupName]);
@@ -41,46 +57,46 @@ return new class () extends Migration {
     private function rightGroups(): array
     {
         return [
-            'Spieler' => [
-                ['id' => PlayerPermissions::Search->value, 'name' => 'Spieler suchen', 'description' => 'Der Benutzer darf nach Spielern suchen'],
-                ['id' => PlayerPermissions::Create->value, 'name' => 'Spieler erstellen', 'description' => 'Der Benutzer darf Spieler erstellen'],
-                ['id' => PlayerPermissions::View->value, 'name' => 'Spieler ansehen', 'description' => 'Der Benutzer darf Spieler ansehen'],
-                ['id' => PlayerPermissions::Edit->value, 'name' => 'Spieler bearbeiten', 'description' => 'Der Benutzer darf Spieler bearbeiten'],
-                ['id' => PlayerPermissions::Destroy->value, 'name' => 'Spieler löschen', 'description' => 'Der Benutzer darf Spieler löschen'],
-                ['id' => PlayerPermissions::ViewHistory->value, 'name' => 'Änderungen der Spieler ansehen', 'description' => 'Der Benutzer darf den Änderungsverlauf von Spielern ansehen'],
+            'Players' => [
+                ['id' => PlayerPermissions::Search->value, 'name' => 'Player search', 'description' => 'The user may search for players'],
+                ['id' => PlayerPermissions::Create->value, 'name' => 'Create player', 'description' => 'The user may create players'],
+                ['id' => PlayerPermissions::View->value, 'name' => 'View player', 'description' => 'The user may view players'],
+                ['id' => PlayerPermissions::Edit->value, 'name' => 'Edit player', 'description' => 'The user may edit players'],
+                ['id' => PlayerPermissions::Destroy->value, 'name' => 'Delete player', 'description' => 'The user may delete players'],
+                ['id' => PlayerPermissions::ViewHistory->value, 'name' => 'View player history', 'description' => 'The user may view the change history of players'],
             ],
-            'Bewertung' => [
-                ['id' => EvaluationPermissions::Search->value, 'name' => 'Bewertung suchen', 'description' => 'Der Benutzer darf nach Bewertungen suchen'],
+            'Evaluations' => [
+                ['id' => EvaluationPermissions::Search->value, 'name' => 'Evaluation search', 'description' => 'The user may search for evaluations'],
             ],
-            'Spielbewertung' => [
-                ['id' => GameEvaluationPermissions::Create->value, 'name' => 'Spielbewertung erstellen', 'description' => 'Der Benutzer darf Spielbewertung erstellen'],
-                ['id' => GameEvaluationPermissions::View->value, 'name' => 'Spielbewertung ansehen', 'description' => 'Der Benutzer darf die von ihm erstellten Spielbewertung ansehen'],
-                ['id' => GameEvaluationPermissions::ViewAll->value, 'name' => 'Alle Spielbewertung ansehen', 'description' => 'Der Benutzer darf alle Spielbewertung ansehen'],
-                ['id' => GameEvaluationPermissions::Edit->value, 'name' => 'Spielbewertung bearbeiten', 'description' => 'Der Benutzer darf die von ihm erstellten Spielbewertung bearbeiten'],
-                ['id' => GameEvaluationPermissions::EditAll->value, 'name' => 'Alle Spielbewertung bearbeiten', 'description' => 'Der Benutzer darf alle Spielbewertung bearbeiten'],
-                ['id' => GameEvaluationPermissions::Destroy->value, 'name' => 'Spielbewertung löschen', 'description' => 'Der Benutzer darf die von ihm erstellten Spielbewertung löschen'],
-                ['id' => GameEvaluationPermissions::DestroyAll->value, 'name' => 'Alle Spielbewertung löschen', 'description' => 'Der Benutzer darf alle Spielbewertung löschen'],
-                ['id' => GameEvaluationPermissions::ViewCreator->value, 'name' => 'Autor der Spielbewertung sehen', 'description' => 'Der Benutzer darf den Autor sehen'],
-                ['id' => GameEvaluationPermissions::ViewHistory->value, 'name' => 'Änderungen der Spielbewertung ansehen', 'description' => 'Der Benutzer darf den Änderungsverlauf von Spielbewertungen ansehen'],
+            'Match evaluations' => [
+                ['id' => GameEvaluationPermissions::Create->value, 'name' => 'Create match evaluation', 'description' => 'The user may create match evaluations'],
+                ['id' => GameEvaluationPermissions::View->value, 'name' => 'View match evaluation', 'description' => 'The user may view match evaluations they created'],
+                ['id' => GameEvaluationPermissions::ViewAll->value, 'name' => 'View all match evaluations', 'description' => 'The user may view all match evaluations'],
+                ['id' => GameEvaluationPermissions::Edit->value, 'name' => 'Edit match evaluation', 'description' => 'The user may edit match evaluations they created'],
+                ['id' => GameEvaluationPermissions::EditAll->value, 'name' => 'Edit all match evaluations', 'description' => 'The user may edit all match evaluations'],
+                ['id' => GameEvaluationPermissions::Destroy->value, 'name' => 'Delete match evaluation', 'description' => 'The user may delete match evaluations they created'],
+                ['id' => GameEvaluationPermissions::DestroyAll->value, 'name' => 'Delete all match evaluations', 'description' => 'The user may delete all match evaluations'],
+                ['id' => GameEvaluationPermissions::ViewCreator->value, 'name' => 'View match evaluation author', 'description' => 'The user may see the author of a match evaluation'],
+                ['id' => GameEvaluationPermissions::ViewHistory->value, 'name' => 'View match evaluation history', 'description' => 'The user may view the change history of match evaluations'],
             ],
-            'Interne Spielerbewertung' => [
-                ['id' => PlayerEvaluationPermissions::Create->value, 'name' => 'Interne Spielerbewertung erstellen', 'description' => 'Der Benutzer darf interne Spielerbewertungen erstellen'],
-                ['id' => PlayerEvaluationPermissions::View->value, 'name' => 'Interne Spielerbewertung ansehen', 'description' => 'Der Benutzer darf die von ihm erstellten internen Spielerbewertungen ansehen'],
-                ['id' => PlayerEvaluationPermissions::ViewAll->value, 'name' => 'Alle internen Spielerbewertungen ansehen', 'description' => 'Der Benutzer darf alle internen Spielerbewertungen ansehen'],
-                ['id' => PlayerEvaluationPermissions::Edit->value, 'name' => 'Interne Spielerbewertung bearbeiten', 'description' => 'Der Benutzer darf die von ihm erstellten internen Spielerbewertungen bearbeiten'],
-                ['id' => PlayerEvaluationPermissions::EditAll->value, 'name' => 'Alle internen Spielerbewertungen bearbeiten', 'description' => 'Der Benutzer darf alle internen Spielerbewertungen bearbeiten'],
-                ['id' => PlayerEvaluationPermissions::Destroy->value, 'name' => 'Interne Spielerbewertung löschen', 'description' => 'Der Benutzer darf die von ihm erstellten internen Spielerbewertungen löschen'],
-                ['id' => PlayerEvaluationPermissions::DestroyAll->value, 'name' => 'Alle internen Spielerbewertungen löschen', 'description' => 'Der Benutzer darf alle internen Spielerbewertungen löschen'],
-                ['id' => PlayerEvaluationPermissions::ViewCreator->value, 'name' => 'Autor der internen Spielerbewertung sehen', 'description' => 'Der Benutzer darf den Autor einer internen Spielerbewertung sehen'],
-                ['id' => PlayerEvaluationPermissions::ViewHistory->value, 'name' => 'Änderungen der internen Spielerbewertung ansehen', 'description' => 'Der Benutzer darf den Änderungsverlauf von internen Spielerbewertungen ansehen'],
+            'Internal player evaluations' => [
+                ['id' => PlayerEvaluationPermissions::Create->value, 'name' => 'Create internal player evaluation', 'description' => 'The user may create internal player evaluations'],
+                ['id' => PlayerEvaluationPermissions::View->value, 'name' => 'View internal player evaluation', 'description' => 'The user may view internal player evaluations they created'],
+                ['id' => PlayerEvaluationPermissions::ViewAll->value, 'name' => 'View all internal player evaluations', 'description' => 'The user may view all internal player evaluations'],
+                ['id' => PlayerEvaluationPermissions::Edit->value, 'name' => 'Edit internal player evaluation', 'description' => 'The user may edit internal player evaluations they created'],
+                ['id' => PlayerEvaluationPermissions::EditAll->value, 'name' => 'Edit all internal player evaluations', 'description' => 'The user may edit all internal player evaluations'],
+                ['id' => PlayerEvaluationPermissions::Destroy->value, 'name' => 'Delete internal player evaluation', 'description' => 'The user may delete internal player evaluations they created'],
+                ['id' => PlayerEvaluationPermissions::DestroyAll->value, 'name' => 'Delete all internal player evaluations', 'description' => 'The user may delete all internal player evaluations'],
+                ['id' => PlayerEvaluationPermissions::ViewCreator->value, 'name' => 'View internal player evaluation author', 'description' => 'The user may see the author of an internal player evaluation'],
+                ['id' => PlayerEvaluationPermissions::ViewHistory->value, 'name' => 'View internal player evaluation history', 'description' => 'The user may view the change history of internal player evaluations'],
             ],
-            'Verein' => [
-                ['id' => ClubPermissions::Search->value, 'name' => 'Verein suchen', 'description' => 'Der Benutzer darf nach Vereinen suchen'],
-                ['id' => ClubPermissions::Create->value, 'name' => 'Verein erstellen', 'description' => 'Der Benutzer darf Vereine erstellen'],
-                ['id' => ClubPermissions::View->value, 'name' => 'Verein ansehen', 'description' => 'Der Benutzer darf Vereine ansehen'],
-                ['id' => ClubPermissions::Edit->value, 'name' => 'Verein bearbeiten', 'description' => 'Der Benutzer darf Vereine bearbeiten'],
-                ['id' => ClubPermissions::Destroy->value, 'name' => 'Verein löschen', 'description' => 'Der Benutzer darf Vereine löschen'],
-                ['id' => ClubPermissions::ViewHistory->value, 'name' => 'Änderungen der Vereine ansehen', 'description' => 'Der Benutzer darf den Änderungsverlauf von Vereinen ansehen'],
+            'Clubs' => [
+                ['id' => ClubPermissions::Search->value, 'name' => 'Club search', 'description' => 'The user may search for clubs'],
+                ['id' => ClubPermissions::Create->value, 'name' => 'Create club', 'description' => 'The user may create clubs'],
+                ['id' => ClubPermissions::View->value, 'name' => 'View club', 'description' => 'The user may view clubs'],
+                ['id' => ClubPermissions::Edit->value, 'name' => 'Edit club', 'description' => 'The user may edit clubs'],
+                ['id' => ClubPermissions::Destroy->value, 'name' => 'Delete club', 'description' => 'The user may delete clubs'],
+                ['id' => ClubPermissions::ViewHistory->value, 'name' => 'View club history', 'description' => 'The user may view the change history of clubs'],
             ],
         ];
     }
