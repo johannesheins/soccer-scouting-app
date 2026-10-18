@@ -1,5 +1,6 @@
-import {Link} from '@inertiajs/react';
+import {Link, router} from '@inertiajs/react';
 import { ClipboardPlus, FilePlus, FileSearch, FileUserIcon, LayoutGrid, Search, Settings, Shield, ShieldPlus, User, UserRoundPlus, UserSearch } from 'lucide-react';
+import { useEffect } from 'react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -12,6 +13,7 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    useSidebar,
 } from '@/components/ui/sidebar';
 import { ClubPermissions, EvaluationPermissions, GameEvaluationPermissions, PlayerEvaluationPermissions, PlayerPermissions } from '@/enums';
 import { t } from '@/locale/translate';
@@ -99,6 +101,9 @@ const footerNavItems = (): NavLink[] => [
 ];
 
 export function AppSidebar() {
+    const { setOpenMobile } = useSidebar();
+    useEffect(() => router.on('navigate', () => setOpenMobile(false)), [setOpenMobile]);
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
