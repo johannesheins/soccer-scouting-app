@@ -8,6 +8,7 @@ use App\Http\Requests\Administration\UserCreateRequest;
 use App\Http\Requests\Administration\UserUpdateRequest;
 use App\Models\User;
 use App\Models\UserGroup;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
@@ -42,7 +43,8 @@ class UserController extends Controller
 
         $user->saveLog(AuditEvent::CREATED, null, $user->createSnapshot());
 
-        return redirect(route('administration.user.index'));
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('User was created.')]);
+        return redirect()->route('administration.user.index');
     }
 
     public function show(User $user)
@@ -71,7 +73,7 @@ class UserController extends Controller
 
         $user->saveLog(AuditEvent::UPDATED, $old, $user->createSnapshot());
 
-        return redirect(route('administration.user.index'));
+        return Inertia::flash('toast', ['type' => 'success', 'message' => __('User was updated.')])->back();
     }
 
     public function destroy(User $user)
@@ -81,6 +83,6 @@ class UserController extends Controller
 
         $user->saveLog(AuditEvent::DELETED, $old, null);
 
-        return redirect(route('administration.user.index'));
+        return Inertia::flash('toast', ['type' => 'success', 'message' => __('User was deleted.')])->back();
     }
 }

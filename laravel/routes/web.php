@@ -15,11 +15,10 @@ Route::middleware(['auth', 'verified', 'password.renewed'])->group(function () {
 
     Route::get('player/search', [PlayerSearchController::class, 'index'])->name('player.search');
     Route::get('player/{player}/history', [PlayerController::class, 'history'])->name('player.history');
-    Route::resource('player', PlayerController::class)->names('player');
+    Route::resource('player', PlayerController::class)->except('index')->names('player');
 
     Route::group(['prefix' => 'evaluation', 'as' => 'evaluation.'], function () {
         Route::get('search/{query?}', [EvaluationController::class, 'search'])->name('search');
-        Route::get('', [EvaluationController::class, 'index'])->name('index');
 
         Route::get('game/{game_evaluation}/history', [GameEvaluationController::class, 'history'])
             ->name('game.history');
@@ -37,7 +36,7 @@ Route::middleware(['auth', 'verified', 'password.renewed'])->group(function () {
 
     Route::get('club/search', [ClubSearchController::class, 'index'])->name('club.search');
     Route::get('club/{club}/history', [ClubController::class, 'history'])->name('club.history');
-    Route::resource('club', ClubController::class)->names('club');
+    Route::resource('club', ClubController::class)->except('index')->names('club');
 
 
     Route::group(['prefix' => 'api',], function () {

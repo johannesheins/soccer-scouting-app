@@ -8,11 +8,6 @@ use App\Models\User;
 
 class ClubPolicy
 {
-    public function index(User $user): bool
-    {
-        return $user->hasRight(ClubPermissions::Index);
-    }
-
     public function search(User $user): bool
     {
         return $user->hasRight(ClubPermissions::Search);

@@ -6,7 +6,6 @@ use App\Interfaces\PermissionsInterface;
 use App\Models\Right;
 use App\Models\User;
 use App\Models\UserGroup;
-use Database\Seeders\RightSeeder;
 
 trait TestHelperTrait
 {
@@ -57,8 +56,6 @@ trait TestHelperTrait
      */
     public function createUserWithRight(array $rights): User
     {
-        (new RightSeeder())->run();
-
         $user = User::factory()->create();
         $userGroup = UserGroup::factory()->create();
         foreach ($rights as $right) {

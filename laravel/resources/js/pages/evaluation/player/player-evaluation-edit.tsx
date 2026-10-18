@@ -1,20 +1,24 @@
+import { setLayoutProps } from '@inertiajs/react';
 import EvaluationForm from "@/components/from/evaluation-form";
+import { useLastVisitedUrl } from '@/hooks/use-previous-url';
 import { t } from '@/locale/translate';
-import playerEvaluation from "@/routes/evaluation/player";
 import evaluation from "@/routes/evaluation";
+import playerEvaluation from "@/routes/evaluation/player";
 
 export default function PlayerEvaluationEdit() {
-    return <EvaluationForm type="player" route={playerEvaluation} edit={true}/>;
-}
+    const searchUrl = useLastVisitedUrl(evaluation.search.url());
 
-PlayerEvaluationEdit.layout = () => ({
-    breadcrumbs: [
-        {
-            title: t('Evaluations'),
-            href: evaluation.index(),
-        },
-        {
-            title: t('Edit internal player evaluation'),
-        },
-    ],
-});
+    setLayoutProps({
+        breadcrumbs: [
+            {
+                title: t('Evaluations'),
+                href: searchUrl,
+            },
+            {
+                title: t('Edit internal player evaluation'),
+            },
+        ],
+    });
+
+    return <EvaluationForm type="player" route={playerEvaluation} edit backHref={searchUrl}/>;
+}

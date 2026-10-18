@@ -32,7 +32,7 @@ export default function EvaluationSearch() {
 
     return (
         <>
-            <Head title={t('Search evaluations')} />
+            <Head title={t('Evaluation search')} />
             <div className="flex h-full flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                     <EvaluationSearchForm
@@ -50,3 +50,11 @@ export default function EvaluationSearch() {
         </>
     )
 }
+
+EvaluationSearch.layout = () => ({
+    breadcrumbs: [
+        {
+            title: t('Evaluation search'),
+        },
+    ],
+});

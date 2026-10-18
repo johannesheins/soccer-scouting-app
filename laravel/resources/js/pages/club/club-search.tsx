@@ -5,7 +5,6 @@ import {DataTable} from "@/components/table/data-table";
 import { t } from '@/locale/translate';
 import ClubSearchForm from "@/pages/club/club-search-form";
 import {clubColumns} from "@/pages/club/table/club-columns";
-import club from "@/routes/club";
 import type {Club} from "@/types/club";
 
 type Props = { clubs: Club[] };
@@ -15,7 +14,7 @@ export default function ClubSearch(){
 
     return (
         <>
-            <Head title={t('Search clubs')} />
+            <Head title={t('Club search')} />
             <div className="flex h-full flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                     <ClubSearchForm />
@@ -32,11 +31,7 @@ export default function ClubSearch(){
 ClubSearch.layout = () => ({
     breadcrumbs: [
         {
-            title: t('Clubs'),
-            href: club.index(),
-        },
-        {
-            title: t('Search clubs'),
+            title: t('Club search'),
         },
     ],
 });

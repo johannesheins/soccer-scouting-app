@@ -126,7 +126,7 @@ class PasswordExpirationTest extends TestCase
         $user = User::factory()->create(['password_expires_at' => now()->subDay()]);
 
         $this->actingAs($user)
-            ->get(route('player.index'))
+            ->get(route('player.search'))
             ->assertRedirect(route('password.expired'));
 
         $this->from(route('password.expired'))
@@ -135,6 +135,6 @@ class PasswordExpirationTest extends TestCase
                 'password' => 'new-password',
                 'password_confirmation' => 'new-password',
             ])
-            ->assertRedirect(route('player.index'));
+            ->assertRedirect(route('player.search'));
     }
 }

@@ -6,16 +6,16 @@ use App\Enums\AuditEvent;
 use App\Http\Requests\Club\ClubRequest;
 use App\Models\AuditLog;
 use App\Models\Club;
-use Emargareten\InertiaModal\Modal;
+use App\Http\Responses\Modal;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Inertia\Inertia;
 
 class ClubController extends Controller implements HasMiddleware
 {
     public static function middleware(): array
     {
         return [
-            new Middleware('can:index,App\Models\Club', only: ['index']),
             new Middleware('can:search,App\Models\Club', only: ['search']),
             new Middleware('can:create,App\Models\Club', only: ['create', 'store']),
             new Middleware('can:view,club', only: ['show']),
@@ -23,11 +23,6 @@ class ClubController extends Controller implements HasMiddleware
             new Middleware('can:update,club', only: ['edit', 'update']),
             new Middleware('can:delete,club', only: ['destroy']),
         ];
-    }
-
-    public function index()
-    {
-        return inertia('club/club-index');
     }
 
     public function create()
@@ -41,14 +36,15 @@ class ClubController extends Controller implements HasMiddleware
 
         $club->saveLog(AuditEvent::CREATED, null, $club->createSnapshot());
 
-        return redirect()->route('club.index');
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Club was created.')]);
+        return to_route('club.search');
     }
 
     public function show(Club $club)
     {
         return new Modal('club/club-show', [
             'club' => $club,
-        ])->baseRoute('club.index');
+        ])->baseRoute('club.search');
     }
 
     public function edit(Club $club)
@@ -66,7 +62,7 @@ class ClubController extends Controller implements HasMiddleware
 
         $club->saveLog(AuditEvent::UPDATED, $old, $club->createSnapshot());
 
-        return redirect()->route('club.index');
+        return Inertia::flash('toast', ['type' => 'success', 'message' => __('Club was updated.')])->back();
     }
 
     public function destroy(Club $club)
@@ -76,7 +72,7 @@ class ClubController extends Controller implements HasMiddleware
 
         $club->saveLog(AuditEvent::DELETED, $old, null);
 
-        return redirect()->route('club.index');
+        return Inertia::flash('toast', ['type' => 'success', 'message' => __('Club was deleted.')])->back();
     }
 
     public function history(Club $club)
@@ -100,6 +96,6 @@ class ClubController extends Controller implements HasMiddleware
         return new Modal('club/club-view-history', [
             'club' => $club,
             'versions' => $versions,
-        ])->baseRoute('club.index');
+        ])->baseRoute('club.search');
     }
 }

@@ -8,14 +8,9 @@ use App\Models\User;
 
 class PlayerPolicy
 {
-    public function index(User $user): bool
-    {
-        return $user->hasRight(PlayerPermissions::Index);
-    }
-
     public function search(User $user): bool
     {
-        return $user->hasRight(PlayerPermissions::Index);
+        return $user->hasRight(PlayerPermissions::Search);
     }
 
     public function view(User $user): bool

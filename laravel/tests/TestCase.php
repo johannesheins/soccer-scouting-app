@@ -6,7 +6,6 @@ use App\Interfaces\PermissionsInterface;
 use App\Models\Right;
 use App\Models\User;
 use App\Models\UserGroup;
-use Database\Seeders\RightSeeder;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Laravel\Fortify\Features;
 use Tests\Traits\TestHelperTrait;

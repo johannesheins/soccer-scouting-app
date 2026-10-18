@@ -6,7 +6,7 @@ use App\Interfaces\PermissionsInterface;
 
 enum ClubPermissions: int implements PermissionsInterface
 {
-    case Index = 17;
+    //case Index = 17;
     case Search = 18;
     case Create = 19;
     case View = 20;

@@ -14,9 +14,10 @@ use App\Models\Player;
 use App\Models\Position;
 use App\Models\Recommendation;
 use App\Services\EvaluationService;
-use Emargareten\InertiaModal\Modal;
+use App\Http\Responses\Modal;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Inertia\Inertia;
 
 class GameEvaluationController extends Controller implements HasMiddleware
 {
@@ -29,11 +30,6 @@ class GameEvaluationController extends Controller implements HasMiddleware
             new Middleware('can:delete,game_evaluation', only: ['destroy']),
             new Middleware('can:viewHistory,game_evaluation', only: ['history']),
         ];
-    }
-
-    public function index()
-    {
-        return redirect()->route('evaluation.index');
     }
 
     public function create(EvaluationCreateRequest $request)
@@ -57,7 +53,8 @@ class GameEvaluationController extends Controller implements HasMiddleware
     {
         EvaluationService::create(new GameEvaluation(), $request->validated());
 
-        return redirect()->route('evaluation.index');
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Evaluation was created.')]);
+        return to_route('evaluation.search');
     }
 
     public function show(GameEvaluation $gameEvaluation)
@@ -65,7 +62,7 @@ class GameEvaluationController extends Controller implements HasMiddleware
         return new Modal('evaluation/evaluation-show', [
             'evaluation' => $gameEvaluation->loadForView(),
             'evaluationCriteriaGroups' => EvaluationCriteriaGroup::with('evaluationCriteria')->get(),
-        ])->baseRoute('evaluation.index');
+        ])->baseRoute('evaluation.search');
     }
 
     public function edit(GameEvaluation $gameEvaluation)
@@ -84,14 +81,14 @@ class GameEvaluationController extends Controller implements HasMiddleware
     {
         EvaluationService::update($gameEvaluation, $request->validated());
 
-        return redirect()->route('evaluation.index');
+        return Inertia::flash('toast', ['type' => 'success', 'message' => __('Evaluation was updated.')])->back();
     }
 
     public function destroy(GameEvaluation $gameEvaluation)
     {
         EvaluationService::delete($gameEvaluation);
 
-        return redirect()->route('evaluation.index');
+        return Inertia::flash('toast', ['type' => 'success', 'message' => __('Evaluation was deleted.')])->back();
     }
 
     public function history(GameEvaluation $gameEvaluation)
@@ -100,6 +97,6 @@ class GameEvaluationController extends Controller implements HasMiddleware
             'evaluation' => $gameEvaluation->loadForView(),
             'evaluationCriteriaGroups' => EvaluationCriteriaGroup::with('evaluationCriteria')->get(),
             'versions' => EvaluationService::versions($gameEvaluation),
-        ])->baseRoute('evaluation.index');
+        ])->baseRoute('evaluation.search');
     }
 }

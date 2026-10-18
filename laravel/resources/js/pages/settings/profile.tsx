@@ -2,7 +2,7 @@ import { Form, Head, Link } from '@inertiajs/react';
 import { t } from '@/locale/translate';
 import { useUser } from '@/hooks/use-auth';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
-import DeleteUser from '@/components/delete-user';
+// import DeleteUser from '@/components/delete-user';
 import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
@@ -141,7 +141,7 @@ export default function Profile({
                 </Form>
             </div>
 
-            <DeleteUser />
+            {/*<DeleteUser />*/}
         </>
     );
 }

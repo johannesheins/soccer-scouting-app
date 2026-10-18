@@ -7,7 +7,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { toUrl } from '@/lib/utils';
-import type { NavItem } from '@/types';
+import type { NavLink } from '@/types';
 import { Link } from "@inertiajs/react";
 import { useUser } from '@/hooks/use-auth';
 
@@ -16,7 +16,7 @@ export function NavFooter({
     className,
     ...props
 }: ComponentPropsWithoutRef<typeof SidebarGroup> & {
-    items: NavItem[];
+    items: NavLink[];
 }) {
     const user = useUser();
     const activeAndAllowedItems = items.filter(i => i.isActive !== false && (i.isAdministrationOnly === true && user.is_administrator || i.isAdministrationOnly !== true));

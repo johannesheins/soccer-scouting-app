@@ -9,11 +9,9 @@ use App\Models\AuditLog;
 use App\Models\Club;
 use App\Models\Player;
 use App\Models\Position;
-use App\Models\Right;
 use App\Models\User;
-use App\Models\UserGroup;
-use Database\Seeders\RightSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Inertia;
 use Tests\TestCase;
 
 class PlayerControllerTest extends TestCase
@@ -26,7 +24,6 @@ class PlayerControllerTest extends TestCase
     {
         parent::setUp();
         $this->user = $this->createUserWithRight([
-            PlayerPermissions::Index,
             PlayerPermissions::Search,
             PlayerPermissions::Create,
             PlayerPermissions::View,
@@ -35,41 +32,6 @@ class PlayerControllerTest extends TestCase
             PlayerPermissions::ViewHistory,
         ]);
     }
-
-    #region index
-    public function test_index(): void
-    {
-        $clubs = Club::factory(10)->create();
-        $positions = Position::factory(8)->create();
-
-        $response = $this->actingAs($this->user)
-            ->get(route('player.index'));
-
-        $firstClub = $clubs->sortBy('clubname')->first();
-        $firstPosition = $positions->sortBy('id')->first();
-
-        $response->assertOk();
-        $response->assertInertia(
-            fn ($page) => $page
-            ->component('player/player-index')
-            ->has('clubs', 10)
-            ->where('clubs.0.id', $firstClub->id)
-            ->where('clubs.0.clubname', $firstClub->clubname)
-            ->has('positions', 8)
-            ->where('positions.0.id', $firstPosition->id)
-            ->where('positions.0.position_code', $firstPosition->position_code)
-        );
-        $this->assertRights(PlayerPermissions::Index, 'player.index');
-    }
-
-    public function test_index_guest_redirect_login(): void
-    {
-        $response = $this->actingAsGuest()
-            ->get(route('player.index'));
-
-        $response->assertRedirect(route('login'));
-    }
-    #endregion
 
     #region create
     public function test_create_shows_player_create_view(): void
@@ -121,7 +83,7 @@ class PlayerControllerTest extends TestCase
                 'position_ids' => $positions->pluck('id')->toArray(),
             ]);
 
-        $response->assertRedirect(route('player.index'));
+        $response->assertRedirect(route('player.search'));
         $this->assertDatabaseHas('players', [
             'firstname' => 'John',
             'lastname' => 'Doe',
@@ -179,7 +141,7 @@ class PlayerControllerTest extends TestCase
             ->post(route('player.store'), []);
 
         $response->assertValid();
-        $response->assertRedirect(route('player.index'));
+        $response->assertRedirect(route('player.search'));
         $this->assertDatabaseHas('players', ['firstname' => null, 'club_id' => null]);
     }
 
@@ -360,7 +322,7 @@ class PlayerControllerTest extends TestCase
 
         $response->assertInertia(
             fn ($page) => $page
-            ->component('player/player-index')
+            ->component('player/player-search')
             ->where('modal.component', 'player/player-show')
             ->where('modal.props.player.id', $player->id)
             ->where('modal.props.player.height', 180)
@@ -397,7 +359,7 @@ class PlayerControllerTest extends TestCase
 
         $response->assertInertia(
             fn ($page) => $page
-            ->component('player/player-index')
+            ->component('player/player-search')
             ->where('modal.component', 'player/player-view-history')
             ->where('modal.props.player.id', $player->id)
             ->has('modal.props.versions', 1)
@@ -563,6 +525,7 @@ class PlayerControllerTest extends TestCase
         $player->positions()->attach($oldPosition->pluck('id')->toArray());
 
         $response = $this->actingAs($this->user)
+            ->from(route('player.search'))
             ->put(route('player.update', $player->id), [
                 'firstname'     => 'Jacob',
                 'lastname'      => $player->lastname,
@@ -573,7 +536,7 @@ class PlayerControllerTest extends TestCase
                 'position_ids'  => [$newPosition->id],
             ]);
 
-        $response->assertRedirect(route('player.index'));
+        $response->assertRedirect(route('player.search'));
         $this->assertDatabaseHas('players', ['id' => $player->id, 'firstname' => 'Jacob', 'height' => 190, 'strong_foot' => FootEnum::RIGHT->value]);
         $this->assertDatabaseHas('player_positions', ['player_id' => $player->id, 'position_id' => $newPosition->id]);
         $oldPosition->each(fn ($pos) => $this->assertDatabaseMissing('player_positions', ['player_id' => $player->id, 'position_id' => $pos->id]));
@@ -607,15 +570,31 @@ class PlayerControllerTest extends TestCase
             ->assertRedirect(route('login'));
     }
 
+    public function test_update_flash_reaches_history_modal_after_restore(): void
+    {
+        $player = Player::factory()->create();
+
+        $this->actingAs($this->user)
+            ->from(route('player.history', $player))
+            ->put(route('player.update', $player), ['firstname' => 'Jacob'])
+            ->assertRedirect(route('player.history', $player));
+
+        $this->withHeaders(['X-Inertia' => 'true', 'X-Inertia-Version' => Inertia::getVersion()])
+            ->get(route('player.history', $player))
+            ->assertHeader('X-Inertia-Modal')
+            ->assertJsonPath('flash.toast.message', __('Player was updated.'));
+    }
+
     public function test_update_succeeds_with_no_fields(): void
     {
         $player = Player::factory()->create();
 
         $response = $this->actingAs($this->user)
+            ->from(route('player.search'))
             ->put(route('player.update', $player), []);
 
         $response->assertValid();
-        $response->assertRedirect(route('player.index'));
+        $response->assertRedirect(route('player.search'));
         $this->assertDatabaseHas('players', ['id' => $player->id, 'firstname' => $player->firstname, 'club_id' => $player->club_id]);
     }
 
@@ -776,9 +755,10 @@ class PlayerControllerTest extends TestCase
         $this->assertRights(PlayerPermissions::Destroy, ['player.destroy', $player->id]);
 
         $response = $this->actingAs($this->user)
+            ->from(route('player.search'))
             ->delete(route('player.destroy', $player->id));
 
-        $response->assertRedirect(route('player.index'));
+        $response->assertRedirect(route('player.search'));
         $this->assertDatabaseMissing('players', ['id' => $player->id]);
         $this->assertDatabaseMissing('player_positions', ['player_id' => $player->id]);
     }

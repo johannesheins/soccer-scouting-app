@@ -10,9 +10,9 @@ export function PlayerView({player, button}: { player: Player, button?: any }) {
     return (
         <Card className="border-none shadow-none py-1 w-full">
             <CardHeader className="pb-2">
-                <CardTitle className={button && 'grid grid-cols-2'}>
+                <CardTitle className={button && 'grid gap-2 sm:grid-cols-2 sm:grid-rows-1 grid-rows-2'}>
                     <p className="text-2xl">{player.firstname} {player.lastname}</p>
-                    {button && <div className="flex justify-end">{button}</div>}
+                    {button && <div className="row-start-1 col-start-1 sm:col-start-2 sm:flex sm:justify-end">{button}</div>}
                 </CardTitle>
                 <a className="text-muted-foreground text-sm" href={club.show.url(player.club.id)}>{player.club.clubname}</a>
             </CardHeader>

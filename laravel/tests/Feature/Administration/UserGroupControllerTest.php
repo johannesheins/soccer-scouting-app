@@ -26,8 +26,7 @@ class UserGroupControllerTest extends AdministrationTestCase
     }
 
     public function test_create(){
-        $rightGroups = RightGroup::factory(3)->create();
-        $rightGroups->each(fn($rightGroup) => Right::factory(3)->for($rightGroup)->create());
+        $rightGroups = RightGroup::withCount('rights')->get();
 
         $response = $this->actingAs($this->administratorUser)
             ->get(route('administration.user-group.create'));
@@ -37,10 +36,9 @@ class UserGroupControllerTest extends AdministrationTestCase
         $response->assertInertia(
             fn ($page) => $page
             ->component('administration/user-group/user-group-create')
-            ->has('rightGroups', 3)
-            ->has('rightGroups.0.rights', 3)
-            ->has('rightGroups.1.rights', 3)
-            ->has('rightGroups.2.rights', 3)
+            ->has('rightGroups', $rightGroups->count())
+            ->has('rightGroups.0.rights', $rightGroups[0]->rights_count)
+            ->has('rightGroups.1.rights', $rightGroups[1]->rights_count)
         );
     }
 
@@ -98,7 +96,7 @@ class UserGroupControllerTest extends AdministrationTestCase
         $response = $this->actingAs($this->administratorUser)
             ->post(route('administration.user-group.store'), [
                 'name' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab aliquam architecto atque, aut commodi, cumque distinctio doloribus eum explicabo fugit illo inventore ipsam minima natus nemo nesciunt nulla porro possimus quasi quo quod recusandae repellendus reprehenderit sunt totam velit veritatis vitae. Ad adipisci assumenda at, corporis culpa cumque enim eos iure neque perspiciatis quae, quo reiciendis rem repellendus repudiandae tempore vel voluptate, voluptatibus! Aperiam autem blanditiis cum delectus dolores enim excepturi facere hic, id labore maxime natus nisi nostrum quae quaerat quis quod suscipit vel, velit vitae! Ad architecto asperiores at culpa eos ex illo magnam, nesciunt nihil omnis soluta.',
-                'rights' => [1, 3, 4]
+                'rights' => [999999, 3, 4]
             ]);
 
         $response->assertInvalid(['name', 'rights.0']);
@@ -116,11 +114,10 @@ class UserGroupControllerTest extends AdministrationTestCase
     }
 
     public function test_edit(){
-        $rightGroups = RightGroup::factory(3)->create();
-        $rightGroups->each(fn($rightGroup) => Right::factory(3)->for($rightGroup)->create());
+        $rightGroups = RightGroup::withCount('rights')->get();
 
         $userGroup = UserGroup::factory()->create();
-        $userGroup->rights()->attach($rightGroups->flatMap->rights->take(10));
+        $userGroup->rights()->attach(Right::query()->limit(9)->pluck('id'));
 
         $response = $this->actingAs($this->administratorUser)
             ->get(route('administration.user-group.edit', $userGroup->id));
@@ -131,8 +128,8 @@ class UserGroupControllerTest extends AdministrationTestCase
             fn ($page) => $page
             ->component('administration/user-group/user-group-edit')
 
-            ->has('rightGroups', 3)
-            ->has('rightGroups.0.rights', 3)
+            ->has('rightGroups', $rightGroups->count())
+            ->has('rightGroups.0.rights', $rightGroups[0]->rights_count)
 
             ->has('userGroup')
             ->has('userGroup.rights', 9)
@@ -150,6 +147,7 @@ class UserGroupControllerTest extends AdministrationTestCase
         $newRights = Right::factory(3)->create();
 
         $response = $this->actingAs($this->administratorUser)
+            ->from(route('administration.user-group.index'))
             ->put(route('administration.user-group.update', $userGroup->id), [
                 'name' => $newName,
                 'rights' => $newRights->pluck('id')->toArray(),
@@ -205,7 +203,7 @@ class UserGroupControllerTest extends AdministrationTestCase
         $response = $this->actingAs($this->administratorUser)
             ->put(route('administration.user-group.update', $userGroup->id), [
                 'name' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab aliquam architecto atque, aut commodi, cumque distinctio doloribus eum explicabo fugit illo inventore ipsam minima natus nemo nesciunt nulla porro possimus quasi quo quod recusandae repellendus reprehenderit sunt totam velit veritatis vitae. Ad adipisci assumenda at, corporis culpa cumque enim eos iure neque perspiciatis quae, quo reiciendis rem repellendus repudiandae tempore vel voluptate, voluptatibus! Aperiam autem blanditiis cum delectus dolores enim excepturi facere hic, id labore maxime natus nisi nostrum quae quaerat quis quod suscipit vel, velit vitae! Ad architecto asperiores at culpa eos ex illo magnam, nesciunt nihil omnis soluta.',
-                'rights' => [1, 3, 4]
+                'rights' => [999999, 3, 4]
             ]);
 
         $response->assertInvalid(['name', 'rights.0']);
@@ -217,6 +215,7 @@ class UserGroupControllerTest extends AdministrationTestCase
         $userGroup->rights()->attach(Right::factory(3)->create());
 
         $response = $this->actingAs($this->administratorUser)
+            ->from(route('administration.user-group.index'))
             ->delete(route('administration.user-group.destroy', $userGroup->id));
 
         $this->assertAdministrationRoute(['administration.user-group.destroy', $userGroup->id]);
@@ -267,7 +266,7 @@ class UserGroupControllerTest extends AdministrationTestCase
             ->component('administration/user-group/user-group-index')
             ->where('modal.component', 'administration/user-group/user-group-view-history')
             ->where('modal.props.userGroup.id', $userGroup->id)
-            ->has('modal.props.rightGroups', 1)
+            ->has('modal.props.rightGroups', RightGroup::count())
             ->has('modal.props.versions', 2)
             ->where('modal.props.versions.0.event', AuditEvent::CREATED->value)
             ->where('modal.props.versions.0.userGroup.name', 'Old Group')

@@ -54,7 +54,7 @@ export default function UserGroupForm({ edit = false, backHref = null }: { edit?
 
     const items = rightGroups.map(rGroup => ({
         value: String(rGroup.id),
-        trigger: rGroup.name,
+        trigger: t(rGroup.name),
         content: <FieldSet>
             <Field orientation="horizontal">
                 <Checkbox id={"rg"+rGroup.id} onCheckedChange={(checked) => selectAll(rGroup.rights, checked === true)}/>
@@ -69,10 +69,10 @@ export default function UserGroupForm({ edit = false, backHref = null }: { edit?
                     <Checkbox id={"r"+right.id} onClick={() => select(right)} checked={data.rights.includes(right.id)}/>
                     <FieldContent>
                         <FieldLabel htmlFor={"r"+right.id}>
-                            {right.name}
+                            {t(right.name)}
                         </FieldLabel>
                         <FieldDescription>
-                            {right.description}
+                            {t(right.description)}
                         </FieldDescription>
                     </FieldContent>
                 </Field>
