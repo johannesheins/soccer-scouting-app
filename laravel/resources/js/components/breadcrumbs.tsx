@@ -15,6 +15,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { t } from '@/locale/translate';
 import type { BreadcrumbItem as BreadcrumbItemType } from '@/types';
 
@@ -56,17 +57,22 @@ export function Breadcrumbs({
                             return (
                                 <Fragment key={index}>
                                     <BreadcrumbItem className={hiddenOnMobile || 'min-w-0'}>
-                                        {isLast ? (
-                                            <BreadcrumbPage className="truncate">
-                                                {item.title}
-                                            </BreadcrumbPage>
-                                        ) : (
-                                            <BreadcrumbLink asChild className="truncate">
-                                                <Link href={item.href}>
-                                                    {item.title}
-                                                </Link>
-                                            </BreadcrumbLink>
-                                        )}
+                                        <Tooltip>
+                                            <TooltipTrigger asChild>
+                                                {isLast ? (
+                                                    <BreadcrumbPage className="truncate">
+                                                        {item.title}
+                                                    </BreadcrumbPage>
+                                                ) : (
+                                                    <BreadcrumbLink asChild className="truncate">
+                                                        <Link href={item.href}>
+                                                            {item.title}
+                                                        </Link>
+                                                    </BreadcrumbLink>
+                                                )}
+                                            </TooltipTrigger>
+                                            <TooltipContent side="bottom" className="max-w-none whitespace-nowrap">{item.title}</TooltipContent>
+                                        </Tooltip>
                                     </BreadcrumbItem>
                                     {!isLast && <BreadcrumbSeparator className={hiddenOnMobile || undefined} />}
                                 </Fragment>

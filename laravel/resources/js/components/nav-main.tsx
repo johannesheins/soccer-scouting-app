@@ -26,6 +26,7 @@ import {
     SidebarMenuSubItem,
     useSidebar,
 } from '@/components/ui/sidebar';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useUser } from '@/hooks/use-auth';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { t } from '@/locale/translate';
@@ -36,6 +37,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
     const { currentUrl, isCurrentUrl } = useCurrentUrl();
     const { state, isMobile } = useSidebar();
     const isIconMode = state === 'collapsed' && !isMobile;
+    const tooltipSide = isMobile ? 'bottom' : 'right';
     const [openItems, setOpenItems] = useState<Record<string, boolean>>({});
     const [prevUrl, setPrevUrl] = useState(currentUrl);
 
@@ -101,11 +103,16 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                     if (subItems.length === 0) {
                         return (
                             <SidebarMenuItem key={item.title}>
-                                <SidebarMenuButton asChild isActive={item.href !== undefined && isCurrentUrl(item.href)} tooltip={{ children: item.title }}>
-                                    {isAllowed(item) && item.href !== undefined
-                                        ? <Link href={item.href} prefetch>{content}</Link>
-                                        : <span aria-disabled="true">{content}</span>}
-                                </SidebarMenuButton>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <SidebarMenuButton asChild isActive={item.href !== undefined && isCurrentUrl(item.href)} tooltip={{ children: item.title }}>
+                                            {isAllowed(item) && item.href !== undefined
+                                                ? <Link href={item.href} prefetch>{content}</Link>
+                                                : <span aria-disabled="true">{content}</span>}
+                                        </SidebarMenuButton>
+                                    </TooltipTrigger>
+                                    <TooltipContent side={tooltipSide} className="max-w-none whitespace-nowrap">{item.title}</TooltipContent>
+                                </Tooltip>
                             </SidebarMenuItem>
                         );
                     }
@@ -142,11 +149,16 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                             onOpenChange={(open) => setOpenItems((prev) => ({ ...prev, [item.title]: open }))}
                         >
                             <SidebarMenuItem>
-                                <SidebarMenuButton asChild isActive={item.href !== undefined && isCurrentUrl(item.href)} tooltip={{ children: item.title }}>
-                                    {item.href !== undefined
-                                        ? <Link href={item.href} prefetch>{content}</Link>
-                                        : <CollapsibleTrigger>{content}</CollapsibleTrigger>}
-                                </SidebarMenuButton>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <SidebarMenuButton asChild isActive={item.href !== undefined && isCurrentUrl(item.href)} tooltip={{ children: item.title }}>
+                                            {item.href !== undefined
+                                                ? <Link href={item.href} prefetch>{content}</Link>
+                                                : <CollapsibleTrigger>{content}</CollapsibleTrigger>}
+                                        </SidebarMenuButton>
+                                    </TooltipTrigger>
+                                    <TooltipContent side={tooltipSide} className="max-w-none whitespace-nowrap">{item.title}</TooltipContent>
+                                </Tooltip>
                                 <CollapsibleTrigger asChild>
                                     <SidebarMenuAction className="data-[state=open]:rotate-90">
                                         <ChevronRight />
@@ -157,11 +169,16 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                                     <SidebarMenuSub>
                                         {subItems.map((subItem) => (
                                             <SidebarMenuSubItem key={subItem.title}>
-                                                <SidebarMenuSubButton asChild isActive={isCurrentUrl(subItem.href)}>
-                                                    {isAllowed(subItem)
-                                                        ? <Link href={subItem.href} prefetch>{subContent(subItem)}</Link>
-                                                        : <span aria-disabled="true">{subContent(subItem)}</span>}
-                                                </SidebarMenuSubButton>
+                                                <Tooltip>
+                                                    <TooltipTrigger asChild>
+                                                        <SidebarMenuSubButton asChild isActive={isCurrentUrl(subItem.href)}>
+                                                            {isAllowed(subItem)
+                                                                ? <Link href={subItem.href} prefetch>{subContent(subItem)}</Link>
+                                                                : <span aria-disabled="true">{subContent(subItem)}</span>}
+                                                        </SidebarMenuSubButton>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent side={tooltipSide} className="max-w-none whitespace-nowrap">{subItem.title}</TooltipContent>
+                                                </Tooltip>
                                             </SidebarMenuSubItem>
                                         ))}
                                     </SidebarMenuSub>
