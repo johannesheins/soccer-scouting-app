@@ -20,5 +20,5 @@ export default function PlayerEvaluationEdit() {
         ],
     });
 
-    return <EvaluationForm type="player" route={playerEvaluation} edit={true}/>;
+    return <EvaluationForm type="player" route={playerEvaluation} edit backHref={searchUrl}/>;
 }

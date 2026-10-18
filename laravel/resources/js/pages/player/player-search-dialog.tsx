@@ -35,7 +35,7 @@ export default function PlayerSearchDialog({positions, clubs, selectPlayer, valu
     const dialogTrigger = (
         <div className="grid grid-cols-[1fr_auto] gap-4">
             <DialogTrigger asChild>
-                <Button variant="outline">{selectedPlayer ? t('Change player') : t('Select player')}</Button>
+                <Button variant="outline">{selectedPlayer || value ? t('Change player') : t('Select player')}</Button>
             </DialogTrigger>
             <PlayerCreateDialog onCreatedPlayer={handlePlayerSelected}/>
         </div>
